@@ -1,32 +1,32 @@
 <?php
 
-use App\Livewire\Admin\TribeManager;
+use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::view('/', 'welcome');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-    
-    // Super Admin Routes
-    Route::prefix('admin')->name('admin.')->group(function() {
-        Route::get('tribes', TribeManager::class)->name('tribes');
-    });
-});
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+require __DIR__.'/auth.php';
 
 Route::get('/health', function () {
     $dbStatus = 'Disconnected';
     $redisStatus = 'Disconnected';
     
     try {
-        DB::connection()->getPdo();
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
         $dbStatus = 'Connected';
     } catch (\Exception $e) {
         $dbStatus = 'Error: ' . $e->getMessage();
     }
 
     try {
-        // Attempt Redis check with a short timeout
-        $redis = Illuminate\Support\Facades\Redis::connection();
+        $redis = \Illuminate\Support\Facades\Redis::connection();
         $redis->ping();
         $redisStatus = 'Connected';
     } catch (\Exception $e) {
@@ -40,7 +40,3 @@ Route::get('/health', function () {
         'env' => config('app.env'),
     ]);
 });
-
-
-require __DIR__.'/settings.php';
-
