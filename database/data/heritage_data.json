@@ -1,0 +1,2182 @@
+[
+  {
+    "id": "alur",
+    "name": "Alur",
+    "hero": "Gipir",
+    "heroTitle": "Keeper of the Sacred Beads",
+    "greeting": "Kop Ango?",
+    "phonetic": "Kop Ang-goh?",
+    "meaning": "What's the news?",
+    "color": "#1B6CA8",
+    "accent": "#F4C430",
+    "region": "West Nile",
+    "animal": "Nile Crocodile",
+    "flag": "🔵",
+    "icon": "💎",
+    "landscape": "River Nile banks and wetlands",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace KOP ANGO?",
+        "desc": "Trace the Alur greeting with big dotted letters. Say it out loud!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Alur Word Match",
+        "desc": "Match 8 Alur words to their English meanings: Ango (news), Kop (ask), Nile (river), Jok (spirit), Kwaro (elder)",
+        "icon": "🔤",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Alur Sentence Builder",
+        "desc": "Drag words to build sentences in Alur. Learn greetings, family words and nature words.",
+        "icon": "🧩",
+        "tag": "Sentence Building",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Proverbs of the Nile",
+        "desc": "\"A person who does not know the past has no future.\" Translate this Alur proverb and draw what it means!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Gipir & the Sacred Blue Beads",
+        "desc": "Gipir was kind to the mysterious old woman in the forest. Colour the scene of him receiving the glowing beads!",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Brothers Split: Gipir & Labongo",
+        "desc": "Read the famous Alur origin story of two brothers. Then answer 5 fun quiz questions about the story!",
+        "icon": "⚔️",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Sacred Bead Colours",
+        "desc": "Alur beads have special meanings. Match each bead colour to its meaning: Blue=loyalty, Red=courage, White=peace, Yellow=wealth!",
+        "icon": "📿",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Gipir's Bead Song 🎵",
+        "desc": "(Tune: Twinkle Twinkle) \"Gipir found a bead of blue, shiny, bright and brand new!\" Sing along and clap the beat!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Nile River Counting Song",
+        "desc": "Count crocodiles, hippos and fish in the Nile! A counting song from 1 to 10 in Alur. Sing and stamp your feet!",
+        "icon": "🎵",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Forest Search Maze",
+        "desc": "Help Gipir find the old woman's hut deep in the forest! Avoid the wild animals on the winding path.",
+        "icon": "🌿",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Sacred Bead Jigsaw",
+        "desc": "Put the picture of Gipir receiving the sacred beads back together. 12 pieces for beginners, 24 for experts!",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Nile Scene",
+        "desc": "Two pictures of the River Nile look almost the same — but 8 things are different! Find them all.",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Alur Word Search",
+        "desc": "Find 12 Alur words hidden in the grid: GIPIR, BEADS, NILE, FOREST, SPIRIT, ELDER, TRIBE, SPEAR, RIVER, HUNT, DANCE, DRUM",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour Gipir's Beads",
+        "desc": "Use the colour guide to colour each bead correctly. Blue=loyalty, red=courage, yellow=wealth. Can you make the pattern?",
+        "icon": "🎨",
+        "tag": "Colour by Number",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Bead Pattern Maker",
+        "desc": "Alur women make beautiful bead necklaces! Follow the pattern: blue-red-white-yellow. Make your own bead pattern!",
+        "icon": "📿",
+        "tag": "Pattern Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Nile Fish Counting Challenge",
+        "desc": "The Alur are expert fishermen! Count the fish in each net. Which net has the most? Solve 10 fish puzzles!",
+        "icon": "🐟",
+        "tag": "Maths Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Alur Traditional Dance Moves",
+        "desc": "The Alur are famous for their Otole war dance! Watch the moves, copy them, and earn a dance star!",
+        "icon": "💃",
+        "tag": "Dance Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw Your Own Sacred Beads",
+        "desc": "Design a bead necklace for a Hero using your favourite colours. Add patterns and share it with the Alur tribe!",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Alur Heritage Crossword",
+        "desc": "Fill in the crossword using clues about Alur history, culture, and the story of Gipir. 10 words to find!",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Alur Champion Quiz",
+        "desc": "10 questions about Alur culture, Gipir's story, and the River Nile. Get 8+ right to earn the Golden Bead badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "acholi",
+    "name": "Acholi",
+    "hero": "Labongo",
+    "heroTitle": "Keeper of the Royal Spear",
+    "greeting": "Itye-di?",
+    "phonetic": "Ee-tyeh-dee?",
+    "meaning": "How are you?",
+    "color": "#8B1A1A",
+    "accent": "#F5D020",
+    "region": "Northern Uganda",
+    "animal": "Lion",
+    "flag": "🔴",
+    "icon": "🏹",
+    "landscape": "Golden grasslands and acacia trees",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace ITYE-DI?",
+        "desc": "Trace the Acholi greeting in big dotted letters. Practise saying it to your family!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Acholi Family Words",
+        "desc": "Learn how to say Mum, Dad, Brother, Sister and Elder in Acholi. Match the words to the pictures!",
+        "icon": "👨‍👩‍👧‍👦",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Acholi Luo Word Builder",
+        "desc": "Build 6 Acholi Luo phrases about everyday life: eating, farming, dancing. Use the word tiles!",
+        "icon": "🧩",
+        "tag": "Sentence Building",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Acholi Wisdom Proverbs",
+        "desc": "\"When spider webs unite, they can tie up a lion.\" Translate 3 Acholi proverbs and act them out!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Labongo & the Royal Spear",
+        "desc": "Labongo was the first Acholi hero who kept the golden grasslands safe. Colour him standing tall under the acacia tree!",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Lost Spear Story",
+        "desc": "The spear of Labongo was stolen by an elephant! Follow the adventure and answer 6 quiz questions.",
+        "icon": "🐘",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "The Bwola Royal Dance",
+        "desc": "The Bwola is the most sacred Acholi dance — only for chiefs! Learn the steps and the meaning of each move.",
+        "icon": "👑",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Labongo's Spear Song 🎵",
+        "desc": "(Tune: London Bridge) \"Labongo carries the royal spear, royal spear, royal spear!\" Clap along!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Grassland Animal Song",
+        "desc": "Count lions, zebras and elephants in the golden grass! A counting song from 1-10 in Acholi Luo.",
+        "icon": "🦁",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Grassland Trail Maze",
+        "desc": "Help Labongo find his royal spear in the elephant grass! Watch out for the wild animals.",
+        "icon": "🌾",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Labongo Jigsaw Puzzle",
+        "desc": "Piece together the picture of Labongo under the acacia tree. 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Acholi Village",
+        "desc": "Two pictures of an Acholi village look almost the same — spot the 8 differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Acholi Word Search",
+        "desc": "Find: LABONGO, SPEAR, GRASS, ACACIA, LION, DRUM, DANCE, CHIEF, RIVER, MILLET, HUNT, BWOLA",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Grasslands",
+        "desc": "Colour the golden Acholi grasslands, the flat-top acacia trees, and Labongo's royal spear!",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Spear Throwing Aim Game",
+        "desc": "Count how many spears hit the target! Practise your counting and adding skills with this Acholi warrior game.",
+        "icon": "🎯",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Millet Harvest Sorting Game",
+        "desc": "The Acholi grow millet! Sort the millet grains by size and count how many bundles you harvest. 10 rounds!",
+        "icon": "🌾",
+        "tag": "Sorting Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Acholi Story Circle Tradition",
+        "desc": "Acholi elders tell stories in a circle at night. Draw your story circle and write 3 things you would share!",
+        "icon": "🌙",
+        "tag": "Cultural Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw Labongo's Spear",
+        "desc": "Design the most magnificent royal spear! Add patterns, feathers and colours. Every warrior's spear is unique!",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Acholi Heritage Crossword",
+        "desc": "10-clue crossword using facts about Acholi history, heroes, food and nature. Use your Hero Pack knowledge!",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Acholi Champion Quiz",
+        "desc": "10 questions about Labongo, Acholi culture and the grasslands of Northern Uganda. Get the Golden Spear badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "bunyoro",
+    "name": "Bunyoro",
+    "hero": "King Isaza",
+    "heroTitle": "Builder of the First Empire",
+    "greeting": "Oraire ota?",
+    "phonetic": "Oh-rye-reh oh-tah?",
+    "meaning": "Good morning",
+    "color": "#4A1C60",
+    "accent": "#FFD700",
+    "region": "Western Uganda",
+    "animal": "Leopard",
+    "flag": "🟣",
+    "icon": "👑",
+    "landscape": "Murchison Falls and ancient kingdom",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace ORAIRE OTA?",
+        "desc": "Trace the Bunyoro morning greeting. Say it when you wake up tomorrow!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Runyoro Words of the Kingdom",
+        "desc": "Learn royal words in Runyoro: Omukama (king), Omugo (royal staff), Omugabe (queen). Match them!",
+        "icon": "👑",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Runyoro Greetings for Every Time",
+        "desc": "Learn morning, afternoon and evening greetings in Runyoro. Fill in the greeting for each time of day!",
+        "icon": "🕐",
+        "tag": "Language Activity",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Bunyoro Royal Proverbs",
+        "desc": "\"A kingdom is built by the people, not the walls.\" Translate 3 Bunyoro proverbs and discuss their meaning!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "King Isaza & the Hidden Kingdom",
+        "desc": "King Isaza traveled to meet the powerful Nyamiyonga underground. Colour the grand gates of the Hidden Kingdom!",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Abatembuzi Empire Story",
+        "desc": "The Bunyoro-Kitara kingdom was the mightiest in all of East Africa! Read the story and answer 6 questions.",
+        "icon": "🏰",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "The Royal Drums of Bunyoro",
+        "desc": "The Mujaguzo royal drums are the most sacred objects in Bunyoro. Learn their names and what each one means.",
+        "icon": "🥁",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "King Isaza's Journey Song 🎵",
+        "desc": "(Tune: Itsy Bitsy Spider) \"King Isaza traveled to a kingdom far away!\" Sing along!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Bunyoro Morning Song",
+        "desc": "Start the day the Bunyoro way! Learn this traditional morning song in Runyoro and count the sunrise colours.",
+        "icon": "🌅",
+        "tag": "Morning Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Secret Path Maze",
+        "desc": "Help King Isaza find the entrance to the Hidden Underground Kingdom! Wind through the caves.",
+        "icon": "🏔️",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Kingdom Gates Jigsaw",
+        "desc": "Rebuild the magnificent gates of the Hidden Kingdom! 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Royal Court",
+        "desc": "Find 8 differences between these two pictures of King Isaza's royal court!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Bunyoro Kingdom Word Search",
+        "desc": "Find: ISAZA, EMPIRE, KINGDOM, KITARA, DRUM, ROYAL, LEOPARD, FALLS, ABATEMBUZI, OMUKAMA, IVORY, CATTLE",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Hidden Kingdom",
+        "desc": "Use purples, golds and greens to colour King Isaza's magnificent underground kingdom!",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Royal Drum Pattern Game",
+        "desc": "The royal drums play different beats! Listen and copy the rhythm. Match the beat pattern to the drum name.",
+        "icon": "🥁",
+        "tag": "Music Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Kingdom Builder Puzzle",
+        "desc": "Place the huts, farms, market and palace in the right spots to build a Bunyoro kingdom. Can you fill all 10 spaces?",
+        "icon": "🏘️",
+        "tag": "Strategy Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Bunyoro Salt Trade Route",
+        "desc": "Bunyoro controlled the great salt lakes! Trace the ancient trade route on the map and count the stops.",
+        "icon": "🗺️",
+        "tag": "Geography Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Design a Royal Crown",
+        "desc": "Every Omukama (king) wears a special crown. Design the most magnificent crown for King Isaza!",
+        "icon": "👑",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Bunyoro Empire Crossword",
+        "desc": "10-clue crossword using facts about the Bunyoro-Kitara empire, King Isaza, and the Great Lakes region.",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Bunyoro Champion Quiz",
+        "desc": "10 questions about King Isaza, the Bunyoro empire, and the royal traditions. Earn the Royal Leopard badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "tooro",
+    "name": "Tooro",
+    "hero": "Prince Kaboyo Olimi I",
+    "heroTitle": "Founder of the Mountain Kingdom",
+    "greeting": "Oraire ota?",
+    "phonetic": "Oh-rye-reh oh-tah?",
+    "meaning": "Good morning",
+    "color": "#1E5631",
+    "accent": "#C8A951",
+    "region": "Rwenzori Mountains",
+    "animal": "Mountain Gorilla",
+    "flag": "🟢",
+    "icon": "🏔️",
+    "landscape": "Rwenzori mountain peaks",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace ORAIRE OTA?",
+        "desc": "Trace the Tooro morning greeting. Say it to your family every morning this week!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Rutooro Mountain Words",
+        "desc": "Learn words for mountains, rivers and forests in Rutooro. Match each word to the right landscape picture!",
+        "icon": "🏔️",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Rutooro Royal Titles",
+        "desc": "Learn how to address kings, queens, princes and elders in Rutooro. Fill in the correct royal title!",
+        "icon": "👑",
+        "tag": "Language Activity",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Mountains Speak Proverbs",
+        "desc": "\"He who climbs alone falls alone.\" Translate 3 Tooro proverbs about unity and strength in the mountains!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Kaboyo & the Rwenzori Mountains",
+        "desc": "Prince Kaboyo looked at the great Rwenzori peaks and said: THIS is my kingdom! Colour the mountain scene.",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Independence of Tooro Kingdom",
+        "desc": "How did Prince Kaboyo break away to found Tooro? Read the story and answer 6 quiz questions!",
+        "icon": "🏰",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "The Rwenzori — Mountains of the Moon",
+        "desc": "The Rwenzori mountains were called the Mountains of the Moon! Learn amazing facts and colour the peak!",
+        "icon": "🌙",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Kaboyo's Mountain Song 🎵",
+        "desc": "(Tune: Row Your Boat) \"Go, go, Kaboyo, to the mountain peaks! Building Tooro, strong and free!\" Sing it!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Counting the Mountain Peaks",
+        "desc": "Count the 6 highest peaks of the Rwenzori in this counting song! Each peak has a Rutooro name.",
+        "icon": "⛰️",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Path to the Foothills Maze",
+        "desc": "Help Prince Kaboyo find his way to the foothills of the Rwenzori to build his palace!",
+        "icon": "🏔️",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Rwenzori Peak Jigsaw",
+        "desc": "Rebuild the magnificent view of the Mountains of the Moon! 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Mountain Village",
+        "desc": "Two pictures of a Tooro mountain village — find the 8 differences hidden in the misty peaks!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Tooro Mountain Word Search",
+        "desc": "Find: KABOYO, RWENZORI, PEAKS, GORILLA, FOREST, KINGDOM, PALACE, FREEDOM, INDEPENDENCE, MOUNTAIN, CLOUDS, MIST",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Rwenzori Peaks",
+        "desc": "Use blues, whites and greens to colour the misty Rwenzori mountain peaks! Add snow on the very top.",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Mountain Animal Matching Game",
+        "desc": "Match the Rwenzori animals to their homes: gorilla=forest, hyrax=rocks, leopard=misty slopes!",
+        "icon": "🦍",
+        "tag": "Matching Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Altitude Number Climb",
+        "desc": "Count by 100s as you climb the mountain from 1000m to 5100m! Each step reveals a new Rwenzori creature.",
+        "icon": "📊",
+        "tag": "Maths Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Tooro Barkcloth Making",
+        "desc": "The Tooro make beautiful barkcloth from fig trees! Follow the steps to draw how barkcloth is made.",
+        "icon": "🌿",
+        "tag": "Craft Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw the Mountains of the Moon",
+        "desc": "Draw the magnificent Rwenzori peaks with their snow caps and misty clouds. Add a mountain gorilla!",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Tooro Kingdom Crossword",
+        "desc": "10 clues about Kaboyo, the Rwenzori, mountain gorillas and Tooro traditions. Fill in the crossword!",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Tooro Champion Quiz",
+        "desc": "10 questions about Prince Kaboyo, the Mountains of the Moon, and Tooro culture. Earn the Gorilla badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "bagisu",
+    "name": "Bagisu",
+    "hero": "Bamasaba",
+    "heroTitle": "Protectors of Mount Elgon",
+    "greeting": "Mulembe!",
+    "phonetic": "Moo-lem-beh!",
+    "meaning": "Hello / Peace",
+    "color": "#7B3F00",
+    "accent": "#228B22",
+    "region": "Mount Elgon",
+    "animal": "Elephant",
+    "flag": "🟤",
+    "icon": "⛰️",
+    "landscape": "Mount Elgon volcanic slopes",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace MULEMBE!",
+        "desc": "Trace the Bagisu greeting for peace and hello! Say it to everyone you meet today.",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Lumasaba Peace Words",
+        "desc": "Learn words for strength, peace, mountain and harvest in Lumasaba. Match each word to its picture!",
+        "icon": "🌿",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Lumasaba Seasonal Calendar",
+        "desc": "The Bagisu have special words for each season. Learn the rainy season, harvest and planting words!",
+        "icon": "🗓️",
+        "tag": "Language Activity",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Mountain Proverbs of the Bagisu",
+        "desc": "\"The mountain does not laugh at another mountain.\" Translate 3 Bagisu proverbs about respect and hard work!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Bamasaba: Heroes of the Peak",
+        "desc": "The Bagisu live high on Mount Elgon and are known for their incredible courage! Colour the dancer in Imbalu beads.",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Imbalu Ceremony Story",
+        "desc": "The Imbalu is the most important Bagisu tradition — a rite of passage into bravery! Read and answer 6 questions.",
+        "icon": "🥁",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Mount Elgon: The Largest Volcano",
+        "desc": "Mount Elgon is an ancient volcano — learn amazing facts about the mountain, its caves and its animals!",
+        "icon": "🌋",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Bamasaba Hero Song 🎵",
+        "desc": "(Tune: If You're Happy) \"Bamasaba are the heroes of the hill, with a strength and a spirit and a will!\" Sing it!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Elephant Counting Song",
+        "desc": "Count elephants climbing Mount Elgon! A fun counting song in Lumasaba from 1 to 10.",
+        "icon": "🐘",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Peak Climb Maze",
+        "desc": "Help Bamasaba climb the winding mountain paths of Mount Elgon to reach the summit!",
+        "icon": "⛰️",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Mount Elgon Jigsaw",
+        "desc": "Rebuild the picture of Mount Elgon rising above the clouds! 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Imbalu Dance",
+        "desc": "Two pictures of the Imbalu dance ceremony — find the 8 hidden differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Bagisu Mountain Word Search",
+        "desc": "Find: BAMASABA, ELGON, IMBALU, DANCE, VOLCANO, CAVES, ELEPHANT, HARVEST, COURAGE, BEADS, DRUM, STRENGTH",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Imbalu Dancer",
+        "desc": "Use earth colours — red, brown, green and gold — to colour the Imbalu dancer on Mount Elgon!",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Harvest Counting Challenge",
+        "desc": "The Bagisu harvest coffee and plantain on the mountain slopes! Count the bunches in each field.",
+        "icon": "☕",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Cave Explorer Puzzle",
+        "desc": "Mount Elgon has huge caves! Navigate through Kitum Cave, matching animals to the right cave chamber.",
+        "icon": "🦇",
+        "tag": "Exploration Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Bagisu Coffee Tradition",
+        "desc": "The Bagisu grow Arabica coffee on Mount Elgon slopes! Follow the journey from bean to cup in 6 steps.",
+        "icon": "☕",
+        "tag": "Cultural Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw Mount Elgon",
+        "desc": "Draw the giant volcano of Mount Elgon! Add the giant crater on top, waterfalls, forests and coffee farms.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Bagisu Heritage Crossword",
+        "desc": "10 clues about Bamasaba, Mount Elgon, the Imbalu, and Bagisu culture. Fill in the answers!",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Bagisu Champion Quiz",
+        "desc": "10 questions about Bamasaba, Imbalu, Mount Elgon and the Bagisu people. Earn the Elephant Warrior badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "baganda",
+    "name": "Baganda",
+    "hero": "Kintu",
+    "heroTitle": "First King of Buganda",
+    "greeting": "Oli otya?",
+    "phonetic": "Oh-lee oh-tyah?",
+    "meaning": "How are you?",
+    "color": "#8B6914",
+    "accent": "#E74C3C",
+    "region": "Central Uganda / Lake Victoria",
+    "animal": "Grey Crowned Crane",
+    "flag": "🟡",
+    "icon": "🐄",
+    "landscape": "Lake Victoria shores and banana groves",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace OLI OTYA?",
+        "desc": "Trace the most famous Luganda greeting! More than 8 million people speak Luganda.",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Luganda Animal Names",
+        "desc": "Learn the Luganda names for Uganda's animals: enjovu (elephant), empologoma (lion), ngabi (bushbuck)! Match them!",
+        "icon": "🦒",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Luganda Number Chant",
+        "desc": "Count 1 to 20 in Luganda with a chant! Emu, Bbiri, Ssatu, Nnya... clap on each number!",
+        "icon": "🔢",
+        "tag": "Number Song",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Buganda Royal Proverbs",
+        "desc": "\"Omuntu nga omuntu n'abantu\" means \"A person is a person through other people.\" Explore 4 Baganda proverbs!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Kintu, Nambi & the First Cow",
+        "desc": "Kintu and his queen Nambi built the first peaceful Buganda kingdom. Colour them under the Great Tree!",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "Kintu's Journey Through the Challenges",
+        "desc": "Kintu had to pass 5 impossible tests to win Nambi's hand. Read and answer 6 quiz questions!",
+        "icon": "⚔️",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "The Kabaka: King of Buganda",
+        "desc": "The Kabaka is one of Africa's most respected kings! Learn about the Lubiri Palace and the Buganda Kingdom.",
+        "icon": "👑",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Kintu's Cow Song 🎵",
+        "desc": "(Tune: Farmer in the Dell) \"Kintu has a cow, Kintu has a cow, he and Nambi built a home!\" Sing and moo!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Luganda Days of the Week Song",
+        "desc": "Learn all 7 days of the week in Luganda! Bazzukulu (Sunday), Balaza (Monday)... Count them on your fingers!",
+        "icon": "📅",
+        "tag": "Language Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Banana Grove Maze",
+        "desc": "Help Kintu's cow find the way through the banana grove to reach the royal palace!",
+        "icon": "🍌",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Kintu & Nambi Jigsaw",
+        "desc": "Rebuild the beautiful scene of Kintu and Nambi under the Great Tree. 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Buganda Kingdom",
+        "desc": "Two pictures of the royal Buganda court — find the 8 hidden differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Buganda Luganda Word Search",
+        "desc": "Find: KINTU, NAMBI, KABAKA, LUGANDA, BANANA, CRANE, DRUM, LAKE, PALACE, CATTLE, TRADE, KINGDOM",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Grey Crowned Crane",
+        "desc": "The Crowned Crane is Uganda's national bird! Colour it with its famous golden crown and red markings.",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Banana Counting Game",
+        "desc": "The Baganda have over 40 types of banana! Count the bunches in each tree. Which tree has the most?",
+        "icon": "🍌",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Lake Victoria Fish Market",
+        "desc": "Sort and count the fish at the Lake Victoria market. Match each fish to its Luganda name!",
+        "icon": "🐟",
+        "tag": "Sorting Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Buganda Clans: Your Animal Family",
+        "desc": "Every Buganda person belongs to a clan with an animal totem! Find your clan animal and learn its story.",
+        "icon": "🦅",
+        "tag": "Cultural Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw Kintu's Royal Palace",
+        "desc": "Design the Lubiri Palace for the Kabaka! Add tall gates, banana trees, the royal drum and the crowned crane.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Buganda Kingdom Crossword",
+        "desc": "10 clues about Kintu, the Kabaka, Lake Victoria and Luganda language. Fill in the answers!",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Buganda Champion Quiz",
+        "desc": "10 questions about Kintu, the Kabaka, Luganda and the Buganda kingdom. Earn the Crowned Crane badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "basongora",
+    "name": "Basongora",
+    "hero": "Queen Kitami",
+    "heroTitle": "The Warrior Priestess",
+    "greeting": "Agandi?",
+    "phonetic": "Ah-gan-dee?",
+    "meaning": "How are you?",
+    "color": "#5C2D00",
+    "accent": "#E8B84B",
+    "region": "Queen Elizabeth National Park region",
+    "animal": "Long-horned Ankole Cattle",
+    "flag": "🟠",
+    "icon": "🥁",
+    "landscape": "Savannah plains with long-horned cattle",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace AGANDI?",
+        "desc": "Trace the Basongora greeting! Say it to your family and make them smile.",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Cattle Names in Runyankore",
+        "desc": "The Basongora are famous cattle herders! Learn the names for different cattle colours and markings.",
+        "icon": "🐄",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Basongora Pastoral Songs",
+        "desc": "Learn to sing about the long-horned Ankole cattle! These special cows have the longest horns in the world.",
+        "icon": "🎵",
+        "tag": "Language Song",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Cattle Keeper Proverbs",
+        "desc": "\"A herd without a leader scatters.\" Translate 3 Basongora proverbs about leadership and community!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Queen Kitami & the Sacred Drum",
+        "desc": "Queen Kitami ruled with her sacred drum — her voice was as powerful as thunder! Colour her holding the royal drum.",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Warrior Priestess of Mpororo",
+        "desc": "Queen Kitami was one of the most powerful female leaders in Uganda's history. Read and answer 6 questions!",
+        "icon": "👸",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Ankole Long-Horned Cattle",
+        "desc": "These extraordinary cows have horns up to 2.4 metres long! Learn about the Basongora cattle culture.",
+        "icon": "🐮",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Queen Kitami's Drum Song 🎵",
+        "desc": "(Tune: Frère Jacques) \"Queen Kitami, Queen Kitami, Hear the drum? Hear the drum?\" Boom boom boom!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Count the Cattle Horns",
+        "desc": "Count the magnificent long horns of the Ankole cattle in this fun rhyming song! 1 horn, 2 horns...",
+        "icon": "🐄",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Sanctuary Path Maze",
+        "desc": "Find the Queen's hidden palace in the rolling hills! Guide the cattle through the savannah paths.",
+        "icon": "🏔️",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Long-horned Cattle Jigsaw",
+        "desc": "Put together the beautiful picture of the magnificent Ankole cattle on the open savannah! 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Cattle Kraal",
+        "desc": "Two pictures of the Basongora cattle kraal — find the 8 differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Basongora Word Search",
+        "desc": "Find: KITAMI, DRUM, CATTLE, ANKOLE, SAVANNAH, QUEEN, PRIESTESS, SACRED, HORNS, MPORORO, KRAAL, WARRIOR",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Ankole Cattle",
+        "desc": "Use browns, creams and blacks to colour the magnificent long-horned Ankole cattle! Their horns can be coloured gold.",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Cattle Herding Counting Game",
+        "desc": "Count how many cattle are in each herd! Sort them by horn size and colour. Which herd is biggest?",
+        "icon": "🐄",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Drum Beat Pattern Game",
+        "desc": "Queen Kitami used drum beats to send messages! Match each drum pattern to its meaning: warning, celebration, call to gather.",
+        "icon": "🥁",
+        "tag": "Music Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Basongora Migration Routes",
+        "desc": "The Basongora moved across the savannah following grass and water for their cattle. Trace their route on the map!",
+        "icon": "🗺️",
+        "tag": "Geography Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw the Long-Horned Cattle",
+        "desc": "Draw a magnificent Ankole cow with the longest horns you can imagine! Add patterns on its coat.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Basongora Heritage Crossword",
+        "desc": "10 clues about Queen Kitami, Ankole cattle, Mpororo, and Basongora culture.",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Basongora Champion Quiz",
+        "desc": "10 questions about Queen Kitami, the sacred drum, and Ankole cattle. Earn the Golden Horn badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "jie",
+    "name": "Jie Karamojong",
+    "hero": "Orwakol & Nayece",
+    "heroTitle": "The Bull Followers",
+    "greeting": "Ejoka?",
+    "phonetic": "Eh-joh-kah?",
+    "meaning": "Are you well?",
+    "color": "#B5451B",
+    "accent": "#F5C518",
+    "region": "Karamoja, NE Uganda",
+    "animal": "Spotted Bull",
+    "flag": "🟠",
+    "icon": "🐂",
+    "landscape": "Semi-arid Karamoja savannah",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace EJOKA?",
+        "desc": "Trace the Jie greeting and say it like a warrior! Stamp your foot when you say it.",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Ateso Karamojong Animal Words",
+        "desc": "Learn the names of the amazing Karamoja animals: ebur (giraffe), emong (lion), ekori (hippo)! Match them!",
+        "icon": "🦒",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Jie Fire-Making Words",
+        "desc": "The Jie make fire by rubbing sticks together — a sacred skill! Learn the special words for each step.",
+        "icon": "🔥",
+        "tag": "Language Activity",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Karamoja Warrior Proverbs",
+        "desc": "\"Follow the bull and find your home.\" Translate 3 Jie proverbs about nature, cattle and finding your way!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Orwakol, Nayece & the Grey Bull",
+        "desc": "Orwakol followed his beloved spotted bull Engiro into a new land. Colour him making fire while the bull watches!",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "Nayece Finds the Water Pool",
+        "desc": "Brave Nayece found water and grass for her people in the dry savannah! Read the adventure and answer 6 questions.",
+        "icon": "💧",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Jie Fire-Making: The Sacred Skill",
+        "desc": "The Jie can make fire using two sticks! Learn about this ancient skill and why fire is sacred to the Jie.",
+        "icon": "🔥",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Orwakol's Bull Song 🎵",
+        "desc": "(Tune: Old MacDonald) \"Orwakol followed the spotted bull, Engiro was his name!\" Moo along!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Counting Cattle in Karamoja",
+        "desc": "Count the spotted bulls, cows and calves in the Karamoja herd! A counting song in Ateso from 1 to 10.",
+        "icon": "🐂",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Follow the Bull's Tracks Maze",
+        "desc": "Follow Engiro the spotted bull's hoof tracks across the Karamoja savannah to reach the water pool!",
+        "icon": "🐾",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Karamoja Landscape Jigsaw",
+        "desc": "Rebuild the vast open landscape of Karamoja with giraffes, the bull, and the water pool. 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Karamoja Sunset",
+        "desc": "Two pictures of the Karamoja sunset with cattle — find the 8 hidden differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Karamoja Word Search",
+        "desc": "Find: ORWAKOL, NAYECE, ENGIRO, BULL, FIRE, WATER, KARAMOJA, GIRAFFE, WARRIOR, SAVANNAH, SPEAR, CATTLE",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour Engiro the Spotted Bull",
+        "desc": "Use browns, whites and blacks to colour Engiro! Add the special spots that make him the most magnificent bull.",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Track the Animal Footprints",
+        "desc": "Match each animal footprint to the right Karamoja animal! Bull, giraffe, lion, ostrich — which track is which?",
+        "icon": "🐾",
+        "tag": "Matching Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Water Finder Geography Game",
+        "desc": "Nayece had to find water in the dry savannah! Follow the clues: look for green grass, birds, and animal tracks.",
+        "icon": "💧",
+        "tag": "Geography Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Jie Beadwork Art Patterns",
+        "desc": "The Jie women make beautiful beadwork! Learn the meaning of the patterns and create your own bead design.",
+        "icon": "📿",
+        "tag": "Craft Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw Engiro the Spotted Bull",
+        "desc": "Draw the most magnificent spotted bull you can imagine! Make his spots and give him a strong proud face.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Jie Karamojong Crossword",
+        "desc": "10 clues about Orwakol, Nayece, Engiro, the Karamoja landscape and Jie culture.",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Jie Champion Quiz",
+        "desc": "10 questions about Orwakol and Nayece, fire-making, and Karamoja culture. Earn the Spotted Bull badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "banyankole",
+    "name": "Banyankole",
+    "hero": "General Muguta",
+    "heroTitle": "Commander of the Nkondami Archers",
+    "greeting": "Agandi ota?",
+    "phonetic": "Ah-gan-dee oh-tah?",
+    "meaning": "How are you doing?",
+    "color": "#2C5F2E",
+    "accent": "#E8B84B",
+    "region": "Ankole, SW Uganda",
+    "animal": "Ankole Longhorn",
+    "flag": "🟢",
+    "icon": "🏹",
+    "landscape": "Rolling green hills of Ankole",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace AGANDI OTA?",
+        "desc": "Trace the Banyankole greeting! It's longer than the others — you can do it!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Runyankore Warrior Words",
+        "desc": "Learn warrior words in Runyankore: omugabe (king), omugunzi (archer), omwishwa (arrow). Match them!",
+        "icon": "🏹",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Runyankore Counting Warriors",
+        "desc": "Count Muguta's archers in Runyankore! Emu, ibiri, ishatu... learn all numbers to 20 with the warrior chant.",
+        "icon": "🔢",
+        "tag": "Number Song",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Ankole Warrior Proverbs",
+        "desc": "\"A warrior who does not sharpen his arrow will lose the battle.\" Translate 3 Banyankole proverbs!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "General Muguta & the Nkondami Archers",
+        "desc": "Muguta's archers were the greatest in all the land! Colour the warriors with their bows near the long-horned cattle.",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "The Battle of Buhweju Hills",
+        "desc": "General Muguta defended the hills of Buhweju against impossible odds! Read the story and answer 6 questions.",
+        "icon": "⚔️",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "The Omugabe: King of Ankole",
+        "desc": "The Omugabe was one of the greatest kings in the Great Lakes region! Learn about the Ankole royal court.",
+        "icon": "👑",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Muguta's Archer Song 🎵",
+        "desc": "(Tune: Head, Shoulders) \"Muguta has a bow and quiv', bow and quiv'! Nkondami are the best to live!\" Sing it!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Counting Arrows in Runyankore",
+        "desc": "Count Muguta's arrows flying through the air! A counting song from 1 to 10 with clapping and stamping.",
+        "icon": "🏹",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Archer's Aim Maze",
+        "desc": "Help the Nkondami archer aim his arrow through the rolling hills of Buhweju to hit the target!",
+        "icon": "🎯",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Buhweju Hills Jigsaw",
+        "desc": "Put together the beautiful landscape of the Buhweju hills with archers and long-horned cattle. 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Archer's Camp",
+        "desc": "Two pictures of the Nkondami archers' camp — find the 8 hidden differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Banyankole Word Search",
+        "desc": "Find: MUGUTA, ARCHER, NKONDAMI, ANKOLE, BUHWEJU, CATTLE, HILLS, OMUGABE, ARROWS, WARRIOR, SHIELD, BATTLE",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Nkondami Archers",
+        "desc": "Use earth tones and greens to colour the great Nkondami archers on the rolling Ankole hills!",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Arrow Target Maths Game",
+        "desc": "Each target circle has a different number! Count how many arrows hit each target. What's the total score?",
+        "icon": "🎯",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Ankole Battle Strategy Game",
+        "desc": "Place your Nkondami archers on the hills to defend Buhweju! Choose the best positions to protect the kingdom.",
+        "icon": "♟️",
+        "tag": "Strategy Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Ankole Milk and Cattle Culture",
+        "desc": "The Banyankole measure wealth in cattle! Learn about the extraordinary Ankole cattle herding traditions.",
+        "icon": "🐄",
+        "tag": "Cultural Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Design an Archer's Bow & Arrow",
+        "desc": "Design the most beautiful bow and arrow set for a Nkondami warrior! Add patterns and colours.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Banyankole Heritage Crossword",
+        "desc": "10 clues about General Muguta, the Nkondami archers, and Ankole culture.",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Banyankole Champion Quiz",
+        "desc": "10 questions about Muguta, the Nkondami, and Ankole culture. Earn the Golden Arrow badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  },
+  {
+    "id": "bakiga",
+    "name": "Bakiga",
+    "hero": "Queen Muhumuza",
+    "heroTitle": "The Forest Freedom Fighter",
+    "greeting": "Oraire-gye?",
+    "phonetic": "Oh-rye-reh-jeh?",
+    "meaning": "Did you sleep well?",
+    "color": "#1A3A2A",
+    "accent": "#C8E63C",
+    "region": "Kigezi Highlands",
+    "animal": "Mountain Gorilla",
+    "flag": "🟩",
+    "icon": "🌿",
+    "landscape": "Impenetrable forest and terraced mountains",
+    "activities": [
+      {
+        "id": 1,
+        "type": "language",
+        "age": "2-4",
+        "title": "Trace ORAIRE-GYE?",
+        "desc": "Trace the Bakiga morning question. Ask your family tomorrow morning when they wake up!",
+        "icon": "✏️",
+        "tag": "Language Trace",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "type": "language",
+        "age": "5-7",
+        "title": "Rukiga Forest Words",
+        "desc": "Learn words for the forest, mountains and animals in Rukiga! Forest (enshaka), mountain (orutare), gorilla (engagi)!",
+        "icon": "🌿",
+        "tag": "Vocabulary",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "type": "language",
+        "age": "7-10",
+        "title": "Rukiga Resistance Song Words",
+        "desc": "The Bakiga sang war songs when fighting for freedom! Learn the powerful words and their meanings.",
+        "icon": "🎵",
+        "tag": "Language Activity",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "type": "language",
+        "age": "5-10",
+        "title": "Kigezi Mountain Proverbs",
+        "desc": "\"A mountain does not tremble at the call of a small bird.\" Translate 3 Bakiga proverbs about courage!",
+        "icon": "📜",
+        "tag": "Proverbs",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "type": "story",
+        "age": "4-7",
+        "title": "Queen Muhumuza in the Forest",
+        "desc": "Fearless Queen Muhumuza hid and fought in the thick mountain forests! Colour her in the forest canopy.",
+        "icon": "📖",
+        "tag": "Story Colouring",
+        "points": 15
+      },
+      {
+        "id": 6,
+        "type": "story",
+        "age": "7-10",
+        "title": "Queen Muhumuza's Fight for Freedom",
+        "desc": "Queen Muhumuza led resistance against colonial forces in the 19th century! Read the story and answer 6 questions.",
+        "icon": "👸",
+        "tag": "Story Quiz",
+        "points": 25
+      },
+      {
+        "id": 7,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Bwindi Impenetrable Forest",
+        "desc": "The Bakiga live next to the most famous forest in Africa — home to the mountain gorillas! Learn its secrets.",
+        "icon": "🦍",
+        "tag": "Cultural Learning",
+        "points": 20
+      },
+      {
+        "id": 8,
+        "type": "song",
+        "age": "2-6",
+        "title": "Queen Muhumuza's Freedom Song 🎵",
+        "desc": "(Tune: Mary Had a Little Lamb) \"Muhumuza was a fearless Queen, fearless Queen, fearless Queen!\" Sing it bravely!",
+        "icon": "🎶",
+        "tag": "Hero Song",
+        "points": 10
+      },
+      {
+        "id": 9,
+        "type": "song",
+        "age": "4-8",
+        "title": "Counting Mountain Gorillas",
+        "desc": "Count the gorillas hiding in the forest! A counting song from 1 to 10 in Rukiga with gorilla sounds.",
+        "icon": "🦍",
+        "tag": "Counting Song",
+        "points": 15
+      },
+      {
+        "id": 10,
+        "type": "maze",
+        "age": "4-7",
+        "title": "Forest Trail Maze",
+        "desc": "Help Queen Muhumuza find the hidden path through the impenetrable forest to reach the mountain camp!",
+        "icon": "🌿",
+        "tag": "Maze",
+        "points": 20
+      },
+      {
+        "id": 11,
+        "type": "puzzle",
+        "age": "5-8",
+        "title": "Bwindi Forest Jigsaw",
+        "desc": "Rebuild the dense Bwindi forest scene with mountain gorillas and the queen. 12 or 24 pieces.",
+        "icon": "🧩",
+        "tag": "Jigsaw Puzzle",
+        "points": 20
+      },
+      {
+        "id": 12,
+        "type": "spot",
+        "age": "5-9",
+        "title": "Spot 8 Differences: Gorilla Forest",
+        "desc": "Two pictures of the Bwindi Impenetrable Forest — find the 8 hidden differences!",
+        "icon": "🔍",
+        "tag": "Spot the Difference",
+        "points": 25
+      },
+      {
+        "id": 13,
+        "type": "wordfind",
+        "age": "6-10",
+        "title": "Bakiga Freedom Word Search",
+        "desc": "Find: MUHUMUZA, FOREST, GORILLA, KIGEZI, FREEDOM, MOUNTAIN, QUEEN, WARRIOR, BWINDI, TERRACES, RESIST, COURAGE",
+        "icon": "🔠",
+        "tag": "Word Search",
+        "points": 20
+      },
+      {
+        "id": 14,
+        "type": "colour",
+        "age": "2-6",
+        "title": "Colour the Mountain Gorilla",
+        "desc": "Colour the magnificent mountain gorilla of Bwindi Forest! Use deep blacks, silver backs, and brown eyes.",
+        "icon": "🎨",
+        "tag": "Colouring",
+        "points": 10
+      },
+      {
+        "id": 15,
+        "type": "game",
+        "age": "4-8",
+        "title": "Gorilla Family Counting Game",
+        "desc": "A gorilla family has silverbacks, females and babies! Count each type. How many in the whole family group?",
+        "icon": "🦍",
+        "tag": "Maths Game",
+        "points": 15
+      },
+      {
+        "id": 16,
+        "type": "game",
+        "age": "6-10",
+        "title": "Terraced Farm Puzzle",
+        "desc": "The Bakiga build famous stepped farms on the mountains! Arrange the terraces from bottom to top and fill each with crops.",
+        "icon": "🏔️",
+        "tag": "Geography Game",
+        "points": 20
+      },
+      {
+        "id": 17,
+        "type": "culture",
+        "age": "5-10",
+        "title": "Bakiga Terraced Farming",
+        "desc": "The Bakiga are masters of mountain farming! Learn how they built terraces to grow food on steep slopes.",
+        "icon": "🌾",
+        "tag": "Cultural Activity",
+        "points": 20
+      },
+      {
+        "id": 18,
+        "type": "draw",
+        "age": "3-7",
+        "title": "Draw the Impenetrable Forest",
+        "desc": "Draw the dark, dense, magical Bwindi forest! Add gorillas, giant ferns and Queen Muhumuza hiding in the trees.",
+        "icon": "✏️",
+        "tag": "Drawing",
+        "points": 15
+      },
+      {
+        "id": 19,
+        "type": "crossword",
+        "age": "7-10",
+        "title": "Bakiga Heritage Crossword",
+        "desc": "10 clues about Queen Muhumuza, Bwindi forest, mountain gorillas and Bakiga traditions.",
+        "icon": "📝",
+        "tag": "Crossword",
+        "points": 25
+      },
+      {
+        "id": 20,
+        "type": "quiz",
+        "age": "6-10",
+        "title": "Bakiga Champion Quiz",
+        "desc": "10 questions about Queen Muhumuza, the forest, gorillas and Bakiga courage. Earn the Gorilla Queen badge!",
+        "icon": "🏆",
+        "tag": "Quiz Challenge",
+        "points": 30
+      }
+    ]
+  }
+]
