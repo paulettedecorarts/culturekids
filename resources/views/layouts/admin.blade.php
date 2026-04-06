@@ -26,7 +26,7 @@
             --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
             --sp-6:24px; --sp-8:32px; --sp-12:48px;
             --r-sm:8px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-full:9999px;
-            --dur-fast:150ms;
+            --dur-fast:150ms; --ease-spring:cubic-bezier(.34,1.56,.64,1);
         }
 
         body {
@@ -97,7 +97,19 @@
         .role-admin { background: rgba(196,75,43,.2); color: var(--clay-red-light); }
         .role-editor { background: rgba(74,124,89,.2); color: var(--banana-mid); }
         .role-teacher { background: rgba(46,77,138,.2); color: var(--sky-mid); }
-        .role-parent { background: rgba(139,94,60,.2); color: #B07D52; }
+        .role-child { background: rgba(232,135,42,.2); color: #F2A84E; }
+
+        /* Module Toggles */
+        .module-toggle { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r-md); padding: var(--sp-3) var(--sp-4); }
+        .toggle-info { flex: 1; }
+        .toggle-name { font-size: 15px; font-weight: 600; color: rgba(255,255,255,.75); }
+        .toggle-desc { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 2px; }
+        .toggle-switch { width: 36px; height: 20px; border-radius: var(--r-full); position: relative; cursor: pointer; flex-shrink: 0; transition: background var(--dur-fast); }
+        .toggle-switch.on { background: var(--banana-green); }
+        .toggle-switch.off { background: rgba(255,255,255,.15); }
+        .toggle-switch::after { content: ''; position: absolute; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left var(--dur-fast) var(--ease-spring); box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+        .toggle-switch.on::after { left: 19px; }
+        .toggle-switch.off::after { left: 3px; }
     </style>
 </head>
 <body>
@@ -112,8 +124,18 @@
             <a href="{{ route('admin.dashboard') }}" class="sa-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 📊 System Overview
             </a>
-            <a href="#" class="sa-nav-item">👥 User Management</a>
-            <a href="#" class="sa-nav-item">🏢 Organizations</a>
+            <a href="{{ route('admin.users') }}" class="sa-nav-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                👥 User Management
+            </a>
+            <a href="{{ route('admin.organizations') }}" class="sa-nav-item {{ request()->routeIs('admin.organizations') ? 'active' : '' }}">
+                🏢 Organizations
+            </a>
+            <a href="{{ route('admin.modules') }}" class="sa-nav-item {{ request()->routeIs('admin.modules') ? 'active' : '' }}">
+                🧩 Module Toggles
+            </a>
+            <a href="{{ route('admin.permissions') }}" class="sa-nav-item {{ request()->routeIs('admin.permissions') ? 'active' : '' }}">
+                🔑 Permissions
+            </a>
             
             <div class="sa-nav-section">Content</div>
             <a href="#" class="sa-nav-item">🌍 Tribe Registry</a>

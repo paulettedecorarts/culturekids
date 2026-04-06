@@ -8,10 +8,14 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Super Admin Route
-Route::get('admin/dashboard', \App\Livewire\Admin\Dashboard::class)
-    ->middleware(['auth', 'verified', 'role:super_admin'])
-    ->name('admin.dashboard');
+// Super Admin Routes
+Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
+    Route::get('users', \App\Livewire\Admin\UserManagement::class)->name('users');
+    Route::get('organizations', \App\Livewire\Admin\OrganizationsManager::class)->name('organizations');
+    Route::get('modules', \App\Livewire\Admin\ModuleToggles::class)->name('modules');
+    Route::get('permissions', \App\Livewire\Admin\PermissionsManager::class)->name('permissions');
+});
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
