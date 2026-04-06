@@ -18,15 +18,15 @@ class Dashboard extends Component
         $tribesCount = \DB::table('tribes')->count();
         $activitiesCount = \DB::table('activities')->count();
 
-        // Let's get the 5 most recent users
-        $recentUsers = User::with('roles', 'organisation')->latest()->take(5)->get();
+        // Let's get the active organizations (we'll just take 3 or 4)
+        $activeOrganizations = Organisation::withCount('users')->latest()->take(4)->get();
 
         return view('livewire.admin.dashboard', [
             'organizationsCount' => $organizationsCount,
             'usersCount' => $usersCount,
             'tribesCount' => $tribesCount,
             'activitiesCount' => $activitiesCount,
-            'recentUsers' => $recentUsers,
+            'activeOrganizations' => $activeOrganizations,
         ]);
     }
 }

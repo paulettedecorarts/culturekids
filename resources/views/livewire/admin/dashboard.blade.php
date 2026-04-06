@@ -33,61 +33,50 @@
         </div>
     </div>
 
-    <!-- Recent Users Table -->
-    <p style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:var(--sp-3);margin-top:var(--sp-6)">Recent Users</p>
+    <!-- Active Organizations -->
+    <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:var(--sp-3);margin-top:var(--sp-6)">Active Organizations</p>
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:3fr 2fr 2fr 1fr 100px">
-            <span>User</span>
-            <span>Role</span>
+        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
             <span>Organization</span>
-            <span>Joined</span>
+            <span>Plan</span>
+            <span>Users</span>
+            <span>Status</span>
             <span>Actions</span>
         </div>
         
-        @forelse($recentUsers as $user)
-            <div class="sa-table-row" style="grid-template-columns:3fr 2fr 2fr 1fr 100px">
-                <div style="display:flex;align-items:center;gap:var(--sp-3)">
-                    <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:14px;">
-                        {{ substr($user->name, 0, 1) }}
-                    </div>
+        @forelse($activeOrganizations as $org)
+            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
+                <div style="display:flex;align-items:center;gap:var(--sp-2)">
+                    <span style="font-size:18px">🏛</span>
                     <div>
-                        <div style="font-weight:600;color:#fff;font-size:14px">{{ $user->email }}</div>
-                        <div style="font-size:12px;color:rgba(255,255,255,.3)">{{ $user->name }}</div>
+                        <div style="font-weight:600;color:#fff;font-size:12px">{{ $org->name }}</div>
+                        <div style="font-size:10px;color:rgba(255,255,255,.3)">{{ $org->slug }}.paulette.app</div>
                     </div>
                 </div>
                 
-                <div>
-                    @if($user->hasRole('super_admin'))
-                        <span class="role-chip role-super">Super Admin</span>
-                    @elseif($user->hasRole('org_admin'))
-                        <span class="role-chip role-admin">Org Admin</span>
-                    @elseif($user->hasRole('cms_editor'))
-                        <span class="role-chip role-editor">CMS Editor</span>
-                    @elseif($user->hasRole('teacher'))
-                        <span class="role-chip role-teacher">Teacher</span>
-                    @elseif($user->hasRole('parent'))
-                        <span class="role-chip role-parent">Parent</span>
-                    @else
-                        <span class="role-chip role-child">Child / Basic</span>
-                    @endif
-                </div>
-
-                <span style="font-size:13px;color:rgba(255,255,255,.5)">
-                    {{ $user->organisation ? $user->organisation->name : 'Global (No Org)' }}
-                </span>
+                <span style="font-size:11px;font-weight:600;color:var(--savanna-gold)">{{ Str::title($org->plan ?? 'Standard') }}</span>
+                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $org->users_count }}</span>
+                <span class="status-pill status-published">Active</span>
                 
-                <span style="font-size:13px;color:rgba(255,255,255,.35)">
-                    {{ $user->created_at->diffForHumans() }}
-                </span>
-                
-                <button class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:5px 12px;font-size:12px;border-radius:var(--r-sm);border:none;cursor:pointer;">
+                <button class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:3px 8px;font-size:9px" onclick="toast('Managing {{ $org->name }}…')">
                     Manage
                 </button>
             </div>
         @empty
             <div class="sa-table-row" style="grid-template-columns:1fr">
-                <div style="text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-4)">No users found.</div>
+                <div style="text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-4)">No active organizations found.</div>
             </div>
         @endforelse
+    </div>
+
+    <!-- Module Toggles (quick access) -->
+    <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:var(--sp-3);margin-top:var(--sp-5)">Global Module Control</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3)">
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">📚 Tribe Directory</div><div class="toggle-desc">All 65+ tribe profiles</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">📖 Comics</div><div class="toggle-desc">Story packs &amp; panels</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🎵 Songs</div><div class="toggle-desc">Audio library</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🗣 Language Learning</div><div class="toggle-desc">Flashcard vocab system</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🖥 Kiosk Mode</div><div class="toggle-desc">Museum installations</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
+        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">💰 Monetization</div><div class="toggle-desc">Premium packs &amp; IAP</div></div><div class="toggle-switch off" onclick="toast('Toggling module')"></div></div>
     </div>
 </div>
