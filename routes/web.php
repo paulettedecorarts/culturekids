@@ -15,6 +15,14 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('organizations', \App\Livewire\Admin\OrganizationsManager::class)->name('organizations');
     Route::get('modules', \App\Livewire\Admin\ModuleToggles::class)->name('modules');
     Route::get('permissions', \App\Livewire\Admin\PermissionsManager::class)->name('permissions');
+    
+    // Content Management
+    Route::get('stories', \App\Livewire\Admin\StoriesManager::class)->name('stories');
+    Route::get('activities', \App\Livewire\Admin\ActivitiesManager::class)->name('activities');
+    Route::get('/modules-registry', \App\Livewire\Admin\ModuleRegistry::class)->name('modules-registry');
+    Route::get('/age-categories', App\Livewire\Admin\AgeCategories::class)->name('age-categories');
+    Route::get('tribe-registry', \App\Livewire\Admin\TribeManager::class)->name('tribe-registry');
+    Route::get('languages', \App\Livewire\Admin\LanguagesManager::class)->name('languages');
 });
 
 Route::view('profile', 'profile')

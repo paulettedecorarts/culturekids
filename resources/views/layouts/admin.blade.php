@@ -138,9 +138,12 @@
             </a>
             
             <div class="sa-nav-section">Content</div>
-            <a href="#" class="sa-nav-item">🌍 Tribe Registry</a>
-            <a href="#" class="sa-nav-item">📖 Stories</a>
-            <a href="#" class="sa-nav-item">🧩 Activities</a>
+            <a href="{{ route('admin.stories') }}" class="sa-nav-item {{ request()->routeIs('admin.stories') ? 'active' : '' }}">📖 Stories</a>
+            <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
+            <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>
+            <a href="{{ route('admin.age-categories') }}" class="sa-nav-item {{ request()->routeIs('admin.age-categories') ? 'active' : '' }}">🌱 Age Categories</a>
+            <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry') ? 'active' : '' }}">🌍 Tribe Registry</a>
+            <a href="{{ route('admin.languages') }}" class="sa-nav-item {{ request()->routeIs('admin.languages') ? 'active' : '' }}">🗣 Languages</a>
             
             <div class="sa-nav-section">User</div>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto">
