@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Organisation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,30 +13,73 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Ensure Roles & Permissions are populated first
         $this->call(RoleSeeder::class);
 
-        // First Super Admin
-        $superAdmin = User::create([
-            'name' => 'Cosmah Admin',
+        // --- 1. Organisations ---
+        $naluwoozaOrg = Organisation::firstOrCreate([
+            'slug' => 'naluwooza-org',
+        ], [
+            'name' => 'Naluwooza Org',
+            'plan' => 'enterprise',
+        ]);
+
+        $ugSchoolsOrg = Organisation::firstOrCreate([
+            'slug' => 'ug-schools',
+        ], [
+            'name' => 'Uganda Schools Org',
+            'plan' => 'school',
+        ]);
+
+        // --- 2. Test Credentials ---
+
+        // #1: Super Admin
+        $superAdmin = User::firstOrCreate([
             'email' => 'admin@culturekids.app',
+        ], [
+            'name' => 'Super Admin',
             'password' => bcrypt('password'),
         ]);
         $superAdmin->assignRole('super_admin');
 
-        // Initial organisation for parent demo
-        $org = \App\Models\Organisation::create([
-            'name' => 'Legacy Primary School',
-            'slug' => 'legacy-primary',
-            'plan' => 'free',
-        ]);
-
-        // Demo Parent
-        $parent = User::create([
-            'name' => 'Tendo Parent',
-            'email' => 'parent@culturekids.app',
+        // #2: Org Admin
+        $orgAdmin = User::firstOrCreate([
+            'email' => 'jane@naluwooza.ug',
+        ], [
+            'name' => 'Jane (Org Admin)',
             'password' => bcrypt('password'),
-            'organisation_id' => $org->id,
+            'organisation_id' => $naluwoozaOrg->id,
+        ]);
+        $orgAdmin->assignRole('org_admin');
+
+        // #3: CMS Editor
+        $cmsEditor = User::firstOrCreate([
+            'email' => 'editor@culturekids.app',
+        ], [
+            'name' => 'Content Editor',
+            'password' => bcrypt('password'),
+        ]);
+        $cmsEditor->assignRole('cms_editor');
+
+        // #4: Teacher
+        $teacher = User::firstOrCreate([
+            'email' => 'teacher@ugschools.ug',
+        ], [
+            'name' => 'Teacher',
+            'password' => bcrypt('password'),
+            'organisation_id' => $ugSchoolsOrg->id,
+        ]);
+        $teacher->assignRole('teacher');
+
+        // #5: Parent
+        $parent = User::firstOrCreate([
+            'email' => 'parent@home.ug',
+        ], [
+            'name' => 'Demo Parent',
+            'password' => bcrypt('password'),
         ]);
         $parent->assignRole('parent');
+
+        $this->command->info('✅ Test credentials successfully seeded!');
     }
 }
