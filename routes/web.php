@@ -8,6 +8,11 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// Super Admin Route
+Route::get('admin/dashboard', \App\Livewire\Admin\Dashboard::class)
+    ->middleware(['auth', 'verified', 'role:super_admin'])
+    ->name('admin.dashboard');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
