@@ -13,6 +13,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Add dynamic initial users if needed
+        $this->call(RoleSeeder::class);
+
+        // First Super Admin
+        $superAdmin = User::create([
+            'name' => 'Cosmah Admin',
+            'email' => 'admin@culturekids.app',
+            'password' => bcrypt('password'),
+        ]);
+        $superAdmin->assignRole('super_admin');
+
+        // Initial organisation for parent demo
+        $org = \App\Models\Organisation::create([
+            'name' => 'Legacy Primary School',
+            'slug' => 'legacy-primary',
+            'plan' => 'free',
+        ]);
+
+        // Demo Parent
+        $parent = User::create([
+            'name' => 'Tendo Parent',
+            'email' => 'parent@culturekids.app',
+            'password' => bcrypt('password'),
+            'organisation_id' => $org->id,
+        ]);
+        $parent->assignRole('parent');
     }
 }
