@@ -151,11 +151,14 @@
             <a href="{{ route('admin.story-packs') }}" class="sa-nav-item {{ request()->routeIs('admin.story-packs') ? 'active' : '' }}">📦 Story Packs</a>
             <a href="{{ route('admin.assets') }}" class="sa-nav-item {{ request()->routeIs('admin.assets') ? 'active' : '' }}">🖼 Assets</a>
             <a href="{{ route('admin.translations') }}" class="sa-nav-item {{ request()->routeIs('admin.translations') ? 'active' : '' }}">🌐 Translations</a>
-            <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
             <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>
             <a href="{{ route('admin.age-categories') }}" class="sa-nav-item {{ request()->routeIs('admin.age-categories') ? 'active' : '' }}">🌱 Age Categories</a>
             <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry') ? 'active' : '' }}">🌍 Tribe Directory</a>
             <a href="{{ route('admin.languages') }}" class="sa-nav-item {{ request()->routeIs('admin.languages') ? 'active' : '' }}">🗣 Languages</a>
+            
+            <div class="sa-nav-section">Activities</div>
+            <a href="{{ route('admin.songs') }}" class="sa-nav-item {{ request()->routeIs('admin.songs') ? 'active' : '' }}">🎵 Songs</a>
+            <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
             
             <div class="sa-nav-section">User</div>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto">

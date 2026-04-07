@@ -23,6 +23,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('assets', \App\Livewire\Admin\AssetsManager::class)->name('assets');
     Route::get('translations', \App\Livewire\Admin\TranslationsManager::class)->name('translations');
     
+    // Activities section items
+    Route::get('songs', \App\Livewire\Admin\SongsManager::class)->name('songs');
     Route::get('activities', \App\Livewire\Admin\ActivitiesManager::class)->name('activities');
     Route::get('/modules-registry', \App\Livewire\Admin\ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', App\Livewire\Admin\AgeCategories::class)->name('age-categories');
