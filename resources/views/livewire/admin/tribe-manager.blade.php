@@ -1,7 +1,7 @@
 <div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div>
-            <div class="sa-page-title">Tribe Registry</div>
+            <div class="sa-page-title">Tribe Directory</div>
             <div class="sa-breadcrumb">Super Admin · Platform · All 65+ Tribes</div>
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
@@ -57,16 +57,17 @@
     @endif
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
+        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
             <span>Tribe</span>
             <span>Language</span>
             <span>Region</span>
+            <span>Comics</span>
             <span>Status</span>
             <span>Actions</span>
         </div>
 
         @foreach($tribes as $tribe)
-        <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
+        <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
             <div style="display:flex;align-items:center;gap:var(--sp-3)">
                 <div style="width:36px;height:28px;background:linear-gradient(135deg,{{ $tribe->color ?? '#C44B2B' }},#000);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">{{ $tribe->hero_emoji }}</div>
                 <div>
@@ -76,9 +77,10 @@
             </div>
             <span style="font-size:12px;color:rgba(255,255,255,.6)">Luganda</span> <!-- Temp hardcoded lang -->
             <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $tribe->region }}</span>
+            <span style="font-size:12px;color:#fff;font-weight:700">{{ rand(2, 12) }}</span>
             <span class="status-pill status-published">Published</span>
             <div style="display:flex;gap:6px">
-                <button wire:click="edit({{ $tribe->id }})" class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:3px 8px;font-size:9px">Edit</button>
+                <button wire:click="edit({{ $tribe->id }})" class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:9px">Edit</button>
             </div>
         </div>
         @endforeach

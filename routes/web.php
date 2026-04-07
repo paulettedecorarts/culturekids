@@ -18,10 +18,14 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     
     // Content Management
     Route::get('stories', \App\Livewire\Admin\StoriesManager::class)->name('stories');
+    Route::get('tribe-registry', \App\Livewire\Admin\TribeManager::class)->name('tribe-registry'); // Now 'Tribe Directory'
+    Route::get('story-packs', \App\Livewire\Admin\StoryPacksManager::class)->name('story-packs');
+    Route::get('assets', \App\Livewire\Admin\AssetsManager::class)->name('assets');
+    Route::get('translations', \App\Livewire\Admin\TranslationsManager::class)->name('translations');
+    
     Route::get('activities', \App\Livewire\Admin\ActivitiesManager::class)->name('activities');
     Route::get('/modules-registry', \App\Livewire\Admin\ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', App\Livewire\Admin\AgeCategories::class)->name('age-categories');
-    Route::get('tribe-registry', \App\Livewire\Admin\TribeManager::class)->name('tribe-registry');
     Route::get('languages', \App\Livewire\Admin\LanguagesManager::class)->name('languages');
 });
 

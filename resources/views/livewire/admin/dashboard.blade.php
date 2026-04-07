@@ -6,6 +6,7 @@
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
             <span class="sa-badge">⚡ SUPER ADMIN</span>
+            <button class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3);padding:5px 12px;font-size:10px" onclick="toast('⚠️ Maintenance mode toggled')">⚠️ Maintenance</button>
         </div>
     </div>
 

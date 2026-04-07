@@ -97,7 +97,16 @@
         .role-admin { background: rgba(196,75,43,.2); color: var(--clay-red-light); }
         .role-editor { background: rgba(74,124,89,.2); color: var(--banana-mid); }
         .role-teacher { background: rgba(46,77,138,.2); color: var(--sky-mid); }
+        .role-parent { background: rgba(139,94,60,.2); color: #B07D52; }
         .role-child { background: rgba(232,135,42,.2); color: #F2A84E; }
+
+        /* Buttons API */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-admin); font-weight: 700; border: none; cursor: pointer; transition: all var(--dur-fast); }
+        .btn-sm { padding: 6px 14px; border-radius: var(--r-full); font-size: 12px; }
+        .btn-primary { background: var(--clay-red); color: #fff; }
+        .btn-primary:hover { background: var(--clay-red-light); }
+        .btn-ghost { background: transparent; color: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.2); }
+        .btn-ghost:hover { background: rgba(255,255,255,.05); color: #fff; }
 
         /* Module Toggles */
         .module-toggle { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r-md); padding: var(--sp-3) var(--sp-4); }
@@ -139,10 +148,13 @@
             
             <div class="sa-nav-section">Content</div>
             <a href="{{ route('admin.stories') }}" class="sa-nav-item {{ request()->routeIs('admin.stories') ? 'active' : '' }}">📖 Stories</a>
+            <a href="{{ route('admin.story-packs') }}" class="sa-nav-item {{ request()->routeIs('admin.story-packs') ? 'active' : '' }}">📦 Story Packs</a>
+            <a href="{{ route('admin.assets') }}" class="sa-nav-item {{ request()->routeIs('admin.assets') ? 'active' : '' }}">🖼 Assets</a>
+            <a href="{{ route('admin.translations') }}" class="sa-nav-item {{ request()->routeIs('admin.translations') ? 'active' : '' }}">🌐 Translations</a>
             <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
             <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>
             <a href="{{ route('admin.age-categories') }}" class="sa-nav-item {{ request()->routeIs('admin.age-categories') ? 'active' : '' }}">🌱 Age Categories</a>
-            <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry') ? 'active' : '' }}">🌍 Tribe Registry</a>
+            <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry') ? 'active' : '' }}">🌍 Tribe Directory</a>
             <a href="{{ route('admin.languages') }}" class="sa-nav-item {{ request()->routeIs('admin.languages') ? 'active' : '' }}">🗣 Languages</a>
             
             <div class="sa-nav-section">User</div>
