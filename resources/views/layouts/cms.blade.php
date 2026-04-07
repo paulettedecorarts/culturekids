@@ -85,9 +85,9 @@
             
             <div class="cms-nav-section">Content</div>
             <a href="{{ route('cms.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.tribes') ? 'active' : '' }}">🌍 Tribe Directory</a>
-            <a href="#" class="cms-nav-item">📋 Story Packs</a>
-            <a href="#" class="cms-nav-item">🖼 Assets</a>
-            <a href="#" class="cms-nav-item">🌐 Translations</a>
+            <a href="{{ route('cms.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
+            <a href="{{ route('cms.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.assets') ? 'active' : '' }}">🖼 Assets</a>
+            <a href="{{ route('cms.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.translations') ? 'active' : '' }}">🌐 Translations</a>
             
             <div class="cms-nav-section">Activities</div>
             <a href="#" class="cms-nav-item">🎵 Songs</a>

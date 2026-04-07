@@ -38,6 +38,9 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
 // CMS Content Management (Org Editor Context)
 Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms')->name('cms.')->group(function () {
     Route::get('/tribes', \App\Livewire\CMS\TribeDirectory::class)->name('tribes');
+    Route::get('/story-packs', \App\Livewire\CMS\StoryPacks::class)->name('story-packs');
+    Route::get('/assets', \App\Livewire\CMS\Assets::class)->name('assets');
+    Route::get('/translations', \App\Livewire\CMS\Translations::class)->name('translations');
 });
 
 Route::view('profile', 'profile')
