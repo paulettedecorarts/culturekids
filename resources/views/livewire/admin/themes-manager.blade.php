@@ -1,4 +1,16 @@
 <div>
+    <!-- Organization Selector -->
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:20px 32px;margin-bottom:var(--sp-5);display:flex;align-items:center;gap:24px">
+        <div style="font-size:12px;font-weight:700;color:var(--savanna-gold);text-transform:uppercase">Configuring For:</div>
+        <select wire:model.live="selectedOrgId" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-full);padding:var(--sp-2) var(--sp-4);color:#fff;font-size:14px;outline:none;font-weight:700;flex:1;cursor:pointer">
+            <option value="" style="background:var(--indigo-night);color:#fff">All Organizations</option>
+            <option value="global" style="background:var(--indigo-night);color:#fff">Global (Platform-wide)</option>
+            @foreach($organisations as $org)
+                <option value="{{ $org->id }}" style="background:var(--indigo-night);color:#fff">{{ $org->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5)">
         <div>
             <div class="sa-page-title">Theme Management</div>
@@ -41,7 +53,14 @@
                                     <span style="background:rgba(212,160,23,.2);color:var(--savanna-gold);padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800;margin-left:8px">DEFAULT</span>
                                 @endif
                             </div>
-                            <div style="font-size:11px;color:rgba(255,255,255,.4);font-family:monospace">{{ $theme->slug }}</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,.4);font-family:monospace">
+                                {{ $theme->slug }}
+                                @if($theme->org_id)
+                                    · {{ $theme->organisation->name }}
+                                @else
+                                    · Global
+                                @endif
+                            </div>
                         </div>
                     </div>
 
@@ -117,6 +136,17 @@
                             <h3 style="font-size:14px;font-weight:800;color:var(--savanna-gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--sp-4)">Basic Information</h3>
                             
                             <div style="display:grid;gap:20px">
+                                <div>
+                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Organization</label>
+                                    <select wire:model="org_id" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;color:#fff;font-family:var(--font-admin);font-size:15px;cursor:pointer">
+                                        <option value="" style="background:var(--indigo-night);color:#fff">Global (Platform-wide)</option>
+                                        @foreach($organisations as $org)
+                                            <option value="{{ $org->id }}" style="background:var(--indigo-night);color:#fff">{{ $org->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px">Leave as Global for platform-wide theme, or select an organization for custom branding</div>
+                                </div>
+
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Theme Name</label>
                                     <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;color:#fff;font-family:var(--font-admin);font-size:15px">

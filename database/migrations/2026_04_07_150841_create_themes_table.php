@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('org_id')->nullable()->constrained('organisations')->nullOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
@@ -33,6 +34,9 @@ return new class extends Migration
             
             $table->string('preview_image')->nullable();
             $table->timestamps();
+            
+            // Index for org-specific themes
+            $table->index(['org_id', 'is_default']);
         });
     }
 

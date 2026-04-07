@@ -10,6 +10,7 @@ class Theme extends Model
     use HasFactory;
 
     protected $fillable = [
+        'org_id',
         'name',
         'slug',
         'description',
@@ -51,5 +52,13 @@ class Theme extends Model
             'text_secondary' => '#6B5544',
             'text_muted' => '#9C8875',
         ];
+    }
+
+    /**
+     * Get the organization that owns this theme
+     */
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class, 'org_id');
     }
 }

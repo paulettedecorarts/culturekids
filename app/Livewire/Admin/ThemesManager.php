@@ -18,8 +18,12 @@ class ThemesManager extends Component
     public $editing = false;
     public $showPreview = false;
     
+    // Organization filter
+    public $selectedOrgId = null;
+    
     // Form fields
     public $selectedId;
+    public $org_id;
     public $name;
     public $description;
     public $slug;
@@ -63,6 +67,7 @@ class ThemesManager extends Component
     {
         $this->resetForm();
         $this->editing = false;
+        $this->org_id = $this->selectedOrgId; // Pre-fill with selected org
         $this->showModal = true;
     }
 
@@ -70,6 +75,7 @@ class ThemesManager extends Component
     {
         $theme = Theme::findOrFail($id);
         $this->selectedId = $id;
+        $this->org_id = $theme->org_id;
         $this->name = $theme->name;
         $this->slug = $theme->slug;
         $this->description = $theme->description;
@@ -93,6 +99,7 @@ class ThemesManager extends Component
         $this->validate($rules);
 
         $data = [
+            'org_id' => $this->org_id,
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
@@ -153,20 +160,25 @@ class ThemesManager extends Component
 
     public function setDefault($id)
     {
-        // Remove default from all themes
-        Theme::where('is_default', true)->update(['is_default' => false]);
+        $theme = Theme::findOrFail($id);
+        
+        // Remove default from themes in the same org (or global if org_id is null)
+        Theme::where('org_id', $theme->org_id)
+            ->where('is_default', true)
+            ->update(['is_default' => false]);
         
         // Set new default
-        $theme = Theme::findOrFail($id);
         $theme->is_default = true;
         $theme->save();
         
         AuditLog::record('UPDATE', "themes/{$theme->id}", [
             'action' => 'set_default',
             'theme_name' => $theme->name,
+            'org_id' => $theme->org_id,
         ]);
         
-        session()->flash('message', "'{$theme->name}' set as default theme.");
+        $orgName = $theme->org_id ? $theme->organisation->name : 'Global';
+        session()->flash('message', "'{$theme->name}' set as default theme for {$orgName}.");
     }
 
     public function applyPreset($preset)
@@ -252,6 +264,7 @@ class ThemesManager extends Component
     private function resetForm()
     {
         $this->selectedId = null;
+        $this->org_id = $this->selectedOrgId;
         $this->name = '';
         $this->slug = '';
         $this->description = '';
@@ -267,12 +280,23 @@ class ThemesManager extends Component
 
     public function render()
     {
-        $themes = Theme::latest()->paginate(12);
+        $query = Theme::with('organisation')->latest();
+        
+        // Filter by organization if selected
+        if ($this->selectedOrgId === 'global') {
+            $query->whereNull('org_id');
+        } elseif ($this->selectedOrgId) {
+            $query->where('org_id', $this->selectedOrgId);
+        }
+        
+        $themes = $query->paginate(12);
         $presets = $this->getPresets();
+        $organisations = \App\Models\Organisation::orderBy('name')->get();
 
         return view('livewire.admin.themes-manager', [
             'themes' => $themes,
             'presets' => $presets,
+            'organisations' => $organisations,
         ]);
     }
 }
