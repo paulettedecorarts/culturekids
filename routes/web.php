@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('
     Route::get('/story-packs', \App\Livewire\CMS\StoryPacks::class)->name('story-packs');
     Route::get('/assets', \App\Livewire\CMS\Assets::class)->name('assets');
     Route::get('/translations', \App\Livewire\CMS\Translations::class)->name('translations');
+    Route::get('/songs', \App\Livewire\CMS\Songs::class)->name('songs');
+    Route::get('/activities', \App\Livewire\CMS\Activities::class)->name('activities');
 });
 
 Route::view('profile', 'profile')

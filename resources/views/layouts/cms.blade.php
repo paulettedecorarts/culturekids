@@ -90,8 +90,8 @@
             <a href="{{ route('cms.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.translations') ? 'active' : '' }}">🌐 Translations</a>
             
             <div class="cms-nav-section">Activities</div>
-            <a href="#" class="cms-nav-item">🎵 Songs</a>
-            <a href="#" class="cms-nav-item">🧩 Activities</a>
+            <a href="{{ route('cms.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.songs') ? 'active' : '' }}">🎵 Songs</a>
+            <a href="{{ route('cms.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.activities') ? 'active' : '' }}">🧩 Activities</a>
             
             <div class="cms-nav-section">Platform</div>
             <a href="#" class="cms-nav-item">🎨 Themes</a>
