@@ -43,21 +43,18 @@
                         <div style="color:#fff; font-weight:800; font-size:13px">{{ $organization->created_at->format('M d, Y') }}</div>
                     </div>
                     <div style="background:rgba(255,255,255,0.02); padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,0.04)">
-                        <div style="font-size:10px; color:rgba(255,255,255,0.3); text-transform:uppercase; font-weight:800; margin-bottom:4px">Platform License</div>
-                        <div style="color:#fff; font-weight:800; font-size:13px">University/Enterprise</div>
+                        <div style="font-size:10px; color:rgba(255,255,255,0.3); text-transform:uppercase; font-weight:800; margin-bottom:4px">Platform Plan</div>
+                        <div style="color:#fff; font-weight:800; font-size:13px">{{ Str::title($organization->plan ?? 'Standard') }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Stats Mini -->
             <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:32px; padding:32px">
-                <h4 style="font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:1px; margin-bottom:24px">Entity Health</h4>
+                <h4 style="font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:1px; margin-bottom:24px">Entity Stats</h4>
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
-                    <span style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6)">Uptime</span>
-                    <span style="color:var(--banana-light); font-size:12px; font-weight:800">99.9%</span>
-                </div>
-                <div style="width:100%; height:8px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden">
-                    <div style="width:99%; height:100%; background:var(--banana-green)"></div>
+                    <span style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6)">Total Users</span>
+                    <span style="color:var(--banana-light); font-size:12px; font-weight:800">{{ $organization->users_count }}</span>
                 </div>
             </div>
         </div>
@@ -94,22 +91,12 @@
                 </div>
             </div>
 
-            <!-- Activity Logs Mockup -->
+            <!-- Activity Logs -->
             <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:32px; padding:40px">
                 <h3 style="font-family:var(--font-display); font-size:24px; font-weight:800; color:#fff; margin-bottom:24px">Entity Activity</h3>
-                <div style="display:flex; flex-direction:column; gap:20px; opacity:0.6">
-                    <div style="display:flex; gap:16px; font-size:13px">
-                        <span style="color:var(--clay-red); font-weight:800">14:02</span>
-                        <span style="color:#fff">Teacher <b>Sarah K.</b> added <b>"The Lion & Turtle"</b> to classroom library.</span>
-                    </div>
-                    <div style="display:flex; gap:16px; font-size:13px">
-                        <span style="color:var(--savanna-gold); font-weight:800">11:15</span>
-                        <span style="color:#fff">Organization status toggled to <b>ACTIVE</b> by Super Admin.</span>
-                    </div>
-                    <div style="display:flex; gap:16px; font-size:13px">
-                        <span style="color:var(--banana-light); font-weight:800">09:45</span>
-                        <span style="color:#fff">Platform synchronization complete: <b>14 assets updated</b>.</span>
-                    </div>
+                <div style="text-align:center; padding:48px; opacity:0.3">
+                    <span style="font-size:40px; display:block; margin-bottom:16px">📊</span>
+                    <span style="font-size:13px; font-weight:700">Activity logs coming soon</span>
                 </div>
             </div>
         </div>

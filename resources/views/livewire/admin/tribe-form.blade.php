@@ -57,9 +57,25 @@
                         @error('hero_name') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
 
-                    <div>
-                        <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Hero Emoji</label>
-                        <input wire:model="hero_emoji" type="text" placeholder="e.g. 🦁, 🛡️" style="width:100%; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:18px; color:#fff; font-family:var(--font-admin)">
+                    <div style="grid-column: span 2">
+                        <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Guardian Icon (Emoji)</label>
+                        <div style="display:flex; flex-wrap:wrap; gap:10px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:24px; max-height:220px; overflow-y:auto; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
+                            @foreach(['🦁', '🐘', '🦒', '🦓', '🐆', '🦍', '🐊', '🦅', '🦉', '🛡️', '🏺', '🥁', '🎭', '🛖', '🌍', '🏔️', '🌳', '🌊', '☀️', '🌙', '🐄', '🐂', '🐐', '🐓', '🌾', '🌽', '🎋', '🏹', '🗡️', '🛶', '🗿'] as $emoji)
+                                <button 
+                                    type="button"
+                                    wire:click="$set('hero_emoji', '{{ $emoji }}')"
+                                    style="width:52px; height:52px; display:flex; align-items:center; justify-content:center; font-size:24px; background:{{ $hero_emoji === $emoji ? 'rgba(255,255,255,0.1)' : 'transparent' }}; border:1px solid {{ $hero_emoji === $emoji ? 'rgba(255,255,255,0.2)' : 'transparent' }}; border-radius:14px; cursor:pointer; transition:all 0.2s; outline:none;"
+                                    title="Select {{ $emoji }}"
+                                >
+                                    {{ $emoji }}
+                                </button>
+                            @endforeach
+                            <!-- Manual Fallback -->
+                            <div style="width:100%; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:12px">
+                                <span style="font-size:11px; font-weight:800; color:rgba(255,255,255,0.2); text-transform:uppercase">Custom:</span>
+                                <input wire:model.live="hero_emoji" type="text" maxlength="2" style="width:60px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:8px; text-align:center; color:#fff; font-size:18px">
+                            </div>
+                        </div>
                         @error('hero_emoji') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
 
