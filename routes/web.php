@@ -29,6 +29,10 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('/modules-registry', \App\Livewire\Admin\ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', App\Livewire\Admin\AgeCategories::class)->name('age-categories');
     Route::get('languages', \App\Livewire\Admin\LanguagesManager::class)->name('languages');
+    
+    // New Platform section items
+    Route::get('themes', \App\Livewire\Admin\ThemesManager::class)->name('themes');
+    Route::get('analytics', \App\Livewire\Admin\AnalyticsManager::class)->name('analytics');
 });
 
 Route::view('profile', 'profile')

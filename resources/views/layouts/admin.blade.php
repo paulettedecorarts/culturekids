@@ -160,6 +160,11 @@
             <a href="{{ route('admin.songs') }}" class="sa-nav-item {{ request()->routeIs('admin.songs') ? 'active' : '' }}">🎵 Songs</a>
             <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
             
+            <div class="sa-nav-section">Platform</div>
+            <a href="{{ route('admin.themes') }}" class="sa-nav-item {{ request()->routeIs('admin.themes') ? 'active' : '' }}">🎨 Themes</a>
+            <a href="{{ route('admin.organizations') }}" class="sa-nav-item {{ request()->routeIs('admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
+            <a href="{{ route('admin.analytics') }}" class="sa-nav-item {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">📊 Analytics</a>
+            
             <div class="sa-nav-section">User</div>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto">
                 @csrf
