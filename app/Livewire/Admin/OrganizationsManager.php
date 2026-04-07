@@ -42,6 +42,13 @@ class OrganizationsManager extends Component
         $this->resetPage();
     }
 
+    public function updatedName($value)
+    {
+        if (!$this->editing) {
+            $this->code = Str::slug($value);
+        }
+    }
+
     public function create()
     {
         $this->resetForm();
