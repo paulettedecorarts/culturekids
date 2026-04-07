@@ -82,21 +82,34 @@
     <div class="cms-shell">
         <div class="cms-sidebar">
             <div class="cms-sidebar-logo">Paulette CMS<span>Admin Dashboard</span></div>
+            <!-- Shared / Dashboard -->
+            @php $isEditor = auth()->user()->hasRole('cms_editor'); $isAdmin = auth()->user()->hasRole('org_admin'); $isSuper = auth()->user()->hasRole('super_admin'); @endphp
+
+            @if($isEditor || $isSuper)
+                <a href="{{ route('cms.editor.dashboard') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.dashboard') ? 'active' : '' }}">📊 Dashboard</a>
+            @elseif($isAdmin)
+                <a href="{{ route('cms.admin.dashboard') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.dashboard') ? 'active' : '' }}">📊 Admin Hub</a>
+            @endif
             
-            <div class="cms-nav-section">Content</div>
-            <a href="{{ route('cms.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.tribes') ? 'active' : '' }}">🌍 Tribe Directory</a>
-            <a href="{{ route('cms.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
-            <a href="{{ route('cms.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.assets') ? 'active' : '' }}">🖼 Assets</a>
-            <a href="{{ route('cms.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.translations') ? 'active' : '' }}">🌐 Translations</a>
+            @if($isEditor || $isSuper)
+                <div class="cms-nav-section">Content Production</div>
+                <a href="{{ route('cms.editor.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.tribes') ? 'active' : '' }}">🌍 Tribe Directory</a>
+                <a href="{{ route('cms.editor.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
+                <a href="{{ route('cms.editor.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.assets') ? 'active' : '' }}">🖼 Assets</a>
+                <a href="{{ route('cms.editor.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.translations') ? 'active' : '' }}">🌐 Translations</a>
+                
+                <div class="cms-nav-section">Activities</div>
+                <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs') ? 'active' : '' }}">🎵 Songs</a>
+                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities') ? 'active' : '' }}">🧩 Activities</a>
+            @endif
             
-            <div class="cms-nav-section">Activities</div>
-            <a href="{{ route('cms.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.songs') ? 'active' : '' }}">🎵 Songs</a>
-            <a href="{{ route('cms.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.activities') ? 'active' : '' }}">🧩 Activities</a>
-            
-            <div class="cms-nav-section">Platform</div>
-            <a href="{{ route('cms.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.themes') ? 'active' : '' }}">🎨 Themes</a>
-            <a href="{{ route('cms.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.organizations') ? 'active' : '' }}">🏫 Organizations</a>
-            <a href="{{ route('cms.analytics') }}" class="cms-nav-item {{ request()->routeIs('cms.analytics') ? 'active' : '' }}">📊 Analytics</a>
+            @if($isAdmin || $isSuper)
+                <div class="cms-nav-section">Management</div>
+                <a href="{{ route('cms.admin.site') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.site') ? 'active' : '' }}">🌐 Site Module</a>
+                <a href="{{ route('cms.admin.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.themes') ? 'active' : '' }}">🎨 Themes</a>
+                <a href="{{ route('cms.admin.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
+                <a href="{{ route('cms.admin.analytics') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.analytics') ? 'active' : '' }}">📈 Analytics</a>
+            @endif
             
             <div style="margin-top:auto">
                 <form method="POST" action="{{ route('logout') }}">

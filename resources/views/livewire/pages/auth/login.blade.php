@@ -23,7 +23,9 @@ new #[Layout('layouts.guest')] class extends Component
         if (auth()->user()->hasRole('super_admin')) {
             $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
         } elseif (auth()->user()->hasRole('cms_editor')) {
-            $this->redirectIntended(default: route('cms.tribes', absolute: false), navigate: true);
+            $this->redirectIntended(default: route('cms.editor.dashboard', absolute: false), navigate: true);
+        } elseif (auth()->user()->hasRole('org_admin')) {
+            $this->redirectIntended(default: route('cms.admin.dashboard', absolute: false), navigate: true);
         } else {
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
         }

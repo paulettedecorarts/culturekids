@@ -35,14 +35,21 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('analytics', \App\Livewire\Admin\AnalyticsManager::class)->name('analytics');
 });
 
-// CMS Content Management (Org Editor Context)
-Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms')->name('cms.')->group(function () {
+// CMS Editor (Content Production)
+Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms/editor')->name('cms.editor.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\CMS\Dashboard::class)->name('dashboard');
     Route::get('/tribes', \App\Livewire\CMS\TribeDirectory::class)->name('tribes');
     Route::get('/story-packs', \App\Livewire\CMS\StoryPacks::class)->name('story-packs');
     Route::get('/assets', \App\Livewire\CMS\Assets::class)->name('assets');
     Route::get('/translations', \App\Livewire\CMS\Translations::class)->name('translations');
     Route::get('/songs', \App\Livewire\CMS\Songs::class)->name('songs');
     Route::get('/activities', \App\Livewire\CMS\Activities::class)->name('activities');
+});
+
+// CMS Organisational Admin (Management & Site)
+Route::middleware(['auth', 'verified', 'role:org_admin|super_admin'])->prefix('cms/admin')->name('cms.admin.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\CMS\AdminDashboard::class)->name('dashboard');
+    Route::get('/site', \App\Livewire\CMS\Site::class)->name('site');
     Route::get('/themes', \App\Livewire\CMS\Themes::class)->name('themes');
     Route::get('/organizations', \App\Livewire\CMS\Organizations::class)->name('organizations');
     Route::get('/analytics', \App\Livewire\CMS\Analytics::class)->name('analytics');
