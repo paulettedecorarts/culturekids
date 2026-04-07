@@ -14,6 +14,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 #[Fillable(['name', 'email', 'password', 'organisation_id'])]
@@ -56,5 +57,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Organisation::class);
     }
-}
 
+    /**
+     * Get the child profiles for this user
+     */
+    public function childProfiles(): HasMany
+    {
+        return $this->hasMany(ChildProfile::class);
+    }
+}

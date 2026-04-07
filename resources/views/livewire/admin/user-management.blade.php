@@ -1,95 +1,96 @@
-<div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5)">
+<div class="sa-user-management-view">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-8)">
         <div>
-            <div class="sa-page-title">User Management</div>
-            <div class="sa-breadcrumb">All users across all organizations</div>
+            <h1 class="sa-page-title">User Management</h1>
+            <div class="sa-breadcrumb">RBAC Control · Platform Access Directory</div>
         </div>
-        <button class="btn btn-primary btn-sm">+ New User</button>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">+ Register New Account</a>
     </div>
 
-    <!-- Filters -->
-    <div style="display:flex; gap:var(--sp-4); margin-bottom:var(--sp-6);">
-        <input 
-            type="text" 
-            wire:model.live.debounce.300ms="search" 
-            placeholder="Search by name or email..." 
-            style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-md); padding:var(--sp-3) var(--sp-4); color:#fff; flex:1; font-family:var(--font-admin); font-size:12px; outline:none;"
-        >
-        
-        <select 
-            wire:model.live="roleFilter" 
-            style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-md); padding:var(--sp-3) var(--sp-4); color:#fff; font-family:var(--font-admin); font-size:12px; outline:none; appearance:none; width:200px; cursor:pointer;"
-        >
-            <option value="" style="color:#000">All Roles</option>
-            @foreach($roles as $role)
-                <option value="{{ $role }}" style="color:#000">{{ Str::title(str_replace('_', ' ', $role)) }}</option>
-            @endforeach
-        </select>
+    @if (session()->has('message'))
+        <div style="background:rgba(74,124,89,0.1); border:1px solid rgba(74,124,89,0.3); color:var(--banana-light); padding:16px 24px; border-radius:16px; margin-bottom:32px; font-size:13px; font-weight:700">
+            ✨ {{ session('message') }}
+        </div>
+    @endif
+
+    <!-- Filters Bar -->
+    <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,0.06); border-radius:32px; padding:32px; margin-bottom:40px">
+        <div style="display:flex; gap:16px">
+            <div style="flex:1; position:relative">
+                <span style="position:absolute; left:20px; top:50%; transform:translateY(-50%); opacity:0.3">🔍</span>
+                <input 
+                    type="text" 
+                    wire:model.live.debounce.300ms="search" 
+                    placeholder="Search by user name or official email..." 
+                    style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 16px 16px 52px; color:#fff; font-family:var(--font-admin); font-size:13px; outline:none;"
+                >
+            </div>
+            
+            <select wire:model.live="roleFilter" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:0 24px; color:#fff; font-family:var(--font-admin); font-size:13px; outline:none; cursor:pointer">
+                <option value="">All Security Roles</option>
+                @foreach($roles as $role)
+                    <option value="{{ $role->name }}">{{ Str::title(str_replace('_', ' ', $role->name)) }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
-    <!-- Users Datagrid -->
-    <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 80px">
-            <span>User</span>
-            <span>Role</span>
+    <!-- Users Table -->
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:32px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:1px">
+            <span>Identity</span>
+            <span>Security Role</span>
             <span>Organization</span>
-            <span>Joined</span>
-            <span>Actions</span>
+            <span>Registered</span>
+            <span style="text-align:right">Management</span>
         </div>
-        
-        @forelse($users as $user)
-            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 80px">
-                <div>
-                    <div style="font-weight:600;color:#fff;font-size:12px">{{ $user->email }}</div>
-                    <div style="font-size:10px;color:rgba(255,255,255,.3)">{{ $user->name }}</div>
-                </div>
-                
-                @if($user->hasRole('super_admin'))
-                    <span class="role-chip role-super">Super Admin</span>
-                @elseif($user->hasRole('org_admin'))
-                    <span class="role-chip role-admin">Org Admin</span>
-                @elseif($user->hasRole('cms_editor'))
-                    <span class="role-chip role-editor">CMS Editor</span>
-                @elseif($user->hasRole('teacher'))
-                    <span class="role-chip role-teacher">Teacher</span>
-                @elseif($user->hasRole('parent'))
-                    <span class="role-chip role-parent">Parent</span>
-                @else
-                    <span class="role-chip role-child">Child</span>
-                @endif
 
-                <span style="font-size:11px;color:rgba(255,255,255,.5)">
-                    {{ $user->organisation ? $user->organisation->name : 'Global' }}
-                </span>
-                
-                <span style="font-size:11px;color:rgba(255,255,255,.35)">
-                    {{ $user->created_at->diffForHumans() }}
-                </span>
-                
-                <div style="display:flex;gap:3px">
-                    <button class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:3px 7px;font-size:9px" onclick="toast('Editing user…')">
-                        Edit
-                    </button>
+        @forelse($users as $user)
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.03); transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                <a href="{{ route('admin.users.detail', $user->id) }}" style="display:flex; align-items:center; gap:16px; text-decoration:none">
+                    <div style="width:40px; height:40px; border-radius:12px; background:{{ $user->hasRole('super_admin') ? 'var(--clay-red)' : 'rgba(255,255,255,0.05)' }}; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:var(--font-display)">
+                        {{ substr($user->name, 0, 1) }}
+                    </div>
+                    <div>
+                        <div style="font-weight:800; color:#fff; font-size:14px; margin-bottom:2px">{{ $user->name }}</div>
+                        <div style="font-size:12px; color:rgba(255,255,255,0.4)">{{ $user->email }}</div>
+                    </div>
+                </a>
+
+                <div>
+                    @foreach($user->roles as $role)
+                        <span class="status-pill status-published" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.1); font-size:10px; padding:4px 10px">
+                            {{ Str::title(str_replace('_', ' ', $role->name)) }}
+                        </span>
+                    @endforeach
+                </div>
+
+                <div style="font-size:13px; color:rgba(255,255,255,0.6); font-weight:700">
+                    {{ $user->organisation ? $user->organisation->name : 'Global / Platform' }}
+                </div>
+
+                <div style="font-size:13px; color:rgba(255,255,255,0.3); font-weight:700">
+                    {{ $user->created_at->format('M d, Y') }}
+                </div>
+
+                <div style="display:flex; gap:8px; justify-content:flex-end">
+                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn" style="width:36px; height:36px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
                     @if($user->id !== auth()->id())
-                    <button class="btn btn-sm" style="background:rgba(196,75,43,.15);color:var(--clay-red-light);padding:3px 7px;font-size:9px">
-                        Del
-                    </button>
+                        <button wire:click="delete({{ $user->id }})" onclick="return confirm('Archive this account permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>
                     @endif
                 </div>
             </div>
         @empty
-            <div class="sa-table-row" style="grid-template-columns:1fr">
-                <div style="text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-8)">
-                    <div style="font-size:32px;margin-bottom:var(--sp-3)">🔍</div>
-                    <div style="font-size:15px;font-weight:600">No users found</div>
-                    <div style="font-size:13px;margin-top:var(--sp-1)">Adjust your search or filter and try again.</div>
-                </div>
+            <div style="padding:100px; text-align:center; opacity:0.3">
+                <div style="font-size:64px; margin-bottom:24px">👤</div>
+                <div style="font-size:15px; font-weight:700">No matching user records found</div>
             </div>
         @endforelse
     </div>
 
-    <!-- Pagination Links -->
-    <div style="margin-top:var(--sp-6);">
+    <!-- Pagination -->
+    <div style="margin-top:40px">
         {{ $users->links(data: ['scrollTo' => false]) }}
     </div>
 </div>
+

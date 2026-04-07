@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Models\User;
-use App\Models\Organisation;
 use Spatie\Permission\Models\Role;
 
 #[Layout('layouts.admin')]
@@ -27,6 +26,17 @@ class UserManagement extends Component
         $this->resetPage();
     }
 
+    public function delete($id)
+    {
+        if ($id === auth()->id()) {
+            session()->flash('error', 'You cannot delete your own account.');
+            return;
+        }
+
+        User::findOrFail($id)->delete();
+        session()->flash('message', 'User removed from platform.');
+    }
+
     public function render()
     {
         $users = User::with(['roles', 'organisation'])
@@ -37,7 +47,6 @@ class UserManagement extends Component
                 });
             })
             ->when($this->roleFilter, function ($query) {
-                // If the user wants a specific role
                 $query->whereHas('roles', function($q) {
                     $q->where('name', $this->roleFilter);
                 });
@@ -45,7 +54,7 @@ class UserManagement extends Component
             ->latest()
             ->paginate(15);
 
-        $roles = Role::orderBy('name')->pluck('name');
+        $roles = Role::orderBy('name')->get();
 
         return view('livewire.admin.user-management', [
             'users' => $users,

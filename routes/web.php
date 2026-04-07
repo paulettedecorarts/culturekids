@@ -12,6 +12,9 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
     Route::get('users', \App\Livewire\Admin\UserManagement::class)->name('users');
+    Route::get('users/create', \App\Livewire\Admin\UserForm::class)->name('users.create');
+    Route::get('users/{user}', \App\Livewire\Admin\UserDetail::class)->name('users.detail');
+    Route::get('users/{user}/edit', \App\Livewire\Admin\UserForm::class)->name('users.edit');
     Route::get('organizations', \App\Livewire\Admin\OrganizationsManager::class)->name('organizations');
     Route::get('organizations/{organization}', \App\Livewire\Admin\OrganizationDetail::class)->name('organizations.detail');
     Route::get('modules', \App\Livewire\Admin\ModuleToggles::class)->name('modules');
