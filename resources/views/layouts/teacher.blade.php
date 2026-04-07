@@ -73,9 +73,14 @@
                 <h2>Teacher Hub</h2>
                 <span>Mrs. Nakato · P3B</span>
             </div>
+
+            <a href="{{ route('teacher.dashboard') }}" class="nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+                <em style="font-size: 14px">🏠</em>
+                <span>Dashboard</span>
+            </a>
             
             <div class="nav-section">Classroom</div>
-            <a href="{{ route('teacher.dashboard') }}" class="nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('teacher.lessons') }}" class="nav-item {{ request()->routeIs('teacher.lessons') ? 'active' : '' }}">
                 <em style="font-size: 14px">🗓️</em>
                 <span>Lesson Plans</span>
             </a>
@@ -83,7 +88,7 @@
                 <em style="font-size: 14px">👪</em>
                 <span>My Class (28)</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('teacher.reports') }}" class="nav-item {{ request()->routeIs('teacher.reports') ? 'active' : '' }}">
                 <em style="font-size: 14px">📊</em>
                 <span>Progress Reports</span>
             </a>
