@@ -55,6 +55,13 @@ Route::middleware(['auth', 'verified', 'role:org_admin|super_admin'])->prefix('c
     Route::get('/analytics', \App\Livewire\CMS\Analytics::class)->name('analytics');
 });
 
+// Teacher Hub (Classroom Context)
+Route::middleware(['auth', 'verified', 'role:teacher|super_admin'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Teacher\Dashboard::class)->name('dashboard');
+    Route::get('/my-class', \App\Livewire\Teacher\MyClass::class)->name('class');
+    Route::get('/resources', \App\Livewire\Teacher\Resources::class)->name('resources');
+});
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
