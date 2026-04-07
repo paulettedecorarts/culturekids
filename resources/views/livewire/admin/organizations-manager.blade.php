@@ -25,7 +25,7 @@
                     <span style="font-size:32px">🏛</span>
                     <div style="flex:1">
                         <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#fff">{{ $org->name }}</div>
-                        <div style="font-size:12px;color:rgba(255,255,255,.4)">{{ $org->slug }}.paulette.app · {{ Str::title($org->plan ?? 'Standard') }} Plan</div>
+                        <div style="font-size:12px;color:rgba(255,255,255,.4)">{{ $org->code }}.paulette.app · {{ Str::title($org->plan ?? 'Standard') }} Plan</div>
                     </div>
                     <span class="status-pill status-published">Active</span>
                     <a href="{{ route('admin.organizations.detail', $org->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.15); color:var(--savanna-gold); border:1px solid rgba(212,160,23,.3); font-size:10px; display:inline-flex; align-items:center; text-decoration:none">Manage Entity</a>
