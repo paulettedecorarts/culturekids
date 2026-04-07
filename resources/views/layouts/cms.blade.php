@@ -94,9 +94,9 @@
             <a href="{{ route('cms.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.activities') ? 'active' : '' }}">🧩 Activities</a>
             
             <div class="cms-nav-section">Platform</div>
-            <a href="#" class="cms-nav-item">🎨 Themes</a>
-            <a href="#" class="cms-nav-item">🏫 Organizations</a>
-            <a href="#" class="cms-nav-item">📊 Analytics</a>
+            <a href="{{ route('cms.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.themes') ? 'active' : '' }}">🎨 Themes</a>
+            <a href="{{ route('cms.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.organizations') ? 'active' : '' }}">🏫 Organizations</a>
+            <a href="{{ route('cms.analytics') }}" class="cms-nav-item {{ request()->routeIs('cms.analytics') ? 'active' : '' }}">📊 Analytics</a>
             
             <div style="margin-top:auto">
                 <form method="POST" action="{{ route('logout') }}">
