@@ -60,8 +60,13 @@ Route::middleware(['auth', 'verified', 'role:teacher|super_admin'])->prefix('tea
     Route::get('/dashboard', \App\Livewire\Teacher\MainDashboard::class)->name('dashboard');
     Route::get('/lessons', \App\Livewire\Teacher\Dashboard::class)->name('lessons');
     Route::get('/my-class', \App\Livewire\Teacher\MyClass::class)->name('class');
-    Route::get('/resources', \App\Livewire\Teacher\Resources::class)->name('resources');
     Route::get('/reports', \App\Livewire\Teacher\Reports::class)->name('reports');
+    
+    // Content Modules
+    Route::get('/library', \App\Livewire\Teacher\StoryLibrary::class)->name('library');
+    Route::get('/tribes', \App\Livewire\Teacher\TribesExplorer::class)->name('tribes');
+    Route::get('/print-center', \App\Livewire\Teacher\PrintCenter::class)->name('print-center');
+    Route::get('/worksheets', \App\Livewire\Teacher\Worksheets::class)->name('worksheets');
 });
 
 Route::view('profile', 'profile')

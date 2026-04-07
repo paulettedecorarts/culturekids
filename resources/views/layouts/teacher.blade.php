@@ -94,19 +94,19 @@
             </a>
 
             <div class="nav-section">Content</div>
-            <a href="{{ route('teacher.resources') }}" class="nav-item {{ request()->routeIs('teacher.resources') ? 'active' : '' }}">
+            <a href="{{ route('teacher.library') }}" class="nav-item {{ request()->routeIs('teacher.library') ? 'active' : '' }}">
                 <em style="font-size: 14px">📚</em>
                 <span>Story Library</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('teacher.tribes') }}" class="nav-item {{ request()->routeIs('teacher.tribes') ? 'active' : '' }}">
                 <em style="font-size: 14px">🌍</em>
                 <span>Tribes Explorer</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('teacher.print-center') }}" class="nav-item {{ request()->routeIs('teacher.print-center') ? 'active' : '' }}">
                 <em style="font-size: 14px">🖨️</em>
                 <span>Print Center</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('teacher.worksheets') }}" class="nav-item {{ request()->routeIs('teacher.worksheets') ? 'active' : '' }}">
               <em style="font-size: 14px">📖</em>
               <span>Worksheets</span>
           </a>

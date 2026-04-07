@@ -72,7 +72,7 @@
           <div style="background:var(--cream); border-radius:32px; border:1px solid var(--cream-mid); padding:32px">
               <h3 style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--stone); margin-bottom:16px">Resource Quick Link</h3>
               <p style="font-size:12px; color:var(--stone); margin-bottom:20px">Need printables for today's lesson?</p>
-              <a href="{{ route('teacher.resources') }}" style="display:block; text-align:center; padding:12px; background:#fff; border:1.5px solid var(--clay-red); color:var(--clay-red); font-weight:800; font-size:12px; border-radius:12px; text-decoration:none">Download Center</a>
+              <a href="{{ route('teacher.print-center') }}" style="display:block; text-align:center; padding:12px; background:#fff; border:1.5px solid var(--clay-red); color:var(--clay-red); font-weight:800; font-size:12px; border-radius:12px; text-decoration:none">Download Center</a>
           </div>
         </div>
     </div>
