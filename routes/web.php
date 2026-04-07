@@ -35,6 +35,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('analytics', \App\Livewire\Admin\AnalyticsManager::class)->name('analytics');
 });
 
+// CMS Content Management (Org Editor Context)
+Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms')->name('cms.')->group(function () {
+    Route::get('/tribes', \App\Livewire\CMS\TribeDirectory::class)->name('tribes');
+});
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
