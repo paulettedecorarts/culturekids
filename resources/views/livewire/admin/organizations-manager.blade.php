@@ -28,7 +28,7 @@
                         <div style="font-size:12px;color:rgba(255,255,255,.4)">{{ $org->slug }}.paulette.app · {{ Str::title($org->plan ?? 'Standard') }} Plan</div>
                     </div>
                     <span class="status-pill status-published">Active</span>
-                    <button class="btn btn-sm" style="background:rgba(212,160,23,.15);color:var(--savanna-gold);border:1px solid rgba(212,160,23,.3);font-size:10px" onclick="toast('Managing org…')">Manage</button>
+                    <a href="{{ route('admin.organizations.detail', $org->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.15); color:var(--savanna-gold); border:1px solid rgba(212,160,23,.3); font-size:10px; display:inline-flex; align-items:center; text-decoration:none">Manage Entity</a>
                 </div>
                 <div style="display:flex;gap:var(--sp-6);font-size:12px;color:rgba(255,255,255,.5)">
                     <span>👥 {{ $org->users_count }} users</span>

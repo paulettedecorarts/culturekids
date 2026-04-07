@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
     Route::get('users', \App\Livewire\Admin\UserManagement::class)->name('users');
     Route::get('organizations', \App\Livewire\Admin\OrganizationsManager::class)->name('organizations');
+    Route::get('organizations/{organization}', \App\Livewire\Admin\OrganizationDetail::class)->name('organizations.detail');
     Route::get('modules', \App\Livewire\Admin\ModuleToggles::class)->name('modules');
     Route::get('permissions', \App\Livewire\Admin\PermissionsManager::class)->name('permissions');
     
