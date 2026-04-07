@@ -26,7 +26,7 @@
         <div class="activity-card">
             <h3 class="card-title">Recent Ingestion Activity</h3>
             <div class="activity-list">
-                @foreach($recentActivity as $activity)
+                @forelse($recentActivity as $activity)
                     <div class="activity-item">
                         <div class="activity-icon {{ strtolower($activity['type']) }}">
                             @if($activity['type'] == 'upload') 📤 @elseif($activity['type'] == 'edit') ✍️ @else ✅ @endif
@@ -37,7 +37,11 @@
                         </div>
                         <button class="btn-link">Details</button>
                     </div>
-                @endforeach
+                @empty
+                    <div style="text-align:center;padding:var(--sp-8);color:var(--stone)">
+                        <p style="font-size:14px">No recent activity</p>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -45,19 +49,19 @@
         <div class="shortcuts-card">
             <h3 class="card-title">Quick Content Shortcuts</h3>
             <div class="shortcuts-grid">
-                <a href="{{ route('cms.story-packs') }}" class="shortcut-item">
+                <a href="{{ route('cms.editor.story-packs') }}" class="shortcut-item">
                     <div class="shortcut-icon">📖</div>
                     <div class="shortcut-label">Comics</div>
                 </a>
-                <a href="{{ route('cms.songs') }}" class="shortcut-item">
+                <a href="{{ route('cms.editor.songs') }}" class="shortcut-item">
                     <div class="shortcut-icon">🎵</div>
                     <div class="shortcut-label">Audio Library</div>
                 </a>
-                <a href="{{ route('cms.translations') }}" class="shortcut-item">
+                <a href="{{ route('cms.editor.translations') }}" class="shortcut-item">
                     <div class="shortcut-icon">🌐</div>
                     <div class="shortcut-label">Vocab Pairs</div>
                 </a>
-                <a href="{{ route('cms.site') }}" class="shortcut-item">
+                <a href="{{ route('cms.admin.site') }}" class="shortcut-item">
                     <div class="shortcut-icon">🎨</div>
                     <div class="shortcut-label">Web Branding</div>
                 </a>

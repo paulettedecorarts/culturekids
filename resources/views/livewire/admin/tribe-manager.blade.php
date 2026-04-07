@@ -1,93 +1,80 @@
-<div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
+<div class="sa-tribe-manager-view">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-8)">
         <div>
-            <div class="sa-page-title">Tribe Directory</div>
-            <div class="sa-breadcrumb">Super Admin · Platform · All 65+ Tribes</div>
+            <h1 class="sa-page-title">Heritage Tribes</h1>
+            <div class="sa-breadcrumb">Culture Management · Ancestral Registry</div>
         </div>
-        <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <span class="sa-badge">⚡ SUPER ADMIN</span>
-            <button class="btn btn-primary btn-sm" style="background:var(--clay-red); border:none; color:#fff; padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full); font-weight:700; cursor:pointer;" wire:click="$set('showForm', true)">+ Add Tribe</button>
-        </div>
+        <a href="{{ route('admin.tribes.create') }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">+ Register New Tribe</a>
     </div>
 
-    <!-- Stats -->
-    <div class="sa-stats-row">
-        <div class="sa-stat">
-            <div class="sa-stat-val">65</div>
-            <div class="sa-stat-label">Total Tribes</div>
-            <div class="sa-stat-delta">Out of 65 possible</div>
+    @if (session()->has('message'))
+        <div style="background:rgba(74,124,89,0.1); border:1px solid rgba(74,124,89,0.3); color:var(--banana-light); padding:16px 24px; border-radius:16px; margin-bottom:32px; font-size:13px; font-weight:700">
+            ✨ {{ session('message') }}
         </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">48</div>
-            <div class="sa-stat-label">With Content</div>
-            <div class="sa-stat-delta">Published</div>
-        </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">17</div>
-            <div class="sa-stat-label">Pending</div>
-            <div class="sa-stat-delta">Needs Assets</div>
-        </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">23</div>
-            <div class="sa-stat-label">Languages</div>
-            <div class="sa-stat-delta">Native coverage</div>
-        </div>
-    </div>
-
-    @if($showForm)
-    <div style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-xl); padding:var(--sp-6); margin-bottom:var(--sp-6);">
-        <h3 style="font-family:var(--font-display); font-size:18px; font-weight:700; margin-bottom:var(--sp-4); color:var(--savanna-gold);">
-            {{ $editingTribeId ? 'Edit Tribe' : 'Create New Tribe' }}
-        </h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4);">
-            <div style="display:flex; flex-direction:column; gap:5px;">
-                <label style="font-size:11px; font-weight:700; color:rgba(255,255,255,.3); text-transform:uppercase;">Tribe Name</label>
-                <input wire:model="name" type="text" style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--r-sm); padding:var(--sp-2) var(--sp-3); color:#fff; outline:none;">
-            </div>
-            <div style="display:flex; flex-direction:column; gap:5px;">
-                <label style="font-size:11px; font-weight:700; color:rgba(255,255,255,.3); text-transform:uppercase;">Hero Name</label>
-                <input wire:model="hero_name" type="text" style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--r-sm); padding:var(--sp-2) var(--sp-3); color:#fff; outline:none;">
-            </div>
-        </div>
-        <div style="margin-top:var(--sp-4); display:flex; gap:var(--sp-3);">
-            <button wire:click="save" class="btn btn-sm" style="background:var(--banana-green); border:none; color:#fff; padding: var(--sp-2) var(--sp-5); border-radius:var(--r-full); font-weight:700; cursor:pointer;">Save Tribe</button>
-            <button wire:click="$set('showForm', false)" class="btn btn-sm" style="background:rgba(255,255,255,.1); border:none; color:#fff; padding: var(--sp-2) var(--sp-5); border-radius:var(--r-full); font-weight:700; cursor:pointer;">Cancel</button>
-        </div>
-    </div>
     @endif
 
-    <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
-            <span>Tribe</span>
-            <span>Language</span>
-            <span>Region</span>
-            <span>Comics</span>
-            <span>Status</span>
-            <span>Actions</span>
+    <!-- Filters Bar -->
+    <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,0.06); border-radius:32px; padding:32px; margin-bottom:40px">
+        <div style="position:relative">
+            <span style="position:absolute; left:20px; top:50%; transform:translateY(-50%); opacity:0.3">🔍</span>
+            <input 
+                type="text" 
+                wire:model.live.debounce.300ms="search" 
+                placeholder="Search tribes by name or region..." 
+                style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 16px 16px 52px; color:#fff; font-family:var(--font-admin); font-size:13px; outline:none;"
+            >
+        </div>
+    </div>
+
+    <!-- Tribes Grid/Table -->
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:32px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:1px">
+            <span>Tribe Identity</span>
+            <span>Ancestral Region</span>
+            <span>Guardian Hero</span>
+            <span>Greeting</span>
+            <span style="text-align:right">Management</span>
         </div>
 
-        @foreach($tribes as $tribe)
-        <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
-            <div style="display:flex;align-items:center;gap:var(--sp-3)">
-                <div style="width:36px;height:28px;background:linear-gradient(135deg,{{ $tribe->color ?? '#C44B2B' }},#000);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">{{ $tribe->hero_emoji }}</div>
-                <div>
-                    <div style="font-weight:600;color:#fff;font-size:13px">{{ $tribe->name }}</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,.3)">{{ $tribe->hero_name }}</div>
+        @forelse($tribes as $tribe)
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.03); transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                <a href="{{ route('admin.tribes.detail', $tribe->id) }}" style="display:flex; align-items:center; gap:20px; text-decoration:none">
+                    <div style="width:52px; height:52px; border-radius:16px; background:{{ $tribe->color }}; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'30' }}">
+                        {{ $tribe->hero_emoji ?: '🗺️' }}
+                    </div>
+                    <div>
+                        <div style="font-weight:800; color:#fff; font-size:16px; margin-bottom:2px">{{ $tribe->name }}</div>
+                        <div style="font-size:12px; color:rgba(255,255,255,0.4); text-transform:uppercase; font-weight:800; letter-spacing:1px">{{ $tribe->activities_count ?? $tribe->activities->count() }} Heritage Events</div>
+                    </div>
+                </a>
+
+                <div style="font-size:14px; color:rgba(255,255,255,0.6); font-weight:700">
+                    {{ $tribe->region }}
+                </div>
+
+                <div style="font-size:14px; color:rgba(255,255,255,0.4); font-weight:700">
+                    {{ $tribe->hero_name }}
+                </div>
+
+                <div style="font-size:15px; color:{{ $tribe->color }}; font-weight:800; font-family:var(--font-display)">
+                    {{ $tribe->greeting }}
+                </div>
+
+                <div style="display:flex; gap:8px; justify-content:flex-end">
+                    <a href="{{ route('admin.tribes.edit', $tribe->id) }}" class="btn" style="width:36px; height:36px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
+                    <button wire:click="delete({{ $tribe->id }})" onclick="return confirm('Archive heritage record permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>
                 </div>
             </div>
-            <span style="font-size:12px;color:rgba(255,255,255,.6)">Luganda</span> <!-- Temp hardcoded lang -->
-            <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $tribe->region }}</span>
-            <span style="font-size:12px;color:#fff;font-weight:700">{{ rand(2, 12) }}</span>
-            <span class="status-pill status-published">Published</span>
-            <div style="display:flex;gap:6px">
-                <button wire:click="edit({{ $tribe->id }})" class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:9px">Edit</button>
+        @empty
+            <div style="padding:100px; text-align:center; opacity:0.3">
+                <div style="font-size:64px; margin-bottom:24px">🗺️</div>
+                <div style="font-size:15px; font-weight:700">No heritage tribes registered.</div>
             </div>
-        </div>
-        @endforeach
+        @endforelse
     </div>
 
-    <div style="margin-top:var(--sp-4);">
-        {{ $tribes->links() }}
+    <!-- Pagination -->
+    <div style="margin-top:40px">
+        {{ $tribes->links(data: ['scrollTo' => false]) }}
     </div>
 </div>
-

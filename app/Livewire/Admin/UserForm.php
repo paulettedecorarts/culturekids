@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\User;
 use App\Models\Organisation;
+use App\Models\AuditLog;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -63,10 +64,24 @@ class UserForm extends Component
         if ($this->editing) {
             $this->user->update($data);
             $this->user->syncRoles($this->userRoles);
+            
+            // Log the update
+            AuditLog::record('UPDATE', "users/{$this->user->id}", [
+                'user_email' => $this->email,
+                'roles' => $this->userRoles,
+            ]);
+            
             session()->flash('message', 'Platform account updated successfully.');
         } else {
             $newUser = User::create($data);
             $newUser->assignRole($this->userRoles);
+            
+            // Log the creation
+            AuditLog::record('CREATE', "users/{$newUser->id}", [
+                'user_email' => $this->email,
+                'roles' => $this->userRoles,
+            ]);
+            
             session()->flash('message', 'Platform account created successfully.');
         }
 

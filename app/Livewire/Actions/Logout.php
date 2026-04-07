@@ -12,6 +12,14 @@ class Logout
      */
     public function __invoke(): void
     {
+        // If impersonating, log the stop action before logout
+        if (session('impersonating')) {
+            \App\Models\AuditLog::record('STOP_IMPERSONATE', 'logout', [
+                'impersonated_user' => auth()->user()?->email,
+                'reason' => 'User logged out',
+            ]);
+        }
+
         Auth::guard('web')->logout();
 
         Session::invalidate();

@@ -11,20 +11,15 @@ class Dashboard extends Component
 
     public function mount()
     {
-        // Mock data for the Org Admin/Editor Dashboard
+        // Stats will be populated from actual database queries
         $this->stats = [
-            ['label' => 'Story Packs', 'val' => '12', 'delta' => '75% published'],
-            ['label' => 'Total Assets', 'val' => '248', 'delta' => '+18 this week'],
-            ['label' => 'Active Children', 'val' => '342', 'delta' => 'Across 14 classes'],
-            ['label' => 'Pending Review', 'val' => '4', 'delta' => 'Needs attention'],
+            ['label' => 'Story Packs', 'val' => '0', 'delta' => 'No data yet'],
+            ['label' => 'Total Assets', 'val' => '0', 'delta' => 'No data yet'],
+            ['label' => 'Active Children', 'val' => '0', 'delta' => 'No data yet'],
+            ['label' => 'Pending Review', 'val' => '0', 'delta' => 'No data yet'],
         ];
 
-        $this->recentActivity = [
-            ['type' => 'upload', 'title' => 'New Comic: The River Spirit', 'time' => '2 hours ago', 'status' => 'Processing'],
-            ['type' => 'edit', 'title' => 'Updated Acholi Translations', 'time' => '5 hours ago', 'status' => 'Review'],
-            ['type' => 'approve', 'title' => 'Garden Words Pack Published', 'time' => 'Yesterday', 'status' => 'Live'],
-            ['type' => 'upload', 'title' => 'Audio Pack: Basoga Folk Songs', 'time' => '2 days ago', 'status' => 'Draft'],
-        ];
+        $this->recentActivity = [];
     }
 
     public function render()

@@ -79,7 +79,19 @@
     </style>
 </head>
 <body>
-    <div class="cms-shell">
+    @if(session('impersonating'))
+        <div style="position:fixed;top:0;left:0;right:0;background:rgba(232,135,42,.95);color:#fff;padding:var(--sp-2) var(--sp-4);z-index:9999;display:flex;align-items:center;justify-content:center;gap:var(--sp-3);font-size:14px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+            <span>🎭 IMPERSONATING: {{ auth()->user()->email }}</span>
+            <form method="POST" action="{{ route('admin.stop-impersonation') }}" style="margin:0">
+                @csrf
+                <button type="submit" style="background:#fff;color:var(--sunfire);padding:4px 12px;font-size:11px;border:none;border-radius:20px;font-weight:700;cursor:pointer;font-family:var(--font-admin)">
+                    Stop Impersonation
+                </button>
+            </form>
+        </div>
+    @endif
+    
+    <div class="cms-shell" style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}">
         <div class="cms-sidebar">
             <div class="cms-sidebar-logo">Paulette CMS<span>Admin Dashboard</span></div>
             <!-- Shared / Dashboard -->

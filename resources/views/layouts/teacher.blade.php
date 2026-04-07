@@ -67,11 +67,23 @@
     </style>
 </head>
 <body>
-    <div class="teacher-shell">
+    @if(session('impersonating'))
+        <div style="position:fixed;top:0;left:0;right:0;background:rgba(232,135,42,.95);color:#fff;padding:var(--sp-2) var(--sp-4);z-index:9999;display:flex;align-items:center;justify-content:center;gap:var(--sp-3);font-size:14px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+            <span>🎭 IMPERSONATING: {{ auth()->user()->email }}</span>
+            <form method="POST" action="{{ route('admin.stop-impersonation') }}" style="margin:0">
+                @csrf
+                <button type="submit" style="background:#fff;color:#E8872A;padding:4px 12px;font-size:11px;border:none;border-radius:20px;font-weight:700;cursor:pointer">
+                    Stop Impersonation
+                </button>
+            </form>
+        </div>
+    @endif
+    
+    <div class="teacher-shell" style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}">
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <h2>Teacher Hub</h2>
-                <span>Mrs. Nakato · P3B</span>
+                <span>{{ auth()->user()->name ?? 'Teacher' }}</span>
             </div>
 
             <a href="{{ route('teacher.dashboard') }}" class="nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
@@ -86,7 +98,7 @@
             </a>
             <a href="{{ route('teacher.class') }}" class="nav-item {{ request()->routeIs('teacher.class') ? 'active' : '' }}">
                 <em style="font-size: 14px">👪</em>
-                <span>My Class (28)</span>
+                <span>My Class</span>
             </a>
             <a href="{{ route('teacher.reports') }}" class="nav-item {{ request()->routeIs('teacher.reports') ? 'active' : '' }}">
                 <em style="font-size: 14px">📊</em>

@@ -122,7 +122,19 @@
     </style>
 </head>
 <body>
-    <div class="sa-shell">
+    @if(session('impersonating'))
+        <div style="position:fixed;top:0;left:0;right:0;background:rgba(232,135,42,.95);color:#fff;padding:var(--sp-2) var(--sp-4);z-index:9999;display:flex;align-items:center;justify-content:center;gap:var(--sp-3);font-size:14px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+            <span>🎭 IMPERSONATING: {{ auth()->user()->email }}</span>
+            <form method="POST" action="{{ route('admin.stop-impersonation') }}" style="margin:0">
+                @csrf
+                <button type="submit" class="btn btn-sm" style="background:#fff;color:var(--sunfire);padding:4px 12px;font-size:11px">
+                    Stop Impersonation
+                </button>
+            </form>
+        </div>
+    @endif
+    
+    <div class="sa-shell" style="{{ session('impersonating') ? 'margin-top:44px' : '' }}">
         <div class="sa-sidebar">
             <div class="sa-sidebar-logo">
                 ⚡ Super Admin
@@ -133,10 +145,10 @@
             <a href="{{ route('admin.dashboard') }}" class="sa-nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 📊 System Overview
             </a>
-            <a href="{{ route('admin.users') }}" class="sa-nav-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+            <a href="{{ route('admin.users') }}" class="sa-nav-item {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                 👥 User Management
             </a>
-            <a href="{{ route('admin.organizations') }}" class="sa-nav-item {{ request()->routeIs('admin.organizations') ? 'active' : '' }}">
+            <a href="{{ route('admin.organizations') }}" class="sa-nav-item {{ request()->routeIs('admin.organizations*') ? 'active' : '' }}">
                 🏢 Organizations
             </a>
             <a href="{{ route('admin.modules') }}" class="sa-nav-item {{ request()->routeIs('admin.modules') ? 'active' : '' }}">
@@ -145,25 +157,25 @@
             <a href="{{ route('admin.permissions') }}" class="sa-nav-item {{ request()->routeIs('admin.permissions') ? 'active' : '' }}">
                 🔑 Permissions
             </a>
+            <a href="{{ route('admin.themes') }}" class="sa-nav-item {{ request()->routeIs('admin.themes') ? 'active' : '' }}">
+                🎨 Themes
+            </a>
+            <a href="{{ route('admin.analytics') }}" class="sa-nav-item {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">
+                📈 Analytics
+            </a>
             
             <div class="sa-nav-section">Content</div>
             <a href="{{ route('admin.stories') }}" class="sa-nav-item {{ request()->routeIs('admin.stories') ? 'active' : '' }}">📖 Stories</a>
-            <a href="{{ route('admin.story-packs') }}" class="sa-nav-item {{ request()->routeIs('admin.story-packs') ? 'active' : '' }}">📦 Story Packs</a>
-            <a href="{{ route('admin.assets') }}" class="sa-nav-item {{ request()->routeIs('admin.assets') ? 'active' : '' }}">🖼 Assets</a>
-            <a href="{{ route('admin.translations') }}" class="sa-nav-item {{ request()->routeIs('admin.translations') ? 'active' : '' }}">🌐 Translations</a>
+            <a href="{{ route('admin.songs') }}" class="sa-nav-item {{ request()->routeIs('admin.songs') ? 'active' : '' }}">🎵 Songs</a>
+            <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🎯 Activities</a>
             <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>
             <a href="{{ route('admin.age-categories') }}" class="sa-nav-item {{ request()->routeIs('admin.age-categories') ? 'active' : '' }}">🌱 Age Categories</a>
-            <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry') ? 'active' : '' }}">🌍 Tribe Directory</a>
+            <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry*') ? 'active' : '' }}">🌍 Tribe Directory</a>
             <a href="{{ route('admin.languages') }}" class="sa-nav-item {{ request()->routeIs('admin.languages') ? 'active' : '' }}">🗣 Languages</a>
             
-            <div class="sa-nav-section">Activities</div>
-            <a href="{{ route('admin.songs') }}" class="sa-nav-item {{ request()->routeIs('admin.songs') ? 'active' : '' }}">🎵 Songs</a>
-            <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🧩 Activities</a>
-            
-            <div class="sa-nav-section">Platform</div>
-            <a href="{{ route('admin.themes') }}" class="sa-nav-item {{ request()->routeIs('admin.themes') ? 'active' : '' }}">🎨 Themes</a>
-            <a href="{{ route('admin.organizations') }}" class="sa-nav-item {{ request()->routeIs('admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
-            <a href="{{ route('admin.analytics') }}" class="sa-nav-item {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">📊 Analytics</a>
+            <div class="sa-nav-section">Logs</div>
+            <a href="{{ route('admin.audit-logs') }}" class="sa-nav-item {{ request()->routeIs('admin.audit-logs') ? 'active' : '' }}">📋 Audit Logs</a>
+            <a href="{{ route('admin.impersonate') }}" class="sa-nav-item {{ request()->routeIs('admin.impersonate') ? 'active' : '' }}">🎭 Impersonate User</a>
             
             <div class="sa-nav-section">User</div>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto">

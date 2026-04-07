@@ -72,12 +72,10 @@
 
     <!-- Module Toggles (quick access) -->
     <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:var(--sp-3);margin-top:var(--sp-5)">Global Module Control</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3)">
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">📚 Tribe Directory</div><div class="toggle-desc">All 65+ tribe profiles</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">📖 Comics</div><div class="toggle-desc">Story packs &amp; panels</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🎵 Songs</div><div class="toggle-desc">Audio library</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🗣 Language Learning</div><div class="toggle-desc">Flashcard vocab system</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">🖥 Kiosk Mode</div><div class="toggle-desc">Museum installations</div></div><div class="toggle-switch on" onclick="toast('Toggling module')"></div></div>
-        <div class="module-toggle"><div class="toggle-info"><div class="toggle-name">💰 Monetization</div><div class="toggle-desc">Premium packs &amp; IAP</div></div><div class="toggle-switch off" onclick="toast('Toggling module')"></div></div>
+    <div style="text-align:center;padding:var(--sp-8);color:rgba(255,255,255,.3)">
+        <p style="font-size:14px;margin-bottom:var(--sp-2)">Module toggles coming soon</p>
+        <a href="{{ route('admin.modules') }}" style="color:var(--savanna-gold);text-decoration:none;font-size:12px">
+            Go to Module Toggles →
+        </a>
     </div>
 </div>

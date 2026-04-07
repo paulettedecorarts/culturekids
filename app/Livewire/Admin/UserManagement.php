@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use App\Models\User;
+use App\Models\AuditLog;
 use Spatie\Permission\Models\Role;
 
 #[Layout('layouts.admin')]
@@ -33,7 +34,15 @@ class UserManagement extends Component
             return;
         }
 
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        
+        // Log the deletion
+        AuditLog::record('DELETE', "users/{$user->id}", [
+            'user_email' => $user->email,
+            'user_name' => $user->name,
+        ]);
+        
+        $user->delete();
         session()->flash('message', 'User removed from platform.');
     }
 

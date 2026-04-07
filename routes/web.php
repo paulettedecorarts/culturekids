@@ -9,7 +9,7 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 // Super Admin Routes
-Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
     Route::get('users', \App\Livewire\Admin\UserManagement::class)->name('users');
     Route::get('users/create', \App\Livewire\Admin\UserForm::class)->name('users.create');
@@ -36,8 +36,19 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('admin')->na
     
     // New Platform section items
     Route::get('themes', \App\Livewire\Admin\ThemesManager::class)->name('themes');
+    Route::get('tribes', \App\Livewire\Admin\TribeManager::class)->name('tribes');
+    Route::get('tribes/create', \App\Livewire\Admin\TribeForm::class)->name('tribes.create');
+    Route::get('tribes/{tribe}', \App\Livewire\Admin\TribeDetail::class)->name('tribes.detail');
+    Route::get('tribes/{tribe}/edit', \App\Livewire\Admin\TribeForm::class)->name('tribes.edit');
     Route::get('analytics', \App\Livewire\Admin\AnalyticsManager::class)->name('analytics');
+    
+    // Logs section
+    Route::get('audit-logs', \App\Livewire\Admin\AuditLogs::class)->name('audit-logs');
+    Route::get('impersonate', \App\Livewire\Admin\ImpersonateUser::class)->name('impersonate');
 });
+
+// Stop Impersonation - accessible by anyone currently impersonating
+Route::middleware(['auth', 'verified'])->post('admin/stop-impersonation', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('admin.stop-impersonation');
 
 // CMS Editor (Content Production)
 Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms/editor')->name('cms.editor.')->group(function () {
