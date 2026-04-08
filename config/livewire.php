@@ -65,16 +65,21 @@ return [
 
     'temporary_file_upload' => [
         'disk' => null,        // Example: 'local', 's3'              | Default: 'default'
-        'rules' => ['required', 'file'],       // Removed max size limit
+        // No max rule: size is bounded only by PHP ini (upload_max_filesize / post_max_size) and web server.
+        'rules' => ['required', 'file'],
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
         'middleware' => null,  // Example: 'throttle:5,1'             | Default: 'throttle:60,1'
-        'preview_mimes' => [   // Supported file types for temporary pre-signed file URLs...
-            'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
-            'mov', 'avi', 'wmv', 'mp3', 'm4a',
-            'jpg', 'jpeg', 'mpga', 'webp', 'wma',
-            'pdf', 'aac', 'ogg',
+        // Livewire only accepts extensions listed here for /livewire/upload-file — include broad audio + existing media.
+        'preview_mimes' => [
+            'png', 'gif', 'bmp', 'svg', 'jpg', 'jpeg', 'webp', 'pdf',
+            'mp4', 'mov', 'avi', 'wmv',
+            'wav', 'mp3', 'm4a', 'm4b', 'm4p', 'aac', 'aif', 'aiff', 'aifc',
+            'alac', 'amr', 'ape', 'au', 'caf', 'dsf', 'dff', 'flac', 'kar',
+            'mka', 'mid', 'midi', 'mpc', 'mp2', 'mpga', 'oga', 'ogg', 'opus',
+            'ra', 'snd', 'tta', 'voc', 'weba', 'webm', 'wma', 'wv',
+            '3gp', '3g2', 'gsm', 'awb', 'dvf', 'mmf', 'nmf', 'nsf', 'spx',
         ],
-        'max_upload_time' => 30, // Increased to 30 minutes for large files
+        'max_upload_time' => 120,
         'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
     ],
 

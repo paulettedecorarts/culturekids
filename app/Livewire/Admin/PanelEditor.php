@@ -52,8 +52,8 @@ class PanelEditor extends Component
 
     protected $rules = [
         'caption' => 'nullable|max:500',
-        'audio_file' => 'nullable|file|mimes:mp3,wav,m4a,aac,ogg',
-        'replacement_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf',
+        'audio_file' => 'nullable|file',
+        'replacement_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:51200',
         'vocab_word' => 'required|max:100',
         'vocab_translation' => 'nullable|max:100',
         'vocab_phonetic' => 'nullable|max:150',
@@ -73,6 +73,12 @@ class PanelEditor extends Component
 
     public function loadCurrentPanel()
     {
+        $this->resetErrorBag();
+
+        // Staged uploads are per-panel; clear when switching so Livewire temp files stay in sync
+        $this->audio_file = null;
+        $this->replacement_image = null;
+
         if ($this->panels->isEmpty()) {
             $this->currentPanel = null;
 
@@ -121,23 +127,35 @@ class PanelEditor extends Component
 
     public function uploadAudio()
     {
-        $this->validate(['audio_file' => 'required|file|mimes:mp3,wav,m4a,aac,ogg']);
+        $this->validate([
+            'audio_file' => [
+                'required',
+                'file',
+            ],
+        ]);
 
         if (! $this->currentPanel) {
             return;
         }
 
-        // Delete old audio
-        if ($this->currentPanel->audio_url) {
-            Storage::disk('public')->delete($this->currentPanel->audio_url);
+        try {
+            // Delete old audio
+            if ($this->currentPanel->audio_url) {
+                Storage::disk('public')->delete($this->currentPanel->audio_url);
+            }
+
+            $audioPath = $this->audio_file->store('comics/audio', 'public');
+            $this->currentPanel->audio_url = $audioPath;
+            $this->currentPanel->save();
+        } catch (\Throwable $e) {
+            report($e);
+            $this->addError('audio_file', __('Could not save audio. Check storage permissions and try again.'));
+
+            return;
         }
 
-        // Upload new audio
-        $audioPath = $this->audio_file->store('comics/audio', 'public');
-        $this->currentPanel->audio_url = $audioPath;
-        $this->currentPanel->save();
-
         $this->audio_file = null;
+        $this->loadPanels();
         $this->loadCurrentPanel();
 
         session()->flash('message', 'Audio uploaded successfully.');

@@ -156,14 +156,33 @@
                             </button>
                         </div>
                     @else
-                        <div style="margin-bottom:16px">
-                            <input wire:model="audio_file" type="file" accept="audio/*" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:11px;margin-bottom:8px">
-                            <button 
-                                wire:click="uploadAudio"
-                                style="width:100%;background:rgba(74,124,89,0.15);color:var(--banana-light);border:1px solid rgba(74,124,89,0.3);padding:10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer"
+                        <div style="margin-bottom:16px" wire:key="audio-upload-{{ $currentPanel->id }}">
+                            <input
+                                wire:model="audio_file"
+                                type="file"
+                                accept="audio/*"
+                                style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:11px;margin-bottom:8px"
                             >
-                                🔊 Upload Audio
+                            <p wire:loading wire:target="audio_file" style="font-size:11px;color:var(--banana-mid);margin:0 0 8px">
+                                Uploading file to server…
+                            </p>
+                            @error('audio_file')
+                                <div style="font-size:11px;color:var(--clay-red-light);margin:0 0 8px;font-weight:600">{{ $message }}</div>
+                            @enderror
+                            <button
+                                type="button"
+                                wire:click="uploadAudio"
+                                wire:loading.attr="disabled"
+                                wire:target="audio_file uploadAudio"
+                                @disabled(! $audio_file)
+                                style="width:100%;background:rgba(74,124,89,0.15);color:var(--banana-light);border:1px solid rgba(74,124,89,0.3);padding:10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;opacity:1"
+                            >
+                                <span wire:loading.remove wire:target="uploadAudio">🔊 Upload Audio</span>
+                                <span wire:loading wire:target="uploadAudio">Saving…</span>
                             </button>
+                            <p style="font-size:10px;color:rgba(255,255,255,0.35);margin:8px 0 0;line-height:1.4">
+                                422 on upload usually means PHP’s 2M default limit. Use <code style="font-size:9px">composer serve</code> or <code style="font-size:9px">composer dev</code> (loads <code style="font-size:9px">php-for-artisan.ini</code>), not raw <code style="font-size:9px">php artisan serve</code>.
+                            </p>
                         </div>
                     @endif
                 </div>
@@ -171,13 +190,23 @@
                 <!-- Replace Panel -->
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:24px">
                     <h3 style="font-size:14px;font-weight:800;color:var(--savanna-gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Replace Panel</h3>
-                    <input wire:model="replacement_image" type="file" accept="image/*,.pdf" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:11px;margin-bottom:8px">
-                    <button 
-                        wire:click="replacePanel"
-                        style="width:100%;background:rgba(232,135,42,0.15);color:#E8872A;border:1px solid rgba(232,135,42,0.3);padding:10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer"
-                    >
-                        🔄 Replace Image
-                    </button>
+                    <div wire:key="replace-panel-{{ $currentPanel->id }}">
+                        <input wire:model="replacement_image" type="file" accept="image/*,.pdf" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:11px;margin-bottom:8px">
+                        @error('replacement_image')
+                            <div style="font-size:11px;color:var(--clay-red-light);margin:0 0 8px;font-weight:600">{{ $message }}</div>
+                        @enderror
+                        <button
+                            type="button"
+                            wire:click="replacePanel"
+                            wire:loading.attr="disabled"
+                            wire:target="replacement_image replacePanel"
+                            @disabled(! $replacement_image)
+                            style="width:100%;background:rgba(232,135,42,0.15);color:#E8872A;border:1px solid rgba(232,135,42,0.3);padding:10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer"
+                        >
+                            <span wire:loading.remove wire:target="replacePanel">🔄 Replace Image</span>
+                            <span wire:loading wire:target="replacePanel">Replacing…</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Vocabulary Tags -->
