@@ -165,7 +165,7 @@
             </a>
             
             <div class="sa-nav-section">Content</div>
-            <a href="{{ route('admin.stories') }}" class="sa-nav-item {{ request()->routeIs('admin.stories') ? 'active' : '' }}">📖 Stories</a>
+            <a href="{{ route('admin.stories') }}" class="sa-nav-item {{ request()->routeIs('admin.stories*') ? 'active' : '' }}">📖 Stories</a>
             <a href="{{ route('admin.songs') }}" class="sa-nav-item {{ request()->routeIs('admin.songs') ? 'active' : '' }}">🎵 Songs</a>
             <a href="{{ route('admin.activities') }}" class="sa-nav-item {{ request()->routeIs('admin.activities') ? 'active' : '' }}">🎯 Activities</a>
             <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>

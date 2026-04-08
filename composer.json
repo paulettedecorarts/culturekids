@@ -18,7 +18,8 @@
         "livewire/livewire": "^3.6.4",
         "livewire/volt": "^1.7.0",
         "predis/predis": "^3.4",
-        "spatie/laravel-permission": "^7.2"
+        "spatie/laravel-permission": "^7.2",
+        "spatie/pdf-to-image": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",

@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<!-- saved from url=(0155)file:///C:/Users/cosmah/AppData/Local/Temp/MicrosoftEdgeDownloads/7a8f266a-17e0-4b20-9652-456340cef596/paulette-culture-kids-SYSTEM-WORKFLOWS-v2-FIXED.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paulette Culture Kids — Laravel · MySQL · Expo React Native System Workflows</title>
+<link href="./Paulette Culture Kids — Laravel · MySQL · Expo React Native System Workflows_files/css2" rel="stylesheet">
+<style>
+:root {
+  --clay-red:#C44B2B;--clay-red-light:#E06444;--clay-red-dark:#9A3218;
+  --sunfire:#E8872A;--sunfire-light:#F2A84E;--sunfire-pale:#FDF0DE;
+  --savanna-gold:#D4A017;--savanna-light:#F2CB5A;
+  --banana-green:#4A7C59;--banana-mid:#6FA882;--banana-light:#B8D9C6;
+  --leaf-pale:#EBF5EE;
+  --barkcloth-warm:#8B5E3C;--barkcloth-mid:#B07D52;--barkcloth-pale:#F2E8DC;
+  --indigo-night:#1E2D4A;--sky-dusk:#2E4D8A;--sky-mid:#4A72C4;
+  --ink:#1A1208;--ink-mid:#3D2F1A;--ink-light:#6B5544;
+  --stone:#9C8875;--stone-light:#C4B5A5;
+  --cream:#FAF6F0;--cream-warm:#F5EDE0;--cream-mid:#EDE0CE;--white:#FFFFFF;
+  --success:#3D7A4E;--warning:#D4A017;--error:#C44B2B;--info:#2E4D8A;
+  --laravel:#FF2D20;--mysql:#4479A1;--expo:#000020;--sanctum:#6875F5;
+  --blade:#fb70a9;--reactnative:#61DAFB;
+  --font-display:'Baloo 2',cursive;--font-child:'Nunito',sans-serif;
+  --font-editorial:'DM Serif Display',serif;--font-admin:'Bricolage Grotesque',sans-serif;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;
+  --sp-8:32px;--sp-10:40px;--sp-12:48px;--sp-16:64px;
+  --r-sm:8px;--r-md:16px;--r-lg:24px;--r-xl:32px;--r-full:9999px;
+  --shadow-sm:0 2px 8px rgba(26,18,8,0.08);--shadow-md:0 4px 16px rgba(26,18,8,0.12);
+  --shadow-lg:0 8px 32px rgba(26,18,8,0.16);--shadow-xl:0 16px 48px rgba(26,18,8,0.20);
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);--ease-out:cubic-bezier(0.22,1,0.36,1);
+  --dur-fast:150ms;--dur-mid:300ms;--dur-slow:500ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--cream);color:var(--ink);font-family:var(--font-admin);line-height:1.5;overflow-x:hidden}
+
+/* ── NAV ───────────────────────────────────────────── */
+.sys-nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:var(--indigo-night);border-bottom:3px solid var(--clay-red);
+  display:flex;align-items:center;gap:var(--sp-2);
+  padding:var(--sp-3) var(--sp-6);overflow-x:auto;
+}
+.sys-nav-logo{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--sunfire-light);white-space:nowrap;margin-right:var(--sp-3);letter-spacing:-0.3px;flex-shrink:0}
+.sys-nav-btn{
+  background:transparent;border:none;color:var(--stone-light);
+  font-family:var(--font-admin);font-size:11px;font-weight:600;white-space:nowrap;
+  letter-spacing:0.5px;text-transform:uppercase;padding:var(--sp-2) var(--sp-3);
+  border-radius:var(--r-sm);cursor:pointer;transition:all var(--dur-fast) var(--ease-out);flex-shrink:0;
+}
+.sys-nav-btn:hover,.sys-nav-btn.active{color:var(--white);background:rgba(255,255,255,0.1)}
+.sys-nav-badge{background:var(--laravel);color:white;padding:3px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;letter-spacing:0.5px;white-space:nowrap;flex-shrink:0}
+.tech-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:var(--r-full);font-size:10px;font-weight:700;white-space:nowrap}
+.tp-laravel{background:rgba(255,45,32,0.15);color:#FF2D20;border:1px solid rgba(255,45,32,0.3)}
+.tp-mysql{background:rgba(68,121,161,0.15);color:#4479A1;border:1px solid rgba(68,121,161,0.3)}
+.tp-expo{background:rgba(97,218,251,0.12);color:#61DAFB;border:1px solid rgba(97,218,251,0.25)}
+.tp-sanctum{background:rgba(104,117,245,0.15);color:#6875F5;border:1px solid rgba(104,117,245,0.3)}
+.tp-blade{background:rgba(251,112,169,0.15);color:#fb70a9;border:1px solid rgba(251,112,169,0.3)}
+
+/* ── SECTIONS ──────────────────────────────────────── */
+.section{padding:var(--sp-16) var(--sp-6);max-width:1200px;margin:0 auto}
+.section-title{font-family:var(--font-editorial);font-size:clamp(24px,3.5vw,38px);font-style:italic;color:var(--ink);margin-bottom:var(--sp-2)}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--clay-red);margin-bottom:var(--sp-3)}
+.section-desc{font-size:15px;color:var(--ink-light);max-width:680px;margin-bottom:var(--sp-8);line-height:1.7}
+.bg-dark{background:var(--indigo-night)}
+.bg-dark .section-title{color:white}
+.bg-dark .section-desc{color:rgba(255,255,255,0.55)}
+.bg-dark .section-label{color:var(--sunfire-light)}
+.bg-warm{background:var(--barkcloth-pale)}
+.section-divider{border:none;border-top:1px solid var(--cream-mid);margin:0}
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero{min-height:100vh;background:var(--indigo-night);position:relative;display:flex;align-items:center;overflow:hidden;padding-top:60px}
+.hero-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(60deg,transparent,transparent 40px,rgba(196,75,43,0.06) 40px,rgba(196,75,43,0.06) 41px),repeating-linear-gradient(-60deg,transparent,transparent 40px,rgba(232,135,42,0.04) 40px,rgba(232,135,42,0.04) 41px)}
+.hero-accent-1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(196,75,43,0.25) 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none}
+.hero-accent-2{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,0.2) 0%,transparent 70%);bottom:50px;left:-50px;pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:var(--sp-16) var(--sp-6);display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-16);align-items:center}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--sunfire-light);margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)}
+.hero-eyebrow::before{content:'';display:inline-block;width:24px;height:2px;background:var(--clay-red)}
+.hero-headline{font-family:var(--font-display);font-size:clamp(32px,4vw,58px);font-weight:800;line-height:1.05;color:var(--white);margin-bottom:var(--sp-6);letter-spacing:-1px}
+.hero-headline em{font-style:normal;color:var(--sunfire-light);display:block}
+.hero-body{font-size:16px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:var(--sp-6);max-width:480px}
+.hero-stack-row{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-8)}
+.hero-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4)}
+.hero-metric{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:var(--sp-4);text-align:center}
+.hero-metric-val{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--sunfire-light);line-height:1;margin-bottom:4px}
+.hero-metric-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+
+/* RBAC diagram */
+.hero-sys-diagram{display:flex;flex-direction:column;align-items:center;gap:var(--sp-4)}
+.sys-node{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-5);border-radius:var(--r-lg);font-size:13px;font-weight:700;width:260px;transition:transform var(--dur-mid) var(--ease-spring)}
+.sys-node:hover{transform:translateX(6px)}
+.sys-node-icon{font-size:20px;flex-shrink:0}
+.sys-node-text{flex:1}
+.sys-node-role{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.7;display:block;margin-bottom:1px}
+.sys-node-name{display:block}
+.sn-super{background:linear-gradient(135deg,#B8960A,#D4A017);color:var(--ink);border:2px solid var(--savanna-gold);box-shadow:0 0 20px rgba(212,160,23,0.3)}
+.sn-admin{background:rgba(196,75,43,0.25);color:var(--clay-red-light);border:1px solid rgba(196,75,43,0.4)}
+.sn-teacher{background:rgba(46,77,138,0.3);color:#7AA8E8;border:1px solid rgba(46,77,138,0.4)}
+.sn-parent{background:rgba(139,94,60,0.3);color:var(--barkcloth-mid);border:1px solid rgba(139,94,60,0.3)}
+.sn-child{background:rgba(232,135,42,0.25);color:var(--sunfire-light);border:1px solid rgba(232,135,42,0.4)}
+.rbac-arrow{width:2px;height:18px;background:linear-gradient(to bottom,rgba(212,160,23,0.6),rgba(212,160,23,0.15));margin:-4px auto}
+
+/* ── WORKFLOW STEPS ────────────────────────────────── */
+.workflow-section{margin-bottom:var(--sp-12)}
+.workflow-header{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-6);padding-bottom:var(--sp-4);border-bottom:2px solid var(--cream-mid)}
+.workflow-icon{width:52px;height:52px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.workflow-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)}
+.workflow-subtitle{font-size:13px;color:var(--stone);margin-top:2px}
+.flow-steps{display:flex;flex-direction:column;gap:0}
+.flow-step{display:grid;grid-template-columns:52px 1fr;gap:var(--sp-4);position:relative}
+.flow-step-left{display:flex;flex-direction:column;align-items:center}
+.flow-step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.flow-step-line{flex:1;width:2px;min-height:24px}
+.flow-step-body{padding-bottom:var(--sp-5)}
+.flow-step-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:var(--sp-1);margin-top:6px}
+.flow-step-desc{font-size:13px;color:var(--ink-light);line-height:1.65}
+.flow-step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--sp-2)}
+.flow-tag{padding:3px 9px;border-radius:var(--r-full);font-size:10px;font-weight:700;letter-spacing:0.3px}
+.flow-step-code{background:var(--ink);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);font-family:'Courier New',monospace;font-size:11px;color:rgba(255,255,255,0.75);margin-top:var(--sp-3);line-height:1.7;overflow-x:auto}
+.flow-step-code .k{color:var(--sunfire-light)}
+.flow-step-code .s{color:var(--banana-mid)}
+.flow-step-code .c{color:rgba(255,255,255,0.35);font-style:italic}
+.flow-step-code .l{color:#fb70a9}
+.flow-step-code .m{color:#6875F5}
+
+/* role colours */
+.role-super .flow-step-num{background:var(--savanna-gold);color:var(--ink)}
+.role-super .flow-step-line{background:linear-gradient(to bottom,var(--savanna-gold),rgba(212,160,23,0.15))}
+.role-admin .flow-step-num{background:var(--clay-red);color:white}
+.role-admin .flow-step-line{background:linear-gradient(to bottom,var(--clay-red),rgba(196,75,43,0.1))}
+.role-teacher .flow-step-num{background:var(--sky-dusk);color:white}
+.role-teacher .flow-step-line{background:linear-gradient(to bottom,var(--sky-dusk),rgba(46,77,138,0.1))}
+.role-parent .flow-step-num{background:var(--barkcloth-warm);color:white}
+.role-parent .flow-step-line{background:linear-gradient(to bottom,var(--barkcloth-warm),rgba(139,94,60,0.1))}
+.role-child .flow-step-num{background:var(--sunfire);color:white}
+.role-child .flow-step-line{background:linear-gradient(to bottom,var(--sunfire),rgba(232,135,42,0.1))}
+.role-cms .flow-step-num{background:var(--banana-green);color:white}
+.role-cms .flow-step-line{background:linear-gradient(to bottom,var(--banana-green),rgba(74,124,89,0.1))}
+.role-system .flow-step-num{background:var(--indigo-night);color:white;border:1px solid rgba(255,255,255,0.2)}
+.role-system .flow-step-line{background:linear-gradient(to bottom,var(--indigo-night),rgba(30,45,74,0.1))}
+
+/* ── SUPER ADMIN DASHBOARD ─────────────────────────── */
+.super-admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:680px;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-xl);border:2px solid var(--savanna-gold)}
+.sa-sidebar{background:#0D1829;display:flex;flex-direction:column;gap:2px;padding:var(--sp-4)}
+.sa-logo{font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--savanna-gold);padding:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-3);border-bottom:1px solid rgba(212,160,23,0.2)}
+.sa-logo span{display:block;font-size:8px;color:rgba(212,160,23,0.5);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-top:2px}
+.sa-nav-section{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(212,160,23,0.35);padding:var(--sp-3) var(--sp-3) var(--sp-1);margin-top:var(--sp-2)}
+.sa-nav-item{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);cursor:pointer;transition:all var(--dur-fast)}
+.sa-nav-item:hover{color:white;background:rgba(255,255,255,0.06)}
+.sa-nav-item.active{color:var(--savanna-gold);background:rgba(212,160,23,0.12);border-left:2px solid var(--savanna-gold)}
+.sa-main{background:#111827;padding:var(--sp-5);overflow:auto}
+.sa-header{display:flex;align-items:center;margin-bottom:var(--sp-5);gap:var(--sp-4)}
+.sa-page-title{font-family:var(--font-admin);font-size:18px;font-weight:700;color:white}
+.sa-breadcrumb{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px}
+.sa-badge{background:rgba(212,160,23,0.15);color:var(--savanna-gold);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;letter-spacing:0.5px;border:1px solid rgba(212,160,23,0.3)}
+.sa-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin-bottom:var(--sp-5)}
+.sa-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-lg);padding:var(--sp-4)}
+.sa-stat-val{font-size:26px;font-weight:800;color:white;line-height:1;margin-bottom:4px}
+.sa-stat-label{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;font-weight:600}
+.sa-stat-delta{font-size:10px;font-weight:700;margin-top:4px;color:var(--banana-mid)}
+.sa-section-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:var(--sp-3)}
+.sa-table{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-lg);overflow:hidden;width:100%;margin-bottom:var(--sp-5)}
+.sa-table-head{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:rgba(255,255,255,0.05);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);border-bottom:1px solid rgba(255,255,255,0.06)}
+.sa-table-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);align-items:center;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;color:rgba(255,255,255,0.7);transition:background var(--dur-fast)}
+.sa-table-row:hover{background:rgba(255,255,255,0.03)}
+.sa-table-row:last-child{border-bottom:none}
+.sa-role-badge{display:inline-block;padding:2px 8px;border-radius:var(--r-full);font-size:9px;font-weight:700;letter-spacing:0.5px}
+.role-super-b{background:rgba(212,160,23,0.2);color:var(--savanna-gold)}
+.role-org-b{background:rgba(196,75,43,0.2);color:var(--clay-red-light)}
+.role-editor-b{background:rgba(74,124,89,0.2);color:var(--banana-mid)}
+.role-teacher-b{background:rgba(46,77,138,0.2);color:var(--sky-mid)}
+.role-parent-b{background:rgba(139,94,60,0.2);color:var(--barkcloth-mid)}
+.sa-module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);margin-bottom:var(--sp-5)}
+.sa-module-tile{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
+.sa-module-name{font-size:12px;font-weight:600;color:rgba(255,255,255,0.8)}
+.sa-module-desc{font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px}
+.sa-toggle{width:36px;height:20px;border-radius:var(--r-full);position:relative;cursor:pointer;flex-shrink:0;transition:background var(--dur-fast)}
+.sa-toggle.on{background:var(--banana-green)}
+.sa-toggle.off{background:rgba(255,255,255,0.15)}
+.sa-toggle::after{content:'';position:absolute;top:3px;width:14px;height:14px;border-radius:50%;background:white;transition:left var(--dur-fast) var(--ease-spring);box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.sa-toggle.on::after{left:19px}
+.sa-toggle.off::after{left:3px}
+
+/* ── AGE PROFILES ──────────────────────────────────── */
+.age-bands{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4)}
+.age-band{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md)}
+.age-band-header{padding:var(--sp-4);text-align:center;color:white}
+.age-band-emoji{font-size:32px;display:block;margin-bottom:var(--sp-2)}
+.age-band-range{font-family:var(--font-display);font-size:15px;font-weight:800;display:block}
+.age-band-name{font-size:11px;font-weight:600;opacity:0.8;display:block;margin-top:2px}
+.age-band-body{background:white;padding:var(--sp-4)}
+.age-feature{display:flex;align-items:center;gap:var(--sp-2);font-size:11px;color:var(--ink-light);margin-bottom:var(--sp-2);font-weight:500}
+.age-feature::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--clay-red);flex-shrink:0}
+
+/* ── RBAC MATRIX ───────────────────────────────────── */
+.rbac-table{width:100%;border-collapse:collapse;font-size:12px}
+.rbac-table th{background:var(--indigo-night);color:rgba(255,255,255,0.6);padding:var(--sp-3) var(--sp-4);text-align:left;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid rgba(255,255,255,0.1)}
+.rbac-table th.role-col{color:var(--savanna-gold)}
+.rbac-table td{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--cream-mid);vertical-align:middle}
+.rbac-table tr:hover td{background:var(--cream-warm)}
+.rbac-table tr:last-child td{border-bottom:none}
+.perm-yes{color:var(--success);font-size:16px;text-align:center}
+.perm-partial{color:var(--warning);font-size:13px;text-align:center;font-weight:700}
+.perm-no{color:var(--stone-light);font-size:16px;text-align:center}
+.perm-label{font-weight:600;color:var(--ink)}
+.perm-note{font-size:10px;color:var(--stone);margin-top:2px}
+
+/* ── CMS WORKFLOW ──────────────────────────────────── */
+.cms-layout{display:grid;grid-template-columns:180px 1fr;gap:0;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-xl);border:1px solid var(--cream-mid)}
+.cms-sidebar{background:var(--cream-warm);border-right:1px solid var(--cream-mid);padding:var(--sp-4)}
+.cms-sidebar-item{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--ink-light);cursor:pointer;margin-bottom:2px}
+.cms-sidebar-item.active{background:white;color:var(--clay-red);box-shadow:var(--shadow-sm)}
+.cms-main{background:white;padding:var(--sp-6)}
+.cms-topbar{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-6);padding-bottom:var(--sp-4);border-bottom:1px solid var(--cream-mid)}
+.cms-title{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--ink);flex:1}
+.cms-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin-bottom:var(--sp-6)}
+.cms-stat{background:var(--cream);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);border:1px solid var(--cream-mid)}
+.cms-stat-val{font-size:22px;font-weight:800;color:var(--ink);line-height:1}
+.cms-stat-label{font-size:10px;color:var(--stone);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-top:2px}
+.pipeline-steps{display:flex;align-items:center;gap:0;margin-bottom:var(--sp-6);overflow-x:auto}
+.pipeline-step{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:var(--sp-2)}
+.pipeline-step-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.pipeline-step-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--stone);text-align:center;max-width:60px}
+.pipeline-arrow{width:32px;height:2px;background:var(--cream-mid);flex-shrink:0;position:relative;top:-18px}
+.pipeline-arrow::after{content:'▶';position:absolute;right:-6px;top:-7px;font-size:10px;color:var(--stone-light)}
+
+/* ── DATA FLOW ─────────────────────────────────────── */
+.dataflow{display:grid;grid-template-columns:repeat(7,1fr);gap:0;align-items:center;background:var(--indigo-night);border-radius:var(--r-xl);padding:var(--sp-8);margin-bottom:var(--sp-8)}
+.df-node{display:flex;flex-direction:column;align-items:center;gap:var(--sp-2);text-align:center}
+.df-box{padding:var(--sp-3) var(--sp-4);border-radius:var(--r-md);font-size:11px;font-weight:700;color:white;width:100%;text-align:center}
+.df-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.35);font-weight:600}
+.df-arrow{display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:20px;padding:0 2px}
+.df-offline{grid-column:1/-1;margin-top:var(--sp-5);padding:var(--sp-4);border:1px dashed rgba(255,255,255,0.15);border-radius:var(--r-lg);display:flex;align-items:center;gap:var(--sp-4)}
+.df-offline-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--banana-mid);white-space:nowrap}
+.df-offline-desc{font-size:11px;color:rgba(255,255,255,0.45);line-height:1.6}
+
+/* ── OFFLINE STATES ────────────────────────────────── */
+.offline-states{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6)}
+.offline-state{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md)}
+.offline-state-header{padding:var(--sp-4) var(--sp-5);display:flex;align-items:center;gap:var(--sp-3)}
+.offline-state-icon{font-size:24px}
+.offline-state-title{font-size:14px;font-weight:700}
+.offline-state-subtitle{font-size:11px;opacity:0.75;margin-top:1px}
+.offline-state-body{background:white;padding:var(--sp-4) var(--sp-5)}
+.offline-item{display:flex;align-items:flex-start;gap:var(--sp-2);margin-bottom:var(--sp-3);font-size:12px;color:var(--ink-light);line-height:1.5}
+.offline-item-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+
+/* ── SCHEMA TABLES ─────────────────────────────────── */
+.schema-tables{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5);margin-bottom:var(--sp-10)}
+.schema-table{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);overflow:hidden}
+.schema-table-header{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);background:rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08)}
+.schema-table-icon{font-size:16px}
+.schema-table-name{font-family:var(--font-admin);font-size:13px;font-weight:700;color:white}
+.schema-field{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding:var(--sp-2) var(--sp-4);border-bottom:1px solid rgba(255,255,255,0.05);font-size:11px}
+.schema-field:last-child{border-bottom:none}
+.sf-name{color:var(--banana-mid);font-family:'Courier New',monospace;font-weight:600}
+.sf-type{color:rgba(255,255,255,0.35);font-family:'Courier New',monospace;font-size:10px}
+.sf-key{background:rgba(212,160,23,0.2);color:var(--savanna-gold);padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700}
+.sf-fk{background:rgba(104,117,245,0.2);color:#8b96f8;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700}
+.sf-idx{background:rgba(74,124,89,0.2);color:var(--banana-mid);padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700}
+
+/* ── API ENDPOINTS ─────────────────────────────────── */
+.api-endpoints{display:flex;flex-direction:column;gap:var(--sp-2)}
+.api-endpoint{background:var(--cream-warm);border:1px solid var(--cream-mid);border-radius:var(--r-md);overflow:hidden}
+.api-endpoint-header{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);flex-wrap:wrap}
+.api-method{font-size:10px;font-weight:800;padding:3px 9px;border-radius:var(--r-sm);font-family:'Courier New',monospace;letter-spacing:0.5px;flex-shrink:0}
+.method-get{background:rgba(74,124,89,0.15);color:var(--banana-green)}
+.method-post{background:rgba(212,160,23,0.15);color:#9A750C}
+.method-put{background:rgba(46,77,138,0.15);color:var(--sky-dusk)}
+.method-delete{background:rgba(196,75,43,0.15);color:var(--clay-red)}
+.api-path{font-family:'Courier New',monospace;font-size:12px;font-weight:600;color:var(--ink);flex:1}
+.api-desc{font-size:11px;color:var(--stone);flex:1}
+.api-auth{font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);flex-shrink:0}
+.auth-any{background:rgba(74,124,89,0.12);color:var(--banana-green)}
+.auth-super{background:rgba(212,160,23,0.15);color:var(--savanna-gold)}
+.auth-admin{background:rgba(196,75,43,0.12);color:var(--clay-red)}
+.auth-teacher{background:rgba(46,77,138,0.12);color:var(--sky-dusk)}
+
+/* ── TRIBE CARDS ───────────────────────────────────── */
+.tribe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--sp-4);margin-bottom:var(--sp-8)}
+.tribe-card{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md);transition:transform var(--dur-mid) var(--ease-spring),box-shadow var(--dur-mid)}
+.tribe-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.tribe-card-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.tribe-card-banner-pattern{position:absolute;inset:0;opacity:0.08;background:repeating-linear-gradient(45deg,white 0,white 1px,transparent 0,transparent 10px);background-size:14px 14px}
+.tribe-card-body{background:white;padding:var(--sp-3) var(--sp-3)}
+.tribe-card-name{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.tribe-card-lang{font-size:10px;color:var(--stone);margin-bottom:var(--sp-2)}
+.tribe-card-counts{display:flex;gap:4px;flex-wrap:wrap}
+.tribe-count-badge{font-size:9px;font-weight:700;background:var(--cream-warm);padding:2px 7px;border-radius:var(--r-full);color:var(--ink-light)}
+
+/* ── WEBSITE FRONTEND PREVIEW ──────────────────────── */
+.website-preview{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-xl);border:2px solid var(--cream-mid)}
+.wp-browser-bar{background:#f0f0f0;padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #ddd}
+.wp-dots{display:flex;gap:5px}
+.wp-dot{width:11px;height:11px;border-radius:50%}
+.wp-url{background:white;border-radius:20px;padding:4px 16px;font-size:11px;color:var(--stone);flex:1;max-width:400px;font-family:monospace}
+.wp-nav{background:white;padding:14px 24px;display:flex;align-items:center;gap:20px;border-bottom:2px solid #f5f5f5;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.wp-logo{font-family:var(--font-display);font-size:17px;font-weight:800;color:var(--clay-red);margin-right:auto}
+.wp-nav-link{font-size:12px;font-weight:600;color:var(--stone);cursor:pointer}
+.wp-nav-btn{background:var(--clay-red);color:white;border:none;border-radius:var(--r-full);padding:7px 18px;font-size:12px;font-weight:700;cursor:pointer}
+.wp-hero{background:linear-gradient(135deg,var(--indigo-night) 0%,var(--sky-dusk) 100%);padding:48px 32px;text-align:center}
+.wp-hero-h{font-family:var(--font-display);font-size:32px;font-weight:800;color:white;margin-bottom:12px}
+.wp-hero-h em{color:var(--sunfire-light);font-style:normal}
+.wp-hero-sub{font-size:14px;color:rgba(255,255,255,0.65);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
+.wp-hero-btns{display:flex;gap:12px;justify-content:center}
+.wp-btn-primary{background:var(--clay-red);color:white;border:none;border-radius:var(--r-full);padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer}
+.wp-btn-secondary{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:var(--r-full);padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer}
+.wp-features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:32px;background:white}
+.wp-feature{text-align:center}
+.wp-feature-ico{font-size:36px;display:block;margin-bottom:10px}
+.wp-feature-title{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.wp-feature-desc{font-size:12px;color:var(--stone);line-height:1.5}
+.wp-tribe-row{padding:24px 32px;background:var(--cream-warm)}
+.wp-tribe-row-title{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:16px}
+.wp-tribe-chips{display:flex;gap:8px;flex-wrap:wrap}
+.wp-tribe-chip{background:white;border:1px solid var(--cream-mid);border-radius:var(--r-full);padding:6px 14px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;box-shadow:var(--shadow-sm)}
+.wp-cta{padding:40px 32px;background:var(--indigo-night);text-align:center}
+.wp-cta-h{font-family:var(--font-display);font-size:22px;font-weight:800;color:white;margin-bottom:8px}
+.wp-cta-sub{font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:20px}
+
+/* ── MOBILE APP PREVIEW ────────────────────────────── */
+.mobile-frame{width:200px;border-radius:28px;background:#111827;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:3px solid #2a2a2a;margin:0 auto}
+.mf-status{background:#111827;padding:8px 16px;display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.4)}
+.mf-screen{background:white;min-height:340px}
+.mf-nav-bar{background:#111827;padding:12px;display:flex;justify-content:space-around;border-top:1px solid rgba(255,255,255,0.05)}
+.mf-nav-ico{text-align:center;font-size:16px;cursor:pointer}
+.mf-nav-lbl{font-size:8px;color:rgba(255,255,255,0.4);display:block;margin-top:2px;font-family:var(--font-child)}
+
+/* ── ANALYTICS ─────────────────────────────────────── */
+.analytics-grid{display:grid;grid-template-columns:2fr 1fr;gap:var(--sp-6);margin-bottom:var(--sp-8)}
+.chart-mock{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-lg);padding:var(--sp-5);position:relative;overflow:hidden}
+.chart-title{font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:var(--sp-4);text-transform:uppercase;letter-spacing:1px}
+.bar-chart{display:flex;align-items:flex-end;gap:var(--sp-2);height:80px}
+.bar{flex:1;border-radius:4px 4px 0 0;transition:opacity 0.2s}
+.bar:hover{opacity:0.8}
+.bar-labels{display:flex;gap:var(--sp-2);margin-top:var(--sp-1)}
+.bar-label{flex:1;text-align:center;font-size:8px;color:rgba(255,255,255,0.3);font-weight:600}
+.mini-stats{display:flex;flex-direction:column;gap:var(--sp-3)}
+.mini-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-md);padding:var(--sp-4);text-align:center}
+.mini-stat-val{font-size:22px;font-weight:800;color:white}
+.mini-stat-label{font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.8px;font-weight:600}
+
+/* ── FILE TREE ─────────────────────────────────────── */
+.file-tree{background:var(--ink);border-radius:var(--r-lg);padding:var(--sp-5);font-family:'Courier New',monospace;font-size:12px;color:rgba(255,255,255,0.65);line-height:1.8;overflow-x:auto}
+.file-tree .dir{color:var(--sunfire-light);font-weight:700}
+.file-tree .file{color:var(--banana-mid)}
+.file-tree .comment{color:rgba(255,255,255,0.3);font-style:italic}
+
+/* ── SPRINT PLAN ───────────────────────────────────── */
+.sprint-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5)}
+.sprint-block{background:white;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--cream-mid)}
+.sprint-header{padding:var(--sp-4) var(--sp-5);font-weight:700;font-size:13px;color:white}
+.sprint-body{padding:var(--sp-4) var(--sp-5)}
+.sprint-item{display:flex;align-items:flex-start;gap:var(--sp-2);margin-bottom:var(--sp-3);font-size:12px;color:var(--ink-light);line-height:1.5}
+.sprint-item-dot{width:6px;height:6px;border-radius:50%;background:var(--clay-red);flex-shrink:0;margin-top:5px}
+
+/* ── GRID LAYOUTS ──────────────────────────────────── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-8);align-items:start}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--sp-6)}
+
+/* ── REVEAL ────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s var(--ease-out),transform 0.6s var(--ease-out)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── NOTE BOX ──────────────────────────────────────── */
+.note-box{background:var(--cream-warm);border:1px solid var(--cream-mid);border-left:4px solid var(--clay-red);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-5);font-size:13px;color:var(--ink-light);line-height:1.7;margin:var(--sp-4) 0}
+.note-box strong{color:var(--ink)}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.dot-live{background:var(--success)}
+.dot-draft{background:var(--warning)}
+.dot-offline{background:var(--stone)}
+.tag{padding:4px 12px;border-radius:var(--r-full);font-size:11px;font-weight:700;letter-spacing:0.3px}
+.tag-row{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-6)}
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .age-bands{grid-template-columns:1fr 1fr}
+  .sprint-grid{grid-template-columns:1fr}
+  .cms-layout{grid-template-columns:1fr}
+  .cms-sidebar{display:none}
+  .dataflow{grid-template-columns:repeat(4,1fr)}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .schema-tables{grid-template-columns:1fr}
+  .super-admin-layout{grid-template-columns:1fr}
+  .sa-sidebar{display:none}
+  .analytics-grid{grid-template-columns:1fr}
+  .offline-states{grid-template-columns:1fr}
+  .wp-features{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .section{padding:var(--sp-10) var(--sp-4)}
+  .age-bands{grid-template-columns:1fr 1fr}
+}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<nav class="sys-nav" id="mainNav">
+  <div class="sys-nav-logo" style="cursor: pointer;">🌍 Paulette Culture Kids</div>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;workflows&#39;)">Workflows</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;super-admin&#39;)">Super Admin</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;age-profiles&#39;)">Age Profiles</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;rbac&#39;)">RBAC</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;cms&#39;)">CMS</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;data-flow&#39;)">Data Flow</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;offline&#39;)">Offline-First</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;schema&#39;)">MySQL Schema</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;api&#39;)">Sanctum API</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;website&#39;)">Website</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;mobile&#39;)">Expo App</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;analytics&#39;)">Analytics</button>
+  <button class="sys-nav-btn" onclick="scrollToSection(&#39;sprint&#39;)">Sprint Plan</button>
+  <div class="sys-nav-badge">⚡ LARAVEL · EXPO · MYSQL</div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section class="hero" id="home" style="padding-top:60px">
+  <div class="hero-pattern"></div>
+  <div class="hero-accent-1"></div>
+  <div class="hero-accent-2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Complete System Specification — v2 Laravel Stack</div>
+      <h1 class="hero-headline">Paulette<br>Culture Kids<em>System Workflows</em></h1>
+      <p class="hero-body">A tribe-aware cultural learning platform for children ages 2–6. Built on <strong style="color:var(--sunfire-light)">Laravel 11 + MySQL</strong> backend, <strong style="color:var(--sunfire-light)">Laravel Blade</strong> web frontend, <strong style="color:var(--sunfire-light)">Sanctum APIs</strong>, and <strong style="color:var(--sunfire-light)">Expo CLI React Native</strong> mobile app. Offline-first, multi-tenant SaaS with God-mode Super Admin control.</p>
+      <div class="hero-stack-row">
+        <span class="tech-pill tp-laravel">🔴 Laravel 11</span>
+        <span class="tech-pill tp-mysql">🐬 MySQL 8</span>
+        <span class="tech-pill tp-sanctum">🔒 Sanctum API</span>
+        <span class="tech-pill tp-blade">🎨 Laravel Blade</span>
+        <span class="tech-pill tp-expo">📱 Expo CLI</span>
+        <span class="tech-pill tp-expo" style="color:#61DAFB;border-color:rgba(97,218,251,0.3)">⚛ React Native</span>
+        <span class="tech-pill" style="background:rgba(212,160,23,0.12);color:var(--savanna-gold);border:1px solid rgba(212,160,23,0.3)">65+ Tribes</span>
+        <span class="tech-pill" style="background:rgba(74,124,89,0.12);color:var(--banana-mid);border:1px solid rgba(74,124,89,0.3)">Offline-First</span>
+      </div>
+      <div class="hero-metrics">
+        <div class="hero-metric"><div class="hero-metric-val">9</div><div class="hero-metric-lbl">Roles</div></div>
+        <div class="hero-metric"><div class="hero-metric-val">65+</div><div class="hero-metric-lbl">Tribes</div></div>
+        <div class="hero-metric"><div class="hero-metric-val">100%</div><div class="hero-metric-lbl">Offline</div></div>
+      </div>
+    </div>
+    <div class="hero-sys-diagram">
+      <div class="sys-node sn-super"><span class="sys-node-icon">👑</span><span class="sys-node-text"><span class="sys-node-role">God Mode · Laravel Admin</span><span class="sys-node-name">Super Admin</span></span></div>
+      <div class="rbac-arrow"></div>
+      <div class="sys-node sn-admin"><span class="sys-node-icon">🏢</span><span class="sys-node-text"><span class="sys-node-role">Organisation · Blade CMS</span><span class="sys-node-name">Admin + CMS Editor</span></span></div>
+      <div class="rbac-arrow"></div>
+      <div class="sys-node sn-teacher"><span class="sys-node-icon">📚</span><span class="sys-node-text"><span class="sys-node-role">Classroom · Blade Dashboard</span><span class="sys-node-name">Teacher</span></span></div>
+      <div class="rbac-arrow"></div>
+      <div class="sys-node sn-parent"><span class="sys-node-icon">👨‍👩‍👧</span><span class="sys-node-text"><span class="sys-node-role">Household · Web + App</span><span class="sys-node-name">Parent / Guardian</span></span></div>
+      <div class="rbac-arrow"></div>
+      <div class="sys-node sn-child"><span class="sys-node-icon">👶</span><span class="sys-node-text"><span class="sys-node-role">Age-Adaptive · Expo App</span><span class="sys-node-name">Child (2–6)</span></span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 1 — USER WORKFLOWS ──────────────────────────────── -->
+<section id="workflows" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 01 — User Flows</div>
+  <h2 class="section-title">All User Workflows</h2>
+  <p class="section-desc">Complete step-by-step flows for every role in the system — from child's first tap in Expo app to Super Admin's Laravel Blade dashboard control.</p>
+
+  <!-- CHILD FLOW -->
+  <div class="workflow-section reveal visible">
+    <div class="workflow-header">
+      <div class="workflow-icon" style="background:var(--sunfire-pale)">👶</div>
+      <div>
+        <div class="workflow-title">Child User Flow — Expo React Native App</div>
+        <div class="workflow-subtitle">Ages 2–6 · Age-adaptive UI · Audio-first · Offline-capable · SQLite local storage</div>
+      </div>
+    </div>
+    <div class="flow-steps role-child">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Launch Expo App</div>
+          <div class="flow-step-desc">Expo app opens on device. App reads child's age profile from AsyncStorage (persisted from parent setup). System checks SQLite database for cached content bundles. If online, calls Sanctum API to refresh content manifest.</div>
+          <div class="flow-step-tags"><span class="flow-tag" style="background:rgba(97,218,251,0.1);color:#61DAFB">Expo AsyncStorage</span><span class="flow-tag" style="background:var(--leaf-pale);color:var(--banana-green)">SQLite Offline Check</span><span class="flow-tag tp-sanctum" style="padding:3px 9px">Sanctum Token</span></div>
+          <div class="flow-step-code"><span class="c">// Expo app startup — App.tsx</span><br><span class="k">const</span> ageProfile = <span class="k">await</span> AsyncStorage.getItem(<span class="s">'child_age_profile'</span>);<br><span class="k">const</span> isOnline = <span class="k">await</span> NetInfo.fetch();<br><span class="k">if</span> (isOnline.isConnected) {<br>&nbsp;&nbsp;<span class="c">// Sanctum: GET /api/v1/content/manifest</span><br>&nbsp;&nbsp;<span class="k">await</span> syncContentManifest();<br>} <span class="k">else</span> {<br>&nbsp;&nbsp;loadFromSQLite(); <span class="c">// Full offline mode</span><br>}</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Home Screen — Tribe Picker</div>
+          <div class="flow-step-desc">Large illustrated tribe cards rendered using React Native FlatList. Age profile determines grid size: 2–3 = 3 giant cards, 5–6 = full scrollable grid. Each card renders tribe colour, emoji, and greeting audio.</div>
+          <div class="flow-step-tags"><span class="flow-tag" style="background:rgba(97,218,251,0.1);color:#61DAFB">React Native FlatList</span><span class="flow-tag" style="background:var(--sunfire-pale);color:var(--sunfire)">Age-Adaptive UI</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Story Selection &amp; Viewing</div>
+          <div class="flow-step-desc">Story cards fetched from SQLite (offline) or Sanctum API (online). Child taps → comic panel viewer opens full screen. Swipe to advance. Read-aloud via Expo Audio. Progress tracked locally in SQLite, queued for sync.</div>
+          <div class="flow-step-code"><span class="c">// Progress tracking — offline queue</span><br><span class="k">await</span> db.runAsync(<br>&nbsp;&nbsp;<span class="s">'INSERT INTO sync_queue (event_type, payload, created_at) VALUES (?, ?, ?)'</span>,<br>&nbsp;&nbsp;[<span class="s">'story_complete'</span>, JSON.stringify(payload), Date.now()]<br>);</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Badge &amp; Sync on Reconnect</div>
+          <div class="flow-step-desc">On network reconnect, Expo NetInfo triggers background sync. SQLite sync_queue drains to Laravel Sanctum API POST /api/v1/sync. Server processes events, returns new badges. App updates local store and shows confetti celebration.</div>
+          <div class="flow-step-tags"><span class="flow-tag" style="background:var(--leaf-pale);color:var(--banana-green)">Background Sync</span><span class="flow-tag tp-sanctum" style="padding:3px 9px">POST /api/v1/sync</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARENT FLOW -->
+  <div class="workflow-section reveal">
+    <div class="workflow-header">
+      <div class="workflow-icon" style="background:var(--barkcloth-pale)">👨‍👩‍👧</div>
+      <div>
+        <div class="workflow-title">Parent / Guardian Flow — Web + App</div>
+        <div class="workflow-subtitle">Laravel Blade web dashboard + Expo parent tab · Profile management · Progress monitoring</div>
+      </div>
+    </div>
+    <div class="flow-steps role-parent">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Register / Login via Laravel Blade</div>
+          <div class="flow-step-desc">Parent visits culturekids.app (Laravel Blade web). Registers with email + password. Laravel Auth (Sanctum + session) creates account. Sanctum issues Personal Access Token for mobile app use. Role assigned: parent.</div>
+          <div class="flow-step-code"><span class="c">// Laravel routes/web.php (Blade)</span><br>Route::get(<span class="s">'/register'</span>, [AuthController::<span class="k">class</span>, <span class="s">'showRegister'</span>]);<br>Route::post(<span class="s">'/register'</span>, [AuthController::<span class="k">class</span>, <span class="s">'register'</span>]);<br><span class="c">// Sanctum token for mobile</span><br>Route::<span class="k">post</span>(<span class="s">'/api/v1/auth/token'</span>, [AuthController::<span class="k">class</span>, <span class="s">'issueToken'</span>]);</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Create Child Profile</div>
+          <div class="flow-step-desc">Parent creates child profile: name, date of birth (system calculates age band), avatar. Age band (2–3, 3–4, 4–5, 5–6) automatically assigned and stored in MySQL child_profiles table. Tribe preferences set.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Download Content &amp; Manage Offline Bundles</div>
+          <div class="flow-step-desc">In Expo app parent tab: parent sees available tribe content bundles. Taps to download .ckb bundle. Expo FileSystem downloads to device storage. Bundle index written to SQLite for offline access by child.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Monitor Child Progress via Blade Dashboard</div>
+          <div class="flow-step-desc">Parent logs into Laravel Blade web dashboard. Views: stories completed, badges earned, time spent, tribe coverage, weekly activity chart. Progress data fetched from MySQL via Laravel Eloquent, scoped to parent's children.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACHER FLOW -->
+  <div class="workflow-section reveal">
+    <div class="workflow-header">
+      <div class="workflow-icon" style="background:#EFF6FF">📚</div>
+      <div>
+        <div class="workflow-title">Teacher Flow — Laravel Blade Dashboard</div>
+        <div class="workflow-subtitle">Classroom management · Lesson planner · Group progress · Downloadable reports</div>
+      </div>
+    </div>
+    <div class="flow-steps role-teacher">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Login to Blade Teacher Dashboard</div>
+          <div class="flow-step-desc">Teacher logs in at org.culturekids.app/teacher (Laravel Blade, session-based auth). Dashboard shows: active pupils, today's scheduled activities, class completion rates, and pending teacher notes.</div>
+          <div class="flow-step-code"><span class="l">@extends</span>(<span class="s">'layouts.teacher'</span>)<br><span class="l">@section</span>(<span class="s">'content'</span>)<br>&lt;x-teacher-dashboard :pupils=<span class="s">"$pupils"</span> :progress=<span class="s">"$weeklyProgress"</span> /&gt;<br><span class="l">@endsection</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Schedule Lesson Plan</div>
+          <div class="flow-step-desc">Teacher uses lesson planner (Blade form) to assign stories + activities to class groups. Schedule stored in MySQL lesson_plans table, linked to classroom_id and content_id. Syncs to pupils' Expo apps on next login.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Run Kiosk Mode on Classroom Tablets</div>
+          <div class="flow-step-desc">Expo app on classroom tablets runs in Kiosk Mode (locked navigation, teacher PIN to exit). Pupils tap their avatar, name, or photo to start. Progress auto-assigned to their profile. No login required for child.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Export Class Report</div>
+          <div class="flow-step-desc">Teacher exports PDF/CSV class report via Blade dashboard. Laravel generates report using DomPDF (or Laravel Excel), including per-pupil completion, badges, time-on-task, tribe coverage. Downloadable directly from browser.</div>
+          <div class="flow-step-code"><span class="c">// Laravel route for export</span><br>Route::get(<span class="s">'/teacher/class/{id}/export'</span>, [ReportController::<span class="k">class</span>, <span class="s">'exportPdf'</span>])<br>&nbsp;&nbsp;-&gt;middleware([<span class="s">'auth'</span>, <span class="s">'role:teacher'</span>]);</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPER ADMIN FLOW -->
+  <div class="workflow-section reveal">
+    <div class="workflow-header">
+      <div class="workflow-icon" style="background:rgba(212,160,23,0.12)">👑</div>
+      <div>
+        <div class="workflow-title">Super Admin Flow — Laravel God Mode</div>
+        <div class="workflow-subtitle">Full platform control · Multi-tenant management · Global content · Analytics · Live theming</div>
+      </div>
+    </div>
+    <div class="flow-steps role-super">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">S1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Access Super Admin Panel</div>
+          <div class="flow-step-desc">Super Admin logs in at admin.culturekids.app (dedicated subdomain). Laravel Blade admin panel with full RBAC bypass — org_id scoping disabled. Sees: all organisations, all users, all content, global analytics dashboard, platform health.</div>
+          <div class="flow-step-code"><span class="c">// Middleware — SuperAdminMiddleware.php</span><br><span class="k">if</span> (auth()-&gt;user()-&gt;role !== <span class="s">'super_admin'</span>) {<br>&nbsp;&nbsp;<span class="k">abort</span>(403);<br>}<br><span class="c">// Disable org_id scoping for Super Admin</span><br>config([<span class="s">'scoping.org_id'</span> =&gt; <span class="k">null</span>]);</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">S2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Manage Organisations &amp; Subscriptions</div>
+          <div class="flow-step-desc">Create/edit/suspend organisations. Set plan tier (free, school, enterprise). Toggle modules per org. Set per-org content access (tribe selection). All via Blade forms, stored in MySQL organisations table.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">S3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Manage Age Profiles &amp; UI Rules</div>
+          <div class="flow-step-desc">Edit age band rules (2–3, 3–4, 4–5, 5–6): content complexity, UI mode, difficulty ceiling, activity unlock rules. Stored in MySQL age_profiles table. Expo app fetches these on startup via Sanctum API and caches locally.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">S4</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">Theme Engine &amp; Branding Control</div>
+          <div class="flow-step-desc">No-code theme builder in Blade admin. Adjust colour tokens, typography, logo per organisation. Changes saved to MySQL theme_configs table. API endpoint returns org theme JSON, app applies at runtime. Blade frontend uses CSS custom properties updated via JS.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">S5</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title">User Impersonation</div>
+          <div class="flow-step-desc">Super Admin can impersonate any user for debugging. Laravel generates temporary impersonation token scoped to target user's role/org. All impersonated actions logged to audit_logs table with impersonator_id.</div>
+          <div class="flow-step-code"><span class="c">// ImpersonationController.php</span><br><span class="k">public function</span> impersonate(User $user) {<br>&nbsp;&nbsp;$token = $user-&gt;createToken(<span class="s">'impersonation'</span>, [<span class="s">'impersonated'</span>]);<br>&nbsp;&nbsp;AuditLog::record(auth()-&gt;id(), <span class="s">'impersonate'</span>, $user-&gt;id);<br>&nbsp;&nbsp;<span class="k">return</span> response()-&gt;json([<span class="s">'token'</span> =&gt; $token-&gt;plainTextToken]);<br>}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 2 — SUPER ADMIN DASHBOARD ───────────────────────── -->
+<section id="super-admin" style="background:var(--cream-warm)">
+<div class="section">
+  <div class="section-label">Section 02 — God Mode Panel</div>
+  <h2 class="section-title">Super Admin Dashboard — Laravel Blade</h2>
+  <p class="section-desc">The Laravel Blade admin panel at admin.culturekids.app — full God Mode access with org management, content control, user oversight, and global analytics.</p>
+  <div class="super-admin-layout reveal">
+    <div class="sa-sidebar">
+      <div class="sa-logo">⚡ Super Admin<span>Laravel Blade · God Mode</span></div>
+      <div class="sa-nav-section">Platform</div>
+      <div class="sa-nav-item active">📊 Global Dashboard</div>
+      <div class="sa-nav-item">🏢 Organisations</div>
+      <div class="sa-nav-item">👥 All Users</div>
+      <div class="sa-nav-item">🌍 Tribes</div>
+      <div class="sa-nav-section">Content</div>
+      <div class="sa-nav-item">📖 Comics CMS</div>
+      <div class="sa-nav-item">🎵 Songs &amp; Audio</div>
+      <div class="sa-nav-item">🃏 Flashcards</div>
+      <div class="sa-nav-item">📦 Bundle Builder</div>
+      <div class="sa-nav-section">System</div>
+      <div class="sa-nav-item">🎨 Theme Engine</div>
+      <div class="sa-nav-item">🔢 Age Profiles</div>
+      <div class="sa-nav-item">🛡️ RBAC Roles</div>
+      <div class="sa-nav-item">📋 Audit Logs</div>
+      <div class="sa-nav-item">📡 API Tokens</div>
+      <div class="sa-nav-item">⚙️ MySQL Health</div>
+    </div>
+    <div class="sa-main">
+      <div class="sa-header">
+        <div><div class="sa-page-title">Global Dashboard</div><div class="sa-breadcrumb">admin.culturekids.app / dashboard</div></div>
+        <div class="sa-badge">⚡ God Mode Active</div>
+        <div style="margin-left:auto;font-size:11px;color:rgba(255,255,255,0.3)">Laravel 11 · MySQL 8 · All orgs visible</div>
+      </div>
+      <div class="sa-stats-grid">
+        <div class="sa-stat"><div class="sa-stat-val">2,847</div><div class="sa-stat-label">Active Children</div><div class="sa-stat-delta">↑ +12% this week</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">34</div><div class="sa-stat-label">Organisations</div><div class="sa-stat-delta">↑ +3 this month</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">183</div><div class="sa-stat-label">Published Stories</div><div class="sa-stat-delta">65 tribes covered</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">9,240</div><div class="sa-stat-label">Badges Earned</div><div class="sa-stat-delta">Last 7 days</div></div>
+      </div>
+      <div class="sa-section-label">Organisations</div>
+      <div class="sa-table">
+        <div class="sa-table-head"><span>Organisation</span><span>Plan</span><span>Children</span><span>Status</span><span>Actions</span></div>
+        <div class="sa-table-row"><span style="color:white;font-weight:600">Naluwooza Creative</span><span><span class="sa-role-badge role-super-b">Enterprise</span></span><span>428</span><span style="color:var(--banana-mid)">● Active</span><span style="color:var(--sky-mid);font-size:11px;cursor:pointer">Edit</span></div>
+        <div class="sa-table-row"><span style="color:white;font-weight:600">Uganda Schools Pilot</span><span><span class="sa-role-badge role-org-b">School</span></span><span>1,203</span><span style="color:var(--banana-mid)">● Active</span><span style="color:var(--sky-mid);font-size:11px;cursor:pointer">Edit</span></div>
+        <div class="sa-table-row"><span style="color:white;font-weight:600">Kampala Kids Hub</span><span><span class="sa-role-badge role-editor-b">School</span></span><span>341</span><span style="color:var(--warning)">● Trial</span><span style="color:var(--sky-mid);font-size:11px;cursor:pointer">Edit</span></div>
+      </div>
+      <div class="sa-section-label">Module Control — Global Toggles</div>
+      <div class="sa-module-grid">
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">📖 Comics</div><div class="sa-module-desc">Story panel viewer</div></div><div class="sa-toggle on" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">🎵 Songs &amp; Audio</div><div class="sa-module-desc">Music + pronunciation</div></div><div class="sa-toggle on" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">🃏 Flashcards</div><div class="sa-module-desc">Vocab + language</div></div><div class="sa-toggle on" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">📦 Offline Bundles</div><div class="sa-module-desc">.ckb download system</div></div><div class="sa-toggle on" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">🎨 Theme Engine</div><div class="sa-module-desc">Org branding override</div></div><div class="sa-toggle off" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+        <div class="sa-module-tile"><div class="sa-module-info"><div class="sa-module-name">🖥️ Kiosk Mode</div><div class="sa-module-desc">Classroom tablets</div></div><div class="sa-toggle on" onclick="this.classList.toggle(&#39;on&#39;);this.classList.toggle(&#39;off&#39;)"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 3 — AGE PROFILES ─────────────────────────────────── -->
+<section id="age-profiles" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 03 — Age Bands</div>
+  <h2 class="section-title">Age Profile System</h2>
+  <p class="section-desc">Four age bands stored in MySQL age_profiles table. Super Admin edits via Blade admin. Expo app fetches via Sanctum API on startup and caches locally for offline use.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-mysql">MySQL: age_profiles table</span>
+    <span class="tech-pill tp-laravel">Laravel Eloquent</span>
+    <span class="tech-pill tp-sanctum">GET /api/v1/age-profiles</span>
+    <span class="tech-pill tp-expo">Expo AsyncStorage cache</span>
+  </div>
+  <div class="age-bands reveal">
+    <div class="age-band">
+      <div class="age-band-header" style="background:linear-gradient(135deg,#E8872A,#C44B2B)">
+        <span class="age-band-emoji">🌱</span>
+        <span class="age-band-range">Ages 2–3</span>
+        <span class="age-band-name">Early Explorer</span>
+      </div>
+      <div class="age-band-body">
+        <div class="age-feature">3 giant tribe cards (full screen)</div>
+        <div class="age-feature">Audio-only navigation</div>
+        <div class="age-feature">Single tap interactions</div>
+        <div class="age-feature">No text required</div>
+        <div class="age-feature">Simple shapes + high contrast</div>
+        <div style="margin-top:8px"><span class="tech-pill tp-mysql" style="font-size:9px">ui_mode: simple</span></div>
+      </div>
+    </div>
+    <div class="age-band">
+      <div class="age-band-header" style="background:linear-gradient(135deg,#D4A017,#8B5E3C)">
+        <span class="age-band-emoji">🌿</span>
+        <span class="age-band-range">Ages 3–4</span>
+        <span class="age-band-name">Growing Learner</span>
+      </div>
+      <div class="age-band-body">
+        <div class="age-feature">4 tribe cards, guided mode</div>
+        <div class="age-feature">Audio + simple word labels</div>
+        <div class="age-feature">Basic drag-and-drop</div>
+        <div class="age-feature">Picture-first vocab cards</div>
+        <div class="age-feature">Animated encouragement</div>
+        <div style="margin-top:8px"><span class="tech-pill tp-mysql" style="font-size:9px">ui_mode: guided</span></div>
+      </div>
+    </div>
+    <div class="age-band">
+      <div class="age-band-header" style="background:linear-gradient(135deg,#4A7C59,#2E4D8A)">
+        <span class="age-band-emoji">🌳</span>
+        <span class="age-band-range">Ages 4–5</span>
+        <span class="age-band-name">Active Reader</span>
+      </div>
+      <div class="age-band-body">
+        <div class="age-feature">6 tribe cards + some text</div>
+        <div class="age-feature">Word tracing activities</div>
+        <div class="age-feature">Flashcard flip games</div>
+        <div class="age-feature">Simple quiz interaction</div>
+        <div class="age-feature">Badge unlock system</div>
+        <div style="margin-top:8px"><span class="tech-pill tp-mysql" style="font-size:9px">ui_mode: advanced</span></div>
+      </div>
+    </div>
+    <div class="age-band">
+      <div class="age-band-header" style="background:linear-gradient(135deg,#1E2D4A,#4A72C4)">
+        <span class="age-band-emoji">🦅</span>
+        <span class="age-band-range">Ages 5–6</span>
+        <span class="age-band-name">Cultural Explorer</span>
+      </div>
+      <div class="age-band-body">
+        <div class="age-feature">Full tribe grid + filters</div>
+        <div class="age-feature">Full reading mode</div>
+        <div class="age-feature">Language building games</div>
+        <div class="age-feature">Cultural knowledge quizzes</div>
+        <div class="age-feature">Cross-tribe comparison</div>
+        <div style="margin-top:8px"><span class="tech-pill tp-mysql" style="font-size:9px">ui_mode: full</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 4 — RBAC ─────────────────────────────────────────── -->
+<section id="rbac" class="bg-dark">
+<div class="section">
+  <div class="section-label">Section 04 — Access Control</div>
+  <h2 class="section-title">RBAC — Role-Based Access Control</h2>
+  <p class="section-desc">9 roles stored in MySQL roles &amp; user_role pivot tables. Laravel Spatie/laravel-permission package manages RBAC. Sanctum token abilities control API access per role.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-laravel">Spatie Laravel Permission</span>
+    <span class="tech-pill tp-mysql">MySQL roles table</span>
+    <span class="tech-pill tp-sanctum">Token Abilities</span>
+    <span class="tech-pill tp-blade">Blade @can directives</span>
+  </div>
+  <div class="reveal" style="overflow-x:auto">
+    <table class="rbac-table">
+      <thead>
+        <tr>
+          <th>Permission / Feature</th>
+          <th class="role-col">Super Admin</th>
+          <th class="role-col">Org Admin</th>
+          <th class="role-col">CMS Editor</th>
+          <th class="role-col">Teacher</th>
+          <th class="role-col">Parent</th>
+          <th class="role-col">Child</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><div class="perm-label">Blade Admin Panel</div><div class="perm-note">admin.culturekids.app</div></td><td class="perm-yes">✓</td><td class="perm-partial">Org only</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Manage All Orgs</div></td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Upload &amp; Edit Comics</div></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Publish Content</div></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-partial">Submit only</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Teacher Blade Dashboard</div></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">View Child Progress</div></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-yes">Class only</td><td class="perm-yes">Own children</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Theme Engine</div></td><td class="perm-yes">✓</td><td class="perm-yes">Org theme</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+        <tr><td><div class="perm-label">Expo App Access</div></td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td><td class="perm-yes">✓</td></tr>
+        <tr><td><div class="perm-label">Sanctum API</div><div class="perm-note">Token abilities enforced</div></td><td class="perm-yes">All</td><td class="perm-partial">Org-scoped</td><td class="perm-partial">Content only</td><td class="perm-partial">Progress R</td><td class="perm-partial">Own data</td><td class="perm-partial">Read + sync</td></tr>
+        <tr><td><div class="perm-label">MySQL Audit Log</div></td><td class="perm-yes">✓</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td><td class="perm-no">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note-box" style="margin-top:var(--sp-6);background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65)">
+    <strong style="color:white">Laravel Blade @can directives:</strong> All Blade views use <code style="color:var(--banana-mid)">@can('manage-organisations')</code> and <code style="color:var(--banana-mid)">@role('super_admin')</code> directives from Spatie to conditionally show/hide UI elements. Server-side enforcement via middleware.
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 5 — CMS WORKFLOW ──────────────────────────────────── -->
+<section id="cms" class="bg-warm">
+<div class="section">
+  <div class="section-label">Section 05 — Content Management</div>
+  <h2 class="section-title">CMS &amp; Comic Ingestion — Laravel Blade</h2>
+  <p class="section-desc">From raw PDF upload to published learning experience. CMS built in Laravel Blade with Livewire components. Panel extraction via queued Laravel Jobs. Assets stored in Laravel Storage (S3/local).</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-laravel">Laravel Jobs + Queues</span>
+    <span class="tech-pill tp-blade">Livewire Components</span>
+    <span class="tech-pill tp-mysql">MySQL: comics, panels tables</span>
+    <span class="tech-pill tp-laravel">Laravel Storage (S3)</span>
+  </div>
+  <div class="reveal" style="margin-bottom:var(--sp-8)">
+    <div class="section-label" style="margin-bottom:var(--sp-5)">Comic Ingestion Pipeline</div>
+    <div class="pipeline-steps">
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--clay-red);color:white">📤</div><div class="pipeline-step-label">Upload PDF (Blade form)</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--sunfire);color:white">✂️</div><div class="pipeline-step-label">Laravel Job: Panel Extract</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--banana-green);color:white">🏷️</div><div class="pipeline-step-label">Blade Editor: Tag Assets</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--sky-dusk);color:white">🗣️</div><div class="pipeline-step-label">Upload Audio Files</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--barkcloth-warm);color:white">🃏</div><div class="pipeline-step-label">Vocab Card Generator</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--savanna-gold);color:var(--ink)">👁️</div><div class="pipeline-step-label">Review &amp; Approve</div></div>
+      <div class="pipeline-arrow"></div>
+      <div class="pipeline-step"><div class="pipeline-step-circle" style="background:var(--success);color:white">🚀</div><div class="pipeline-step-label">Publish + Bundle Build</div></div>
+    </div>
+  </div>
+  <div class="cms-layout reveal">
+    <div class="cms-sidebar">
+      <div style="font-size:12px;font-weight:800;color:var(--ink);padding:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-3)">CMS Blade</div>
+      <div class="cms-sidebar-item active">📖 Comics</div>
+      <div class="cms-sidebar-item">🎵 Songs</div>
+      <div class="cms-sidebar-item">🃏 Flashcards</div>
+      <div class="cms-sidebar-item">🗣️ Language Packs</div>
+      <div class="cms-sidebar-item">🌍 Tribes</div>
+      <div class="cms-sidebar-item">📦 Bundle Builder</div>
+      <div class="cms-sidebar-item">⚙️ Settings</div>
+    </div>
+    <div class="cms-main">
+      <div class="cms-topbar">
+        <div class="cms-title">Comic Library</div>
+        <div style="display:flex;gap:var(--sp-3);align-items:center">
+          <div style="background:var(--cream-warm);border:1px solid var(--cream-mid);padding:6px 14px;border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--ink-light)">🔍 Search</div>
+          <div class="tech-pill tp-blade" style="font-size:11px">Livewire Upload</div>
+          <div style="background:var(--clay-red);color:white;padding:8px 16px;border-radius:var(--r-full);font-size:12px;font-weight:700;cursor:pointer">+ Upload Comic</div>
+        </div>
+      </div>
+      <div class="cms-stats-row">
+        <div class="cms-stat"><div class="cms-stat-val">183</div><div class="cms-stat-label">Published</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">12</div><div class="cms-stat-label">In Review</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">4</div><div class="cms-stat-label">Draft</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">8</div><div class="cms-stat-label">Archived</div></div>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--stone);margin-bottom:var(--sp-3)">Recent Uploads</div>
+      <div style="border:1px solid var(--cream-mid);border-radius:var(--r-lg);overflow:hidden">
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:var(--cream-warm);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--stone);border-bottom:2px solid var(--cream-mid)"><span>Title</span><span>Tribe</span><span>Age Band</span><span>Status</span><span>Actions</span></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);align-items:center;border-bottom:1px solid var(--cream-mid);font-size:12px;color:var(--ink-light)"><span style="font-weight:600;color:var(--ink)">The Clever Hare of Buganda</span><span>Buganda</span><span>3–5 yrs</span><span><span class="status-dot dot-live"></span>Published</span><span style="color:var(--sky-dusk);font-size:11px;cursor:pointer">✏️ Edit</span></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);align-items:center;border-bottom:1px solid var(--cream-mid);font-size:12px;color:var(--ink-light)"><span style="font-weight:600;color:var(--ink)">Garden Words of Acholi</span><span>Acholi</span><span>4–6 yrs</span><span><span class="status-dot dot-draft"></span>In Review</span><span style="color:var(--sky-dusk);font-size:11px;cursor:pointer">✏️ Edit</span></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);align-items:center;font-size:12px;color:var(--ink-light)"><span style="font-weight:600;color:var(--ink)">Drum Songs of Iteso</span><span>Iteso</span><span>2–4 yrs</span><span><span class="status-dot dot-offline"></span>Draft</span><span style="color:var(--sky-dusk);font-size:11px;cursor:pointer">✏️ Edit</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="flow-steps role-cms reveal" style="margin-top:var(--sp-8)">
+    <div class="flow-step">
+      <div class="flow-step-left"><div class="flow-step-num">C1</div><div class="flow-step-line"></div></div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">PDF Upload via Livewire Component</div>
+        <div class="flow-step-desc">CMS Editor uploads comic PDF via Livewire file upload component. File validated (type, size) and stored to Laravel Storage (S3 or local disk). Job dispatched to queue: ProcessComicPDF.</div>
+        <div class="flow-step-code"><span class="c">// Livewire component — ComicUpload.php</span><br><span class="k">public function</span> save() {<br>&nbsp;&nbsp;$path = $this-&gt;file-&gt;store(<span class="s">'comics/raw'</span>, <span class="s">'s3'</span>);<br>&nbsp;&nbsp;ProcessComicPDF::dispatch($path, auth()-&gt;user());<br>&nbsp;&nbsp;<span class="l">$this</span>-&gt;emit(<span class="s">'uploadSuccess'</span>);<br>}</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-left"><div class="flow-step-num">C2</div><div class="flow-step-line"></div></div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">Panel Extraction via Laravel Job</div>
+        <div class="flow-step-desc">ProcessComicPDF Job (dispatched to Redis queue) splits PDF into individual panel images using Imagick/GD. Each panel stored to S3. Panel records inserted into MySQL comic_panels table with order_index and image_path.</div>
+        <div class="flow-step-code"><span class="c">// Jobs/ProcessComicPDF.php</span><br><span class="k">public function</span> handle() {<br>&nbsp;&nbsp;$panels = $this-&gt;extractPanels($this-&gt;pdfPath);<br>&nbsp;&nbsp;<span class="k">foreach</span> ($panels <span class="k">as</span> $i =&gt; $panel) {<br>&nbsp;&nbsp;&nbsp;&nbsp;ComicPanel::create([<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">'comic_id'</span> =&gt; $this-&gt;comicId,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">'order_index'</span> =&gt; $i,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">'image_path'</span> =&gt; $panel-&gt;storeToS3()<br>&nbsp;&nbsp;&nbsp;&nbsp;]);<br>&nbsp;&nbsp;}<br>}</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-left"><div class="flow-step-num">C3</div><div class="flow-step-line"></div></div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">Asset Tagging in Blade Editor</div>
+        <div class="flow-step-desc">CMS Editor opens panel editor (Blade + Alpine.js). Tags vocab words on each panel by clicking image areas. Audio files uploaded per panel. Tags saved to MySQL panel_vocab_tags table. Translation pairs added per tribe language.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-left"><div class="flow-step-num">C4</div><div class="flow-step-line"></div></div>
+      <div class="flow-step-body">
+        <div class="flow-step-title">Review, Approval &amp; Publish</div>
+        <div class="flow-step-desc">Org Admin reviews in Blade review panel. On approval: comic status set to 'published' in MySQL. Laravel Job dispatched: BuildOfflineBundle — packages all comic assets into signed .ckb ZIP file, uploads to S3. Sanctum API cache invalidated. Push notification sent via Firebase (if enabled).</div>
+        <div class="flow-step-tags"><span class="flow-tag" style="background:var(--leaf-pale);color:var(--banana-green)">BuildOfflineBundle Job</span><span class="flow-tag" style="background:var(--sunfire-pale);color:var(--sunfire)">S3 Upload</span><span class="flow-tag tp-sanctum" style="padding:3px 9px">Cache Bust</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 6 — DATA FLOW ─────────────────────────────────────── -->
+<section id="data-flow" class="bg-dark">
+<div class="section">
+  <div class="section-label">Section 06 — Architecture</div>
+  <h2 class="section-title">Data Flow Architecture</h2>
+  <p class="section-desc">User → Expo / Blade → Sanctum API → Laravel → MySQL → Cache → Response. Full offline fallback with SQLite + sync queue. Laravel Horizon manages job queues.</p>
+  <div class="dataflow reveal">
+    <div class="df-node"><div class="df-box" style="background:rgba(232,135,42,0.25);border:1px solid rgba(232,135,42,0.4)">👶 User</div><div class="df-label">Expo / Browser</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(97,218,251,0.15);border:1px solid rgba(97,218,251,0.3)">⚛ Expo RN</div><div class="df-label">React Native App</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(104,117,245,0.25);border:1px solid rgba(104,117,245,0.5)">🔒 Sanctum</div><div class="df-label">Token Auth Guard</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(255,45,32,0.2);border:1px solid rgba(255,45,32,0.4)">🔴 Laravel</div><div class="df-label">Controllers + Policies</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(68,121,161,0.3);border:1px solid rgba(68,121,161,0.5)">🐬 MySQL 8</div><div class="df-label">Eloquent ORM</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(212,160,23,0.2);border:1px solid rgba(212,160,23,0.4)">⚡ Redis</div><div class="df-label">Cache + Queues</div></div>
+    <div class="df-arrow">→</div>
+    <div class="df-node"><div class="df-box" style="background:rgba(74,124,89,0.25);border:1px solid rgba(74,124,89,0.4)">☁️ S3 Assets</div><div class="df-label">CDN Images/Audio</div></div>
+    <div class="df-offline">
+      <div class="df-offline-label">✈️ Offline Path</div>
+      <div class="df-offline-desc">When API unavailable: Expo app detects offline via <strong style="color:var(--banana-mid)">NetInfo</strong> → routes to <strong style="color:var(--banana-mid)">expo-sqlite</strong> local DB → serves assets from <strong style="color:var(--banana-mid)">Expo FileSystem</strong> (.ckb bundles) → queues writes to <strong style="color:var(--banana-mid)">sync_queue table</strong> → on reconnect: POST /api/v1/sync drains queue → Laravel processes events, resolves conflicts by <strong style="color:var(--banana-mid)">last-write-wins + server-authority</strong>.</div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:var(--sp-8)">
+    <div class="section-label" style="color:var(--sunfire-light);margin-bottom:var(--sp-5)">Auth &amp; Sanctum Token Flow</div>
+    <div class="flow-steps role-system">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">A1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title" style="color:white">Login — Sanctum Token Issue</div>
+          <div class="flow-step-desc" style="color:rgba(255,255,255,0.55)">Expo app sends POST /api/v1/auth/login { email, password }. Laravel validates credentials via Auth::attempt(). On success: Sanctum issues Personal Access Token with role abilities. Token stored in Expo SecureStore. Rate limited via Laravel Throttle middleware.</div>
+          <div class="flow-step-code"><span class="c">// AuthController.php</span><br><span class="k">public function</span> login(Request $request) {<br>&nbsp;&nbsp;<span class="k">if</span> (!Auth::attempt($request-&gt;only(<span class="s">'email'</span>, <span class="s">'password'</span>))) {<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">return</span> response()-&gt;json([<span class="s">'error'</span> =&gt; <span class="s">'Unauthorized'</span>], 401);<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;$user = Auth::user();<br>&nbsp;&nbsp;$token = $user-&gt;createToken(<span class="s">'expo-app'</span>, $user-&gt;getSanctumAbilities());<br>&nbsp;&nbsp;<span class="k">return</span> response()-&gt;json([<span class="s">'token'</span> =&gt; $token-&gt;plainTextToken, <span class="s">'user'</span> =&gt; $user]);<br>}</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">A2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title" style="color:white">Sanctum Token Abilities + Laravel Policies</div>
+          <div class="flow-step-desc" style="color:rgba(255,255,255,0.55)">Every API route protected by auth:sanctum middleware. Laravel Policies enforce org-scoping: non-Super-Admin users can only access records where org_id matches their token's org. Spatie roles handle feature-level permission checks.</div>
+          <div class="flow-step-code"><span class="c">// routes/api.php</span><br>Route::middleware([<span class="s">'auth:sanctum'</span>])-&gt;group(<span class="k">function</span>() {<br>&nbsp;&nbsp;Route::get(<span class="s">'/tribes'</span>, [TribeController::<span class="k">class</span>, <span class="s">'index'</span>]);<br>&nbsp;&nbsp;Route::post(<span class="s">'/progress/sync'</span>, [SyncController::<span class="k">class</span>, <span class="s">'sync'</span>]);<br>});<br><span class="c">// TribeController — org scoping</span><br>$tribes = Tribe::where(<span class="s">'org_id'</span>, auth()-&gt;user()-&gt;org_id)-&gt;get();</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">A3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-body">
+          <div class="flow-step-title" style="color:white">Web Session Auth — Blade (CSRF)</div>
+          <div class="flow-step-desc" style="color:rgba(255,255,255,0.55)">Laravel Blade web views use session-based auth (Sanctum stateful for web). CSRF token included in all Blade forms via @csrf directive. Cookie-based session managed by Laravel. Blade dashboard routes protected by auth middleware and role checks.</div>
+          <div class="flow-step-code"><span class="l">{{-- Blade login form --}}</span><br>&lt;form method=<span class="s">"POST"</span> action=<span class="s">"/login"</span>&gt;<br>&nbsp;&nbsp;<span class="l">@csrf</span><br>&nbsp;&nbsp;&lt;input type=<span class="s">"email"</span> name=<span class="s">"email"</span>&gt;<br>&nbsp;&nbsp;&lt;input type=<span class="s">"password"</span> name=<span class="s">"password"</span>&gt;<br>&lt;/form&gt;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 7 — OFFLINE-FIRST ─────────────────────────────────── -->
+<section id="offline" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 07 — Offline-First</div>
+  <h2 class="section-title">Offline-First Architecture — Expo + SQLite</h2>
+  <p class="section-desc">Built for schools and homes with unreliable connectivity across Uganda. Expo SQLite (expo-sqlite) stores all content locally. Progress syncs automatically via Laravel Sanctum API when connection returns.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-expo">expo-sqlite</span>
+    <span class="tech-pill tp-expo">Expo FileSystem</span>
+    <span class="tech-pill tp-expo">expo-network / NetInfo</span>
+    <span class="tech-pill tp-sanctum">POST /api/v1/sync</span>
+    <span class="tech-pill tp-mysql">MySQL: sync_events</span>
+  </div>
+  <div class="offline-states reveal">
+    <div class="offline-state">
+      <div class="offline-state-header" style="background:var(--banana-green);color:white"><div class="offline-state-icon">📶</div><div><div class="offline-state-title">Online Mode</div><div class="offline-state-subtitle">Connected to Laravel API</div></div></div>
+      <div class="offline-state-body">
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>Sanctum API calls resolve from Laravel server</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>Assets served from S3 CDN via signed URLs</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>Progress synced in real time to MySQL</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>New content manifests auto-discovered</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>Age profile pulled from API, cached in SQLite</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--banana-green)"></div>Theme config fetched and applied at startup</div>
+      </div>
+    </div>
+    <div class="offline-state">
+      <div class="offline-state-header" style="background:var(--barkcloth-warm);color:white"><div class="offline-state-icon">✈️</div><div><div class="offline-state-title">Offline Mode</div><div class="offline-state-subtitle">No connectivity — full functionality</div></div></div>
+      <div class="offline-state-body">
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>All reads from expo-sqlite local database</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>Assets from Expo FileSystem .ckb bundles</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>Progress written to SQLite sync_queue</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>All downloaded content fully accessible</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>Badges awarded locally, synced on reconnect</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--barkcloth-warm)"></div>Age profile rules enforced from cached data</div>
+      </div>
+    </div>
+    <div class="offline-state">
+      <div class="offline-state-header" style="background:var(--sky-dusk);color:white"><div class="offline-state-icon">🔄</div><div><div class="offline-state-title">Sync Mode</div><div class="offline-state-subtitle">Reconnected — draining queue</div></div></div>
+      <div class="offline-state-body">
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>NetInfo reconnect → triggers SyncService</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>SQLite sync_queue batched to Sanctum API</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>Laravel SyncController resolves conflicts</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>Events deduplicated by idempotency_key</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>New content manifest downloaded to SQLite</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--sky-dusk)"></div>Sync complete → UI returns to online mode</div>
+      </div>
+    </div>
+    <div class="offline-state">
+      <div class="offline-state-header" style="background:var(--clay-red);color:white"><div class="offline-state-icon">📦</div><div><div class="offline-state-title">Bundle System</div><div class="offline-state-subtitle">.ckb — Culture Kids Bundle</div></div></div>
+      <div class="offline-state-body">
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Bundle = ZIP: images/ + audio/ + metadata.json</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Built by Laravel BuildOfflineBundle Job</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Signed with org HMAC key (prevents sharing)</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Per-tribe bundles (~15–50MB each)</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Downloaded via Expo FileSystem.downloadAsync</div>
+        <div class="offline-item"><div class="offline-item-dot" style="background:var(--clay-red)"></div>Version hash stored in SQLite for delta check</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 8 — MYSQL SCHEMA ─────────────────────────────────── -->
+<section id="schema" class="bg-dark">
+<div class="section">
+  <div class="section-label">Section 08 — Data Model</div>
+  <h2 class="section-title">MySQL Database Schema &amp; Migrations</h2>
+  <p class="section-desc">MySQL 8 with Laravel Eloquent ORM. All tables created via Laravel Migrations. Multi-tenant scoping via org_id. Full audit log on all Super Admin actions. Run: php artisan migrate --seed</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-mysql">MySQL 8 InnoDB</span>
+    <span class="tech-pill tp-laravel">Laravel Migrations</span>
+    <span class="tech-pill tp-laravel">Eloquent ORM</span>
+    <span class="tech-pill tp-laravel">php artisan migrate</span>
+    <span class="tech-pill tp-laravel">Database Seeders</span>
+  </div>
+  <div class="schema-tables reveal">
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">🏢</span><span class="schema-table-name">organisations</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">name</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">slug</span><span><span class="sf-type">VARCHAR(100)</span> <span class="sf-idx">UNIQUE</span></span></div>
+      <div class="schema-field"><span class="sf-name">plan</span><span class="sf-type">ENUM(free,school,enterprise)</span></div>
+      <div class="schema-field"><span class="sf-name">modules</span><span class="sf-type">JSON</span></div>
+      <div class="schema-field"><span class="sf-name">theme_config</span><span class="sf-type">JSON</span></div>
+      <div class="schema-field"><span class="sf-name">is_active</span><span class="sf-type">BOOLEAN</span></div>
+      <div class="schema-field"><span class="sf-name">created_at</span><span class="sf-type">TIMESTAMP</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">👤</span><span class="schema-table-name">users</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">org_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">name</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">email</span><span><span class="sf-type">VARCHAR(255)</span> <span class="sf-idx">UNIQUE</span></span></div>
+      <div class="schema-field"><span class="sf-name">password</span><span class="sf-type">VARCHAR(255) BCRYPT</span></div>
+      <div class="schema-field"><span class="sf-name">role</span><span class="sf-type">ENUM(super_admin,org_admin...)</span></div>
+      <div class="schema-field"><span class="sf-name">email_verified_at</span><span class="sf-type">TIMESTAMP</span></div>
+      <div class="schema-field"><span class="sf-name">remember_token</span><span class="sf-type">VARCHAR(100)</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">👶</span><span class="schema-table-name">child_profiles</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">parent_user_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">org_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">name</span><span class="sf-type">VARCHAR(100)</span></div>
+      <div class="schema-field"><span class="sf-name">date_of_birth</span><span class="sf-type">DATE</span></div>
+      <div class="schema-field"><span class="sf-name">age_profile_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">avatar</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">preferred_tribe_ids</span><span class="sf-type">JSON</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">🌍</span><span class="schema-table-name">tribes</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">name</span><span class="sf-type">VARCHAR(150)</span></div>
+      <div class="schema-field"><span class="sf-name">slug</span><span><span class="sf-type">VARCHAR(100)</span> <span class="sf-idx">UNIQUE</span></span></div>
+      <div class="schema-field"><span class="sf-name">language</span><span class="sf-type">VARCHAR(100)</span></div>
+      <div class="schema-field"><span class="sf-name">region</span><span class="sf-type">VARCHAR(150)</span></div>
+      <div class="schema-field"><span class="sf-name">greeting</span><span class="sf-type">VARCHAR(100)</span></div>
+      <div class="schema-field"><span class="sf-name">phonetic</span><span class="sf-type">VARCHAR(150)</span></div>
+      <div class="schema-field"><span class="sf-name">color_hex</span><span class="sf-type">VARCHAR(7)</span></div>
+      <div class="schema-field"><span class="sf-name">emoji_symbol</span><span class="sf-type">VARCHAR(10)</span></div>
+      <div class="schema-field"><span class="sf-name">is_active</span><span class="sf-type">BOOLEAN DEFAULT 1</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">📖</span><span class="schema-table-name">comics</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">org_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">tribe_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">title</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">age_min</span><span class="sf-type">TINYINT UNSIGNED</span></div>
+      <div class="schema-field"><span class="sf-name">age_max</span><span class="sf-type">TINYINT UNSIGNED</span></div>
+      <div class="schema-field"><span class="sf-name">status</span><span class="sf-type">ENUM(draft,review,published)</span></div>
+      <div class="schema-field"><span class="sf-name">cover_image_path</span><span class="sf-type">VARCHAR(500)</span></div>
+      <div class="schema-field"><span class="sf-name">bundle_path</span><span class="sf-type">VARCHAR(500) S3</span></div>
+      <div class="schema-field"><span class="sf-name">bundle_hash</span><span class="sf-type">VARCHAR(64)</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">📊</span><span class="schema-table-name">progress_events</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">child_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">comic_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">event_type</span><span class="sf-type">ENUM(story_start,complete,badge...)</span></div>
+      <div class="schema-field"><span class="sf-name">idempotency_key</span><span><span class="sf-type">VARCHAR(64)</span> <span class="sf-idx">UNIQUE</span></span></div>
+      <div class="schema-field"><span class="sf-name">payload</span><span class="sf-type">JSON</span></div>
+      <div class="schema-field"><span class="sf-name">synced_at</span><span class="sf-type">TIMESTAMP</span></div>
+      <div class="schema-field"><span class="sf-name">created_at</span><span class="sf-type">TIMESTAMP</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">🔢</span><span class="schema-table-name">age_profiles</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">age_min</span><span class="sf-type">TINYINT UNSIGNED</span></div>
+      <div class="schema-field"><span class="sf-name">age_max</span><span class="sf-type">TINYINT UNSIGNED</span></div>
+      <div class="schema-field"><span class="sf-name">stage</span><span class="sf-type">VARCHAR(50)</span></div>
+      <div class="schema-field"><span class="sf-name">ui_mode</span><span class="sf-type">ENUM(simple,guided,advanced,full)</span></div>
+      <div class="schema-field"><span class="sf-name">difficulty_ceiling</span><span class="sf-type">TINYINT</span></div>
+      <div class="schema-field"><span class="sf-name">rules</span><span class="sf-type">JSON</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">🛡️</span><span class="schema-table-name">personal_access_tokens</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">tokenable_type</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">tokenable_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">name</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">token</span><span><span class="sf-type">VARCHAR(64)</span> <span class="sf-idx">UNIQUE</span></span></div>
+      <div class="schema-field"><span class="sf-name">abilities</span><span class="sf-type">TEXT JSON</span></div>
+      <div class="schema-field"><span class="sf-name">last_used_at</span><span class="sf-type">TIMESTAMP</span></div>
+      <div class="schema-field"><span class="sf-name">expires_at</span><span class="sf-type">TIMESTAMP</span></div>
+    </div>
+    <div class="schema-table">
+      <div class="schema-table-header"><span class="schema-table-icon">📋</span><span class="schema-table-name">audit_logs</span></div>
+      <div class="schema-field"><span class="sf-name">id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-key">PK</span></span></div>
+      <div class="schema-field"><span class="sf-name">user_id</span><span><span class="sf-type">BIGINT UNSIGNED</span> <span class="sf-fk">FK</span></span></div>
+      <div class="schema-field"><span class="sf-name">impersonator_id</span><span class="sf-type">BIGINT UNSIGNED NULL</span></div>
+      <div class="schema-field"><span class="sf-name">action</span><span class="sf-type">VARCHAR(100)</span></div>
+      <div class="schema-field"><span class="sf-name">model_type</span><span class="sf-type">VARCHAR(255)</span></div>
+      <div class="schema-field"><span class="sf-name">model_id</span><span class="sf-type">BIGINT UNSIGNED</span></div>
+      <div class="schema-field"><span class="sf-name">old_values</span><span class="sf-type">JSON</span></div>
+      <div class="schema-field"><span class="sf-name">new_values</span><span class="sf-type">JSON</span></div>
+      <div class="schema-field"><span class="sf-name">ip_address</span><span class="sf-type">VARCHAR(45)</span></div>
+    </div>
+  </div>
+
+  <!-- Migration example -->
+  <div class="reveal">
+    <div class="section-label" style="color:var(--sunfire-light);margin-bottom:var(--sp-4)">Example Laravel Migration</div>
+    <div class="file-tree">
+      <span class="c">// database/migrations/create_progress_events_table.php</span><br>
+      Schema::<span class="k">create</span>(<span class="s">'progress_events'</span>, <span class="k">function</span> (Blueprint $table) {<br>
+      &nbsp;&nbsp;$table-&gt;<span class="k">id</span>();<br>
+      &nbsp;&nbsp;$table-&gt;foreignId(<span class="s">'child_id'</span>)-&gt;constrained(<span class="s">'child_profiles'</span>)-&gt;cascadeOnDelete();<br>
+      &nbsp;&nbsp;$table-&gt;foreignId(<span class="s">'comic_id'</span>)-&gt;nullable()-&gt;constrained(<span class="s">'comics'</span>);<br>
+      &nbsp;&nbsp;$table-&gt;enum(<span class="s">'event_type'</span>, [<span class="s">'story_start'</span>, <span class="s">'story_complete'</span>, <span class="s">'badge_earned'</span>, <span class="s">'vocab_seen'</span>]);<br>
+      &nbsp;&nbsp;$table-&gt;string(<span class="s">'idempotency_key'</span>, 64)-&gt;unique(); <span class="c">// prevents duplicate sync</span><br>
+      &nbsp;&nbsp;$table-&gt;json(<span class="s">'payload'</span>)-&gt;nullable();<br>
+      &nbsp;&nbsp;$table-&gt;timestamp(<span class="s">'synced_at'</span>)-&gt;nullable();<br>
+      &nbsp;&nbsp;$table-&gt;timestamps();<br>
+      &nbsp;&nbsp;$table-&gt;index([<span class="s">'child_id'</span>, <span class="s">'event_type'</span>]); <span class="c">// composite index</span><br>
+      });
+    </div>
+  </div>
+
+  <!-- Project file structure -->
+  <div class="reveal" style="margin-top:var(--sp-8)">
+    <div class="section-label" style="color:var(--sunfire-light);margin-bottom:var(--sp-4)">Project Structure</div>
+    <div class="grid-2" style="gap:var(--sp-5)">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--sunfire-light);margin-bottom:var(--sp-3)">🔴 Laravel Backend (culturekids-api/)</div>
+        <div class="file-tree" style="font-size:10px">
+          <div><span class="dir">app/</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Http/Controllers/Api/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">AuthController.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">TribeController.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ComicController.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SyncController.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ProgressController.php</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Http/Controllers/Admin/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SuperAdminController.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">OrganisationController.php</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Models/</span> <span class="comment">Eloquent models</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Jobs/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ProcessComicPDF.php</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">BuildOfflineBundle.php</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Policies/</span> <span class="comment">OrgScoping</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">Middleware/</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SuperAdminMiddleware.php</span></div>
+          <div><span class="dir">database/</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">migrations/</span> <span class="comment">All MySQL tables</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">seeders/</span> <span class="comment">Demo data</span></div>
+          <div><span class="dir">routes/</span></div>
+          <div>&nbsp;&nbsp;<span class="file">api.php</span> <span class="comment">Sanctum routes</span></div>
+          <div>&nbsp;&nbsp;<span class="file">web.php</span> <span class="comment">Blade routes</span></div>
+          <div><span class="dir">resources/views/</span> <span class="comment">Blade templates</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">admin/</span> <span class="comment">Super admin Blade</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">teacher/</span> <span class="comment">Teacher dashboard</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">parent/</span> <span class="comment">Parent web views</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">components/</span> <span class="comment">Blade components</span></div>
+          <div>&nbsp;&nbsp;<span class="dir">livewire/</span> <span class="comment">Livewire views</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#61DAFB;margin-bottom:var(--sp-3)">📱 Expo React Native (culturekids-app/)</div>
+        <div class="file-tree" style="font-size:10px">
+          <div><span class="dir">app/</span> <span class="comment">Expo Router file-based routing</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(auth)/login.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(child)/home.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(child)/tribes/[id].tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(child)/story/[id].tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(parent)/dashboard.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(parent)/downloads.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">(teacher)/class.tsx</span></div>
+          <div><span class="dir">services/</span></div>
+          <div>&nbsp;&nbsp;<span class="file">SanctumAPI.ts</span> <span class="comment">HTTP client</span></div>
+          <div>&nbsp;&nbsp;<span class="file">SQLiteService.ts</span> <span class="comment">expo-sqlite</span></div>
+          <div>&nbsp;&nbsp;<span class="file">SyncService.ts</span> <span class="comment">Offline sync</span></div>
+          <div>&nbsp;&nbsp;<span class="file">BundleService.ts</span> <span class="comment">.ckb bundles</span></div>
+          <div><span class="dir">store/</span> <span class="comment">Zustand state mgmt</span></div>
+          <div>&nbsp;&nbsp;<span class="file">authStore.ts</span></div>
+          <div>&nbsp;&nbsp;<span class="file">childStore.ts</span></div>
+          <div>&nbsp;&nbsp;<span class="file">offlineStore.ts</span></div>
+          <div><span class="dir">components/</span></div>
+          <div>&nbsp;&nbsp;<span class="file">TribeCard.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">ComicViewer.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">FlashCard.tsx</span></div>
+          <div>&nbsp;&nbsp;<span class="file">AgeAdaptiveLayout.tsx</span></div>
+          <div><span class="dir">db/</span></div>
+          <div>&nbsp;&nbsp;<span class="file">schema.ts</span> <span class="comment">SQLite table defs</span></div>
+          <div>&nbsp;&nbsp;<span class="file">migrations.ts</span> <span class="comment">App DB migrations</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 9 — SANCTUM API ───────────────────────────────────── -->
+<section id="api" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 09 — API Reference</div>
+  <h2 class="section-title">Sanctum API Endpoints</h2>
+  <p class="section-desc">RESTful Laravel API protected by Sanctum token authentication. All endpoints scoped by org_id for multi-tenancy. Super Admin bypasses all scoping. Base URL: <code style="background:var(--cream-warm);padding:2px 8px;border-radius:4px;font-family:monospace;color:var(--clay-red)">https://api.culturekids.app/api/v1</code></p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-sanctum">Laravel Sanctum</span>
+    <span class="tech-pill tp-laravel">auth:sanctum middleware</span>
+    <span class="tech-pill tp-laravel">Laravel Throttle</span>
+    <span class="tech-pill tp-mysql">MySQL query scoping</span>
+  </div>
+  <div class="api-endpoints reveal">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--clay-red);margin:var(--sp-5) 0 var(--sp-3)">Authentication (Sanctum)</div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/auth/login</span><span class="api-desc">Issue Sanctum Personal Access Token</span><span class="api-auth auth-any">Public</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/auth/logout</span><span class="api-desc">Revoke current Sanctum token</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/auth/user</span><span class="api-desc">Get authenticated user + abilities</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/auth/register</span><span class="api-desc">Register parent account</span><span class="api-auth auth-any">Public</span></div></div>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--savanna-gold);margin:var(--sp-5) 0 var(--sp-3)">⚡ Super Admin</div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/admin/dashboard</span><span class="api-desc">Global platform stats (all orgs)</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/admin/organisations</span><span class="api-desc">List all organisations</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/admin/organisations</span><span class="api-desc">Create organisation</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-put">PUT</span><span class="api-path">/admin/organisations/{id}/modules</span><span class="api-desc">Toggle org modules</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/admin/users/{id}/impersonate</span><span class="api-desc">Issue impersonation token</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-put">PUT</span><span class="api-path">/admin/age-profiles/{id}</span><span class="api-desc">Edit age profile rules</span><span class="api-auth auth-super">Super Admin</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-put">PUT</span><span class="api-path">/admin/themes/{org_id}</span><span class="api-desc">Update org theme config</span><span class="api-auth auth-super">Super Admin</span></div></div>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--banana-green);margin:var(--sp-5) 0 var(--sp-3)">Content (Org-scoped)</div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/tribes</span><span class="api-desc">List tribes (org-scoped via Eloquent)</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/tribes/{id}/comics</span><span class="api-desc">Comics for tribe (age-filtered)</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/comics/{id}/panels</span><span class="api-desc">Get panels for offline bundle</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/age-profiles</span><span class="api-desc">Get all age profile configs</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/content/manifest</span><span class="api-desc">Offline content manifest (org-scoped)</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/bundles/{tribe_id}</span><span class="api-desc">Download .ckb bundle (signed URL)</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/cms/comics/upload</span><span class="api-desc">Upload comic PDF (Livewire fallback)</span><span class="api-auth auth-admin">Editor+</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-put">PUT</span><span class="api-path">/cms/comics/{id}/publish</span><span class="api-desc">Publish comic + dispatch bundle job</span><span class="api-auth auth-admin">Admin+</span></div></div>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sky-dusk);margin:var(--sp-5) 0 var(--sp-3)">Progress, Sync &amp; Analytics</div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/sync</span><span class="api-desc">Drain Expo offline sync queue (idempotent)</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/progress/events</span><span class="api-desc">Record single progress event</span><span class="api-auth auth-any">Token</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/progress/child/{id}</span><span class="api-desc">Child progress summary</span><span class="api-auth auth-teacher">Teacher+</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/child-profiles</span><span class="api-desc">Parent's child profiles</span><span class="api-auth auth-any">Token (parent)</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-post">POST</span><span class="api-path">/child-profiles</span><span class="api-desc">Create child profile</span><span class="api-auth auth-any">Token (parent)</span></div></div>
+    <div class="api-endpoint"><div class="api-endpoint-header"><span class="api-method method-get">GET</span><span class="api-path">/analytics/org/{id}</span><span class="api-desc">Org analytics (MySQL aggregates)</span><span class="api-auth auth-admin">Admin+</span></div></div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 10 — WEBSITE FRONTEND ─────────────────────────────── -->
+<section id="website" class="bg-warm">
+<div class="section">
+  <div class="section-label">Section 10 — Web Frontend</div>
+  <h2 class="section-title">Website &amp; Web Dashboard — Laravel Blade</h2>
+  <p class="section-desc">Public marketing website, parent registration, teacher dashboard, and admin panel — all built with Laravel Blade templates, Livewire components, and Alpine.js. User-friendly, mobile-responsive, session-authenticated.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-blade">Laravel Blade</span>
+    <span class="tech-pill tp-laravel">Livewire 3</span>
+    <span class="tech-pill tp-laravel">Alpine.js</span>
+    <span class="tech-pill tp-laravel">Tailwind CSS</span>
+    <span class="tech-pill tp-laravel">Laravel Vite</span>
+  </div>
+
+  <!-- Public Website Preview -->
+  <div class="reveal" style="margin-bottom:var(--sp-8)">
+    <div class="section-label" style="margin-bottom:var(--sp-4)">Public Website — culturekids.app (Blade)</div>
+    <div class="website-preview">
+      <div class="wp-browser-bar">
+        <div class="wp-dots"><div class="wp-dot" style="background:#FF5F57"></div><div class="wp-dot" style="background:#FFBD2E"></div><div class="wp-dot" style="background:#28C840"></div></div>
+        <div class="wp-url">🔒 culturekids.app</div>
+      </div>
+      <div class="wp-nav">
+        <div class="wp-logo">🌍 Paulette Culture Kids</div>
+        <div class="wp-nav-link">Tribes</div>
+        <div class="wp-nav-link">Stories</div>
+        <div class="wp-nav-link">For Schools</div>
+        <div class="wp-nav-link">Pricing</div>
+        <div class="wp-nav-link">Login</div>
+        <button class="wp-nav-btn">Start Free Trial</button>
+      </div>
+      <div class="wp-hero">
+        <div class="wp-hero-h">Bring <em>Africa's Stories</em> to Life</div>
+        <div class="wp-hero-sub">Interactive cultural comics, songs, and language learning for children ages 2–6 across 65+ Ugandan tribes.</div>
+        <div class="wp-hero-btns">
+          <button class="wp-btn-primary">🚀 Start Free Trial</button>
+          <button class="wp-btn-secondary">📱 Download App</button>
+        </div>
+      </div>
+      <div class="wp-features">
+        <div class="wp-feature"><span class="wp-feature-ico">📖</span><div class="wp-feature-title">Cultural Comics</div><div class="wp-feature-desc">Age-adaptive stories from 65+ Ugandan tribes with audio read-aloud</div></div>
+        <div class="wp-feature"><span class="wp-feature-ico">🎵</span><div class="wp-feature-title">Songs &amp; Language</div><div class="wp-feature-desc">Traditional songs and vocabulary in authentic tribal languages</div></div>
+        <div class="wp-feature"><span class="wp-feature-ico">✈️</span><div class="wp-feature-title">Works Offline</div><div class="wp-feature-desc">Download content bundles for full offline use in low-connectivity areas</div></div>
+      </div>
+      <div class="wp-tribe-row">
+        <div class="wp-tribe-row-title">Explore 65+ Ugandan Tribes</div>
+        <div class="wp-tribe-chips">
+          <div class="wp-tribe-chip">🥁 Buganda</div>
+          <div class="wp-tribe-chip">🦅 Acholi</div>
+          <div class="wp-tribe-chip">🎶 Basoga</div>
+          <div class="wp-tribe-chip">🌾 Iteso</div>
+          <div class="wp-tribe-chip">🦁 Banyankole</div>
+          <div class="wp-tribe-chip">🌊 Alur</div>
+          <div class="wp-tribe-chip">⭐ + 59 more →</div>
+        </div>
+      </div>
+      <div class="wp-cta">
+        <div class="wp-cta-h">Ready to start your child's cultural journey?</div>
+        <div class="wp-cta-sub">Join 2,847 children learning about their heritage through stories and songs</div>
+        <button class="wp-btn-primary">Create Free Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blade Pages List -->
+  <div class="grid-2 reveal">
+    <div>
+      <div class="section-label" style="margin-bottom:var(--sp-4)">Public Blade Views (resources/views/)</div>
+      <div class="flow-steps role-cms">
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">W1</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Home Page (welcome.blade.php)</div>
+            <div class="flow-step-desc">Marketing landing: hero, tribe showcase, feature highlights, pricing plans, testimonials, App Store download buttons. SEO meta tags via Laravel SEOTools. CTA links to /register.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">W2</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Register / Login (auth/)</div>
+            <div class="flow-step-desc">Laravel Breeze or Fortify auth scaffolding. Register: email, name, password, role selection (parent/teacher). Login: email + password, remember me. Email verification via queued mail. Password reset flow.</div>
+            <div class="flow-step-code"><span class="l">@extends</span>(<span class="s">'layouts.auth'</span>)<br><span class="l">@section</span>(<span class="s">'content'</span>)<br>&lt;form method=<span class="s">"POST"</span> action=<span class="s">"{{ route('register') }}"</span>&gt;<br>&nbsp;&nbsp;<span class="l">@csrf</span><br>&nbsp;&nbsp;&lt;x-input name=<span class="s">"email"</span> type=<span class="s">"email"</span> /&gt;<br>&lt;/form&gt;</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">W3</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Parent Dashboard (parent/)</div>
+            <div class="flow-step-desc">View child profiles, progress charts (Chart.js), activity timeline, badge collection, content download manager. Create/edit child profiles. Connect to Expo app via QR code + token pairing.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">W4</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Tribe &amp; Story Browser (tribes/)</div>
+            <div class="flow-step-desc">Public-facing (no login required). Lists all tribes with filter by region/language. Each tribe page: greeting audio, cultural info, available stories preview. Login prompt to unlock full content.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:var(--sp-4)">Admin &amp; Teacher Blade Views</div>
+      <div class="flow-steps role-teacher">
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">T1</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Teacher Dashboard (teacher/)</div>
+            <div class="flow-step-desc">Class overview: pupil list, completion rates, weekly activity chart, lesson schedule. Livewire real-time data updates. Export class report as PDF (Laravel DomPDF) or Excel (Laravel Excel).</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">T2</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">CMS Editor Panel (cms/)</div>
+            <div class="flow-step-desc">Comic upload (Livewire file upload), panel editor (Alpine.js drag to tag), audio upload, vocab card editor, tribe/age-band selector. Submit for review flow. Status pipeline display.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">T3</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Super Admin Panel (admin/)</div>
+            <div class="flow-step-desc">God Mode Blade dashboard at admin.culturekids.app. Full org management, user impersonation, theme engine, age profile editor, bundle builder, global analytics, audit log viewer, API token management, MySQL health monitor.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-left"><div class="flow-step-num" style="font-size:10px">T4</div><div class="flow-step-line"></div></div>
+          <div class="flow-step-body">
+            <div class="flow-step-title">Livewire Components Used</div>
+            <div class="flow-step-desc">ComicUpload · PanelEditor · ProgressChart · ClassRoster · OrgManager · ThemeEngine · BundleBuilder · AuditLogViewer · ChildProfileForm · UserImpersonator</div>
+            <div class="flow-step-code"><span class="l">@livewire</span>(<span class="s">'progress-chart'</span>, [<span class="s">'classId'</span> =&gt; $class-&gt;id])</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 11 — MOBILE APP ───────────────────────────────────── -->
+<section id="mobile" class="bg-dark">
+<div class="section">
+  <div class="section-label">Section 11 — Mobile Application</div>
+  <h2 class="section-title">Expo CLI React Native App</h2>
+  <p class="section-desc">Built with Expo SDK 51+ and Expo Router for file-based navigation. TypeScript throughout. Zustand for state management. expo-sqlite for local database. Sanctum token auth stored securely in expo-secure-store.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-expo">Expo SDK 51+</span>
+    <span class="tech-pill tp-expo">Expo Router</span>
+    <span class="tech-pill tp-expo" style="color:#61DAFB;border-color:rgba(97,218,251,0.3)">React Native 0.74</span>
+    <span class="tech-pill" style="background:rgba(104,117,245,0.12);color:#8b96f8;border:1px solid rgba(104,117,245,0.3)">TypeScript</span>
+    <span class="tech-pill" style="background:rgba(74,124,89,0.12);color:var(--banana-mid);border:1px solid rgba(74,124,89,0.3)">Zustand</span>
+    <span class="tech-pill tp-expo">expo-sqlite</span>
+    <span class="tech-pill tp-expo">expo-secure-store</span>
+    <span class="tech-pill tp-expo">expo-av (Audio)</span>
+  </div>
+
+  <div class="grid-3 reveal" style="align-items:start">
+    <!-- Child App -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--sunfire-light);text-align:center;margin-bottom:var(--sp-4);text-transform:uppercase;letter-spacing:1px">👶 Child Mode</div>
+      <div class="mobile-frame">
+        <div class="mf-status"><span>9:41</span><span>📶 WiFi 🔋</span></div>
+        <div class="mf-screen">
+          <div style="background:linear-gradient(135deg,var(--sunfire),var(--clay-red));padding:16px;text-align:center">
+            <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.8);letter-spacing:1px;text-transform:uppercase">Choose a Tribe</div>
+          </div>
+          <div style="padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:linear-gradient(135deg,#C44B2B,#8B3018);border-radius:12px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px">🥁<div style="font-size:9px;color:rgba(255,255,255,0.8);font-weight:700;margin-top:2px">Buganda</div></div>
+            <div style="background:linear-gradient(135deg,#4A7C59,#2D5438);border-radius:12px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px">🦅<div style="font-size:9px;color:rgba(255,255,255,0.8);font-weight:700;margin-top:2px">Acholi</div></div>
+            <div style="background:linear-gradient(135deg,#2E4D8A,#1A3060);border-radius:12px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px">🎶<div style="font-size:9px;color:rgba(255,255,255,0.8);font-weight:700;margin-top:2px">Basoga</div></div>
+            <div style="background:linear-gradient(135deg,#D4A017,#8B5E3C);border-radius:12px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px">🌾<div style="font-size:9px;color:rgba(255,255,255,0.8);font-weight:700;margin-top:2px">Iteso</div></div>
+          </div>
+          <div style="padding:0 10px;font-size:9px;font-weight:700;color:var(--stone);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Today's Stories</div>
+          <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px">
+            <div style="background:var(--cream-warm);border-radius:8px;padding:8px;display:flex;align-items:center;gap:8px"><span style="font-size:18px">📖</span><div><div style="font-size:10px;font-weight:700;color:var(--ink)">The Clever Hare</div><div style="font-size:9px;color:var(--stone)">Buganda · 5 panels · ⭐ 3</div></div></div>
+          </div>
+        </div>
+        <div class="mf-nav-bar">
+          <div class="mf-nav-ico">🏠<span class="mf-nav-lbl">Home</span></div>
+          <div class="mf-nav-ico">🌍<span class="mf-nav-lbl">Tribes</span></div>
+          <div class="mf-nav-ico">⭐<span class="mf-nav-lbl">Badges</span></div>
+          <div class="mf-nav-ico">👤<span class="mf-nav-lbl">Me</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Parent App -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--barkcloth-mid);text-align:center;margin-bottom:var(--sp-4);text-transform:uppercase;letter-spacing:1px">👨‍👩‍👧 Parent Mode</div>
+      <div class="mobile-frame">
+        <div class="mf-status"><span>9:41</span><span>📶 WiFi 🔋</span></div>
+        <div class="mf-screen">
+          <div style="background:var(--barkcloth-warm);padding:16px">
+            <div style="font-size:12px;font-weight:800;color:white">Parent Dashboard</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px">Naluwooza's Progress</div>
+          </div>
+          <div style="padding:10px">
+            <div style="background:var(--cream-warm);border-radius:10px;padding:10px;margin-bottom:8px">
+              <div style="font-size:10px;font-weight:700;color:var(--ink);margin-bottom:6px">📊 This Week</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center">
+                <div><div style="font-size:16px;font-weight:800;color:var(--clay-red)">8</div><div style="font-size:8px;color:var(--stone)">Stories</div></div>
+                <div><div style="font-size:16px;font-weight:800;color:var(--banana-green)">3</div><div style="font-size:8px;color:var(--stone)">Badges</div></div>
+                <div><div style="font-size:16px;font-weight:800;color:var(--sky-dusk)">24m</div><div style="font-size:8px;color:var(--stone)">Time</div></div>
+              </div>
+            </div>
+            <div style="font-size:9px;font-weight:700;color:var(--stone);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Downloads</div>
+            <div style="background:var(--cream-warm);border-radius:8px;padding:8px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:600;color:var(--ink)">📦 Buganda Pack</span><span style="font-size:9px;font-weight:700;color:var(--banana-green)">✓ Downloaded</span></div>
+            <div style="margin-top:6px;background:var(--cream-warm);border-radius:8px;padding:8px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-weight:600;color:var(--ink)">📦 Acholi Pack</span><span style="font-size:9px;font-weight:700;color:var(--clay-red)">↓ Download</span></div>
+          </div>
+        </div>
+        <div class="mf-nav-bar">
+          <div class="mf-nav-ico">🏠<span class="mf-nav-lbl">Home</span></div>
+          <div class="mf-nav-ico">👶<span class="mf-nav-lbl">Child</span></div>
+          <div class="mf-nav-ico">📦<span class="mf-nav-lbl">Packs</span></div>
+          <div class="mf-nav-ico">⚙️<span class="mf-nav-lbl">Settings</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Teacher / Kiosk -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#7AA8E8;text-align:center;margin-bottom:var(--sp-4);text-transform:uppercase;letter-spacing:1px">📚 Teacher / Kiosk</div>
+      <div class="mobile-frame">
+        <div class="mf-status"><span>9:41</span><span>🖥️ Kiosk Mode</span></div>
+        <div class="mf-screen">
+          <div style="background:var(--sky-dusk);padding:16px;text-align:center">
+            <div style="font-size:12px;font-weight:800;color:white">🖥️ Classroom Mode</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px">Tap your name to start</div>
+          </div>
+          <div style="padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:linear-gradient(135deg,#C44B2B,#8B3018);border-radius:12px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:20px">😊</span><div style="font-size:9px;color:rgba(255,255,255,0.9);font-weight:700;margin-top:3px">Amara</div></div>
+            <div style="background:linear-gradient(135deg,#4A7C59,#2D5438);border-radius:12px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:20px">😄</span><div style="font-size:9px;color:rgba(255,255,255,0.9);font-weight:700;margin-top:3px">Kiprotich</div></div>
+            <div style="background:linear-gradient(135deg,#D4A017,#8B5E3C);border-radius:12px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:20px">🤗</span><div style="font-size:9px;color:rgba(255,255,255,0.9);font-weight:700;margin-top:3px">Nakato</div></div>
+            <div style="background:linear-gradient(135deg,#2E4D8A,#1A3060);border-radius:12px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:20px">😁</span><div style="font-size:9px;color:rgba(255,255,255,0.9);font-weight:700;margin-top:3px">Ochieng</div></div>
+          </div>
+          <div style="padding:8px 10px;text-align:center;font-size:8px;color:rgba(0,0,0,0.3)">🔒 Kiosk Mode · PIN to exit</div>
+        </div>
+        <div class="mf-nav-bar" style="justify-content:center">
+          <div style="font-size:9px;color:rgba(255,255,255,0.3)">🔒 Navigation locked in kiosk mode</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQLite Schema -->
+  <div class="reveal" style="margin-top:var(--sp-8)">
+    <div class="section-label" style="color:var(--sunfire-light);margin-bottom:var(--sp-4)">Expo SQLite Local Schema (expo-sqlite)</div>
+    <div class="file-tree">
+      <span class="c">-- SQLite tables in Expo app (db/schema.ts)</span><br>
+      CREATE TABLE <span class="k">content_manifest</span> (<br>
+      &nbsp;&nbsp;id INTEGER PRIMARY KEY, comic_id INTEGER, tribe_id INTEGER,<br>
+      &nbsp;&nbsp;title TEXT, bundle_hash TEXT, downloaded INTEGER DEFAULT 0,<br>
+      &nbsp;&nbsp;bundle_path TEXT, updated_at TEXT<br>
+      );<br><br>
+      CREATE TABLE <span class="k">sync_queue</span> (<br>
+      &nbsp;&nbsp;id INTEGER PRIMARY KEY AUTOINCREMENT,<br>
+      &nbsp;&nbsp;event_type TEXT NOT NULL,<br>
+      &nbsp;&nbsp;payload TEXT NOT NULL, <span class="c">-- JSON string</span><br>
+      &nbsp;&nbsp;idempotency_key TEXT UNIQUE,<br>
+      &nbsp;&nbsp;synced INTEGER DEFAULT 0,<br>
+      &nbsp;&nbsp;created_at INTEGER <span class="c">-- Unix timestamp</span><br>
+      );<br><br>
+      CREATE TABLE <span class="k">child_progress_cache</span> (<br>
+      &nbsp;&nbsp;child_id INTEGER, comic_id INTEGER,<br>
+      &nbsp;&nbsp;completed INTEGER DEFAULT 0,<br>
+      &nbsp;&nbsp;panels_seen TEXT, <span class="c">-- JSON array</span><br>
+      &nbsp;&nbsp;PRIMARY KEY (child_id, comic_id)<br>
+      );<br><br>
+      CREATE TABLE <span class="k">age_profiles_cache</span> (<br>
+      &nbsp;&nbsp;id INTEGER PRIMARY KEY, age_min INTEGER, age_max INTEGER,<br>
+      &nbsp;&nbsp;ui_mode TEXT, rules TEXT, <span class="c">-- JSON</span><br>
+      &nbsp;&nbsp;cached_at INTEGER<br>
+      );
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 12 — TRIBE DIRECTORY ──────────────────────────────── -->
+<section id="tribes" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 12 — Tribe System</div>
+  <h2 class="section-title">Tribe Directory</h2>
+  <p class="section-desc">65+ Ugandan tribes stored in MySQL tribes table. Super Admin manages all tribe data via Blade CMS. Each tribe has language pack, cultural notes, comic library, and regional colour. API returns tribe data scoped to org subscription.</p>
+  <div class="tribe-grid reveal">
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#C44B2B,#8B3018)"><div class="tribe-card-banner-pattern"></div>🥁</div><div class="tribe-card-body"><div class="tribe-card-name">Buganda</div><div class="tribe-card-lang">Luganda · Central Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">6 Comics</span><span class="tribe-count-badge">3 Langs</span></div></div></div>
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#4A7C59,#2D5438)"><div class="tribe-card-banner-pattern"></div>🦅</div><div class="tribe-card-body"><div class="tribe-card-name">Acholi</div><div class="tribe-card-lang">Luo · Northern Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">4 Comics</span><span class="tribe-count-badge">2 Langs</span></div></div></div>
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#2E4D8A,#1A3060)"><div class="tribe-card-banner-pattern"></div>🎶</div><div class="tribe-card-body"><div class="tribe-card-name">Basoga</div><div class="tribe-card-lang">Lusoga · Eastern Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">3 Comics</span><span class="tribe-count-badge">2 Langs</span></div></div></div>
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#D4A017,#8B5E3C)"><div class="tribe-card-banner-pattern"></div>🌾</div><div class="tribe-card-body"><div class="tribe-card-name">Iteso</div><div class="tribe-card-lang">Ateso · Eastern Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">3 Comics</span><span class="tribe-count-badge">1 Lang</span></div></div></div>
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#8B1A1A,#5C1010)"><div class="tribe-card-banner-pattern"></div>🦁</div><div class="tribe-card-body"><div class="tribe-card-name">Banyankole</div><div class="tribe-card-lang">Runyankole · SWest Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">4 Comics</span><span class="tribe-count-badge">2 Langs</span></div></div></div>
+    <div class="tribe-card"><div class="tribe-card-banner" style="background:linear-gradient(135deg,#1B6CA8,#0E3E6E)"><div class="tribe-card-banner-pattern"></div>🌊</div><div class="tribe-card-body"><div class="tribe-card-name">Alur</div><div class="tribe-card-lang">Dho-Alur · NWest Uganda</div><div class="tribe-card-counts"><span class="tribe-count-badge">2 Comics</span><span class="tribe-count-badge">1 Lang</span></div></div></div>
+    <div class="tribe-card" style="opacity:0.7"><div class="tribe-card-banner" style="background:linear-gradient(135deg,var(--stone),var(--ink-light))"><div class="tribe-card-banner-pattern"></div>⭐</div><div class="tribe-card-body"><div class="tribe-card-name" style="color:var(--stone)">+59 More</div><div class="tribe-card-lang">All stored in MySQL tribes table</div><div class="tribe-card-counts"><span class="tribe-count-badge">65+ tribes</span></div></div></div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 13 — ANALYTICS ─────────────────────────────────────── -->
+<section id="analytics" class="bg-dark">
+<div class="section">
+  <div class="section-label">Section 13 — Analytics</div>
+  <h2 class="section-title">Analytics Dashboard</h2>
+  <p class="section-desc">Multi-level analytics: global (Super Admin), org-level (Admin), classroom (Teacher), family (Parent). All data from MySQL progress_events table. Aggregated via Laravel Eloquent + MySQL GROUP BY queries. Visualised in Blade via Chart.js.</p>
+  <div class="tag-row reveal">
+    <span class="tech-pill tp-mysql">MySQL GROUP BY aggregates</span>
+    <span class="tech-pill tp-laravel">Laravel Eloquent</span>
+    <span class="tech-pill tp-blade">Blade + Chart.js</span>
+    <span class="tech-pill tp-laravel">Redis cache (1hr TTL)</span>
+  </div>
+  <div class="analytics-grid reveal">
+    <div class="chart-mock">
+      <div class="chart-title">Weekly Story Completions — All Orgs</div>
+      <div class="bar-chart">
+        <div class="bar" style="height:45%;background:var(--clay-red)"></div>
+        <div class="bar" style="height:65%;background:var(--clay-red)"></div>
+        <div class="bar" style="height:52%;background:var(--clay-red)"></div>
+        <div class="bar" style="height:80%;background:var(--clay-red)"></div>
+        <div class="bar" style="height:70%;background:var(--clay-red)"></div>
+        <div class="bar" style="height:90%;background:var(--sunfire-light)"></div>
+        <div class="bar" style="height:75%;background:var(--clay-red)"></div>
+      </div>
+      <div class="bar-labels"><span class="bar-label">Mon</span><span class="bar-label">Tue</span><span class="bar-label">Wed</span><span class="bar-label">Thu</span><span class="bar-label">Fri</span><span class="bar-label">Sat</span><span class="bar-label">Sun</span></div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:var(--sp-3)">MySQL: SELECT DATE(created_at), COUNT(*) FROM progress_events WHERE event_type='story_complete' GROUP BY DATE(created_at)</div>
+    </div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="mini-stat-val" style="color:var(--sunfire-light)">2,847</div><div class="mini-stat-label">Active Children (7d)</div></div>
+      <div class="mini-stat"><div class="mini-stat-val" style="color:var(--banana-mid)">94%</div><div class="mini-stat-label">Offline Capable</div></div>
+      <div class="mini-stat"><div class="mini-stat-val" style="color:var(--sky-mid)">12.4m</div><div class="mini-stat-label">Avg Session Duration</div></div>
+      <div class="mini-stat"><div class="mini-stat-val" style="color:var(--savanna-gold)">9,240</div><div class="mini-stat-label">Badges Earned (7d)</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── SECTION 14 — SPRINT PLAN ───────────────────────────────────── -->
+<section id="sprint" style="background:var(--cream)">
+<div class="section">
+  <div class="section-label">Section 14 — Build Plan</div>
+  <h2 class="section-title">Sprint Plan &amp; Build Order</h2>
+  <p class="section-desc">12-week MVP delivery. Three sprints of four weeks each. Laravel + MySQL foundation first, then Expo React Native app, then Blade admin + analytics. Production-ready at week 12.</p>
+  <div class="sprint-grid reveal">
+    <div class="sprint-block">
+      <div class="sprint-header" style="background:var(--clay-red)">Sprint 1 — Weeks 1–4 · Laravel Foundation</div>
+      <div class="sprint-body">
+        <div class="sprint-item"><div class="sprint-item-dot"></div>MySQL 8 setup + Laravel 11 project scaffolding</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>All database migrations (artisan migrate)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Sanctum auth: login, logout, token abilities</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Spatie RBAC: roles, permissions, middleware</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Tribe + comic API endpoints (CRUD)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Age profile service + Sanctum API</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Multi-tenant org_id scoping via Eloquent Global Scopes</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Database seeders: demo orgs, tribes, users</div>
+      </div>
+    </div>
+    <div class="sprint-block">
+      <div class="sprint-header" style="background:var(--banana-green)">Sprint 2 — Weeks 5–8 · Expo App + Offline</div>
+      <div class="sprint-body">
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Expo Router navigation shell + auth flow</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Child home screen: tribe cards (age-adaptive)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Comic panel viewer (full-screen, swipe)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>expo-sqlite schema + SQLiteService</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>SyncService: offline queue + Sanctum drain</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Expo FileSystem .ckb bundle download/serve</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>expo-av audio read-aloud integration</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Blade CMS: comic upload + Livewire panel editor</div>
+      </div>
+    </div>
+    <div class="sprint-block">
+      <div class="sprint-header" style="background:var(--savanna-gold);color:var(--ink)">Sprint 3 — Weeks 9–12 · Admin &amp; Launch</div>
+      <div class="sprint-body">
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Laravel Blade Super Admin panel (full God Mode)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Blade Teacher dashboard + PDF/Excel export</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Blade Parent dashboard + child profile manager</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Theme engine (MySQL theme_configs + Blade vars)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Analytics dashboard (Chart.js + MySQL aggregates)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>BuildOfflineBundle Job + Laravel Horizon</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Expo Kiosk Mode (locked navigation, PIN exit)</div>
+        <div class="sprint-item"><div class="sprint-item-dot"></div>Demo data seeded + EAS Build for app stores</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech stack summary -->
+  <div class="reveal" style="margin-top:var(--sp-10)">
+    <div class="section-label" style="margin-bottom:var(--sp-4)">Complete Technology Stack</div>
+    <div class="grid-3" style="gap:var(--sp-4)">
+      <div style="background:rgba(255,45,32,0.05);border:1px solid rgba(255,45,32,0.15);border-radius:var(--r-lg);padding:var(--sp-5)">
+        <div style="font-size:13px;font-weight:700;color:var(--clay-red);margin-bottom:var(--sp-3)">🔴 Backend — Laravel 11</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Laravel 11 · PHP 8.3+</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>MySQL 8 (InnoDB, UTF8MB4)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Laravel Sanctum (API tokens)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Spatie Laravel Permission</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Laravel Horizon (queues)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Laravel Storage (S3/local)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Redis (cache + queues)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:var(--clay-red)"></div>Laravel DomPDF / Excel</div>
+      </div>
+      <div style="background:rgba(251,112,169,0.05);border:1px solid rgba(251,112,169,0.2);border-radius:var(--r-lg);padding:var(--sp-5)">
+        <div style="font-size:13px;font-weight:700;color:#fb70a9;margin-bottom:var(--sp-3)">🎨 Web — Laravel Blade</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Laravel Blade templates</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Livewire 3 (reactive UI)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Alpine.js (micro-interactivity)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Tailwind CSS + Vite</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Laravel Breeze (auth UI)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Chart.js (analytics)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>@csrf CSRF protection</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#fb70a9"></div>Session-based web auth</div>
+      </div>
+      <div style="background:rgba(97,218,251,0.05);border:1px solid rgba(97,218,251,0.2);border-radius:var(--r-lg);padding:var(--sp-5)">
+        <div style="font-size:13px;font-weight:700;color:#61DAFB;margin-bottom:var(--sp-3)">📱 App — Expo React Native</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>Expo SDK 51+ (EAS Build)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>Expo Router (file-based nav)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>React Native 0.74 (TypeScript)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>expo-sqlite (local DB)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>expo-secure-store (tokens)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>expo-av (audio read-aloud)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>expo-file-system (.ckb bundles)</div>
+        <div class="sprint-item"><div class="sprint-item-dot" style="background:#61DAFB"></div>Zustand (state management)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo seed data -->
+  <div class="reveal" style="margin-top:var(--sp-10)">
+    <div class="section-label" style="margin-bottom:var(--sp-4)">Demo Seed Data — php artisan db:seed</div>
+    <div class="file-tree">
+      <div><span class="comment">// database/seeders/DemoSeeder.php</span></div>
+      <div>$organisations = [</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'name'</span> =&gt; <span class="s">'Naluwooza Creative Space'</span>, <span class="dir">'plan'</span> =&gt; <span class="s">'enterprise'</span>, <span class="dir">'modules'</span> =&gt; <span class="s">['all']</span>],</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'name'</span> =&gt; <span class="s">'Uganda Schools Pilot'</span>, <span class="dir">'plan'</span> =&gt; <span class="s">'school'</span>, <span class="dir">'modules'</span> =&gt; <span class="s">['comics','songs','vocab','offline']</span>]</div>
+      <div>];</div>
+      <div>$users = [</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'role'</span> =&gt; <span class="s">'super_admin'</span>, <span class="dir">'email'</span> =&gt; <span class="s">'<a href="file:///C:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcbdb8b1b5b29cbfa9b0a8a9aeb9b7b5b8aff2bdacac">[email&nbsp;protected]</a>'</span>],</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'role'</span> =&gt; <span class="s">'org_admin'</span>, <span class="dir">'email'</span> =&gt; <span class="s">'<a href="file:///C:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e7e8e5fcfee6e6f3e8c9eafce5fdfcfbece2e0edfaa7e8f9f9">[email&nbsp;protected]</a>'</span>],</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'role'</span> =&gt; <span class="s">'teacher'</span>, <span class="dir">'email'</span> =&gt; <span class="s">'<a href="file:///C:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c68797d7f74796e5c697b6f7f747373706f327d6c6c">[email&nbsp;protected]</a>'</span>],</div>
+      <div>&nbsp;&nbsp;[<span class="dir">'role'</span> =&gt; <span class="s">'parent'</span>, <span class="dir">'email'</span> =&gt; <span class="s">'<a href="file:///C:/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5828392a3d362c183b2d342c2d2a3d33313c2b76392828">[email&nbsp;protected]</a>'</span>]</div>
+      <div>];</div>
+      <div><span class="comment">// Seeded tribes: buganda, acholi, basoga, iteso, banyankole, alur (+ 59 more)</span></div>
+      <div><span class="comment">// Comics: clever-hare, garden-words, naluwooza-gift, drum-songs, heron-river, market-day</span></div>
+      <div><span class="comment">// Run: php artisan migrate:fresh --seed</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer style="background:var(--ink);padding:var(--sp-10) var(--sp-6);text-align:center">
+  <div style="font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--sunfire-light);margin-bottom:var(--sp-2)">Paulette Culture Kids</div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.5px;margin-bottom:var(--sp-4)">Laravel · MySQL · Sanctum · Blade · Expo CLI · React Native · 2025</div>
+  <div style="display:flex;justify-content:center;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-4)">
+    <span style="background:rgba(255,45,32,0.15);border:1px solid rgba(255,45,32,0.3);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:#FF2D20">🔴 Laravel 11</span>
+    <span style="background:rgba(68,121,161,0.15);border:1px solid rgba(68,121,161,0.3);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:#4479A1">🐬 MySQL 8</span>
+    <span style="background:rgba(104,117,245,0.15);border:1px solid rgba(104,117,245,0.3);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:#6875F5">🔒 Sanctum API</span>
+    <span style="background:rgba(251,112,169,0.15);border:1px solid rgba(251,112,169,0.3);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:#fb70a9">🎨 Laravel Blade</span>
+    <span style="background:rgba(97,218,251,0.12);border:1px solid rgba(97,218,251,0.25);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:#61DAFB">📱 Expo CLI</span>
+    <span style="background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:rgba(255,255,255,0.5)">65+ Tribes</span>
+    <span style="background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:rgba(255,255,255,0.5)">Offline-First</span>
+    <span style="background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:rgba(255,255,255,0.5)">RBAC · 9 Roles</span>
+    <span style="background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:rgba(255,255,255,0.5)">Age 2–6 Adaptive</span>
+    <span style="background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:var(--r-full);font-size:10px;font-weight:600;color:rgba(255,255,255,0.5)">Multi-Tenant SaaS</span>
+  </div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.2);margin-top:var(--sp-2)">Preserving Ugandan &amp; African cultural heritage through joyful learning</div>
+</footer>
+<script>
+// ================================================================
+// PAULETTE CULTURE KIDS — ALL NAVIGATION & INTERACTIVITY
+// Self-contained — no external dependencies
+// ================================================================
+
+// ── SCROLL TO SECTION ─────────────────────────────────────────────
+// Called by onclick="scrollToSection('id')" on every nav button
+function scrollToSection(id) {
+  var el = document.getElementById(id);
+  if (!el) { console.warn('Section not found:', id); return; }
+  var nav = document.getElementById('mainNav');
+  var navH = nav ? nav.offsetHeight : 65;
+  var top = el.getBoundingClientRect().top + window.pageYOffset - navH - 8;
+  window.scrollTo({ top: top, behavior: 'smooth' });
+
+  // Mark the clicked button as active
+  document.querySelectorAll('.sys-nav-btn').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  // Find the button that matches this id and highlight it
+  document.querySelectorAll('.sys-nav-btn').forEach(function(btn) {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf("'" + id + "'") !== -1) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────
+(function() {
+  var revealEls = document.querySelectorAll('.reveal');
+  if (!revealEls.length) return;
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(function(el) { observer.observe(el); });
+})();
+
+// ── ACTIVE NAV HIGHLIGHT ON SCROLL ────────────────────────────────
+(function() {
+  var sectionIds = [
+    'home','workflows','super-admin','age-profiles','rbac',
+    'cms','data-flow','offline','schema',
+    'api','website','mobile','tribes','analytics','sprint'
+  ];
+
+  var navBtnMap = {};
+  document.querySelectorAll('.sys-nav-btn').forEach(function(btn) {
+    var onclick = btn.getAttribute('onclick') || '';
+    var match = onclick.match(/scrollToSection\('([^']+)'\)/);
+    if (match) navBtnMap[match[1]] = btn;
+  });
+
+  function onScroll() {
+    var nav = document.getElementById('mainNav');
+    var navH = nav ? nav.offsetHeight + 20 : 85;
+    var scrollY = window.pageYOffset;
+    var activeId = sectionIds[0];
+
+    for (var i = 0; i < sectionIds.length; i++) {
+      var el = document.getElementById(sectionIds[i]);
+      if (el && el.getBoundingClientRect().top + scrollY - navH <= scrollY) {
+        activeId = sectionIds[i];
+      }
+    }
+
+    Object.keys(navBtnMap).forEach(function(id) {
+      navBtnMap[id].classList.toggle('active', id === activeId);
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
+})();
+
+// ── TOGGLE SWITCHES (Super Admin Module Toggles) ───────────────────
+document.querySelectorAll('.sa-toggle').forEach(function(toggle) {
+  toggle.addEventListener('click', function() {
+    this.classList.toggle('on');
+    this.classList.toggle('off');
+  });
+});
+
+// ── LOGO CLICK → SCROLL TO TOP ────────────────────────────────────
+var logo = document.querySelector('.sys-nav-logo');
+if (logo) {
+  logo.style.cursor = 'pointer';
+  logo.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ── KIOSK TRIBE CARDS INTERACTION ─────────────────────────────────
+document.querySelectorAll('.kiosk-tribe').forEach(function(card) {
+  card.addEventListener('click', function() {
+    document.querySelectorAll('.kiosk-tribe').forEach(function(c) {
+      c.style.borderColor = 'rgba(255,255,255,0.1)';
+      c.style.background = 'rgba(255,255,255,0.08)';
+    });
+    card.style.borderColor = 'var(--sunfire-light)';
+    card.style.background = 'rgba(255,255,255,0.18)';
+  });
+});
+
+console.log('[Paulette CK] All scripts loaded successfully ✓');
+</script>
+
+
+</body></html>

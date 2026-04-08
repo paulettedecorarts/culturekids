@@ -1,5 +1,53 @@
 <?php
 
+use App\Http\Controllers\Admin\ImpersonationController;
+use App\Livewire\Admin\ActivitiesManager;
+use App\Livewire\Admin\AgeCategories;
+use App\Livewire\Admin\AnalyticsManager;
+use App\Livewire\Admin\AssetsManager;
+use App\Livewire\Admin\AuditLogs;
+use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\ImpersonateUser;
+use App\Livewire\Admin\LanguagesManager;
+use App\Livewire\Admin\ModuleRegistry;
+use App\Livewire\Admin\ModuleToggles;
+use App\Livewire\Admin\OrganizationDetail;
+use App\Livewire\Admin\OrganizationsManager;
+use App\Livewire\Admin\PanelEditor;
+use App\Livewire\Admin\PermissionsManager;
+use App\Livewire\Admin\SongsManager;
+use App\Livewire\Admin\StoriesManager;
+use App\Livewire\Admin\StoryDetail;
+use App\Livewire\Admin\StoryForm;
+use App\Livewire\Admin\StoryPacksManager;
+use App\Livewire\Admin\ThemesManager;
+use App\Livewire\Admin\TranslationsManager;
+use App\Livewire\Admin\TribeDetail;
+use App\Livewire\Admin\TribeForm;
+use App\Livewire\Admin\TribeManager;
+use App\Livewire\Admin\UserDetail;
+use App\Livewire\Admin\UserForm;
+use App\Livewire\Admin\UserManagement;
+use App\Livewire\CMS\Activities;
+use App\Livewire\CMS\AdminDashboard;
+use App\Livewire\CMS\Analytics;
+use App\Livewire\CMS\Assets;
+use App\Livewire\CMS\Organizations;
+use App\Livewire\CMS\Site;
+use App\Livewire\CMS\Songs;
+use App\Livewire\CMS\StoryPacks;
+use App\Livewire\CMS\Themes;
+use App\Livewire\CMS\Translations;
+use App\Livewire\CMS\TribeDirectory;
+use App\Livewire\Teacher\MainDashboard;
+use App\Livewire\Teacher\MyClass;
+use App\Livewire\Teacher\PrintCenter;
+use App\Livewire\Teacher\Reports;
+use App\Livewire\Teacher\StoryLibrary;
+use App\Livewire\Teacher\TribesExplorer;
+use App\Livewire\Teacher\Worksheets;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -10,78 +58,82 @@ Route::view('dashboard', 'dashboard')
 
 // Super Admin Routes
 Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
-    Route::get('users', \App\Livewire\Admin\UserManagement::class)->name('users');
-    Route::get('users/create', \App\Livewire\Admin\UserForm::class)->name('users.create');
-    Route::get('users/{user}', \App\Livewire\Admin\UserDetail::class)->name('users.detail');
-    Route::get('users/{user}/edit', \App\Livewire\Admin\UserForm::class)->name('users.edit');
-    Route::get('organizations', \App\Livewire\Admin\OrganizationsManager::class)->name('organizations');
-    Route::get('organizations/{organization}', \App\Livewire\Admin\OrganizationDetail::class)->name('organizations.detail');
-    Route::get('modules', \App\Livewire\Admin\ModuleToggles::class)->name('modules');
-    Route::get('permissions', \App\Livewire\Admin\PermissionsManager::class)->name('permissions');
-    
+    Route::get('dashboard', Dashboard::class)->name('dashboard');
+    Route::get('users', UserManagement::class)->name('users');
+    Route::get('users/create', UserForm::class)->name('users.create');
+    Route::get('users/{user}', UserDetail::class)->name('users.detail');
+    Route::get('users/{user}/edit', UserForm::class)->name('users.edit');
+    Route::get('organizations', OrganizationsManager::class)->name('organizations');
+    Route::get('organizations/{organization}', OrganizationDetail::class)->name('organizations.detail');
+    Route::get('modules', ModuleToggles::class)->name('modules');
+    Route::get('permissions', PermissionsManager::class)->name('permissions');
+
     // Content Management
-    Route::get('stories', \App\Livewire\Admin\StoriesManager::class)->name('stories');
-    Route::get('tribe-registry', \App\Livewire\Admin\TribeManager::class)->name('tribe-registry'); // Now 'Tribe Directory'
-    Route::get('story-packs', \App\Livewire\Admin\StoryPacksManager::class)->name('story-packs');
-    Route::get('assets', \App\Livewire\Admin\AssetsManager::class)->name('assets');
-    Route::get('translations', \App\Livewire\Admin\TranslationsManager::class)->name('translations');
-    
+    Route::get('stories', StoriesManager::class)->name('stories');
+    Route::get('stories/create', StoryForm::class)->name('stories.create');
+    Route::get('stories/{id}/edit', StoryForm::class)->name('stories.edit');
+    Route::get('stories/{id}/panels', PanelEditor::class)->name('stories.panels');
+    Route::get('stories/{id}', StoryDetail::class)->name('stories.detail');
+    Route::get('tribe-registry', TribeManager::class)->name('tribe-registry'); // Now 'Tribe Directory'
+    Route::get('story-packs', StoryPacksManager::class)->name('story-packs');
+    Route::get('assets', AssetsManager::class)->name('assets');
+    Route::get('translations', TranslationsManager::class)->name('translations');
+
     // Activities section items
-    Route::get('songs', \App\Livewire\Admin\SongsManager::class)->name('songs');
-    Route::get('activities', \App\Livewire\Admin\ActivitiesManager::class)->name('activities');
-    Route::get('/modules-registry', \App\Livewire\Admin\ModuleRegistry::class)->name('modules-registry');
-    Route::get('/age-categories', App\Livewire\Admin\AgeCategories::class)->name('age-categories');
-    Route::get('languages', \App\Livewire\Admin\LanguagesManager::class)->name('languages');
-    
+    Route::get('songs', SongsManager::class)->name('songs');
+    Route::get('activities', ActivitiesManager::class)->name('activities');
+    Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
+    Route::get('/age-categories', AgeCategories::class)->name('age-categories');
+    Route::get('languages', LanguagesManager::class)->name('languages');
+
     // New Platform section items
-    Route::get('themes', \App\Livewire\Admin\ThemesManager::class)->name('themes');
-    Route::get('tribes', \App\Livewire\Admin\TribeManager::class)->name('tribes');
-    Route::get('tribes/create', \App\Livewire\Admin\TribeForm::class)->name('tribes.create');
-    Route::get('tribes/{tribe}', \App\Livewire\Admin\TribeDetail::class)->name('tribes.detail');
-    Route::get('tribes/{tribe}/edit', \App\Livewire\Admin\TribeForm::class)->name('tribes.edit');
-    Route::get('analytics', \App\Livewire\Admin\AnalyticsManager::class)->name('analytics');
-    
+    Route::get('themes', ThemesManager::class)->name('themes');
+    Route::get('tribes', TribeManager::class)->name('tribes');
+    Route::get('tribes/create', TribeForm::class)->name('tribes.create');
+    Route::get('tribes/{tribe}', TribeDetail::class)->name('tribes.detail');
+    Route::get('tribes/{tribe}/edit', TribeForm::class)->name('tribes.edit');
+    Route::get('analytics', AnalyticsManager::class)->name('analytics');
+
     // Logs section
-    Route::get('audit-logs', \App\Livewire\Admin\AuditLogs::class)->name('audit-logs');
-    Route::get('impersonate', \App\Livewire\Admin\ImpersonateUser::class)->name('impersonate');
+    Route::get('audit-logs', AuditLogs::class)->name('audit-logs');
+    Route::get('impersonate', ImpersonateUser::class)->name('impersonate');
 });
 
 // Stop Impersonation - accessible by anyone currently impersonating
-Route::middleware(['auth', 'verified'])->post('admin/stop-impersonation', [\App\Http\Controllers\Admin\ImpersonationController::class, 'stop'])->name('admin.stop-impersonation');
+Route::middleware(['auth', 'verified'])->post('admin/stop-impersonation', [ImpersonationController::class, 'stop'])->name('admin.stop-impersonation');
 
 // CMS Editor (Content Production)
 Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms/editor')->name('cms.editor.')->group(function () {
-    Route::get('/dashboard', \App\Livewire\CMS\Dashboard::class)->name('dashboard');
-    Route::get('/tribes', \App\Livewire\CMS\TribeDirectory::class)->name('tribes');
-    Route::get('/story-packs', \App\Livewire\CMS\StoryPacks::class)->name('story-packs');
-    Route::get('/assets', \App\Livewire\CMS\Assets::class)->name('assets');
-    Route::get('/translations', \App\Livewire\CMS\Translations::class)->name('translations');
-    Route::get('/songs', \App\Livewire\CMS\Songs::class)->name('songs');
-    Route::get('/activities', \App\Livewire\CMS\Activities::class)->name('activities');
+    Route::get('/dashboard', App\Livewire\CMS\Dashboard::class)->name('dashboard');
+    Route::get('/tribes', TribeDirectory::class)->name('tribes');
+    Route::get('/story-packs', StoryPacks::class)->name('story-packs');
+    Route::get('/assets', Assets::class)->name('assets');
+    Route::get('/translations', Translations::class)->name('translations');
+    Route::get('/songs', Songs::class)->name('songs');
+    Route::get('/activities', Activities::class)->name('activities');
 });
 
 // CMS Organisational Admin (Management & Site)
 Route::middleware(['auth', 'verified', 'role:org_admin|super_admin'])->prefix('cms/admin')->name('cms.admin.')->group(function () {
-    Route::get('/dashboard', \App\Livewire\CMS\AdminDashboard::class)->name('dashboard');
-    Route::get('/site', \App\Livewire\CMS\Site::class)->name('site');
-    Route::get('/themes', \App\Livewire\CMS\Themes::class)->name('themes');
-    Route::get('/organizations', \App\Livewire\CMS\Organizations::class)->name('organizations');
-    Route::get('/analytics', \App\Livewire\CMS\Analytics::class)->name('analytics');
+    Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+    Route::get('/site', Site::class)->name('site');
+    Route::get('/themes', Themes::class)->name('themes');
+    Route::get('/organizations', Organizations::class)->name('organizations');
+    Route::get('/analytics', Analytics::class)->name('analytics');
 });
 
 // Teacher Hub (Classroom Context)
 Route::middleware(['auth', 'verified', 'role:teacher|super_admin'])->prefix('teacher')->name('teacher.')->group(function () {
-    Route::get('/dashboard', \App\Livewire\Teacher\MainDashboard::class)->name('dashboard');
-    Route::get('/lessons', \App\Livewire\Teacher\Dashboard::class)->name('lessons');
-    Route::get('/my-class', \App\Livewire\Teacher\MyClass::class)->name('class');
-    Route::get('/reports', \App\Livewire\Teacher\Reports::class)->name('reports');
-    
+    Route::get('/dashboard', MainDashboard::class)->name('dashboard');
+    Route::get('/lessons', App\Livewire\Teacher\Dashboard::class)->name('lessons');
+    Route::get('/my-class', MyClass::class)->name('class');
+    Route::get('/reports', Reports::class)->name('reports');
+
     // Content Modules
-    Route::get('/library', \App\Livewire\Teacher\StoryLibrary::class)->name('library');
-    Route::get('/tribes', \App\Livewire\Teacher\TribesExplorer::class)->name('tribes');
-    Route::get('/print-center', \App\Livewire\Teacher\PrintCenter::class)->name('print-center');
-    Route::get('/worksheets', \App\Livewire\Teacher\Worksheets::class)->name('worksheets');
+    Route::get('/library', StoryLibrary::class)->name('library');
+    Route::get('/tribes', TribesExplorer::class)->name('tribes');
+    Route::get('/print-center', PrintCenter::class)->name('print-center');
+    Route::get('/worksheets', Worksheets::class)->name('worksheets');
 });
 
 Route::view('profile', 'profile')
@@ -93,20 +145,20 @@ require __DIR__.'/auth.php';
 Route::get('/health', function () {
     $dbStatus = 'Disconnected';
     $redisStatus = 'Disconnected';
-    
+
     try {
-        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        DB::connection()->getPdo();
         $dbStatus = 'Connected';
-    } catch (\Exception $e) {
-        $dbStatus = 'Error: ' . $e->getMessage();
+    } catch (Exception $e) {
+        $dbStatus = 'Error: '.$e->getMessage();
     }
 
     try {
-        $redis = \Illuminate\Support\Facades\Redis::connection();
+        $redis = Redis::connection();
         $redis->ping();
         $redisStatus = 'Connected';
-    } catch (\Exception $e) {
-        $redisStatus = 'Error: ' . $e->getMessage();
+    } catch (Exception $e) {
+        $redisStatus = 'Error: '.$e->getMessage();
     }
 
     return view('health', [
