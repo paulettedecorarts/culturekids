@@ -1,43 +1,54 @@
-<div class="story-detail" wire:poll.5s="refreshStatus">
+<div
+    class="sd-root"
+    @if($processingStatus?->isProcessing())
+        wire:poll.5s="refreshStatus"
+    @endif
+>
+    @php
+        $tribeTint = $story->tribe->color ?? '#D4A017';
+        $statusKey = $story->status;
+    @endphp
+
     @if (session()->has('message'))
-        <div class="story-detail-flash">✨ {{ session('message') }}</div>
+        <div class="sd-flash" role="status">
+            <span class="sd-flash__dot" aria-hidden="true"></span>
+            {{ session('message') }}
+        </div>
     @endif
 
     @if($processingStatus && $processingStatus->isProcessing())
-        <div class="story-detail-banner story-detail-banner--progress">
-            <div class="story-detail-banner-shimmer" aria-hidden="true"></div>
-            <div class="story-detail-banner-inner">
-                <div class="story-detail-banner-icon" aria-hidden="true">
-                    <svg class="story-detail-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="15" opacity="0.3"/>
-                        <circle cx="12" cy="12" r="10" stroke-dasharray="15" stroke-linecap="round"/>
+        <div class="sd-banner sd-banner--progress">
+            <div class="sd-banner__glow" aria-hidden="true"></div>
+            <div class="sd-banner__grid">
+                <div class="sd-banner__icon" aria-hidden="true">
+                    <svg class="sd-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="15" opacity="0.25"/>
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <div class="story-detail-banner-body">
-                    <div class="story-detail-banner-top">
-                        <h3 class="story-detail-banner-title">
-                            {{ $processingStatus->status === 'pending' ? '⏳ Queued for processing' : '⚙️ Extracting panels' }}
-                        </h3>
-                        <span class="story-detail-banner-pct">{{ $processingStatus->progress_percentage }}%</span>
+                <div class="sd-banner__body">
+                    <div class="sd-banner__row">
+                        <h2 class="sd-banner__title">
+                            {{ $processingStatus->status === 'pending' ? 'Queued' : 'Extracting panels' }}
+                        </h2>
+                        <span class="sd-banner__pct">{{ $processingStatus->progress_percentage }}%</span>
                     </div>
-                    <p class="story-detail-banner-text">
+                    <p class="sd-banner__text">
                         @if($processingStatus->current_file)
-                            Now: <strong>{{ basename($processingStatus->current_file) }}</strong>
+                            <span class="sd-banner__mono">{{ basename($processingStatus->current_file) }}</span>
                         @else
-                            PDFs and uploads are processed in the background. This page refreshes every few seconds.
+                            Background processing — this view updates automatically.
                         @endif
                     </p>
-                    <div class="story-detail-progress-track">
-                        <div class="story-detail-progress-fill" style="width: {{ $processingStatus->progress_percentage }}%"></div>
+                    <div class="sd-progress">
+                        <div class="sd-progress__fill" style="width: {{ $processingStatus->progress_percentage }}%"></div>
                     </div>
-                    <div class="story-detail-banner-meta">
-                        <span>Files: <strong>{{ $processingStatus->processed_files }}/{{ $processingStatus->total_files }}</strong></span>
+                    <div class="sd-banner__meta">
+                        <span>{{ $processingStatus->processed_files }}/{{ $processingStatus->total_files }} files</span>
                         @if($processingStatus->failed_files > 0)
-                            <span class="story-detail-text-warn">Failed: <strong>{{ $processingStatus->failed_files }}</strong></span>
+                            <span class="sd-banner__warn">{{ $processingStatus->failed_files }} failed</span>
                         @endif
-                        <span class="story-detail-banner-meta-right">
-                            Started {{ $processingStatus->started_at?->diffForHumans() ?? 'recently' }}
-                        </span>
+                        <span class="sd-banner__meta-end">{{ $processingStatus->started_at?->diffForHumans() ?? 'Started recently' }}</span>
                     </div>
                 </div>
             </div>
@@ -45,394 +56,865 @@
     @endif
 
     @if($processingFailure && !$processingStatus)
-        <div class="story-detail-banner story-detail-banner--error" role="alert">
-            <div class="story-detail-banner-inner story-detail-banner-inner--row">
-                <span class="story-detail-error-icon" aria-hidden="true">⚠</span>
+        <div class="sd-banner sd-banner--error" role="alert">
+            <div class="sd-banner__grid sd-banner__grid--tight">
+                <div class="sd-banner__icon sd-banner__icon--error" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    </svg>
+                </div>
                 <div>
-                    <div class="story-detail-banner-title story-detail-banner-title--sm">Panel processing failed</div>
-                    <p class="story-detail-banner-text story-detail-banner-text--tight">
-                        {{ $processingFailure->error_message ?? 'The background job did not finish successfully.' }}
-                    </p>
-                    <p class="story-detail-hint">
-                        Re-upload panels or PDF from <a href="{{ route('admin.stories.edit', $story->id) }}" class="story-detail-link">Edit story</a>, then run the queue worker.
+                    <h2 class="sd-banner__title sd-banner__title--sm">Processing did not complete</h2>
+                    <p class="sd-banner__text sd-banner__text--tight">{{ $processingFailure->error_message ?? 'The background job did not finish successfully.' }}</p>
+                    <p class="sd-banner__hint">
+                        Re-upload from <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-link">Edit story</a> and ensure the queue worker is running.
                     </p>
                 </div>
             </div>
         </div>
     @endif
 
-    <header class="story-detail-header">
-        <div class="story-detail-header-left">
-            <a href="{{ route('admin.stories') }}" class="story-detail-back" aria-label="Back to stories">←</a>
-            <div>
-                <h1 class="sa-page-title story-detail-title">{{ $story->title }}</h1>
-                <p class="sa-breadcrumb story-detail-sub">
-                    {{ $story->tribe->name }}
-                    · Ages {{ $story->age_range }}
-                    · {{ $panels->count() }} {{ $panels->count() === 1 ? 'panel' : 'panels' }}
-                    @if($story->status === 'published')
-                        · <span class="story-detail-status story-detail-status--live">Published</span>
-                    @elseif($story->status === 'review')
-                        · <span class="story-detail-status story-detail-status--review">In review</span>
-                    @else
-                        · <span class="story-detail-status story-detail-status--draft">Draft</span>
-                    @endif
-                </p>
+    <header class="sd-hero" style="--sd-tribe: {{ $tribeTint }}">
+        <div class="sd-hero__mesh" aria-hidden="true"></div>
+        <div class="sd-hero__inner">
+            <div class="sd-hero__lead">
+                <a href="{{ route('admin.stories') }}" class="sd-back" aria-label="Back to stories">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </a>
+                <div class="sd-hero__copy">
+                    <p class="sd-eyebrow">Story <span class="sd-eyebrow__sep">·</span> #{{ $story->id }}</p>
+                    <h1 class="sd-title">{{ $story->title }}</h1>
+                    <div class="sd-chips">
+                        <span class="sd-chip sd-chip--tribe">{{ $story->tribe->name }}</span>
+                        <span class="sd-chip">Ages {{ $story->age_range }}</span>
+                        <span class="sd-chip">{{ $panels->count() }} {{ $panels->count() === 1 ? 'panel' : 'panels' }}</span>
+                        @if($statusKey === 'published')
+                            <span class="sd-pill sd-pill--live">Published</span>
+                        @elseif($statusKey === 'review')
+                            <span class="sd-pill sd-pill--review">In review</span>
+                        @else
+                            <span class="sd-pill sd-pill--draft">Draft</span>
+                        @endif
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="story-detail-actions">
-            <a href="{{ route('admin.stories.panels', $story->id) }}" class="story-detail-btn story-detail-btn--accent">🎨 Edit panels</a>
-            <a href="{{ route('admin.stories.edit', $story->id) }}" class="story-detail-btn story-detail-btn--ghost">✏️ Edit story</a>
+            <div class="sd-hero__actions">
+                <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-btn sd-btn--ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Edit story
+                </a>
+                <a href="{{ route('admin.stories.panels', $story->id) }}" class="sd-btn sd-btn--primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Edit panels
+                </a>
+            </div>
         </div>
     </header>
 
-    <div class="story-detail-layout">
-        <aside class="story-detail-aside">
-            <div class="story-detail-card">
-                <div class="story-detail-cover">
-                    @if($story->cover_image_path)
-                        @if(str_ends_with(strtolower($story->cover_image_path), '.pdf'))
-                            <div class="story-detail-cover-fallback">
-                                <span class="story-detail-cover-emoji">📄</span>
-                                <span class="story-detail-cover-label">PDF cover</span>
-                            </div>
-                        @else
-                            <img src="{{ asset('storage/' . $story->cover_image_path) }}" alt="" class="story-detail-cover-img">
-                        @endif
-                    @else
-                        <div class="story-detail-cover-fallback">
-                            <span class="story-detail-cover-emoji">📖</span>
-                            <span class="story-detail-cover-label">No cover</span>
-                        </div>
-                    @endif
-                </div>
-                <p class="story-detail-id">Story #{{ $story->id }}</p>
-
-                <div class="story-detail-tribe">
-                    <span class="story-detail-kicker">Tribe</span>
-                    <div class="story-detail-tribe-row">
-                        <div class="story-detail-tribe-emoji" style="background: {{ $story->tribe->color ? $story->tribe->color.'33' : 'rgba(255,255,255,0.08)' }}">
-                            {{ $story->tribe->hero_emoji ?? '🌍' }}
-                        </div>
-                        <div>
-                            <div class="story-detail-tribe-name">{{ $story->tribe->name }}</div>
-                            <div class="story-detail-tribe-region">{{ $story->tribe->region ?? '—' }}</div>
+    <div class="sd-workspace">
+        <section class="sd-stage" aria-label="Panel preview" wire:key="sd-stage-{{ $story->id }}-{{ $panels->count() }}">
+            @if($panels->isEmpty())
+                <div class="sd-empty">
+                    <div class="sd-empty__frame">
+                        <svg class="sd-empty__icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25">
+                            <rect x="4" y="3" width="16" height="18" rx="2"/>
+                            <path d="M8 8h8M8 12h5"/>
+                        </svg>
+                        <h2 class="sd-empty__title">No panels yet</h2>
+                        <p class="sd-empty__text">Upload a PDF or images from Edit story, then fine-tune order and audio in Edit panels.</p>
+                        <div class="sd-empty__row">
+                            <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-btn sd-btn--primary">Edit story</a>
+                            <a href="{{ route('admin.stories.panels', $story->id) }}" class="sd-btn sd-btn--ghost">Edit panels</a>
                         </div>
                     </div>
                 </div>
-
-                <dl class="story-detail-stats">
-                    <div class="story-detail-stat">
-                        <dt>Age band</dt>
-                        <dd>{{ $story->age_min }}–{{ $story->age_max }} yrs</dd>
+            @else
+                <div class="sd-theatre">
+                    <div class="sd-theatre__chrome">
+                        <span class="sd-theatre__label">Preview</span>
+                        <span class="sd-theatre__counter">{{ str_pad((string) ($currentPanel + 1), 2, '0', STR_PAD_LEFT) }} / {{ str_pad((string) $panels->count(), 2, '0', STR_PAD_LEFT) }}</span>
                     </div>
-                    <div class="story-detail-stat">
-                        <dt>Star points</dt>
-                        <dd>⭐ {{ $story->star_points }}</dd>
-                    </div>
-                    <div class="story-detail-stat">
-                        <dt>Panels</dt>
-                        <dd>{{ $panels->count() }}</dd>
-                    </div>
-                    <div class="story-detail-stat">
-                        <dt>Updated</dt>
-                        <dd>{{ $story->updated_at->format('M j, Y') }}</dd>
-                    </div>
-                </dl>
-            </div>
-        </aside>
-
-        <main class="story-detail-main">
-            @if($story->description)
-                <section class="story-detail-card story-detail-section">
-                    <h2 class="story-detail-h2">Description</h2>
-                    <div class="story-detail-prose">{!! nl2br(e($story->description)) !!}</div>
-                </section>
-            @endif
-
-            <section class="story-detail-card story-detail-section story-detail-section--panels" wire:key="panels-{{ $story->id }}-{{ $panels->count() }}">
-                @if($panels->isEmpty())
-                    <div class="story-detail-empty">
-                        <span class="story-detail-empty-icon" aria-hidden="true">📖</span>
-                        <h2 class="story-detail-h2 story-detail-h2--center">No panels yet</h2>
-                        <p class="story-detail-empty-text">
-                            Add images or a PDF from <strong>Edit story</strong>, or open <strong>Edit panels</strong> to manage pages and audio.
-                        </p>
-                        <div class="story-detail-empty-actions">
-                            <a href="{{ route('admin.stories.edit', $story->id) }}" class="story-detail-btn story-detail-btn--accent">✏️ Edit story</a>
-                            <a href="{{ route('admin.stories.panels', $story->id) }}" class="story-detail-btn story-detail-btn--ghost">🎨 Edit panels</a>
-                        </div>
-                    </div>
-                @else
-                    <div class="story-detail-panels-head">
-                        <h2 class="story-detail-h2">Panels</h2>
-                        <span class="story-detail-panels-count">
-                            {{ $currentPanel + 1 }} / {{ $panels->count() }}
-                        </span>
-                    </div>
-
-                    <div class="story-detail-stage">
+                    <div class="sd-theatre__viewport">
                         @if($currentPanelModel)
                             @php
                                 $path = $currentPanelModel->image_path;
                                 $isPdf = str_ends_with(strtolower($path), '.pdf');
                             @endphp
                             @if($isPdf)
-                                <div class="story-detail-stage-pdf">
-                                    <span class="story-detail-stage-emoji">📄</span>
-                                    <p>PDF panel — open in a new tab to view.</p>
-                                    <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener" class="story-detail-btn story-detail-btn--accent">Open PDF</a>
+                                <div class="sd-theatre__pdf">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M10 13h4M10 17h4"/></svg>
+                                    <p>PDF panel</p>
+                                    <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener" class="sd-btn sd-btn--sm sd-btn--primary">Open file</a>
                                 </div>
                             @else
-                                <img src="{{ asset('storage/' . $path) }}" alt="Panel {{ $currentPanel + 1 }}" class="story-detail-stage-img">
-                            @endif
-                            @if($currentPanelModel->caption)
-                                <p class="story-detail-caption">{{ $currentPanelModel->caption }}</p>
+                                <img
+                                    src="{{ asset('storage/' . $path) }}"
+                                    alt="Panel {{ $currentPanel + 1 }}"
+                                    class="sd-theatre__img"
+                                    loading="lazy"
+                                />
                             @endif
                         @endif
                     </div>
-
-                    <div class="story-detail-nav">
-                        <button type="button" wire:click="previousPanel" class="story-detail-nav-btn" @disabled($currentPanel === 0)>← Previous</button>
-                        <button type="button" wire:click="nextPanel" class="story-detail-nav-btn" @disabled($currentPanel >= $panels->count() - 1)>Next →</button>
+                    @if($currentPanelModel && $currentPanelModel->caption)
+                        <p class="sd-theatre__caption">{{ $currentPanelModel->caption }}</p>
+                    @endif
+                    <div class="sd-theatre__controls">
+                        <button type="button" wire:click="previousPanel" class="sd-nav-btn" @disabled($currentPanel === 0) aria-label="Previous panel">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        @if($panels->count() <= 32)
+                            <div class="sd-theatre__dots" aria-hidden="true">
+                                @foreach($panels as $i => $_)
+                                    <span class="sd-dot {{ $currentPanel === $i ? 'is-on' : '' }}"></span>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="sd-theatre__track" aria-hidden="true">
+                                <div class="sd-theatre__track-fill" style="width: {{ $panels->count() > 1 ? (($currentPanel / ($panels->count() - 1)) * 100) : 100 }}%"></div>
+                            </div>
+                        @endif
+                        <button type="button" wire:click="nextPanel" class="sd-nav-btn" @disabled($currentPanel >= $panels->count() - 1) aria-label="Next panel">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
                     </div>
+                </div>
 
-                    <div class="story-detail-thumbs" role="tablist" aria-label="Panel thumbnails">
+                <div class="sd-filmstrip-wrap">
+                    <p class="sd-filmstrip__kicker">All pages</p>
+                    <div class="sd-filmstrip" role="tablist" aria-label="Panel thumbnails">
                         @foreach($panels as $index => $panel)
                             @php $pPath = $panel->image_path; $thumbPdf = str_ends_with(strtolower($pPath), '.pdf'); @endphp
                             <button
                                 type="button"
                                 wire:click="goToPanel({{ $index }})"
-                                class="story-detail-thumb {{ $currentPanel === $index ? 'is-active' : '' }}"
+                                class="sd-thumb {{ $currentPanel === $index ? 'is-active' : '' }}"
                                 aria-label="Panel {{ $index + 1 }}"
                                 aria-current="{{ $currentPanel === $index ? 'true' : 'false' }}"
                             >
-                                @if($thumbPdf)
-                                    <span class="story-detail-thumb-pdf">PDF</span>
-                                @else
-                                    <img src="{{ asset('storage/' . $pPath) }}" alt="" loading="lazy">
-                                @endif
-                                <span class="story-detail-thumb-badge">{{ $index + 1 }}</span>
+                                <span class="sd-thumb__frame">
+                                    @if($thumbPdf)
+                                        <span class="sd-thumb__pdf">PDF</span>
+                                    @else
+                                        <img src="{{ asset('storage/' . $pPath) }}" alt="" loading="lazy" />
+                                    @endif
+                                </span>
+                                <span class="sd-thumb__idx">{{ $index + 1 }}</span>
                             </button>
                         @endforeach
                     </div>
-                @endif
-            </section>
-        </main>
+                </div>
+            @endif
+        </section>
+
+        <aside class="sd-rail">
+            <div class="sd-card sd-card--cover">
+                <p class="sd-card__kicker">Cover</p>
+                <div class="sd-cover">
+                    @if($story->cover_image_path)
+                        @if(str_ends_with(strtolower($story->cover_image_path), '.pdf'))
+                            <div class="sd-cover__fallback">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                                <span>PDF</span>
+                            </div>
+                        @else
+                            <img src="{{ asset('storage/' . $story->cover_image_path) }}" alt="" class="sd-cover__img" loading="lazy" />
+                        @endif
+                    @else
+                        <div class="sd-cover__fallback sd-cover__fallback--muted">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><rect x="4" y="3" width="16" height="18" rx="2"/></svg>
+                            <span>No cover</span>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="sd-card">
+                <p class="sd-card__kicker">Tribe</p>
+                <div class="sd-tribe">
+                    <div class="sd-tribe__badge" style="background: {{ $story->tribe->color ? $story->tribe->color.'26' : 'rgba(255,255,255,0.08)' }}">
+                        {{ $story->tribe->hero_emoji ?: '🌍' }}
+                    </div>
+                    <div>
+                        <div class="sd-tribe__name">{{ $story->tribe->name }}</div>
+                        <div class="sd-tribe__meta">{{ $story->tribe->region ?? '—' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sd-metrics">
+                <div class="sd-metric">
+                    <span class="sd-metric__label">Age band</span>
+                    <span class="sd-metric__val">{{ $story->age_min }}–{{ $story->age_max }} yrs</span>
+                </div>
+                <div class="sd-metric">
+                    <span class="sd-metric__label">Star points</span>
+                    <span class="sd-metric__val">{{ $story->star_points }}</span>
+                </div>
+                <div class="sd-metric">
+                    <span class="sd-metric__label">Panels</span>
+                    <span class="sd-metric__val">{{ $panels->count() }}</span>
+                </div>
+                <div class="sd-metric">
+                    <span class="sd-metric__label">Updated</span>
+                    <span class="sd-metric__val">{{ $story->updated_at->format('M j, Y') }}</span>
+                </div>
+            </div>
+
+            @if($story->description)
+                <div class="sd-card sd-card--prose">
+                    <p class="sd-card__kicker">Synopsis</p>
+                    <div class="sd-prose">{!! nl2br(e($story->description)) !!}</div>
+                </div>
+            @endif
+        </aside>
     </div>
 
     <style>
-        .story-detail { width: 100%; max-width: 100%; min-width: 0; }
-        .story-detail-flash {
-            background: rgba(74,124,89,0.12);
-            border: 1px solid rgba(74,124,89,0.35);
-            color: var(--banana-light);
-            padding: 12px 20px;
-            border-radius: 12px;
-            margin-bottom: var(--sp-6);
-            font-size: 12px;
-            font-weight: 700;
+        .sd-root {
+            --sd-accent: var(--savanna-gold);
+            --sd-accent-dim: rgba(212, 160, 23, 0.14);
+            --sd-line: rgba(255, 255, 255, 0.09);
+            --sd-surface: rgba(255, 255, 255, 0.04);
+            --sd-surface2: rgba(15, 23, 42, 0.65);
+            width: 100%;
+            max-width: min(1680px, 100%);
+            margin-inline: auto;
+            min-width: 0;
         }
-        .story-detail-banner {
+
+        .sd-flash {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 14px;
+            margin-bottom: var(--sp-5);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--banana-light);
+            background: rgba(74, 124, 89, 0.14);
+            border: 1px solid rgba(74, 124, 89, 0.35);
+        }
+        .sd-flash__dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--banana-mid);
+            box-shadow: 0 0 12px rgba(111, 168, 130, 0.7);
+        }
+
+        .sd-banner {
             border-radius: 20px;
-            padding: 22px 24px;
-            margin-bottom: var(--sp-6);
+            margin-bottom: var(--sp-5);
             position: relative;
             overflow: hidden;
         }
-        .story-detail-banner--progress {
-            background: linear-gradient(135deg, rgba(212,160,23,0.12), rgba(232,135,42,0.1));
-            border: 2px solid rgba(212,160,23,0.45);
+        .sd-banner--progress {
+            border: 1px solid rgba(212, 160, 23, 0.35);
+            background: linear-gradient(125deg, rgba(212, 160, 23, 0.12), rgba(232, 135, 42, 0.08), rgba(30, 45, 74, 0.35));
         }
-        .story-detail-banner--error {
-            background: rgba(196,75,43,0.1);
-            border: 1px solid rgba(196,75,43,0.35);
+        .sd-banner--error {
+            border: 1px solid rgba(196, 75, 43, 0.4);
+            background: linear-gradient(135deg, rgba(196, 75, 43, 0.12), rgba(17, 24, 39, 0.9));
         }
-        .story-detail-banner-shimmer {
+        .sd-banner__glow {
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-            animation: story-detail-shimmer 2.5s infinite;
+            background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            animation: sd-shimmer 2.8s ease-in-out infinite;
             pointer-events: none;
         }
-        @keyframes story-detail-shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        @keyframes sd-shimmer {
+            0%, 100% { transform: translateX(-40%); opacity: 0.4; }
+            50% { transform: translateX(40%); opacity: 0.9; }
         }
-        .story-detail-banner-inner { position: relative; z-index: 1; display: flex; gap: 18px; align-items: flex-start; }
-        .story-detail-banner-inner--row { align-items: flex-start; gap: 16px; }
-        .story-detail-banner-icon {
-            width: 52px; height: 52px; flex-shrink: 0;
-            border-radius: 14px;
-            background: rgba(212,160,23,0.2);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--savanna-gold);
-        }
-        .story-detail-spin { width: 28px; height: 28px; animation: story-detail-spin 1.8s linear infinite; }
-        @keyframes story-detail-spin { to { transform: rotate(360deg); } }
-        .story-detail-banner-body { flex: 1; min-width: 0; }
-        .story-detail-banner-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
-        .story-detail-banner-title { margin: 0; font-size: 17px; font-weight: 800; color: var(--savanna-gold); }
-        .story-detail-banner-title--sm { font-size: 15px; color: var(--clay-red-light); }
-        .story-detail-banner-pct { margin-left: auto; font-size: 22px; font-weight: 800; color: var(--savanna-gold); }
-        .story-detail-banner-text { margin: 0 0 14px; font-size: 13px; color: rgba(255,255,255,0.72); line-height: 1.55; }
-        .story-detail-banner-text--tight { margin-bottom: 8px; }
-        .story-detail-text-warn { color: var(--clay-red-light); }
-        .story-detail-progress-track {
-            height: 10px; border-radius: 8px; background: rgba(0,0,0,0.35); overflow: hidden; margin-bottom: 12px;
-        }
-        .story-detail-progress-fill {
-            height: 100%; border-radius: 8px;
-            background: linear-gradient(90deg, var(--savanna-gold), #E8872A);
-            transition: width 0.4s ease;
-        }
-        .story-detail-banner-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.55); }
-        .story-detail-banner-meta-right { margin-left: auto; }
-        .story-detail-error-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
-        .story-detail-hint { margin: 0; font-size: 12px; color: rgba(255,255,255,0.45); }
-        .story-detail-link { color: var(--savanna-gold); font-weight: 700; }
-
-        .story-detail-header {
-            display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between;
-            gap: var(--sp-4); margin-bottom: var(--sp-6);
-        }
-        .story-detail-header-left { display: flex; align-items: flex-start; gap: 16px; min-width: 0; }
-        .story-detail-back {
-            flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; display: flex; align-items: center; justify-content: center; text-decoration: none;
-        }
-        .story-detail-title { margin-bottom: 4px; word-break: break-word; }
-        .story-detail-sub { margin: 0; line-height: 1.5; }
-        .story-detail-status { font-weight: 700; }
-        .story-detail-status--live { color: var(--banana-light); }
-        .story-detail-status--review { color: #E8872A; }
-        .story-detail-status--draft { color: var(--savanna-gold); }
-        .story-detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-        .story-detail-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 10px 20px; border-radius: 14px; font-weight: 800; font-size: 12px;
-            text-decoration: none; border: 1px solid transparent; cursor: pointer;
-            font-family: inherit; transition: background 0.15s, border-color 0.15s;
-        }
-        .story-detail-btn--accent {
-            background: rgba(212,160,23,0.15); color: var(--savanna-gold);
-            border-color: rgba(212,160,23,0.35);
-        }
-        .story-detail-btn--ghost {
-            background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.12);
-        }
-        .story-detail-nav-btn {
-            background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.12);
-            padding: 12px 22px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit;
-        }
-        .story-detail-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-        .story-detail-layout {
+        .sd-banner__grid {
+            position: relative;
+            z-index: 1;
             display: grid;
-            grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
-            gap: clamp(20px, 3vw, 36px);
+            grid-template-columns: auto 1fr;
+            gap: clamp(14px, 2vw, 22px);
+            padding: clamp(18px, 2.2vw, 26px);
             align-items: start;
         }
-        @media (max-width: 1024px) {
-            .story-detail-layout { grid-template-columns: 1fr; }
+        .sd-banner__grid--tight { align-items: center; }
+        .sd-banner__icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 160, 23, 0.18);
+            color: var(--savanna-gold);
+        }
+        .sd-banner__icon--error {
+            background: rgba(196, 75, 43, 0.2);
+            color: var(--clay-red-light);
+        }
+        .sd-spinner {
+            width: 26px;
+            height: 26px;
+            animation: sd-spin 1.1s linear infinite;
+        }
+        @keyframes sd-spin { to { transform: rotate(360deg); } }
+        .sd-banner__row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+        .sd-banner__title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--savanna-gold);
+            letter-spacing: -0.02em;
+        }
+        .sd-banner__title--sm { font-size: 15px; color: #fecaca; }
+        .sd-banner__pct { font-size: 22px; font-weight: 800; color: var(--savanna-light); }
+        .sd-banner__text {
+            margin: 0 0 12px;
+            font-size: 13px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.68);
+        }
+        .sd-banner__text--tight { margin-bottom: 8px; }
+        .sd-banner__mono {
+            font-family: ui-monospace, monospace;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            word-break: break-all;
+        }
+        .sd-banner__hint {
+            margin: 0;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.42);
+        }
+        .sd-link {
+            color: var(--savanna-gold);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .sd-link:hover { text-decoration: underline; }
+        .sd-progress {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .sd-progress__fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--savanna-gold), var(--sunfire));
+            transition: width 0.45s ease;
+        }
+        .sd-banner__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.48);
+        }
+        .sd-banner__warn { color: #fecaca; font-weight: 700; }
+        .sd-banner__meta-end { margin-left: auto; }
+
+        .sd-hero {
+            position: relative;
+            border-radius: 24px;
+            padding: clamp(18px, 2.5vw, 28px);
+            margin-bottom: clamp(20px, 3vw, 32px);
+            border: 1px solid var(--sd-line);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            overflow: hidden;
+        }
+        .sd-hero__mesh {
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(ellipse 80% 60% at 10% 20%, color-mix(in srgb, var(--sd-tribe) 35%, transparent), transparent 55%),
+                radial-gradient(ellipse 70% 50% at 90% 0%, rgba(212, 160, 23, 0.12), transparent 50%),
+                radial-gradient(ellipse 60% 40% at 70% 100%, rgba(46, 77, 138, 0.2), transparent 45%);
+            pointer-events: none;
+        }
+        .sd-hero__inner {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: clamp(16px, 3vw, 28px);
+        }
+        .sd-hero__lead {
+            display: flex;
+            gap: 14px;
+            min-width: 0;
+            flex: 1 1 280px;
+        }
+        .sd-back {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.15s, transform 0.15s;
+        }
+        .sd-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-2px);
+        }
+        .sd-eyebrow {
+            margin: 0 0 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.38);
+        }
+        .sd-eyebrow__sep { opacity: 0.5; }
+        .sd-title {
+            margin: 0 0 12px;
+            font-family: var(--font-display);
+            font-size: clamp(26px, 3.2vw, 38px);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+            color: #fff;
+            word-break: break-word;
+        }
+        .sd-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .sd-chip {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.72);
+        }
+        .sd-chip--tribe {
+            border-color: color-mix(in srgb, var(--sd-tribe) 45%, transparent);
+            background: color-mix(in srgb, var(--sd-tribe) 18%, transparent);
+            color: #fff;
+        }
+        .sd-pill {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+        .sd-pill--live { background: rgba(74, 124, 89, 0.25); color: var(--banana-light); border: 1px solid rgba(74, 124, 89, 0.45); }
+        .sd-pill--review { background: rgba(232, 135, 42, 0.18); color: #FBD38D; border: 1px solid rgba(232, 135, 42, 0.4); }
+        .sd-pill--draft { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.55); border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        .sd-hero__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+            flex: 0 1 auto;
+        }
+        .sd-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, transform 0.12s;
+        }
+        .sd-btn--primary {
+            background: linear-gradient(145deg, rgba(212, 160, 23, 0.22), rgba(196, 75, 43, 0.15));
+            border-color: rgba(212, 160, 23, 0.45);
+            color: #fff;
+        }
+        .sd-btn--primary:hover { transform: translateY(-1px); background: linear-gradient(145deg, rgba(212, 160, 23, 0.32), rgba(196, 75, 43, 0.22)); }
+        .sd-btn--ghost {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.88);
+        }
+        .sd-btn--ghost:hover { background: rgba(255, 255, 255, 0.08); }
+        .sd-btn--sm { padding: 8px 14px; font-size: 12px; border-radius: 12px; }
+
+        .sd-workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+            gap: clamp(20px, 2.5vw, 36px);
+            align-items: start;
+        }
+        @media (max-width: 1100px) {
+            .sd-workspace {
+                grid-template-columns: 1fr;
+            }
+            .sd-rail {
+                order: 2;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 16px;
+            }
+            .sd-card--cover { grid-column: 1 / -1; }
+            .sd-metrics { grid-column: 1 / -1; }
+        }
+        @media (max-width: 640px) {
+            .sd-hero__actions { width: 100%; justify-content: stretch; }
+            .sd-hero__actions .sd-btn { flex: 1 1 calc(50% - 6px); justify-content: center; }
         }
 
-        .story-detail-card {
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--r-xl);
-            padding: clamp(20px, 2.5vw, 28px);
-        }
-        .story-detail-cover {
-            border-radius: 20px; overflow: hidden;
-            aspect-ratio: 3/4; max-height: 340px;
-            background: linear-gradient(145deg, rgba(196,75,43,0.25), rgba(30,45,74,0.6));
-            display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
-        }
-        .story-detail-cover-img { width: 100%; height: 100%; object-fit: cover; }
-        .story-detail-cover-fallback { text-align: center; padding: 24px; color: rgba(255,255,255,0.55); }
-        .story-detail-cover-emoji { font-size: 52px; display: block; margin-bottom: 8px; }
-        .story-detail-cover-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-        .story-detail-id { text-align: center; font-size: 12px; color: rgba(255,255,255,0.38); font-weight: 700; margin: 0 0 20px; }
+        .sd-stage { min-width: 0; }
 
-        .story-detail-kicker {
-            display: block; font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
-            text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px;
+        .sd-empty {
+            border-radius: 24px;
+            border: 1px dashed rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.02);
+            min-height: clamp(280px, 42vh, 480px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
         }
-        .story-detail-tribe-row { display: flex; gap: 12px; align-items: center; }
-        .story-detail-tribe-emoji {
-            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            font-size: 22px; border: 1px solid rgba(255,255,255,0.08);
+        .sd-empty__frame {
+            text-align: center;
+            max-width: 400px;
         }
-        .story-detail-tribe-name { font-weight: 800; color: #fff; font-size: 15px; }
-        .story-detail-tribe-region { font-size: 12px; color: rgba(255,255,255,0.42); margin-top: 2px; }
+        .sd-empty__icon {
+            margin: 0 auto 16px;
+            opacity: 0.35;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .sd-empty__title {
+            margin: 0 0 10px;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .sd-empty__text {
+            margin: 0 0 22px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.48);
+        }
+        .sd-empty__row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 
-        .story-detail-stats {
-            margin: 20px 0 0; padding: 0; display: grid; gap: 12px;
+        .sd-theatre {
+            border-radius: 24px;
+            border: 1px solid var(--sd-line);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
         }
-        .story-detail-stat {
-            display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-            padding: 12px 14px; border-radius: 12px;
-            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);
+        .sd-theatre__chrome {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--sd-line);
+            background: rgba(0, 0, 0, 0.2);
         }
-        .story-detail-stat dt { margin: 0; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); }
-        .story-detail-stat dd { margin: 0; font-size: 14px; font-weight: 700; color: #fff; }
+        .sd-theatre__label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.38);
+        }
+        .sd-theatre__counter {
+            font-variant-numeric: tabular-nums;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.55);
+        }
+        .sd-theatre__viewport {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-height: min(72vh, 720px);
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(212, 160, 23, 0.08), transparent 55%),
+                linear-gradient(165deg, #0f172a, #020617);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(12px, 2vw, 28px);
+        }
+        .sd-theatre__img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+        }
+        .sd-theatre__pdf {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 320px;
+        }
+        .sd-theatre__pdf p { margin: 10px 0 16px; font-size: 14px; }
+        .sd-theatre__caption {
+            margin: 0;
+            padding: 14px 20px 6px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.72);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .sd-theatre__controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 14px 16px 18px;
+            border-top: 1px solid var(--sd-line);
+            background: rgba(0, 0, 0, 0.18);
+        }
+        .sd-nav-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s, opacity 0.15s;
+        }
+        .sd-nav-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+        .sd-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .sd-theatre__dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            max-width: min(360px, 50vw);
+        }
+        .sd-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+            transition: transform 0.15s, background 0.15s;
+        }
+        .sd-dot.is-on {
+            background: var(--savanna-gold);
+            transform: scale(1.35);
+            box-shadow: 0 0 12px rgba(212, 160, 23, 0.45);
+        }
+        .sd-theatre__track {
+            width: min(280px, 40vw);
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .sd-theatre__track-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--savanna-gold), var(--sunfire));
+            transition: width 0.25s ease;
+        }
 
-        .story-detail-section { margin-bottom: 0; }
-        .story-detail-h2 {
-            font-family: var(--font-display); font-size: clamp(20px, 2.2vw, 26px);
-            font-weight: 800; color: #fff; margin: 0 0 14px;
+        .sd-filmstrip-wrap {
+            margin-top: var(--sp-5);
         }
-        .story-detail-h2--center { text-align: center; }
-        .story-detail-prose { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.78); }
+        .sd-filmstrip__kicker {
+            margin: 0 0 10px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.32);
+        }
+        .sd-filmstrip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(212, 160, 23, 0.35) transparent;
+        }
+        .sd-filmstrip::-webkit-scrollbar { height: 6px; }
+        .sd-filmstrip::-webkit-scrollbar-thumb {
+            background: rgba(212, 160, 23, 0.35);
+            border-radius: 999px;
+        }
+        .sd-thumb {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            position: relative;
+            padding: 0;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: transform 0.15s;
+        }
+        .sd-thumb:hover { transform: translateY(-2px); }
+        .sd-thumb:focus-visible {
+            outline: 2px solid var(--savanna-gold);
+            outline-offset: 3px;
+        }
+        .sd-thumb__frame {
+            display: block;
+            width: clamp(72px, 14vw, 104px);
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.4);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .sd-thumb.is-active .sd-thumb__frame {
+            border-color: var(--savanna-gold);
+            box-shadow: 0 0 0 1px rgba(212, 160, 23, 0.35), 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+        .sd-thumb__frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sd-thumb__pdf {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.45);
+        }
+        .sd-thumb__idx {
+            display: block;
+            margin-top: 6px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.35);
+        }
+        .sd-thumb.is-active .sd-thumb__idx { color: var(--savanna-light); }
 
-        .story-detail-empty { text-align: center; padding: clamp(32px, 5vw, 56px) 20px; }
-        .story-detail-empty-icon { font-size: 56px; opacity: 0.35; display: block; margin-bottom: 12px; }
-        .story-detail-empty-text { max-width: 420px; margin: 0 auto 24px; font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
-        .story-detail-empty-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-
-        .story-detail-panels-head {
-            display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
+        .sd-rail {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: sticky;
+            top: var(--sp-4);
         }
-        .story-detail-panels-count { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.45); }
-
-        .story-detail-stage {
-            border-radius: 20px; background: rgba(0,0,0,0.35);
-            border: 1px solid rgba(255,255,255,0.06);
-            min-height: min(60vh, 560px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 24px; margin-bottom: 18px;
-        }
-        .story-detail-stage-img { max-width: 100%; max-height: min(58vh, 520px); width: auto; height: auto; object-fit: contain; border-radius: 8px; }
-        .story-detail-stage-pdf { text-align: center; color: rgba(255,255,255,0.65); max-width: 360px; }
-        .story-detail-stage-emoji { font-size: 56px; display: block; margin-bottom: 12px; }
-        .story-detail-stage-pdf p { margin: 0 0 18px; font-size: 14px; line-height: 1.5; }
-        .story-detail-caption {
-            margin: 16px 0 0; width: 100%; max-width: 640px; text-align: center;
-            font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.55;
+        @media (max-width: 1100px) {
+            .sd-rail { position: static; }
         }
 
-        .story-detail-nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .sd-card {
+            border-radius: 20px;
+            border: 1px solid var(--sd-line);
+            background: var(--sd-surface);
+            padding: 18px 18px 16px;
+        }
+        .sd-card--cover { padding-bottom: 14px; }
+        .sd-card__kicker {
+            margin: 0 0 12px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+        }
+        .sd-cover {
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(145deg, rgba(196, 75, 43, 0.2), rgba(30, 45, 74, 0.55));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sd-cover__img { width: 100%; height: 100%; object-fit: cover; }
+        .sd-cover__fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 24px;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .sd-cover__fallback--muted { opacity: 0.75; }
 
-        .story-detail-thumbs {
-            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        .sd-tribe { display: flex; gap: 12px; align-items: center; }
+        .sd-tribe__badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .story-detail-thumb {
-            position: relative; width: 76px; height: 76px; padding: 0; border-radius: 12px; overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.35);
-            cursor: pointer; flex-shrink: 0; transition: border-color 0.15s, transform 0.15s;
+        .sd-tribe__name { font-weight: 800; font-size: 16px; color: #fff; }
+        .sd-tribe__meta { font-size: 12px; color: rgba(255, 255, 255, 0.42); margin-top: 2px; }
+
+        .sd-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
-        .story-detail-thumb:hover { border-color: rgba(212,160,23,0.5); transform: translateY(-2px); }
-        .story-detail-thumb.is-active { border-color: var(--savanna-gold); box-shadow: 0 0 0 1px rgba(212,160,23,0.25); }
-        .story-detail-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .story-detail-thumb-pdf {
-            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.55); letter-spacing: 0.04em;
+        .sd-metric {
+            border-radius: 16px;
+            padding: 12px 14px;
+            background: rgba(0, 0, 0, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .story-detail-thumb-badge {
-            position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.82);
-            color: #fff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+        .sd-metric__label {
+            display: block;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.32);
+            margin-bottom: 6px;
+        }
+        .sd-metric__val {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .sd-card--prose .sd-prose {
+            font-size: 14px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.72);
         }
     </style>
 </div>
