@@ -1,14 +1,14 @@
 <div class="sa-tribe-detail-view">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-8)">
         <div style="display:flex; align-items:center; gap:20px">
-            <a href="{{ route('admin.tribes') }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; text-decoration:none; border:1px solid rgba(255,255,255,0.1)">←</a>
+            <a href="{{ route($routePrefix . '.tribes') }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; text-decoration:none; border:1px solid rgba(255,255,255,0.1)">←</a>
             <div>
                 <h1 class="sa-page-title">Heritage Portfolio: {{ $tribe->name }}</h1>
                 <div class="sa-breadcrumb">Culture Management · {{ $tribe->region }} Region Ancestry</div>
             </div>
         </div>
         <div style="display:flex; gap:12px">
-            <a href="{{ route('admin.tribes.edit', $tribe->id) }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; padding:12px 28px; border-radius:14px; text-decoration:none; border:1px solid rgba(255,255,255,0.1); font-weight:800; font-size:13px">Profile Editor</a>
+            <a href="{{ route($routePrefix . '.tribes.edit', $tribe->id) }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; padding:12px 28px; border-radius:14px; text-decoration:none; border:1px solid rgba(255,255,255,0.1); font-weight:800; font-size:13px">Profile Editor</a>
             <button class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow:0 8px 24px rgba(196,75,43,0.3)">+ Add Heritage Activity</button>
         </div>
     </div>

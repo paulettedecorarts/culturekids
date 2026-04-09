@@ -2,19 +2,19 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.admin')]
 class StoriesManager extends Component
 {
     use WithPagination;
+    use UsesPortalContext;
 
     public $searchTerm = '';
 
@@ -112,6 +112,7 @@ class StoriesManager extends Component
             'stories' => $stories,
             'tribes' => $tribes,
             'stats' => $stats,
-        ]);
+            'storyRouteBase' => $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories',
+        ])->layout($this->portalLayout());
     }
 }

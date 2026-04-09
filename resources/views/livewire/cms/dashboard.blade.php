@@ -5,8 +5,8 @@
             <div class="cms-breadcrumb">Paulette CMS · Organizational Hub</div>
         </div>
         <div style="margin-left:auto; display:flex; gap:var(--sp-2)">
-            <button class="btn btn-ghost btn-sm" onclick="alert('Syncing content...')">🔄 Sync Cloud</button>
-            <button class="btn btn-primary btn-sm" onclick="alert('Redirecting to upload...')">+ New Comic Pack</button>
+            <a class="btn btn-ghost btn-sm" href="{{ route('cms.editor.assets') }}" style="text-decoration:none">🗂 Manage Assets</a>
+            <a class="btn btn-primary btn-sm" href="{{ route('cms.editor.story-packs') }}" style="text-decoration:none">+ New Comic Pack</a>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
                             <div class="activity-name">{{ $activity['title'] }}</div>
                             <div class="activity-meta">{{ $activity['time'] }} · Status: {{ $activity['status'] }}</div>
                         </div>
-                        <button class="btn-link">Details</button>
+                        <span class="btn-link">Recent</span>
                     </div>
                 @empty
                     <div style="text-align:center;padding:var(--sp-8);color:var(--stone)">
@@ -61,9 +61,9 @@
                     <div class="shortcut-icon">🌐</div>
                     <div class="shortcut-label">Vocab Pairs</div>
                 </a>
-                <a href="{{ route('cms.admin.site') }}" class="shortcut-item">
-                    <div class="shortcut-icon">🎨</div>
-                    <div class="shortcut-label">Web Branding</div>
+                <a href="{{ route('cms.editor.assets') }}" class="shortcut-item">
+                    <div class="shortcut-icon">🖼️</div>
+                    <div class="shortcut-label">Media Assets</div>
                 </a>
             </div>
 

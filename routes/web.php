@@ -115,18 +115,36 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
 Route::middleware(['auth', 'verified'])->post('admin/stop-impersonation', [ImpersonationController::class, 'stop'])->name('admin.stop-impersonation');
 
 // CMS Editor (Content Production)
-Route::middleware(['auth', 'verified', 'role:cms_editor|super_admin'])->prefix('cms/editor')->name('cms.editor.')->group(function () {
+// Super Admin must impersonate a cms_editor user to access these routes.
+Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_editor'])->prefix('cms/editor')->name('cms.editor.')->group(function () {
     Route::get('/dashboard', App\Livewire\CMS\Dashboard::class)->name('dashboard');
-    Route::get('/tribes', TribeDirectory::class)->name('tribes');
-    Route::get('/story-packs', StoryPacks::class)->name('story-packs');
-    Route::get('/assets', Assets::class)->name('assets');
-    Route::get('/translations', Translations::class)->name('translations');
-    Route::get('/songs', Songs::class)->name('songs');
-    Route::get('/activities', Activities::class)->name('activities');
+
+    // Reuse mature admin content modules in editor portal context.
+    Route::get('/tribes', TribeManager::class)->name('tribes');
+    Route::get('/tribes/create', TribeForm::class)->name('tribes.create');
+    Route::get('/tribes/{tribe}', TribeDetail::class)->name('tribes.detail');
+    Route::get('/tribes/{tribe}/edit', TribeForm::class)->name('tribes.edit');
+
+    Route::get('/story-packs', StoriesManager::class)->name('story-packs');
+    Route::get('/story-packs/create', StoryForm::class)->name('story-packs.create');
+    Route::get('/story-packs/{id}/edit', StoryForm::class)->name('story-packs.edit');
+    Route::get('/story-packs/{id}/panels', PanelEditor::class)->name('story-packs.panels');
+    Route::get('/story-packs/{id}', StoryDetail::class)->name('story-packs.detail');
+    Route::get('/assets', AssetsManager::class)->name('assets');
+    Route::get('/translations', TranslationsManager::class)->name('translations');
+
+    Route::get('/songs', SongsManager::class)->name('songs');
+    Route::get('/songs/create', SongDetailPage::class)->name('songs.create');
+    Route::get('/songs/{id}', SongDetailPage::class)->name('songs.detail');
+
+    Route::get('/activities', ActivitiesManager::class)->name('activities');
+    Route::get('/activities/create', ActivityDetailPage::class)->name('activities.create');
+    Route::get('/activities/{id}', ActivityDetailPage::class)->name('activities.detail');
 });
 
 // CMS Organisational Admin (Management & Site)
-Route::middleware(['auth', 'verified', 'role:org_admin|super_admin'])->prefix('cms/admin')->name('cms.admin.')->group(function () {
+// Super Admin must impersonate an org_admin user to access these routes.
+Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'])->prefix('cms/admin')->name('cms.admin.')->group(function () {
     Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('/site', Site::class)->name('site');
     Route::get('/themes', Themes::class)->name('themes');
@@ -135,7 +153,8 @@ Route::middleware(['auth', 'verified', 'role:org_admin|super_admin'])->prefix('c
 });
 
 // Teacher Hub (Classroom Context)
-Route::middleware(['auth', 'verified', 'role:teacher|super_admin'])->prefix('teacher')->name('teacher.')->group(function () {
+// Super Admin must impersonate a teacher user to access these routes.
+Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', MainDashboard::class)->name('dashboard');
     Route::get('/lessons', App\Livewire\Teacher\Dashboard::class)->name('lessons');
     Route::get('/my-class', MyClass::class)->name('class');

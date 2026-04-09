@@ -2,19 +2,19 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Song;
 use App\Models\Tribe;
 use App\Services\AudioUploadService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.admin')]
 class SongDetailPage extends Component
 {
     use WithFileUploads;
+    use UsesPortalContext;
 
     public ?Song $song = null;
 
@@ -78,7 +78,7 @@ class SongDetailPage extends Component
             return;
         }
 
-        $this->redirectRoute('admin.songs', navigate: true);
+        $this->redirectRoute($this->portalRouteName('songs'), navigate: true);
     }
 
     protected function rules(): array
@@ -163,7 +163,7 @@ class SongDetailPage extends Component
         $isUpdate = (bool) $this->song;
         session()->flash('message', $isUpdate ? 'Song updated.' : 'Song created.');
 
-        return $this->redirectRoute('admin.songs.detail', ['id' => $song->id], navigate: true);
+        return $this->redirectRoute($this->portalRouteName('songs.detail'), ['id' => $song->id], navigate: true);
     }
 
     public function deleteSong()
@@ -186,7 +186,7 @@ class SongDetailPage extends Component
         $this->song->delete();
         session()->flash('message', 'Song deleted.');
 
-        return $this->redirectRoute('admin.songs', navigate: true);
+        return $this->redirectRoute($this->portalRouteName('songs'), navigate: true);
     }
 
     protected function fillFromSong(Song $song): void
@@ -211,6 +211,7 @@ class SongDetailPage extends Component
         return view('livewire.admin.song-detail-page', [
             'uploadMax' => ini_get('upload_max_filesize'),
             'postMax' => ini_get('post_max_size'),
-        ]);
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }

@@ -3,12 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Paulette CMS · Editor Dashboard</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 
     <!-- Styles -->
     <style>
@@ -46,6 +50,7 @@
         .cms-nav-item.active { background: rgba(212,160,23,.1); color: var(--savanna-gold); }
 
         .cms-main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: var(--sp-8) var(--sp-12); }
+        .cms-main.cms-main-dark { background: #111827; color: #fff; }
         .cms-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
         .cms-page-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.5px; }
         .cms-breadcrumb { font-size: 13px; color: var(--stone); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
@@ -76,6 +81,20 @@
         .cms-asset-thumb { width: 40px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0; }
         .cms-asset-name { font-size: 15px; font-weight: 700; color: var(--ink); }
         .cms-asset-sub { font-size: 11px; color: var(--stone); font-weight: 600; }
+
+        /* Admin-module typography helpers reused by editor routes */
+        .sa-page-title { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .sa-breadcrumb { font-size: 14px; color: rgba(255,255,255,.4); }
+        .sa-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6); }
+        .sa-stat { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r-md); padding: var(--sp-4); }
+        .sa-stat-val { font-size: 36px; font-weight: 800; color: #fff; line-height: 1.1; }
+        .sa-stat-label { font-size: 13px; color: rgba(255,255,255,.35); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+        .sa-stat-delta { font-size: 13px; font-weight: 700; margin-top: 4px; color: var(--banana-mid); }
+        .sa-table-wrap { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: var(--r-lg); overflow: hidden; margin-bottom: var(--sp-6); }
+        .sa-table-head { background: rgba(255,255,255,.05); padding: var(--sp-3) var(--sp-4); display: grid; gap: var(--sp-3); font-size: 13px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: rgba(255,255,255,.25); border-bottom: 1px solid rgba(255,255,255,.05); }
+        .sa-table-row { padding: var(--sp-3) var(--sp-4); display: grid; gap: var(--sp-3); align-items: center; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 15px; transition: background var(--dur-fast); }
+        .sa-table-row:hover { background: rgba(255,255,255,.03); }
+        .sa-table-row:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -91,6 +110,16 @@
         </div>
     @endif
     
+    @php
+        $isEditorDataModule =
+            request()->routeIs('cms.editor.tribes*') ||
+            request()->routeIs('cms.editor.story-packs*') ||
+            request()->routeIs('cms.editor.assets*') ||
+            request()->routeIs('cms.editor.translations*') ||
+            request()->routeIs('cms.editor.songs*') ||
+            request()->routeIs('cms.editor.activities*');
+    @endphp
+
     <div class="cms-shell" style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}">
         <div class="cms-sidebar">
             <div class="cms-sidebar-logo">Paulette CMS<span>Admin Dashboard</span></div>
@@ -133,9 +162,11 @@
             </div>
         </div>
 
-        <main class="cms-main">
+        <main class="cms-main {{ $isEditorDataModule ? 'cms-main-dark' : '' }}">
             {{ $slot }}
         </main>
     </div>
+
+    @livewireScripts
 </body>
 </html>

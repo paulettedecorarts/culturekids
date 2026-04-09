@@ -67,7 +67,7 @@
                     <h2 class="sd-banner__title sd-banner__title--sm">Processing did not complete</h2>
                     <p class="sd-banner__text sd-banner__text--tight">{{ $processingFailure->error_message ?? 'The background job did not finish successfully.' }}</p>
                     <p class="sd-banner__hint">
-                        Re-upload from <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-link">Edit story</a> and ensure the queue worker is running.
+                        Re-upload from <a href="{{ route($storyRouteBase . '.edit', $story->id) }}" class="sd-link">Edit story</a> and ensure the queue worker is running.
                     </p>
                 </div>
             </div>
@@ -78,7 +78,7 @@
         <div class="sd-hero__mesh" aria-hidden="true"></div>
         <div class="sd-hero__inner">
             <div class="sd-hero__lead">
-                <a href="{{ route('admin.stories') }}" class="sd-back" aria-label="Back to stories">
+                <a href="{{ route($storyRouteBase) }}" class="sd-back" aria-label="Back to stories">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
                 </a>
                 <div class="sd-hero__copy">
@@ -99,11 +99,11 @@
                 </div>
             </div>
             <div class="sd-hero__actions">
-                <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-btn sd-btn--ghost">
+                <a href="{{ route($storyRouteBase . '.edit', $story->id) }}" class="sd-btn sd-btn--ghost">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     Edit story
                 </a>
-                <a href="{{ route('admin.stories.panels', $story->id) }}" class="sd-btn sd-btn--primary">
+                <a href="{{ route($storyRouteBase . '.panels', $story->id) }}" class="sd-btn sd-btn--primary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                     Edit panels
                 </a>
@@ -123,8 +123,8 @@
                         <h2 class="sd-empty__title">No panels yet</h2>
                         <p class="sd-empty__text">Upload a PDF or images from Edit story, then fine-tune order and audio in Edit panels.</p>
                         <div class="sd-empty__row">
-                            <a href="{{ route('admin.stories.edit', $story->id) }}" class="sd-btn sd-btn--primary">Edit story</a>
-                            <a href="{{ route('admin.stories.panels', $story->id) }}" class="sd-btn sd-btn--ghost">Edit panels</a>
+                            <a href="{{ route($storyRouteBase . '.edit', $story->id) }}" class="sd-btn sd-btn--primary">Edit story</a>
+                            <a href="{{ route($storyRouteBase . '.panels', $story->id) }}" class="sd-btn sd-btn--ghost">Edit panels</a>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <div class="story-form-root">
     <div class="story-form-header">
         <div class="story-form-header-inner">
-            <a href="{{ route('admin.stories') }}" class="btn story-form-back" aria-label="Back to stories">←</a>
+            <a href="{{ route($storyRouteBase) }}" class="btn story-form-back" aria-label="Back to stories">←</a>
             <div>
                 <div class="sa-page-title">{{ $editing ? '📖 Edit story' : '✨ Create story' }}</div>
                 <div class="sa-breadcrumb">Cultural learning content · Panels &amp; cover</div>
@@ -135,7 +135,7 @@
             </div>
 
             <div class="story-form-actions">
-                <a href="{{ route('admin.stories') }}" class="btn story-form-btn-secondary">Cancel</a>
+                <a href="{{ route($storyRouteBase) }}" class="btn story-form-btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary story-form-btn-submit" @disabled($isSaving)>
                     @if($isSaving)
                         <span class="story-form-saving">

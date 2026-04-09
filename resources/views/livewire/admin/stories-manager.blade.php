@@ -4,7 +4,7 @@
             <div class="sa-page-title">Stories & Comics</div>
             <div class="sa-breadcrumb">Cultural learning content · Panel-based stories</div>
         </div>
-        <a href="{{ route('admin.stories.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none;display:inline-flex;align-items:center">📖 Create story</a>
+        <a href="{{ route($storyRouteBase . '.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none;display:inline-flex;align-items:center">📖 Create story</a>
     </div>
 
     @if (session()->has('message'))
@@ -115,7 +115,7 @@
 
                     <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
                         <a
-                            href="{{ route('admin.stories.detail', $story->id) }}"
+                            href="{{ route($storyRouteBase . '.detail', $story->id) }}"
                             class="btn btn-sm"
                             style="flex:1;min-width:72px;background:rgba(212,160,23,.15);color:var(--savanna-gold);border:1px solid rgba(212,160,23,.3);font-size:10px;padding:8px;text-decoration:none;display:flex;align-items:center;justify-content:center"
                         >
@@ -129,7 +129,7 @@
                             {{ $story->status === 'published' ? 'Unpublish' : 'Publish' }}
                         </button>
                         <a
-                            href="{{ route('admin.stories.edit', $story->id) }}"
+                            href="{{ route($storyRouteBase . '.edit', $story->id) }}"
                             class="btn btn-sm"
                             style="flex:1;min-width:72px;background:rgba(255,255,255,.05);color:#fff;border:1px solid rgba(255,255,255,.1);font-size:10px;padding:8px;text-decoration:none;display:flex;align-items:center;justify-content:center"
                         >
@@ -151,7 +151,7 @@
                 <div style="font-size:64px;margin-bottom:var(--sp-4)">📖</div>
                 <div style="font-size:16px;font-weight:700;margin-bottom:var(--sp-2)">No stories created</div>
                 <div style="font-size:13px;margin-bottom:var(--sp-4)">Create your first story to start building your cultural content library.</div>
-                <a href="{{ route('admin.stories.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">📖 Create story</a>
+                <a href="{{ route($storyRouteBase . '.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">📖 Create story</a>
             </div>
         @endforelse
     </div>

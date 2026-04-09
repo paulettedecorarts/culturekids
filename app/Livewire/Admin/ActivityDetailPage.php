@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Activity;
 use App\Models\Tribe;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.admin')]
 class ActivityDetailPage extends Component
 {
+    use UsesPortalContext;
+
     public ?Activity $activity = null;
 
     public bool $isCreate = false;
@@ -111,7 +112,7 @@ class ActivityDetailPage extends Component
             return null;
         }
 
-        return $this->redirectRoute('admin.activities', navigate: true);
+        return $this->redirectRoute($this->portalRouteName('activities'), navigate: true);
     }
 
     public function saveActivity()
@@ -146,7 +147,7 @@ class ActivityDetailPage extends Component
 
         session()->flash('message', $this->activity ? 'Activity updated.' : 'Activity created.');
 
-        return $this->redirectRoute('admin.activities.detail', ['id' => $activity->id], navigate: true);
+        return $this->redirectRoute($this->portalRouteName('activities.detail'), ['id' => $activity->id], navigate: true);
     }
 
     public function deleteActivity()
@@ -158,7 +159,7 @@ class ActivityDetailPage extends Component
         $this->activity->delete();
         session()->flash('message', 'Activity deleted.');
 
-        return $this->redirectRoute('admin.activities', navigate: true);
+        return $this->redirectRoute($this->portalRouteName('activities'), navigate: true);
     }
 
     protected function fillFromActivity(Activity $activity): void
@@ -228,6 +229,8 @@ class ActivityDetailPage extends Component
 
     public function render()
     {
-        return view('livewire.admin.activity-detail-page');
+        return view('livewire.admin.activity-detail-page', [
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }

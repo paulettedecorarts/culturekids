@@ -5,7 +5,7 @@
             <div class="sa-breadcrumb">Doc-aligned domain model · title, tribe, language, type, audio, lyrics, status</div>
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <a href="{{ route('admin.songs.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ New Song</a>
+            <a href="{{ route($routePrefix . '.songs.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ New Song</a>
         </div>
     </div>
 
@@ -74,7 +74,7 @@
                 <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ str_replace('_', ' ', $song->song_type) }}</span>
                 <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ $song->duration_label }}</span>
                 <div style="display:flex;gap:6px">
-                    <a href="{{ route('admin.songs.detail', $song->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px;text-decoration:none">Details</a>
+                    <a href="{{ route($routePrefix . '.songs.detail', $song->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px;text-decoration:none">Details</a>
                 </div>
             </div>
         @empty

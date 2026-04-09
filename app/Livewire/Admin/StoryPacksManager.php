@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 
-#[Layout('layouts.admin')]
 class StoryPacksManager extends Component
 {
+    use UsesPortalContext;
+
     public function render()
     {
-        return view('livewire.admin.story-packs-manager');
+        return view('livewire.admin.story-packs-manager')
+            ->layout($this->portalLayout());
     }
 }

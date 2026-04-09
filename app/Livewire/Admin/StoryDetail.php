@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Comic;
 use App\Models\ComicProcessingStatus;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.admin')]
 class StoryDetail extends Component
 {
+    use UsesPortalContext;
+
     public Comic $story;
 
     public int $currentPanel = 0;
@@ -118,6 +119,7 @@ class StoryDetail extends Component
         return view('livewire.admin.story-detail', [
             'panels' => $panels,
             'currentPanelModel' => $current,
-        ]);
+            'storyRouteBase' => $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories',
+        ])->layout($this->portalLayout());
     }
 }

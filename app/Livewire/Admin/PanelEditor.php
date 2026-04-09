@@ -2,20 +2,20 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\PanelVocabTag;
 use App\Services\AudioUploadService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.admin')]
 class PanelEditor extends Component
 {
     use WithFileUploads;
+    use UsesPortalContext;
 
     public $comic;
 
@@ -332,6 +332,8 @@ class PanelEditor extends Component
 
     public function render()
     {
-        return view('livewire.admin.panel-editor');
+        return view('livewire.admin.panel-editor', [
+            'storyRouteBase' => $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories',
+        ])->layout($this->portalLayout());
     }
 }

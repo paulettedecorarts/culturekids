@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Jobs\ProcessComicStoryMedia;
 use App\Models\AuditLog;
 use App\Models\Comic;
@@ -11,14 +12,13 @@ use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-#[Layout('layouts.admin')]
 class StoryForm extends Component
 {
     use WithFileUploads;
+    use UsesPortalContext;
 
     public bool $editing = false;
 
@@ -213,7 +213,9 @@ class StoryForm extends Component
             throw $e;
         }
 
-        return $this->redirect(route('admin.stories.detail', $savedComicId), navigate: true);
+        $routeBase = $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories';
+
+        return $this->redirect(route($routeBase.'.detail', $savedComicId), navigate: true);
     }
 
     public function removePanel($panelId): void
@@ -241,6 +243,7 @@ class StoryForm extends Component
     {
         return view('livewire.admin.story-form', [
             'tribes' => Tribe::orderBy('name')->get(),
-        ]);
+            'storyRouteBase' => $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories',
+        ])->layout($this->portalLayout());
     }
 }

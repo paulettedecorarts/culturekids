@@ -1,7 +1,7 @@
 <div class="sa-tribe-form-view">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-8)">
         <div style="display:flex; align-items:center; gap:20px">
-            <a href="{{ route('admin.tribes') }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; text-decoration:none; border:1px solid rgba(255,255,255,0.1)">←</a>
+            <a href="{{ route($routePrefix . '.tribes') }}" class="btn" style="background:rgba(255,255,255,0.05); color:#fff; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; text-decoration:none; border:1px solid rgba(255,255,255,0.1)">←</a>
             <div>
                 <h1 class="sa-page-title">{{ $editing ? 'Update Heritage Record' : 'Register New Tribe' }}</h1>
                 <div class="sa-breadcrumb">Culture Management · Heritage Portfolio</div>

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\LogLivewireUploadDiagnostics;
 use App\Http\Middleware\LogSuperAdminActions;
+use App\Http\Middleware\EnsurePortalRoleIsolation;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'log.admin' => LogSuperAdminActions::class,
             'log.livewire.upload' => LogLivewireUploadDiagnostics::class,
+            'portal.role' => EnsurePortalRoleIsolation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

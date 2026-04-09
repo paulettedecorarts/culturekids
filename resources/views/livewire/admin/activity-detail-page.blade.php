@@ -1,7 +1,7 @@
 <div class="activity-detail-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div style="display:flex;align-items:center;gap:12px">
-            <a href="{{ route('admin.activities') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Activities</a>
+            <a href="{{ route($routePrefix . '.activities') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Activities</a>
             <div>
                 <div class="sa-page-title">{{ $activity ? 'Activity Details' : 'Create Activity' }}</div>
                 <div class="sa-breadcrumb">{{ $activity ? "Activity #{$activity->id}" : 'New activity record' }}</div>

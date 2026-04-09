@@ -5,7 +5,7 @@
             <div class="sa-breadcrumb">Doc-aligned generic activities (excluding Songs domain)</div>
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <a href="{{ route('admin.activities.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ Add Activity</a>
+            <a href="{{ route($routePrefix . '.activities.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ Add Activity</a>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
                 <span class="status-pill {{ $activity->is_published ? 'status-published' : 'status-draft' }}">{{ $activity->is_published ? 'Published' : 'Draft' }}</span>
                 <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $activity->age_range ?: '—' }}</span>
                 <div style="display:flex;gap:6px">
-                    <a href="{{ route('admin.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                    <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                 </div>
             </div>
         @empty

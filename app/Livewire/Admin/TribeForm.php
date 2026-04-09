@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 use App\Models\Tribe;
 use Illuminate\Validation\Rule;
 
-#[Layout('layouts.admin')]
 class TribeForm extends Component
 {
+    use UsesPortalContext;
+
     public $tribe;
     public $editing = false;
 
@@ -72,11 +73,13 @@ class TribeForm extends Component
             session()->flash('message', 'New Heritage Tribe added.');
         }
 
-        return redirect()->route('admin.tribes');
+        return redirect()->route($this->portalRouteName('tribes'));
     }
 
     public function render()
     {
-        return view('livewire.admin.tribe-form');
+        return view('livewire.admin.tribe-form', [
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }

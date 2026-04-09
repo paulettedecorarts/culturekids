@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Tribe;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.admin')]
 class TribeDetail extends Component
 {
+    use UsesPortalContext;
+
     public Tribe $tribe;
 
     public function mount(Tribe $tribe)
@@ -25,6 +26,8 @@ class TribeDetail extends Component
 
     public function render()
     {
-        return view('livewire.admin.tribe-detail');
+        return view('livewire.admin.tribe-detail', [
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }

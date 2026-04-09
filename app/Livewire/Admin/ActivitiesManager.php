@@ -2,17 +2,17 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Activity;
 use App\Models\Tribe;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.admin')]
 class ActivitiesManager extends Component
 {
     use WithPagination;
+    use UsesPortalContext;
 
     public string $search = '';
 
@@ -75,6 +75,8 @@ class ActivitiesManager extends Component
 
     public function render()
     {
-        return view('livewire.admin.activities-manager');
+        return view('livewire.admin.activities-manager', [
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }

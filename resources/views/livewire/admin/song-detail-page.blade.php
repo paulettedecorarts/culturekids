@@ -1,7 +1,7 @@
 <div class="song-detail-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div style="display:flex;align-items:center;gap:12px">
-            <a href="{{ route('admin.songs') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Songs</a>
+            <a href="{{ route($routePrefix . '.songs') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Songs</a>
             <div>
                 <div class="sa-page-title">{{ $song ? 'Song Details' : 'Create Song' }}</div>
                 <div class="sa-breadcrumb">

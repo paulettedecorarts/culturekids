@@ -2,15 +2,15 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Tribe;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 
-#[Layout('layouts.admin')]
 class TribeManager extends Component
 {
     use WithPagination;
+    use UsesPortalContext;
 
     public $search = '';
 
@@ -31,6 +31,7 @@ class TribeManager extends Component
             'tribes' => Tribe::where('name', 'like', '%' . $this->search . '%')
                 ->latest()
                 ->paginate(15),
-        ]);
+            'routePrefix' => $this->portalRoutePrefix(),
+        ])->layout($this->portalLayout());
     }
 }
