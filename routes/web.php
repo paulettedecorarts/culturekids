@@ -11,6 +11,7 @@ use App\Livewire\Admin\AuditLogs;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\ImpersonateUser;
 use App\Livewire\Admin\LanguagesManager;
+use App\Livewire\Admin\LanguageDetailPage;
 use App\Livewire\Admin\ModuleRegistry;
 use App\Livewire\Admin\ModuleToggles;
 use App\Livewire\Admin\OrganizationDetail;
@@ -94,6 +95,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('/age-categories/create', AgeProfileDetailPage::class)->name('age-categories.create');
     Route::get('/age-categories/{id}', AgeProfileDetailPage::class)->name('age-categories.detail');
     Route::get('languages', LanguagesManager::class)->name('languages');
+    Route::get('languages/create', LanguageDetailPage::class)->name('languages.create');
+    Route::get('languages/{id}', LanguageDetailPage::class)->name('languages.detail');
 
     // New Platform section items
     Route::get('themes', ThemesManager::class)->name('themes');

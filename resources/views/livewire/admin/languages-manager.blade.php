@@ -1,41 +1,37 @@
-<div>
+<div class="languages-registry-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div>
             <div class="sa-page-title">Language Registry</div>
-            <div class="sa-breadcrumb">Super Admin · Platform · Dialect & Translation coverage</div>
+            <div class="sa-breadcrumb">Super Admin · Platform · Dialect and translation coverage</div>
         </div>
-        <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <span class="sa-badge">⚡ SUPER ADMIN</span>
-            <button class="btn btn-primary btn-sm" style="background:var(--clay-red); border:none; color:#fff; padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full); font-weight:700; cursor:pointer;">+ Add Language</button>
-        </div>
+        <a class="btn btn-primary btn-sm" href="{{ route('admin.languages.create') }}" style="background:var(--clay-red); border:none; color:#fff; padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full); font-weight:700; text-decoration:none">+ Add Language</a>
     </div>
 
-    <!-- Stats strip -->
+    @if(session()->has('message'))
+        <div style="background:rgba(74,124,89,.12);border:1px solid rgba(74,124,89,.35);color:var(--banana-light);padding:10px 14px;border-radius:10px;margin-bottom:var(--sp-4);font-size:12px;font-weight:700">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <div class="sa-stats-row" style="grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin-bottom:var(--sp-5)">
-        <div class="sa-stat">
-            <div class="sa-stat-val">23</div>
-            <div class="sa-stat-label">Active Languages</div>
-            <div class="sa-stat-delta">Native dialects</div>
-        </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">84%</div>
-            <div class="sa-stat-label">System Trans.</div>
-            <div class="sa-stat-delta">Overall coverage</div>
-        </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">12</div>
-            <div class="sa-stat-label">Audio Packs</div>
-            <div class="sa-stat-delta">TTS/Voiceover</div>
-        </div>
-        <div class="sa-stat">
-            <div class="sa-stat-val">3</div>
-            <div class="sa-stat-label">Pending</div>
-            <div class="sa-stat-delta">In translation</div>
-        </div>
+        <div class="sa-stat"><div class="sa-stat-val">{{ $stats['total'] }}</div><div class="sa-stat-label">Total Languages</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">{{ $stats['active'] }}</div><div class="sa-stat-label">Active</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">{{ $stats['avg_coverage'] }}%</div><div class="sa-stat-label">Avg Coverage</div></div>
+        <div class="sa-stat"><div class="sa-stat-val">{{ $stats['audio'] }}</div><div class="sa-stat-label">Audio Packs</div></div>
+    </div>
+
+    <div style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4); flex-wrap:wrap;">
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search name, native name or code..." style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:#fff; font-size:12px; outline:none; min-width:250px;">
+        <select wire:model.live="statusFilter" style="background:#1a2744; border:1px solid rgba(255,255,255,.1); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:#fff; font-size:12px; outline:none;">
+            <option value="all">All status</option>
+            <option value="verified">Verified</option>
+            <option value="partial">Partial</option>
+            <option value="pending">Pending</option>
+        </select>
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:1.5fr 1fr 1fr 1fr 140px">
+        <div class="sa-table-head" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr 120px">
             <span>Language / Dialect</span>
             <span>Code</span>
             <span>Coverage</span>
@@ -43,43 +39,32 @@
             <span>Actions</span>
         </div>
 
-        <!-- Sample Row 1 -->
-        <div class="sa-table-row" style="grid-template-columns:1.5fr 1fr 1fr 1fr 140px">
-            <div style="display:flex;align-items:center;gap:12px">
-                <span style="font-size:20px">🇺🇬</span>
-                <div style="font-weight:600;color:#fff;font-size:13px">Luganda</div>
-            </div>
-            <code style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--savanna-gold)">lug-UG</code>
-            <div style="flex:1;display:flex;align-items:center;gap:10px">
-                <div style="flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden">
-                    <div style="width:95%;height:100%;background:var(--banana-green)"></div>
+        @forelse($languages as $language)
+            <div class="sa-table-row" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr 120px">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <span style="font-size:20px">{{ $language->flag_emoji ?: '🗣️' }}</span>
+                    <div>
+                        <div style="font-weight:700;color:#fff;font-size:13px">{{ $language->name }}</div>
+                        <div style="font-size:11px;color:rgba(255,255,255,.5)">{{ $language->native_name ?: '—' }}</div>
+                    </div>
                 </div>
-                <span style="font-size:10px;font-weight:700;color:var(--banana-mid)">95%</span>
+                <code style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--savanna-gold)">{{ $language->code }}</code>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <div style="flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden">
+                        <div style="width:{{ $language->translation_coverage }}%;height:100%;background:{{ $language->translation_coverage >= 80 ? 'var(--banana-green)' : ($language->translation_coverage >= 50 ? 'var(--sunfire)' : 'var(--clay-red)') }}"></div>
+                    </div>
+                    <span style="font-size:10px;font-weight:700;color:#fff">{{ $language->translation_coverage }}%</span>
+                </div>
+                <span class="status-pill {{ $language->status === 'verified' ? 'status-published' : ($language->status === 'partial' ? 'status-review' : 'status-draft') }}">{{ ucfirst($language->status) }}</span>
+                <div><a class="btn btn-sm" href="{{ route('admin.languages.detail', ['id' => $language->id]) }}" style="text-decoration:none">Details</a></div>
             </div>
-            <span class="status-pill status-published">Verified</span>
-            <div style="display:flex;gap:6px">
-                <button class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:3px 8px;font-size:9px">Manage</button>
-            </div>
-        </div>
+        @empty
+            <div style="padding:20px;color:rgba(255,255,255,.6)">No languages found.</div>
+        @endforelse
+    </div>
 
-        <!-- Sample Row 2 -->
-        <div class="sa-table-row" style="grid-template-columns:1.5fr 1fr 1fr 1fr 140px">
-            <div style="display:flex;align-items:center;gap:12px">
-                <span style="font-size:20px">🇺🇬</span>
-                <div style="font-weight:600;color:#fff;font-size:13px">Acholi</div>
-            </div>
-            <code style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--savanna-gold)">ach-UG</code>
-            <div style="flex:1;display:flex;align-items:center;gap:10px">
-                <div style="flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden">
-                    <div style="width:62%;height:100%;background:var(--sunfire)"></div>
-                </div>
-                <span style="font-size:10px;font-weight:700;color:var(--sunfire-light)">62%</span>
-            </div>
-            <span class="status-pill status-review">Partial</span>
-            <div style="display:flex;gap:6px">
-                <button class="btn btn-sm" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:3px 8px;font-size:9px">Manage</button>
-            </div>
-        </div>
+    <div style="margin-top:12px">
+        {{ $languages->links() }}
     </div>
 </div>
 
