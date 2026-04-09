@@ -15,6 +15,7 @@ use App\Livewire\Admin\OrganizationDetail;
 use App\Livewire\Admin\OrganizationsManager;
 use App\Livewire\Admin\PanelEditor;
 use App\Livewire\Admin\PermissionsManager;
+use App\Livewire\Admin\SongDetailPage;
 use App\Livewire\Admin\SongsManager;
 use App\Livewire\Admin\StoriesManager;
 use App\Livewire\Admin\StoryDetail;
@@ -81,6 +82,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
 
     // Activities section items
     Route::get('songs', SongsManager::class)->name('songs');
+    Route::get('songs/create', SongDetailPage::class)->name('songs.create');
+    Route::get('songs/{id}', SongDetailPage::class)->name('songs.detail');
     Route::get('activities', ActivitiesManager::class)->name('activities');
     Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', AgeCategories::class)->name('age-categories');

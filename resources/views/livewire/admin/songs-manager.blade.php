@@ -5,7 +5,7 @@
             <div class="sa-breadcrumb">Doc-aligned domain model · title, tribe, language, type, audio, lyrics, status</div>
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <button type="button" class="btn btn-primary btn-sm" wire:click="openCreateForm">+ New Song</button>
+            <a href="{{ route('admin.songs.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ New Song</a>
         </div>
     </div>
 
@@ -50,90 +50,6 @@
         </select>
     </div>
 
-    @if($showForm)
-        <div class="sa-table-wrap" style="padding:18px;margin-bottom:var(--sp-4)">
-            <h3 style="font-size:14px;font-weight:800;margin-bottom:14px">{{ $editingId ? 'Edit Song' : 'Create Song' }}</h3>
-            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Title</label>
-                    <input wire:model="title" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    @error('title') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Tribe</label>
-                    <select wire:model="tribe_id" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff">
-                        <option value="">Select tribe</option>
-                        @foreach($this->tribes as $tribe)
-                            <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('tribe_id') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Language</label>
-                    <input wire:model="language" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Song type</label>
-                    <select wire:model="song_type" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff">
-                        <option value="traditional_song">Traditional Song</option>
-                        <option value="nursery_rhyme">Nursery Rhyme</option>
-                        <option value="pronunciation">Pronunciation</option>
-                        <option value="chant">Chant</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:10px">
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Audio file</label>
-                    <input wire:model="audio_file" type="file" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    @error('audio_file') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Cover image</label>
-                    <input wire:model="cover_image" type="file" accept="image/*" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    @error('cover_image') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Duration (sec)</label>
-                    <input wire:model="duration_seconds" type="number" min="0" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Age min / max</label>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                        <input wire:model="age_min" type="number" min="1" max="18" placeholder="min" style="padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                        <input wire:model="age_max" type="number" min="1" max="18" placeholder="max" style="padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    </div>
-                    @error('age_max') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
-                </div>
-                <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Status</label>
-                    <select wire:model="status" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff">
-                        <option value="draft">Draft</option>
-                        <option value="review">Review</option>
-                        <option value="published">Published</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="margin-top:10px">
-                <label style="font-size:11px;color:rgba(255,255,255,.6)">Description</label>
-                <textarea wire:model="description" rows="2" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff"></textarea>
-            </div>
-            <div style="margin-top:10px">
-                <label style="font-size:11px;color:rgba(255,255,255,.6)">Lyrics</label>
-                <textarea wire:model="lyrics" rows="3" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff"></textarea>
-            </div>
-            <div style="display:flex;gap:10px;margin-top:14px">
-                <button type="button" class="btn btn-primary btn-sm" wire:click="saveSong" wire:loading.attr="disabled" wire:target="saveSong,audio_file,cover_image">
-                    {{ $editingId ? 'Update Song' : 'Create Song' }}
-                </button>
-                <button type="button" class="btn btn-ghost btn-sm" wire:click="cancelForm">Cancel</button>
-            </div>
-        </div>
-    @endif
-
     <div class="sa-table-wrap">
         <div class="sa-table-head" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px 160px">
             <span></span>
@@ -158,8 +74,7 @@
                 <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ str_replace('_', ' ', $song->song_type) }}</span>
                 <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ $song->duration_label }}</span>
                 <div style="display:flex;gap:6px">
-                    <button type="button" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px" wire:click="editSong({{ $song->id }})">Edit</button>
-                    <button type="button" class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3);padding:4px 10px;border-radius:999px;font-size:10px" wire:click="deleteSong({{ $song->id }})" wire:confirm="Delete this song?">Delete</button>
+                    <a href="{{ route('admin.songs.detail', $song->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px;text-decoration:none">Details</a>
                 </div>
             </div>
         @empty
