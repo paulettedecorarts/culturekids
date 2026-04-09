@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ImpersonationController;
 use App\Livewire\Admin\ActivitiesManager;
+use App\Livewire\Admin\ActivityDetailPage;
 use App\Livewire\Admin\AgeCategories;
 use App\Livewire\Admin\AnalyticsManager;
 use App\Livewire\Admin\AssetsManager;
@@ -85,6 +86,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('songs/create', SongDetailPage::class)->name('songs.create');
     Route::get('songs/{id}', SongDetailPage::class)->name('songs.detail');
     Route::get('activities', ActivitiesManager::class)->name('activities');
+    Route::get('activities/create', ActivityDetailPage::class)->name('activities.create');
+    Route::get('activities/{id}', ActivityDetailPage::class)->name('activities.detail');
     Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', AgeCategories::class)->name('age-categories');
     Route::get('languages', LanguagesManager::class)->name('languages');

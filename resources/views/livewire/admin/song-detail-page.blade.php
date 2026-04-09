@@ -1,4 +1,4 @@
-<div>
+<div class="song-detail-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div style="display:flex;align-items:center;gap:12px">
             <a href="{{ route('admin.songs') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Songs</a>
@@ -163,4 +163,16 @@
             </div>
         </div>
     @endif
+    <style>
+        .song-detail-page select {
+            background:#1a2744;
+            color:#fff;
+            color-scheme: dark;
+        }
+        .song-detail-page select option,
+        .song-detail-page select optgroup {
+            background:#1a2744;
+            color:#fff;
+        }
+    </style>
 </div>
