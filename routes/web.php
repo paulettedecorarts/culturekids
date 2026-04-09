@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ImpersonationController;
 use App\Livewire\Admin\ActivitiesManager;
 use App\Livewire\Admin\ActivityDetailPage;
 use App\Livewire\Admin\AgeCategories;
+use App\Livewire\Admin\AgeProfileDetailPage;
 use App\Livewire\Admin\AnalyticsManager;
 use App\Livewire\Admin\AssetsManager;
 use App\Livewire\Admin\AuditLogs;
@@ -90,6 +91,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('activities/{id}', ActivityDetailPage::class)->name('activities.detail');
     Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', AgeCategories::class)->name('age-categories');
+    Route::get('/age-categories/create', AgeProfileDetailPage::class)->name('age-categories.create');
+    Route::get('/age-categories/{id}', AgeProfileDetailPage::class)->name('age-categories.detail');
     Route::get('languages', LanguagesManager::class)->name('languages');
 
     // New Platform section items
