@@ -21,4 +21,14 @@ class Tribe extends Model
     {
         return $this->hasMany(Activity::class);
     }
+
+    public function heritageActivities(): HasMany
+    {
+        return $this->hasMany(Activity::class)->where('type', '!=', 'song');
+    }
+
+    public function songs(): HasMany
+    {
+        return $this->hasMany(Song::class);
+    }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\Attributes\Layout;
 use App\Models\Tribe;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.admin')]
 class TribeDetail extends Component
@@ -13,13 +13,13 @@ class TribeDetail extends Component
 
     public function mount(Tribe $tribe)
     {
-        $this->tribe = $tribe->load('activities');
+        $this->tribe = $tribe->load(['heritageActivities', 'songs']);
     }
 
     public function deleteActivity($id)
     {
-        $this->tribe->activities()->findOrFail($id)->delete();
-        $this->tribe->refresh();
+        $this->tribe->heritageActivities()->findOrFail($id)->delete();
+        $this->tribe->refresh()->load(['heritageActivities', 'songs']);
         session()->flash('message', 'Heritage activity removed.');
     }
 

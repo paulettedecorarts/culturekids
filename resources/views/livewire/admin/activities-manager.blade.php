@@ -38,7 +38,6 @@
         <input placeholder="🔍 Search activities…" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
         <select style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Types</option>
-            <option value="song">Songs</option>
             <option value="vocab">Vocab Pack</option>
             <option value="worksheet">Worksheet</option>
         </select>

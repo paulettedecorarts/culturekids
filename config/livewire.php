@@ -68,7 +68,7 @@ return [
         // No max rule: size is bounded only by PHP ini (upload_max_filesize / post_max_size) and web server.
         'rules' => ['required', 'file'],
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
-        'middleware' => null,  // Example: 'throttle:5,1'             | Default: 'throttle:60,1'
+        'middleware' => ['throttle:120,1', 'log.livewire.upload'],
         // Livewire only accepts extensions listed here for /livewire/upload-file — include broad audio + existing media.
         'preview_mimes' => [
             'png', 'gif', 'bmp', 'svg', 'jpg', 'jpeg', 'webp', 'pdf',

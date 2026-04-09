@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\PanelVocabTag;
+use App\Services\AudioUploadService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
@@ -139,12 +140,16 @@ class PanelEditor extends Component
         }
 
         try {
-            // Delete old audio
-            if ($this->currentPanel->audio_url) {
-                Storage::disk('public')->delete($this->currentPanel->audio_url);
-            }
-
-            $audioPath = $this->audio_file->store('comics/audio', 'public');
+            $audioPath = app(AudioUploadService::class)->store(
+                $this->audio_file,
+                'comics/audio',
+                $this->currentPanel->audio_url,
+                [
+                    'feature' => 'panel_editor',
+                    'entity' => 'comic_panel',
+                    'entity_id' => $this->currentPanel->id,
+                ],
+            );
             $this->currentPanel->audio_url = $audioPath;
             $this->currentPanel->save();
         } catch (\Throwable $e) {
@@ -167,7 +172,11 @@ class PanelEditor extends Component
             return;
         }
 
-        Storage::disk('public')->delete($this->currentPanel->audio_url);
+        app(AudioUploadService::class)->delete($this->currentPanel->audio_url, [
+            'feature' => 'panel_editor',
+            'entity' => 'comic_panel',
+            'entity_id' => $this->currentPanel->id,
+        ]);
         $this->currentPanel->audio_url = null;
         $this->currentPanel->save();
 

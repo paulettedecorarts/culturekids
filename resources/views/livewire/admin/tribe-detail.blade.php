@@ -61,11 +61,11 @@
                         <h2 style="font-family:var(--font-display); font-size:28px; color:#fff; margin-bottom:4px">Heritage Activity Inventory</h2>
                         <div style="font-size:12px; color:rgba(255,255,255,0.4); font-weight:700">Cultural assets assigned to the {{ $tribe->name }} archive</div>
                     </div>
-                    <span style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:8px 16px; border-radius:12px; font-size:12px; font-weight:800; color:rgba(255,255,255,0.6)">{{ $tribe->activities->count() }} Records Found</span>
+                    <span style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:8px 16px; border-radius:12px; font-size:12px; font-weight:800; color:rgba(255,255,255,0.6)">{{ $tribe->heritageActivities->count() }} Heritage Records · {{ $tribe->songs->count() }} Songs</span>
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:12px">
-                    @forelse($tribe->activities as $activity)
+                    @forelse($tribe->heritageActivities as $activity)
                         <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); border-radius:24px; padding:24px; display:flex; align-items:center; justify-content:space-between; transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
                             <div style="display:flex; align-items:center; gap:20px">
                                 <div style="width:52px; height:52px; background:{{ $tribe->color }}; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'20' }}">🏺</div>
@@ -98,7 +98,7 @@
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
                     <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); padding:32px; border-radius:24px; text-align:center">
                         <div style="font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; margin-bottom:8px">Total Star Points Archive</div>
-                        <div style="font-size:32px; font-weight:800; color:var(--savanna-gold); font-family:var(--font-display)">{{ $tribe->activities->sum('star_points') }} ★</div>
+                        <div style="font-size:32px; font-weight:800; color:var(--savanna-gold); font-family:var(--font-display)">{{ $tribe->heritageActivities->sum('star_points') + $tribe->songs->sum('star_points') }} ★</div>
                     </div>
                 </div>
             </div>
