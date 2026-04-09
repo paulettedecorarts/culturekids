@@ -2,17 +2,17 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 use App\Models\Theme;
 use App\Models\AuditLog;
 use Illuminate\Support\Str;
 
-#[Layout('layouts.admin')]
 class ThemesManager extends Component
 {
     use WithPagination;
+    use UsesPortalContext;
 
     public $showModal = false;
     public $editing = false;
@@ -49,6 +49,11 @@ class ThemesManager extends Component
 
     public function mount()
     {
+        $user = auth()->user();
+        if ($user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin')) {
+            $this->selectedOrgId = (string) $user->organisation_id;
+        }
+
         // Load default colors
         $defaults = Theme::defaultColors();
         foreach ($defaults as $key => $value) {
@@ -280,23 +285,34 @@ class ThemesManager extends Component
 
     public function render()
     {
+        $user = auth()->user();
+        $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
+        $orgId = $user?->organisation_id;
+
         $query = Theme::with('organisation')->latest();
-        
-        // Filter by organization if selected
-        if ($this->selectedOrgId === 'global') {
-            $query->whereNull('org_id');
-        } elseif ($this->selectedOrgId) {
-            $query->where('org_id', $this->selectedOrgId);
+
+        if ($isOrgAdminOnly) {
+            $query->where('org_id', $orgId);
+        } else {
+            // Super admin behavior.
+            if ($this->selectedOrgId === 'global') {
+                $query->whereNull('org_id');
+            } elseif ($this->selectedOrgId) {
+                $query->where('org_id', $this->selectedOrgId);
+            }
         }
         
         $themes = $query->paginate(12);
         $presets = $this->getPresets();
-        $organisations = \App\Models\Organisation::orderBy('name')->get();
+        $organisations = $isOrgAdminOnly
+            ? \App\Models\Organisation::where('id', $orgId)->orderBy('name')->get()
+            : \App\Models\Organisation::orderBy('name')->get();
 
         return view('livewire.admin.themes-manager', [
             'themes' => $themes,
             'presets' => $presets,
             'organisations' => $organisations,
-        ]);
+            'isOrgAdminOnly' => $isOrgAdminOnly,
+        ])->layout($this->portalLayout());
     }
 }

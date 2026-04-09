@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Push\FcmPushGateway;
+use App\Services\Push\LogPushGateway;
+use App\Services\Push\PushGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(PushGateway::class, function () {
+            return config('push.provider') === 'fcm'
+                ? new FcmPushGateway
+                : new LogPushGateway;
+        });
     }
 
     /**

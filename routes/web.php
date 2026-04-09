@@ -37,10 +37,10 @@ use App\Livewire\CMS\AdminDashboard;
 use App\Livewire\CMS\Analytics;
 use App\Livewire\CMS\Assets;
 use App\Livewire\CMS\Organizations;
+use App\Livewire\CMS\ReviewQueue;
 use App\Livewire\CMS\Site;
 use App\Livewire\CMS\Songs;
 use App\Livewire\CMS\StoryPacks;
-use App\Livewire\CMS\Themes;
 use App\Livewire\CMS\Translations;
 use App\Livewire\CMS\TribeDirectory;
 use App\Livewire\Teacher\MainDashboard;
@@ -146,8 +146,10 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
 // Super Admin must impersonate an org_admin user to access these routes.
 Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'])->prefix('cms/admin')->name('cms.admin.')->group(function () {
     Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+    Route::get('/review', ReviewQueue::class)->name('review');
     Route::get('/site', Site::class)->name('site');
-    Route::get('/themes', Themes::class)->name('themes');
+    // Reuse mature admin theme management with org-admin scoping.
+    Route::get('/themes', ThemesManager::class)->name('themes');
     Route::get('/organizations', Organizations::class)->name('organizations');
     Route::get('/analytics', Analytics::class)->name('analytics');
 });

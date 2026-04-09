@@ -65,4 +65,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChildProfile::class);
     }
+
+    /**
+     * Device tokens registered for push notifications.
+     */
+    public function pushDeviceTokens(): HasMany
+    {
+        return $this->hasMany(PushDeviceToken::class);
+    }
 }

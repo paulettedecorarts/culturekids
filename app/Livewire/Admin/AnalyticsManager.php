@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\UsesPortalContext;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 
-#[Layout('layouts.admin')]
 class AnalyticsManager extends Component
 {
+    use UsesPortalContext;
+
     public function render()
     {
-        return view('livewire.admin.analytics-manager');
+        return view('livewire.admin.analytics-manager')
+            ->layout($this->portalLayout());
     }
 }

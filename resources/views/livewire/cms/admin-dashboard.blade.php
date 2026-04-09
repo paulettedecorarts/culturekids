@@ -5,8 +5,8 @@
             <div class="cms-breadcrumb">Organizational Admin · {{ $organization }}</div>
         </div>
         <div style="margin-left:auto; display:flex; gap:var(--sp-2)">
-            <span class="status-pill status-published" style="padding: 8px 16px; font-size: 11px;">PRO PLAN</span>
-            <button class="btn btn-primary btn-sm" onclick="alert('Viewing detailed reports...')">📊 Export Reports</button>
+            <span class="status-pill status-published" style="padding: 8px 16px; font-size: 11px;">{{ $plan }} PLAN</span>
+            <a href="{{ route('cms.admin.analytics') }}" class="btn btn-primary btn-sm" style="text-decoration:none;">📊 View Reports</a>
         </div>
     </div>
 
@@ -29,8 +29,8 @@
                 <div class="preview-thumb">🌍</div>
                 <div class="presence-info">
                     <div class="presence-name">Main Landing Page</div>
-                    <div class="presence-link">culturekids.app/{{ strtolower(str_replace(' ', '-', $organization)) }}</div>
-                    <div class="status-pill status-published">Active</div>
+                    <div class="presence-link">culturekids.app/{{ $organizationCode ?: strtolower(str_replace(' ', '-', $organization)) }}</div>
+                    <div class="status-pill {{ $siteStatus === 'Published' ? 'status-published' : 'status-draft' }}">{{ $siteStatus }}</div>
                 </div>
                 <a href="{{ route('cms.admin.site') }}" class="btn-primary" style="padding: 10px 24px; font-size: 11px; text-decoration: none;">Manage</a>
             </div>
@@ -41,7 +41,7 @@
                     <div class="theme-color" style="background:var(--clay-red)"></div>
                     <div class="theme-color" style="background:var(--sunfire)"></div>
                     <div class="theme-color" style="background:var(--savanna-gold)"></div>
-                    <span style="font-size:13px; font-weight:700; margin-left:12px">Savanna Default</span>
+                    <span style="font-size:13px; font-weight:700; margin-left:12px">{{ $activeThemeName }}</span>
                 </div>
                 <a href="{{ route('cms.admin.themes') }}" style="font-size:11px; font-weight:800; color:var(--clay-red); text-decoration:none; display:inline-block; margin-top:12px">Customize Theme →</a>
             </div>
@@ -51,18 +51,16 @@
         <div class="admin-card">
             <h3 class="card-title">Usage & Engagement</h3>
             <div class="activity-meters">
-                <div class="meter-group">
-                    <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:6px"><span style="font-weight:700">Comics Read</span> <span>84% Target</span></div>
-                    <div class="meter-bg"><div class="meter-fill" style="width:84%; background:var(--clay-red)"></div></div>
-                </div>
-                <div class="meter-group">
-                    <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:6px"><span style="font-weight:700">Vocabulary Mastery</span> <span>61% Target</span></div>
-                    <div class="meter-bg"><div class="meter-fill" style="width:61%; background:var(--savanna-gold)"></div></div>
-                </div>
-                <div class="meter-group">
-                  <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:6px"><span style="font-weight:700">Teacher Login Rate</span> <span>92% Target</span></div>
-                  <div class="meter-bg"><div class="meter-fill" style="width:92%; background:var(--banana-green)"></div></div>
-                </div>
+                @foreach($usageMeters as $meter)
+                    <div class="meter-group">
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:6px">
+                            <span style="font-weight:700">{{ $meter['label'] }}</span>
+                            <span>{{ $meter['percent'] }}%</span>
+                        </div>
+                        <div class="meter-bg"><div class="meter-fill" style="width:{{ $meter['percent'] }}%; background:var(--clay-red)"></div></div>
+                        <div style="font-size:11px; color:var(--stone); margin-top:6px">{{ $meter['meta'] }}</div>
+                    </div>
+                @endforeach
             </div>
             <a href="{{ route('cms.admin.analytics') }}" class="btn-ghost" style="padding: 10px; width: 100%; text-align: center; border-radius: 12px; margin-top: 12px; text-decoration: none;">View Detailed Analytics</a>
         </div>

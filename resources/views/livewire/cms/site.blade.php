@@ -5,10 +5,15 @@
             <div class="cms-breadcrumb">Platform · Public Web · Front-end</div>
         </div>
         <div style="margin-left:auto; display:flex; gap:var(--sp-3)">
-            <button class="btn btn-ghost btn-sm" wire:click="$refresh">🔄 Discard Changes</button>
-            <button class="btn btn-primary btn-sm" onclick="alert('✅ Public site updated successfully!')">🚀 Publish Live</button>
+            <button class="btn btn-ghost btn-sm" wire:click="discardChanges">🔄 Discard Changes</button>
+            <button class="btn btn-primary btn-sm" wire:click="publishLive">🚀 Publish Live</button>
         </div>
     </div>
+    @if (session()->has('message'))
+        <div style="margin-bottom:12px; padding:10px 14px; border:1px solid #DCFCE7; background:#F0FDF4; color:#166534; border-radius:10px; font-size:12px; font-weight:700;">
+            {{ session('message') }}
+        </div>
+    @endif
 
     <div class="site-grid">
         <!-- Editor Column -->
@@ -33,11 +38,10 @@
                         </div>
                         <div class="form-group">
                             <label>Primary Site Logo</label>
-                            <div class="upload-dropzone">
-                                <span>📁</span>
-                                <div>Click to replace logo</div>
-                                <small>PNG/SVG · 512x512 recommended</small>
-                            </div>
+                            <input type="file" wire:model="logo_upload" accept="image/*">
+                            @if($logo_path)
+                                <small style="display:block; margin-top:6px; color:var(--stone)">Current logo: <code>{{ $logo_path }}</code></small>
+                            @endif
                         </div>
                     @elseif($active_tab == 'content')
                         <div class="form-group">
@@ -47,11 +51,11 @@
                         <div class="form-group">
                             <label>Featured Tribes (displayed on home)</label>
                             <div class="tribe-selector">
-                                <div class="tribe-chip checked">🦁 Buganda</div>
-                                <div class="tribe-chip checked">🦒 Acholi</div>
-                                <div class="tribe-chip checked">🐘 Basoga</div>
-                                <div class="tribe-chip">🛡️ Banyankore</div>
-                                <div class="tribe-chip">⛰️ Bakiga</div>
+                                @foreach($tribes as $tribe)
+                                    <button type="button" class="tribe-chip {{ in_array($tribe->id, $featured_tribe_ids, true) ? 'checked' : '' }}" wire:click="toggleFeaturedTribe({{ $tribe->id }})">
+                                        {{ $tribe->hero_emoji ?: '🌍' }} {{ $tribe->name }}
+                                    </button>
+                                @endforeach
                             </div>
                         </div>
                     @elseif($active_tab == 'contact')
@@ -65,18 +69,21 @@
                         </div>
                         <div class="form-group">
                             <label>Physical Location</label>
-                            <input type="text" value="Kampala, Uganda · Plot 42 Heritage Rd.">
+                            <input type="text" wire:model.live="location_text">
                         </div>
                     @elseif($active_tab == 'seo')
                         <div class="form-group">
                             <label>SEO Title Tag</label>
-                            <input type="text" value="{{ $organization }} · African Cultural Heritage for Kids">
+                            <input type="text" wire:model.live="seo_title">
                         </div>
                         <div class="form-group">
                             <label>Meta Description</label>
-                            <textarea rows="3">Discover your roots through traditional stories and songs. {{ $organization }} is a proud partner of Paulette Culture Kids.</textarea>
+                            <textarea rows="3" wire:model.live="seo_description"></textarea>
                         </div>
                     @endif
+                    <div style="display:flex; justify-content:flex-end; gap:8px;">
+                        <button class="btn btn-ghost btn-sm" type="button" wire:click="save">💾 Save Draft</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,8 +121,11 @@
                     
                     <div class="mock-section-label">Explore Our Tribes</div>
                     <div class="mock-grid">
-                        <div class="mock-card">🦁 Buganda</div>
-                        <div class="mock-card">🦒 Acholi</div>
+                        @forelse($featuredTribes->take(4) as $tribe)
+                            <div class="mock-card">{{ $tribe->hero_emoji ?: '🌍' }} {{ $tribe->name }}</div>
+                        @empty
+                            <div class="mock-card">🌍 Featured tribe</div>
+                        @endforelse
                     </div>
                 </div>
 
