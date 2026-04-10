@@ -55,6 +55,45 @@
                     <span style="color:var(--banana-light); font-size:12px; font-weight:800">{{ $organization->users_count }}</span>
                 </div>
             </div>
+
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:32px; padding:28px">
+                <div style="margin-bottom:20px">
+                    <h3 style="font-family:var(--font-display); font-size:20px; font-weight:800; color:#fff; margin-bottom:8px">Users</h3>
+                    <p style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.5; margin:0">{{ $orgUsers->count() }} {{ Str::plural('account', $orgUsers->count()) }} in this organization. Organisation admins invite and manage their own staff from their portal; this list is read-only for platform oversight.</p>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:10px; max-height:420px; overflow-y:auto; padding-right:4px">
+                    @forelse($orgUsers as $user)
+                        <a href="{{ route('admin.users.detail', $user) }}" style="text-decoration:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:10px">
+                            <div style="display:flex; align-items:center; gap:12px">
+                                <div style="width:40px; height:40px; border-radius:12px; background:var(--clay-red); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:var(--font-display); font-size:15px; flex-shrink:0">
+                                    {{ Str::substr($user->name, 0, 1) }}
+                                </div>
+                                <div style="flex:1; min-width:0">
+                                    <div style="color:#fff; font-weight:800; font-size:14px; margin-bottom:2px; line-height:1.2">{{ $user->name }}</div>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.35); font-weight:700; word-break:break-word">{{ $user->email }}</div>
+                                    <div style="font-size:10px; color:rgba(255,255,255,0.25); font-weight:600; margin-top:4px">Joined {{ $user->created_at->diffForHumans() }}</div>
+                                </div>
+                            </div>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; justify-content:space-between">
+                                <div style="display:flex; flex-wrap:wrap; gap:6px">
+                                    @foreach($user->roles as $role)
+                                        <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; padding:4px 8px; border-radius:999px; background:rgba(212,160,23,0.12); color:var(--savanna-gold); border:1px solid rgba(212,160,23,0.25)">{{ str_replace('_', ' ', $role->name) }}</span>
+                                    @endforeach
+                                    @if($user->roles->isEmpty())
+                                        <span style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.25)">No roles</span>
+                                    @endif
+                                </div>
+                                <span style="font-size:10px; font-weight:800; color:var(--savanna-gold)">View →</span>
+                            </div>
+                        </a>
+                    @empty
+                        <div style="text-align:center; padding:28px 16px; opacity:0.35">
+                            <span style="font-size:12px; font-weight:700">No users in this organization yet.</span>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:32px">
@@ -98,31 +137,19 @@
             </div>
 
             <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:32px; padding:40px">
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:12px">
-                    <div>
-                        <h3 style="font-family:var(--font-display); font-size:24px; font-weight:800; color:#fff; margin-bottom:4px">Teachers</h3>
-                        <p style="font-size:13px; color:rgba(255,255,255,0.4)">{{ $teachers->count() }} with teacher role in this organization.</p>
+                <h3 style="font-family:var(--font-display); font-size:24px; font-weight:800; color:#fff; margin-bottom:8px">Subscription plan</h3>
+                <p style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:24px">Set the platform tier for this school (same options as when creating an organization).</p>
+                <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end">
+                    <div style="flex:1; min-width:220px">
+                        <label style="display:block; font-size:10px; font-weight:800; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px">Plan tier</label>
+                        <select wire:model="plan" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 16px; color:#fff; font-family:var(--font-admin); font-size:14px; outline:none">
+                            <option value="free">Free</option>
+                            <option value="school">School</option>
+                            <option value="enterprise">Enterprise</option>
+                        </select>
+                        @error('plan') <div style="color:var(--clay-red); font-size:11px; margin-top:8px; font-weight:700">{{ $message }}</div> @enderror
                     </div>
-                    <a href="{{ route('admin.users.create', ['organisation_id' => $organization->id]) }}" class="btn" style="background:rgba(212,160,23,0.15); color:var(--savanna-gold); border:1px solid rgba(212,160,23,0.35); padding:10px 20px; border-radius:14px; font-size:12px; font-weight:800; text-decoration:none">+ Add user</a>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:12px">
-                    @forelse($teachers as $teacher)
-                        <a href="{{ route('admin.users.detail', $teacher) }}" style="text-decoration:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:16px 24px; display:flex; align-items:center; gap:20px">
-                            <div style="width:48px; height:48px; border-radius:14px; background:var(--clay-red); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:var(--font-display); font-size:18px">
-                                {{ substr($teacher->name, 0, 1) }}
-                            </div>
-                            <div style="flex:1; min-width:0">
-                                <div style="color:#fff; font-weight:800; font-size:15px; margin-bottom:2px">{{ $teacher->name }}</div>
-                                <div style="font-size:12px; color:rgba(255,255,255,0.3); font-weight:700">{{ $teacher->email }} · Joined {{ $teacher->created_at->diffForHumans() }}</div>
-                            </div>
-                            <span style="font-size:11px; font-weight:800; color:var(--savanna-gold)">View</span>
-                        </a>
-                    @empty
-                        <div style="text-align:center; padding:48px; opacity:0.3">
-                            <span style="font-size:13px; font-weight:700">No teachers found for this organization.</span>
-                        </div>
-                    @endforelse
+                    <button type="button" wire:click="saveSubscriptionPlan" class="btn btn-primary" style="padding:14px 24px; border-radius:14px; font-weight:800; font-size:12px">Save plan</button>
                 </div>
             </div>
 

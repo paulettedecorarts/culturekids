@@ -17,13 +17,39 @@ class OrganizationDetail extends Component
     /** @var array<int, string> */
     public array $allowedTribeIds = [];
 
+    public string $plan = 'free';
+
     public function mount(Organisation $organization): void
     {
         $this->organization = $organization->loadCount('users')->load('modules');
+        $this->syncPlanFromOrganization();
         $ids = data_get($this->organization->settings, 'allowed_tribe_ids', []);
         $this->allowedTribeIds = is_array($ids)
             ? array_values(array_map('strval', array_filter($ids)))
             : [];
+    }
+
+    public function saveSubscriptionPlan(): void
+    {
+        $this->validate([
+            'plan' => 'required|in:free,school,enterprise',
+        ]);
+
+        $this->organization->update(['plan' => $this->plan]);
+        $this->organization->refresh();
+        $this->syncPlanFromOrganization();
+
+        AuditLog::record('UPDATE_ORGANISATION_PLAN', "organisations/{$this->organization->id}", [
+            'plan' => $this->plan,
+        ]);
+
+        session()->flash('message', 'Subscription plan updated.');
+    }
+
+    private function syncPlanFromOrganization(): void
+    {
+        $p = $this->organization->plan;
+        $this->plan = in_array($p, ['free', 'school', 'enterprise'], true) ? $p : 'free';
     }
 
     public function toggleStatus(): void
@@ -82,13 +108,13 @@ class OrganizationDetail extends Component
 
     public function render()
     {
-        $this->organization = $this->organization->fresh(['modules']);
+        $this->organization = $this->organization->fresh(['modules'])->loadCount('users');
 
         $org = $this->organization;
 
-        $teachers = $org->users()
-            ->whereHas('roles', fn ($q) => $q->where('name', 'teacher'))
-            ->latest()
+        $orgUsers = $org->users()
+            ->with('roles')
+            ->orderBy('name')
             ->get();
 
         $modules = Module::query()
@@ -109,7 +135,7 @@ class OrganizationDetail extends Component
         ]);
 
         return view('livewire.admin.organization-detail', [
-            'teachers' => $teachers,
+            'orgUsers' => $orgUsers,
             'modules' => $modules,
             'moduleStates' => $moduleStates,
             'tribes' => $tribes,
