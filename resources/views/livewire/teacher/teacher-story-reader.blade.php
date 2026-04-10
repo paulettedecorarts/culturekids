@@ -6,7 +6,10 @@
                 {{ $comic->tribe?->name ?? __('Tribe') }} · {{ $comic->age_range }} · {{ $comic->panels->count() }} {{ __('panels') }}
             </div>
         </div>
-        <a href="{{ route('teacher.library') }}" wire:navigate class="btn btn-outline btn-sm" style="text-decoration:none">{{ __('← Story Library') }}</a>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+            <a href="{{ route('teacher.library') }}" wire:navigate class="btn btn-outline btn-sm" style="text-decoration:none">{{ __('← Story Library') }}</a>
+            <button type="button" class="btn btn-primary btn-sm" style="border-radius:12px" onclick="window.print()">{{ __('Print') }}</button>
+        </div>
     </div>
 
     @if ($comic->description)
@@ -33,4 +36,12 @@
             </div>
         @endforeach
     </div>
+
+    @if (request()->boolean('print'))
+        <script>
+            window.addEventListener('load', function () {
+                setTimeout(function () { window.print(); }, 300);
+            });
+        </script>
+    @endif
 </div>

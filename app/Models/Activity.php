@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Activity extends Model
 {
@@ -46,5 +47,26 @@ class Activity extends Model
     public function tribe(): BelongsTo
     {
         return $this->belongsTo(Tribe::class);
+    }
+
+    /**
+     * Resolved URL for a printable file stored in metadata (relative to the public disk or absolute http(s)).
+     */
+    public function printableAssetUrl(): ?string
+    {
+        $metadata = $this->metadata ?? [];
+        foreach (['print_path', 'file_path', 'pdf_path', 'asset_path', 'download_url', 'url'] as $key) {
+            $value = data_get($metadata, $key);
+            if (! is_string($value) || $value === '') {
+                continue;
+            }
+            if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+                return $value;
+            }
+
+            return Storage::disk('public')->url(ltrim($value, '/'));
+        }
+
+        return null;
     }
 }
