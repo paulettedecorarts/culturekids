@@ -2,30 +2,38 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Layout;
+use App\Models\AuditLog;
 use App\Models\Organisation;
-use Illuminate\Support\Str;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 #[Layout('layouts.admin')]
 class OrganizationsManager extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $search = '';
+
     public $showModal = false;
-    public $editing = false;
-    
-    // Form fields
+
     public $selectedId;
+
     public $name;
+
     public $code;
+
     public $description;
+
     public $address;
+
+    public string $plan = 'free';
+
     public $status = 'active';
-    public $logo; // For upload
+
+    public $logo;
+
     public $logo_url;
 
     protected $rules = [
@@ -33,27 +41,14 @@ class OrganizationsManager extends Component
         'code' => 'required|alpha_dash|unique:organisations,code',
         'description' => 'nullable|max:500',
         'address' => 'nullable|max:255',
+        'plan' => 'required|in:free,school,enterprise',
         'status' => 'required|in:active,inactive',
-        'logo' => 'nullable|image|max:1024', // 1MB Max
+        'logo' => 'nullable|image|max:1024',
     ];
 
     public function updatingSearch()
     {
         $this->resetPage();
-    }
-
-    public function updatedName($value)
-    {
-        if (!$this->editing) {
-            $this->code = Str::slug($value);
-        }
-    }
-
-    public function create()
-    {
-        $this->resetForm();
-        $this->editing = false;
-        $this->showModal = true;
     }
 
     public function edit($id)
@@ -64,19 +59,19 @@ class OrganizationsManager extends Component
         $this->code = $organization->code;
         $this->description = $organization->description;
         $this->address = $organization->address;
+        $this->plan = in_array($organization->plan, ['free', 'school', 'enterprise'], true)
+            ? $organization->plan
+            : 'free';
         $this->status = $organization->status;
         $this->logo_url = $organization->logo_url;
-        
-        $this->editing = true;
+
         $this->showModal = true;
     }
 
     public function save()
     {
         $rules = $this->rules;
-        if ($this->editing) {
-            $rules['code'] = 'required|alpha_dash|unique:organisations,code,' . $this->selectedId;
-        }
+        $rules['code'] = 'required|alpha_dash|unique:organisations,code,'.$this->selectedId;
 
         $this->validate($rules);
 
@@ -85,6 +80,7 @@ class OrganizationsManager extends Component
             'code' => $this->code,
             'description' => $this->description,
             'address' => $this->address,
+            'plan' => $this->plan,
             'status' => $this->status,
         ];
 
@@ -92,13 +88,14 @@ class OrganizationsManager extends Component
             $data['logo_url'] = $this->logo->store('logos', 'public');
         }
 
-        if ($this->editing) {
-            Organisation::findOrFail($this->selectedId)->update($data);
-            session()->flash('message', 'Organization updated successfully.');
-        } else {
-            Organisation::create($data);
-            session()->flash('message', 'Organization created successfully.');
-        }
+        $org = Organisation::findOrFail($this->selectedId);
+        $org->update($data);
+        AuditLog::record('UPDATE_ORGANISATION', "organisations/{$org->id}", [
+            'code' => $org->code,
+            'plan' => $org->plan,
+            'status' => $org->status,
+        ]);
+        session()->flash('message', 'Organization updated successfully.');
 
         $this->showModal = false;
         $this->resetForm();
@@ -106,7 +103,12 @@ class OrganizationsManager extends Component
 
     public function delete($id)
     {
-        Organisation::findOrFail($id)->delete();
+        $org = Organisation::findOrFail($id);
+        AuditLog::record('DELETE_ORGANISATION', "organisations/{$org->id}", [
+            'code' => $org->code,
+            'name' => $org->name,
+        ]);
+        $org->delete();
         session()->flash('message', 'Organization removed successfully.');
     }
 
@@ -115,6 +117,9 @@ class OrganizationsManager extends Component
         $org = Organisation::findOrFail($id);
         $org->status = $org->status === 'active' ? 'inactive' : 'active';
         $org->save();
+        AuditLog::record('TOGGLE_ORGANISATION_STATUS', "organisations/{$org->id}", [
+            'status' => $org->status,
+        ]);
     }
 
     private function resetForm()
@@ -124,6 +129,7 @@ class OrganizationsManager extends Component
         $this->code = '';
         $this->description = '';
         $this->address = '';
+        $this->plan = 'free';
         $this->status = 'active';
         $this->logo = null;
         $this->logo_url = null;
@@ -132,10 +138,14 @@ class OrganizationsManager extends Component
 
     public function render()
     {
-        $organizations = Organisation::withCount('users')
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('code', 'like', '%' . $this->search . '%');
+        $search = $this->search;
+
+        $organizations = Organisation::withCount(['users', 'childProfiles'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('code', 'like', '%'.$search.'%');
+                });
             })
             ->latest()
             ->paginate(15);

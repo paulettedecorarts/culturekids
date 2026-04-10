@@ -148,6 +148,15 @@
             .auth-link:hover { color: var(--clay-red); }
 
             .input-error { color: var(--clay-red); font-size: 11px; margin-top: 5px; font-weight: 700; }
+
+            .guest-lead {
+                text-align: center;
+                font-size: 14px;
+                line-height: 1.55;
+                color: var(--stone);
+                font-weight: 600;
+                margin: -8px 0 28px;
+            }
         </style>
     </head>
     <body>
@@ -158,7 +167,13 @@
             <div class="guest-card">
                 <div class="guest-logo">
                     <div class="logo-text">Paulette Culture Kids</div>
-                    <div class="logo-sub">{{ $title ?? 'Welcome Back' }}</div>
+                    <div class="logo-sub">
+                        @if (request()->routeIs('password.reset'))
+                            Set your password
+                        @else
+                            {{ $title ?? 'Welcome Back' }}
+                        @endif
+                    </div>
                 </div>
 
                 {{ $slot }}
