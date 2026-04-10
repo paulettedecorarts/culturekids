@@ -9,14 +9,27 @@ trait UsesPortalContext
         return request()->routeIs('cms.editor.*');
     }
 
+    protected function isOrgAdminPortal(): bool
+    {
+        return request()->routeIs('cms.admin.*');
+    }
+
     protected function portalRoutePrefix(): string
     {
-        return $this->isEditorPortal() ? 'cms.editor' : 'admin';
+        if ($this->isEditorPortal()) {
+            return 'cms.editor';
+        }
+
+        if ($this->isOrgAdminPortal()) {
+            return 'cms.admin';
+        }
+
+        return 'admin';
     }
 
     protected function portalLayout(): string
     {
-        return $this->isEditorPortal() ? 'layouts.cms' : 'layouts.admin';
+        return ($this->isEditorPortal() || $this->isOrgAdminPortal()) ? 'layouts.cms' : 'layouts.admin';
     }
 
     protected function portalRouteName(string $suffix): string

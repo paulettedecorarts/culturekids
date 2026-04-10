@@ -117,7 +117,8 @@
             request()->routeIs('cms.editor.assets*') ||
             request()->routeIs('cms.editor.translations*') ||
             request()->routeIs('cms.editor.songs*') ||
-            request()->routeIs('cms.editor.activities*');
+            request()->routeIs('cms.editor.activities*') ||
+            request()->routeIs('cms.admin.themes*');
     @endphp
 
     <div class="cms-shell" style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}">

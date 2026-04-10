@@ -103,6 +103,12 @@ class ThemesManager extends Component
 
         $this->validate($rules);
 
+        $user = auth()->user();
+        $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
+        if ($isOrgAdminOnly) {
+            $this->org_id = $user->organisation_id;
+        }
+
         $data = [
             'org_id' => $this->org_id,
             'name' => $this->name,
@@ -148,7 +154,14 @@ class ThemesManager extends Component
 
     public function delete($id)
     {
+        $user = auth()->user();
+        $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
         $theme = Theme::findOrFail($id);
+
+        if ($isOrgAdminOnly && (int) $theme->org_id !== (int) $user->organisation_id) {
+            session()->flash('error', 'You are not allowed to delete this theme.');
+            return;
+        }
         
         if ($theme->is_default) {
             session()->flash('error', 'Cannot delete the default theme.');
@@ -165,7 +178,14 @@ class ThemesManager extends Component
 
     public function setDefault($id)
     {
+        $user = auth()->user();
+        $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
         $theme = Theme::findOrFail($id);
+
+        if ($isOrgAdminOnly && (int) $theme->org_id !== (int) $user->organisation_id) {
+            session()->flash('error', 'You are not allowed to modify this theme.');
+            return;
+        }
         
         // Remove default from themes in the same org (or global if org_id is null)
         Theme::where('org_id', $theme->org_id)
