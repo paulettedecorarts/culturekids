@@ -109,7 +109,8 @@ class OfflineBundleBuilder
         $zip->addFromString('manifest.json', json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $zip->close();
 
-        $bundlePath = 'bundles/org-'.$comic->org_id.'/comic-'.$comic->id.'.ckb';
+        $bundleScope = $comic->org_id ? 'org-'.$comic->org_id : 'global';
+        $bundlePath = 'bundles/'.$bundleScope.'/comic-'.$comic->id.'.ckb';
         $stream = fopen($tempZipPath, 'r');
         $publicDisk->put($bundlePath, $stream);
         if (is_resource($stream)) {

@@ -19,7 +19,7 @@ class HandlePublishedContentSideEffects implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int $orgId,
+        public ?int $orgId = null,
         public ?int $comicId = null,
         public ?int $songId = null
     ) {
@@ -30,7 +30,9 @@ class HandlePublishedContentSideEffects implements ShouldQueue
     {
         // API cache invalidation strategy: bump org content version
         // so clients can detect stale data and refresh.
-        $versionKey = "api:org:{$this->orgId}:content_version";
+        $versionKey = $this->orgId
+            ? "api:org:{$this->orgId}:content_version"
+            : 'api:global:content_version';
         if (! Cache::has($versionKey)) {
             Cache::put($versionKey, 1, now()->addYears(5));
         } else {
@@ -52,8 +54,8 @@ class HandlePublishedContentSideEffects implements ShouldQueue
         }
 
         $tokens = PushDeviceToken::query()
-            ->where('organisation_id', $this->orgId)
             ->where('is_active', true)
+            ->when($this->orgId, fn ($query) => $query->where('organisation_id', $this->orgId))
             ->pluck('token')
             ->values()
             ->all();
@@ -75,7 +77,7 @@ class HandlePublishedContentSideEffects implements ShouldQueue
                 title: $title,
                 body: $body,
                 data: [
-                    'org_id' => (string) $this->orgId,
+                    'org_id' => $this->orgId !== null ? (string) $this->orgId : null,
                     'comic_id' => isset($payload['comic_id']) ? (string) $payload['comic_id'] : null,
                     'song_id' => isset($payload['song_id']) ? (string) $payload['song_id'] : null,
                     'type' => 'content_published',

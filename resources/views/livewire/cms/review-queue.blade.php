@@ -13,10 +13,10 @@
     @endif
 
     <div class="cms-stats-row">
-        <div class="cms-stat"><div class="sa-stat-val">{{ $reviewComics->count() }}</div><div class="cms-stat-label">Comics In Review</div></div>
-        <div class="cms-stat"><div class="sa-stat-val">{{ $reviewSongs->count() }}</div><div class="cms-stat-label">Songs In Review</div></div>
-        <div class="cms-stat"><div class="sa-stat-val">{{ $reviewComics->count() + $reviewSongs->count() }}</div><div class="cms-stat-label">Total Pending</div></div>
-        <div class="cms-stat"><div class="sa-stat-val">Org</div><div class="cms-stat-label">Scoped Approval</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">{{ $reviewComics->count() }}</div><div class="cms-stat-label">Comics In Review</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">{{ $reviewSongs->count() }}</div><div class="cms-stat-label">Songs In Review</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">{{ $reviewComics->count() + $reviewSongs->count() }}</div><div class="cms-stat-label">Total Pending</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">Ready</div><div class="cms-stat-label">Approval Queue</div></div>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-6);">
@@ -29,8 +29,26 @@
                     <span style="font-weight:700">{{ $comic->title }}</span>
                     <span style="font-size:12px; color:var(--stone)">{{ $comic->updated_at?->diffForHumans() }}</span>
                     <span style="display:flex; gap:6px;">
-                        <button class="btn btn-primary btn-sm" wire:click="approveComic({{ $comic->id }})">Approve</button>
-                        <button class="btn btn-ghost btn-sm" wire:click="rejectComic({{ $comic->id }})">Reject</button>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            wire:click="approveComic({{ $comic->id }})"
+                            wire:loading.attr="disabled"
+                            wire:target="approveComic({{ $comic->id }})"
+                            wire:loading.class="opacity-50 cursor-not-allowed"
+                        >
+                            <span wire:loading.remove wire:target="approveComic({{ $comic->id }})">Approve</span>
+                            <span wire:loading wire:target="approveComic({{ $comic->id }})">Approving...</span>
+                        </button>
+                        <button
+                            class="btn btn-ghost btn-sm"
+                            wire:click="rejectComic({{ $comic->id }})"
+                            wire:loading.attr="disabled"
+                            wire:target="rejectComic({{ $comic->id }})"
+                            wire:loading.class="opacity-50 cursor-not-allowed"
+                        >
+                            <span wire:loading.remove wire:target="rejectComic({{ $comic->id }})">Reject</span>
+                            <span wire:loading wire:target="rejectComic({{ $comic->id }})">Rejecting...</span>
+                        </button>
                     </span>
                 </div>
             @empty
@@ -47,8 +65,26 @@
                     <span style="font-weight:700">{{ $song->title }}</span>
                     <span style="font-size:12px; color:var(--stone)">{{ $song->updated_at?->diffForHumans() }}</span>
                     <span style="display:flex; gap:6px;">
-                        <button class="btn btn-primary btn-sm" wire:click="approveSong({{ $song->id }})">Approve</button>
-                        <button class="btn btn-ghost btn-sm" wire:click="rejectSong({{ $song->id }})">Reject</button>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            wire:click="approveSong({{ $song->id }})"
+                            wire:loading.attr="disabled"
+                            wire:target="approveSong({{ $song->id }})"
+                            wire:loading.class="opacity-50 cursor-not-allowed"
+                        >
+                            <span wire:loading.remove wire:target="approveSong({{ $song->id }})">Approve</span>
+                            <span wire:loading wire:target="approveSong({{ $song->id }})">Approving...</span>
+                        </button>
+                        <button
+                            class="btn btn-ghost btn-sm"
+                            wire:click="rejectSong({{ $song->id }})"
+                            wire:loading.attr="disabled"
+                            wire:target="rejectSong({{ $song->id }})"
+                            wire:loading.class="opacity-50 cursor-not-allowed"
+                        >
+                            <span wire:loading.remove wire:target="rejectSong({{ $song->id }})">Reject</span>
+                            <span wire:loading wire:target="rejectSong({{ $song->id }})">Rejecting...</span>
+                        </button>
                     </span>
                 </div>
             @empty

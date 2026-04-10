@@ -15,10 +15,8 @@ class ReviewQueue extends Component
 {
     public function approveComic(int $comicId): void
     {
-        $orgId = auth()->user()?->organisation_id;
         $comic = Comic::query()
             ->where('id', $comicId)
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->first();
 
@@ -28,17 +26,15 @@ class ReviewQueue extends Component
 
         $comic->update(['status' => 'published']);
         BuildOfflineBundle::dispatch($comic->id);
-        HandlePublishedContentSideEffects::dispatch((int) $orgId, comicId: $comic->id);
+        HandlePublishedContentSideEffects::dispatch(null, comicId: $comic->id);
         AuditLog::record('APPROVE_COMIC', "comics/{$comic->id}", ['status' => 'published']);
         session()->flash('message', "Comic '{$comic->title}' approved, bundle build queued, and publish side-effects dispatched.");
     }
 
     public function rejectComic(int $comicId): void
     {
-        $orgId = auth()->user()?->organisation_id;
         $comic = Comic::query()
             ->where('id', $comicId)
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->first();
 
@@ -53,10 +49,8 @@ class ReviewQueue extends Component
 
     public function approveSong(int $songId): void
     {
-        $orgId = auth()->user()?->organisation_id;
         $song = Song::query()
             ->where('id', $songId)
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->first();
 
@@ -65,17 +59,15 @@ class ReviewQueue extends Component
         }
 
         $song->update(['status' => 'published']);
-        HandlePublishedContentSideEffects::dispatch((int) $orgId, songId: $song->id);
+        HandlePublishedContentSideEffects::dispatch(null, songId: $song->id);
         AuditLog::record('APPROVE_SONG', "songs/{$song->id}", ['status' => 'published']);
         session()->flash('message', "Song '{$song->title}' approved and publish side-effects dispatched.");
     }
 
     public function rejectSong(int $songId): void
     {
-        $orgId = auth()->user()?->organisation_id;
         $song = Song::query()
             ->where('id', $songId)
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->first();
 
@@ -90,18 +82,15 @@ class ReviewQueue extends Component
 
     public function render()
     {
-        $orgId = auth()->user()?->organisation_id;
-        $organization = auth()->user()?->organisation?->name ?? 'Your Organization';
+        $organization = auth()->user()?->organisation?->name ?? 'Global Library';
 
         $reviewComics = Comic::query()
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->latest()
             ->limit(50)
             ->get(['id', 'title', 'updated_at']);
 
         $reviewSongs = Song::query()
-            ->where('org_id', $orgId)
             ->where('status', 'review')
             ->latest()
             ->limit(50)
