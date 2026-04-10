@@ -1,21 +1,76 @@
 <div class="tribes-explorer">
     <div class="header">
         <div>
-            <h1 class="page-title">Tribes Explorer</h1>
-            <div class="breadcrumb">Content · Cultural Heritage Search</div>
-        </div>
-        <div style="display:flex; gap:12px">
-            <button class="btn btn-primary" style="padding:10px 24px; font-size:12px">🔍 Search All Tribes</button>
+            <h1 class="page-title">{{ __('Tribes explorer') }}</h1>
+            <div class="breadcrumb">{{ __('Content · Heritage by tribe') }}</div>
+            <p style="margin-top:12px; font-size:14px; font-weight:600; color:var(--stone); max-width:560px; line-height:1.5">
+                {{ __('Tribes listed here match stories your org admin approved from the Review Queue. Counts are only for those approved comics.') }}
+            </p>
         </div>
     </div>
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:26px">
-        @foreach(['Buganda', 'Acholi', 'Basoga', 'Banyankore'] as $tribe)
-            <div style="background:#fff; border-radius:32px; padding:32px; border:1px solid var(--cream-mid); text-align:center; box-shadow:0 8px 32px rgba(26,18,8,.04); transition:all 0.2s" onmouseover="this.style.boxShadow='0 12px 48px rgba(196,75,43,.1)'" onmouseout="this.style.boxShadow='0 8px 32px rgba(26,18,8,.04)'">
-                <div style="font-size:56px; margin-bottom:20px">🦁</div>
-                <h3 style="font-family:var(--font-display); font-size:24px; color:var(--ink)">{{ $tribe }}</h3>
-                <div style="font-size:12px; font-weight:800; color:var(--stone); margin-top:8px; text-transform:uppercase; letter-spacing:1px">Central Region</div>
-                <button class="btn btn-primary" style="margin-top:24px; width:100%; font-size:12px; border-radius:12px">Explore Heritage</button>
-            </div>
-        @endforeach
+
+    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:24px">
+        <input
+            type="search"
+            wire:model.live.debounce.300ms="search"
+            placeholder="{{ __('Search tribes, languages, regions…') }}"
+            style="flex:1; min-width:220px; max-width:400px; padding:10px 16px; border-radius:999px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:13px;"
+        >
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center">
+            <button
+                type="button"
+                wire:click="selectRegion('')"
+                class="btn btn-sm {{ $region === '' ? 'btn-primary' : 'btn-outline' }}"
+                style="border-radius:999px; padding:8px 14px; font-size:12px"
+            >{{ __('All regions') }}</button>
+            @foreach ($regions as $r)
+                <button
+                    type="button"
+                    wire:click="selectRegion(@js($r))"
+                    class="btn btn-sm {{ $region === $r ? 'btn-primary' : 'btn-outline' }}"
+                    style="border-radius:999px; padding:8px 14px; font-size:12px"
+                >{{ $r }}</button>
+            @endforeach
+        </div>
     </div>
+
+    @if ($tribes->isEmpty())
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:24px; padding:32px; text-align:center; font-weight:600; color:#92400E;">
+            {{ __('No tribes match these filters.') }}
+        </div>
+    @else
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:22px;">
+            @foreach ($tribes as $tribe)
+                <div style="background:#fff; border-radius:24px; border:1px solid var(--cream-mid); overflow:hidden; box-shadow:0 8px 24px rgba(26,18,8,.05);">
+                    <div style="height:88px; display:flex; align-items:center; justify-content:center; font-size:36px; background:linear-gradient(135deg, {{ $tribe->color ? $tribe->color.'33' : 'var(--cream-mid)' }}, var(--cream-warm));">
+                        {{ $tribe->hero_emoji ?: '🌍' }}
+                    </div>
+                    <div style="padding:16px 18px 20px;">
+                        <div style="font-family:var(--font-display); font-size:17px; font-weight:800; color:var(--ink); margin-bottom:4px">{{ $tribe->name }}</div>
+                        <div style="font-size:11px; font-weight:700; color:var(--stone); margin-bottom:12px">
+                            @if ($tribe->region)
+                                {{ $tribe->region }}
+                            @endif
+                            @if ($tribe->hero_name)
+                                @if ($tribe->region) · @endif{{ $tribe->hero_name }}
+                            @endif
+                        </div>
+                        <span style="display:inline-block; font-size:10px; font-weight:800; background:var(--cream-warm); padding:4px 10px; border-radius:999px; color:var(--ink-light); margin-bottom:12px">
+                            {{ $tribe->published_comics_count }} {{ __('published comics') }}
+                        </span>
+                        <a
+                            href="{{ route('teacher.library', ['tribe' => $tribe->id]) }}"
+                            wire:navigate
+                            class="btn btn-primary btn-sm"
+                            style="width:100%; display:block; text-align:center; text-decoration:none; border-radius:12px; padding:10px; font-size:12px; margin-top:4px"
+                        >{{ __('Open in Story Library') }}</a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div style="margin-top:28px">
+            {{ $tribes->links('vendor.pagination.teacher') }}
+        </div>
+    @endif
 </div>

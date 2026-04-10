@@ -44,6 +44,17 @@ class AuditLog extends Model
     /**
      * Static helper to record an audit log
      */
+    public static function comicIdFromResource(?string $resource): ?int
+    {
+        if (! $resource || ! str_starts_with($resource, 'comics/')) {
+            return null;
+        }
+
+        $id = (int) substr($resource, strlen('comics/'));
+
+        return $id > 0 ? $id : null;
+    }
+
     public static function record(string $action, ?string $resource = null, ?array $payload = null, string $status = 'success'): self
     {
         return self::create([

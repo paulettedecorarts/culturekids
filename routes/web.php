@@ -48,6 +48,7 @@ use App\Livewire\Teacher\MyClass;
 use App\Livewire\Teacher\PrintCenter;
 use App\Livewire\Teacher\Reports;
 use App\Livewire\Teacher\StoryLibrary;
+use App\Livewire\Teacher\TeacherStoryReader;
 use App\Livewire\Teacher\TribesExplorer;
 use App\Livewire\Teacher\Worksheets;
 use Illuminate\Support\Facades\DB;
@@ -169,6 +170,7 @@ Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->
 
     // Content Modules
     Route::get('/library', StoryLibrary::class)->name('library');
+    Route::get('/stories/{id}', TeacherStoryReader::class)->name('stories.show');
     Route::get('/tribes', TribesExplorer::class)->name('tribes');
     Route::get('/print-center', PrintCenter::class)->name('print-center');
     Route::get('/worksheets', Worksheets::class)->name('worksheets');

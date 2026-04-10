@@ -13,6 +13,10 @@ class ApprovedContent extends Component
 {
     private function extractResourceId(?string $resource, string $prefix): ?int
     {
+        if ($prefix === 'comics') {
+            return AuditLog::comicIdFromResource($resource);
+        }
+
         if (! $resource || ! str_starts_with($resource, $prefix.'/')) {
             return null;
         }

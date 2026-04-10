@@ -31,4 +31,9 @@ class Tribe extends Model
     {
         return $this->hasMany(Song::class);
     }
+
+    public function comics(): HasMany
+    {
+        return $this->hasMany(Comic::class);
+    }
 }

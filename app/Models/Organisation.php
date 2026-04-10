@@ -65,6 +65,49 @@ class Organisation extends Model
     }
 
     /**
+     * Tribe IDs explicitly saved for this organisation (teacher hub).
+     * Missing or empty settings means no tribes are approved yet — teachers should not see shared heritage catalog until an admin selects tribes.
+     *
+     * @return list<int>
+     */
+    public function explicitAllowedTribeIds(): array
+    {
+        $ids = data_get($this->settings, 'allowed_tribe_ids');
+        if (! is_array($ids)) {
+            return [];
+        }
+
+        $out = array_values(array_unique(array_map('intval', $ids)));
+
+        return array_values(array_filter($out, fn (int $id) => $id > 0));
+    }
+
+    /**
+     * Comic IDs this organisation’s org admins have approved via the CMS Review Queue
+     * (APPROVE_COMIC audit log rows). Teachers should only see these published comics.
+     *
+     * @return list<int>
+     */
+    public function approvedComicIds(): array
+    {
+        $resources = AuditLog::query()
+            ->where('action', 'APPROVE_COMIC')
+            ->where('resource', 'like', 'comics/%')
+            ->whereHas('user', function ($query): void {
+                $query->where('organisation_id', $this->id)
+                    ->whereHas('roles', fn ($roles) => $roles->where('name', 'org_admin'));
+            })
+            ->pluck('resource');
+
+        return $resources
+            ->map(fn (string $resource) => AuditLog::comicIdFromResource($resource))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
      * Modules available to this organisation
      */
     public function modules(): BelongsToMany

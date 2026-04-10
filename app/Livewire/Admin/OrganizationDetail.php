@@ -103,7 +103,7 @@ class OrganizationDetail extends Component
             'allowed_tribe_ids' => $settings['allowed_tribe_ids'],
         ]);
 
-        session()->flash('message', 'Tribe access saved. Empty selection means all tribes (full library).');
+        session()->flash('message', 'Tribe access saved. This list controls which heritage tribes are licensed for integrations and API catalog rules. Teacher story access in the hub comes from the CMS Review Queue (approved comics), not from this screen alone.');
     }
 
     public function render()
