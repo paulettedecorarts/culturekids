@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Teacher;
 
-use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\Organisation;
+use App\Models\OrganisationComicDecision;
 use App\Models\Tribe;
 use App\Models\User;
 use App\Support\TeacherCatalogScope;
@@ -38,16 +38,6 @@ class TeacherCatalogScopeTest extends TestCase
         ], $overrides));
     }
 
-    private function approveComic(User $orgAdmin, Comic $comic): void
-    {
-        AuditLog::create([
-            'user_id' => $orgAdmin->id,
-            'action' => 'APPROVE_COMIC',
-            'resource' => 'comics/'.$comic->id,
-            'status' => 'success',
-        ]);
-    }
-
     public function test_tribes_query_lists_only_tribes_from_approved_comics(): void
     {
         $this->seed(RoleSeeder::class);
@@ -62,13 +52,15 @@ class TeacherCatalogScopeTest extends TestCase
             'status' => 'active',
         ]);
 
-        $admin = User::factory()->create(['organisation_id' => $org->id]);
-        $admin->assignRole('org_admin');
-
         $comicA = $this->comic($tribeA, ['title' => 'On A']);
         $this->comic($tribeB, ['title' => 'On B']);
 
-        $this->approveComic($admin, $comicA);
+        OrganisationComicDecision::create([
+            'organisation_id' => $org->id,
+            'comic_id' => $comicA->id,
+            'decision' => OrganisationComicDecision::DECISION_APPROVED,
+            'decided_by' => null,
+        ]);
 
         $teacher = User::factory()->create(['organisation_id' => $org->id]);
         $teacher->assignRole('teacher');
@@ -78,7 +70,7 @@ class TeacherCatalogScopeTest extends TestCase
         $this->assertSame([$tribeA->id], $ids);
     }
 
-    public function test_comics_query_lists_only_org_approved_published_comics(): void
+    public function test_comics_query_lists_pivot_approved_and_school_owned(): void
     {
         $this->seed(RoleSeeder::class);
 
@@ -96,15 +88,16 @@ class TeacherCatalogScopeTest extends TestCase
             'status' => 'active',
         ]);
 
-        $admin = User::factory()->create(['organisation_id' => $org->id]);
-        $admin->assignRole('org_admin');
-
         $global = $this->comic($t, ['title' => 'Global']);
         $mine = $this->comic($t, ['title' => 'Mine', 'org_id' => $org->id]);
         $theirs = $this->comic($t, ['title' => 'Theirs', 'org_id' => $other->id]);
 
-        $this->approveComic($admin, $global);
-        $this->approveComic($admin, $mine);
+        OrganisationComicDecision::create([
+            'organisation_id' => $org->id,
+            'comic_id' => $global->id,
+            'decision' => OrganisationComicDecision::DECISION_APPROVED,
+            'decided_by' => null,
+        ]);
 
         $teacher = User::factory()->create(['organisation_id' => $org->id]);
         $teacher->assignRole('teacher');
@@ -115,12 +108,12 @@ class TeacherCatalogScopeTest extends TestCase
         $this->assertNotContains($theirs->id, $ids);
     }
 
-    public function test_published_comics_without_review_queue_approval_are_hidden(): void
+    public function test_published_shared_comics_without_pivot_are_hidden(): void
     {
         $this->seed(RoleSeeder::class);
 
         $t = $this->tribe('T');
-        $this->comic($t, ['title' => 'Published but never approved for this org']);
+        $this->comic($t, ['title' => 'Shared no pivot']);
 
         $org = Organisation::create([
             'name' => 'School',
@@ -133,10 +126,9 @@ class TeacherCatalogScopeTest extends TestCase
         $teacher->assignRole('teacher');
 
         $this->assertSame([], TeacherCatalogScope::comicsQueryFor($teacher)->pluck('id')->all());
-        $this->assertSame([], TeacherCatalogScope::tribesQueryFor($teacher)->pluck('id')->all());
     }
 
-    public function test_user_can_view_comic_requires_org_admin_approval(): void
+    public function test_user_can_view_comic_matches_pivot_and_school_owned_rules(): void
     {
         $this->seed(RoleSeeder::class);
 
@@ -159,13 +151,18 @@ class TeacherCatalogScopeTest extends TestCase
 
         $this->assertFalse(TeacherCatalogScope::userCanViewComic($teacher, $published));
 
-        $this->approveComic($admin, $published);
+        OrganisationComicDecision::create([
+            'organisation_id' => $org->id,
+            'comic_id' => $published->id,
+            'decision' => OrganisationComicDecision::DECISION_APPROVED,
+            'decided_by' => $admin->id,
+        ]);
 
         $this->assertTrue(TeacherCatalogScope::userCanViewComic($teacher, $published));
         $this->assertFalse(TeacherCatalogScope::userCanViewComic($teacher, $draft));
     }
 
-    public function test_other_organisation_approvals_do_not_grant_access(): void
+    public function test_other_organisation_pivot_does_not_grant_access(): void
     {
         $this->seed(RoleSeeder::class);
 
@@ -183,11 +180,13 @@ class TeacherCatalogScopeTest extends TestCase
             'status' => 'active',
         ]);
 
-        $adminB = User::factory()->create(['organisation_id' => $orgB->id]);
-        $adminB->assignRole('org_admin');
-
         $comic = $this->comic($t, ['title' => 'Shared title']);
-        $this->approveComic($adminB, $comic);
+        OrganisationComicDecision::create([
+            'organisation_id' => $orgB->id,
+            'comic_id' => $comic->id,
+            'decision' => OrganisationComicDecision::DECISION_APPROVED,
+            'decided_by' => null,
+        ]);
 
         $teacherA = User::factory()->create(['organisation_id' => $orgA->id]);
         $teacherA->assignRole('teacher');

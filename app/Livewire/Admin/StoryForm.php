@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin;
 
-use App\Livewire\Concerns\UsesPortalContext;
 use App\Jobs\ProcessComicStoryMedia;
+use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\ComicPanel;
@@ -17,8 +17,8 @@ use Livewire\WithFileUploads;
 
 class StoryForm extends Component
 {
-    use WithFileUploads;
     use UsesPortalContext;
+    use WithFileUploads;
 
     public bool $editing = false;
 

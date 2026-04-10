@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Comic;
+use App\Models\OrganisationComicDecision;
 use App\Models\Tribe;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class TeacherCatalogScope
 {
     /**
-     * Comic IDs this teacher’s organisation may access (org-admin approvals from Review Queue).
+     * Comic IDs this organisation approved for the shared catalog (pivot), plus school-owned handled in queries.
      *
      * @return list<int>
      */
@@ -22,23 +23,31 @@ class TeacherCatalogScope
     }
 
     /**
-     * Tribes that appear on at least one org-approved comic.
-     *
      * @return Builder<Tribe>
      */
     public static function tribesQueryFor(User $user): Builder
     {
-        $approvedIds = self::approvedComicIdsFor($user);
-
-        if ($approvedIds === []) {
+        $org = $user->organisation;
+        if (! $org) {
             return Tribe::query()->whereRaw('0 = 1');
         }
 
+        $approvedIds = $org->approvedComicIds();
+
         $tribeIds = Comic::query()
-            ->whereKey($approvedIds)
-            ->where('status', 'published')
+            ->published()
+            ->where(function ($q) use ($approvedIds, $org) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $org->id);
+            })
             ->distinct()
             ->pluck('tribe_id');
+
+        if ($tribeIds->isEmpty()) {
+            return Tribe::query()->whereRaw('0 = 1');
+        }
 
         return Tribe::query()
             ->whereIn('id', $tribeIds)
@@ -46,8 +55,6 @@ class TeacherCatalogScope
     }
 
     /**
-     * Published comics this organisation’s org admins have approved (Review Queue → APPROVE_COMIC).
-     *
      * @return Builder<Comic>
      */
     public static function comicsQueryFor(User $user): Builder
@@ -56,13 +63,19 @@ class TeacherCatalogScope
             ->published()
             ->with(['tribe:id,name,hero_emoji,color,region']);
 
-        $approvedIds = self::approvedComicIdsFor($user);
-
-        if ($approvedIds === []) {
+        $org = $user->organisation;
+        if (! $org) {
             return $query->whereRaw('0 = 1');
         }
 
-        return $query->whereIn('id', $approvedIds)->orderBy('title');
+        $ids = $org->approvedComicIds();
+
+        return $query->where(function ($q) use ($ids, $org) {
+            if ($ids !== []) {
+                $q->whereIn('id', $ids);
+            }
+            $q->orWhere('org_id', $org->id);
+        })->orderBy('title');
     }
 
     public static function userCanViewComic(User $user, Comic $comic): bool
@@ -71,15 +84,24 @@ class TeacherCatalogScope
             return false;
         }
 
-        if ($comic->org_id !== null && (int) $comic->org_id !== (int) $user->organisation_id) {
-            return false;
-        }
-
         $org = $user->organisation;
         if (! $org) {
             return false;
         }
 
-        return in_array((int) $comic->id, $org->approvedComicIds(), true);
+        $comicOrg = $comic->org_id !== null ? (int) $comic->org_id : null;
+        if ($comicOrg !== null && $comicOrg !== 0 && $comicOrg === (int) $org->id) {
+            return true;
+        }
+
+        if ($comicOrg === null || $comicOrg === 0) {
+            return OrganisationComicDecision::query()
+                ->where('organisation_id', $org->id)
+                ->where('comic_id', $comic->id)
+                ->where('decision', OrganisationComicDecision::DECISION_APPROVED)
+                ->exists();
+        }
+
+        return false;
     }
 }

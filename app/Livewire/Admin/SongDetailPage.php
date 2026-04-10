@@ -13,8 +13,8 @@ use Livewire\WithFileUploads;
 
 class SongDetailPage extends Component
 {
-    use WithFileUploads;
     use UsesPortalContext;
+    use WithFileUploads;
 
     public ?Song $song = null;
 
@@ -158,6 +158,7 @@ class SongDetailPage extends Component
                 'source' => 'song_detail_page',
             ]),
         ]);
+
         $song->save();
 
         $isUpdate = (bool) $this->song;

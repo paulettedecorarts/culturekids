@@ -83,28 +83,45 @@ class Organisation extends Model
     }
 
     /**
-     * Comic IDs this organisation’s org admins have approved via the CMS Review Queue
-     * (APPROVE_COMIC audit log rows). Teachers should only see these published comics.
+     * Comic IDs approved for this organisation (heritage / shared catalog via pivot).
      *
      * @return list<int>
      */
     public function approvedComicIds(): array
     {
-        $resources = AuditLog::query()
-            ->where('action', 'APPROVE_COMIC')
-            ->where('resource', 'like', 'comics/%')
-            ->whereHas('user', function ($query): void {
-                $query->where('organisation_id', $this->id)
-                    ->whereHas('roles', fn ($roles) => $roles->where('name', 'org_admin'));
-            })
-            ->pluck('resource');
-
-        return $resources
-            ->map(fn (string $resource) => AuditLog::comicIdFromResource($resource))
-            ->filter()
+        return OrganisationComicDecision::query()
+            ->where('organisation_id', $this->id)
+            ->where('decision', OrganisationComicDecision::DECISION_APPROVED)
+            ->pluck('comic_id')
             ->unique()
             ->values()
             ->all();
+    }
+
+    /**
+     * Song IDs approved for this organisation (shared catalog via pivot).
+     *
+     * @return list<int>
+     */
+    public function approvedSongIds(): array
+    {
+        return OrganisationSongDecision::query()
+            ->where('organisation_id', $this->id)
+            ->where('decision', OrganisationSongDecision::DECISION_APPROVED)
+            ->pluck('song_id')
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    public function comicDecisions(): HasMany
+    {
+        return $this->hasMany(OrganisationComicDecision::class);
+    }
+
+    public function songDecisions(): HasMany
+    {
+        return $this->hasMany(OrganisationSongDecision::class);
     }
 
     /**

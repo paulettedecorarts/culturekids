@@ -39,12 +39,21 @@ class TribesExplorer extends Component
     {
         $user = auth()->user();
         $approvedComicIds = TeacherCatalogScope::approvedComicIdsFor($user);
+        $orgId = $user->organisation?->id;
 
         $query = TeacherCatalogScope::tribesQueryFor($user)
             ->withCount([
-                'comics as published_comics_count' => fn ($q) => $q
-                    ->where('status', 'published')
-                    ->whereIn('id', $approvedComicIds),
+                'comics as published_comics_count' => function ($q) use ($approvedComicIds, $orgId) {
+                    $q->where('status', 'published')
+                        ->where(function ($inner) use ($approvedComicIds, $orgId) {
+                            if ($approvedComicIds !== []) {
+                                $inner->whereIn('id', $approvedComicIds);
+                            }
+                            if ($orgId) {
+                                $inner->orWhere('org_id', $orgId);
+                            }
+                        });
+                },
             ]);
 
         if ($this->search !== '') {

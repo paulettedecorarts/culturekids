@@ -45,6 +45,11 @@ class Comic extends Model
         return $this->hasMany(ComicPanel::class)->orderBy('order_index');
     }
 
+    public function organisationComicDecisions(): HasMany
+    {
+        return $this->hasMany(OrganisationComicDecision::class);
+    }
+
     /**
      * Get age range string (e.g., "2-3", "3-4")
      */

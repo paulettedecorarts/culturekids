@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Song extends Model
@@ -76,6 +77,11 @@ class Song extends Model
     public function organisation(): BelongsTo
     {
         return $this->belongsTo(Organisation::class, 'org_id');
+    }
+
+    public function organisationSongDecisions(): HasMany
+    {
+        return $this->hasMany(OrganisationSongDecision::class);
     }
 
     public function getAgeRangeAttribute(): string
