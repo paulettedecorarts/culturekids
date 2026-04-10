@@ -38,6 +38,7 @@ use App\Livewire\CMS\AdminDashboard;
 use App\Livewire\CMS\Analytics;
 use App\Livewire\CMS\ApprovedContent;
 use App\Livewire\CMS\Organizations;
+use App\Livewire\CMS\OrgClassroomsManager;
 use App\Livewire\CMS\OrgPeopleManager;
 use App\Livewire\CMS\ReviewQueue;
 use App\Livewire\CMS\SongPreview;
@@ -154,6 +155,7 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
     Route::get('/themes', ThemesManager::class)->name('themes');
     Route::get('/organizations', Organizations::class)->name('organizations');
     Route::get('/people', OrgPeopleManager::class)->name('people');
+    Route::get('/classrooms', OrgClassroomsManager::class)->name('classrooms');
     Route::get('/analytics', Analytics::class)->name('analytics');
 });
 

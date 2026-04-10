@@ -41,7 +41,7 @@ class OrgPeopleManager extends Component
         $this->validate([
             'inviteName' => ['required', 'string', 'max:255'],
             'inviteEmail' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'inviteRole' => ['required', 'in:teacher,student'],
+            'inviteRole' => ['required', 'in:teacher,child'],
         ], [], [
             'inviteName' => 'name',
             'inviteEmail' => 'email',

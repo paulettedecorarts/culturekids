@@ -151,7 +151,8 @@
                 <a href="{{ route('cms.admin.approved-content') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.approved-content*') ? 'active' : '' }}">📚 Approved Content</a>
                 <a href="{{ route('cms.admin.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.themes') ? 'active' : '' }}">🎨 Themes</a>
                 <a href="{{ route('cms.admin.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
-                <a href="{{ route('cms.admin.people') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.people') ? 'active' : '' }}">👥 Teachers &amp; students</a>
+                <a href="{{ route('cms.admin.people') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.people') ? 'active' : '' }}">👥 Teachers &amp; children</a>
+                <a href="{{ route('cms.admin.classrooms') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.classrooms') ? 'active' : '' }}">🎓 Classrooms</a>
                 <a href="{{ route('cms.admin.analytics') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.analytics') ? 'active' : '' }}">📈 Analytics</a>
             @endif
             

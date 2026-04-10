@@ -28,7 +28,7 @@ new #[Layout('layouts.guest')] class extends Component
             $this->redirectIntended(default: route('cms.admin.dashboard', absolute: false), navigate: true);
         } elseif (auth()->user()->hasRole('teacher')) {
             $this->redirectIntended(default: route('teacher.dashboard', absolute: false), navigate: true);
-        } elseif (auth()->user()->hasRole('student')) {
+        } elseif (auth()->user()->hasRole('child')) {
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
         } else {
             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);

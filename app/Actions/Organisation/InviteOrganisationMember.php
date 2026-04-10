@@ -14,9 +14,9 @@ use Illuminate\Support\Str;
 class InviteOrganisationMember
 {
     /**
-     * Invite a teacher or student: creates the user, assigns the role, emails a password-setup link.
+     * Invite a teacher or child (learner): creates the user, assigns the role, emails a password-setup link.
      *
-     * @param  'teacher'|'student'  $roleName
+     * @param  'teacher'|'child'  $roleName
      */
     public function __invoke(
         Organisation $organisation,
@@ -25,7 +25,7 @@ class InviteOrganisationMember
         string $roleName,
         ?User $invitedBy = null,
     ): User {
-        if (! in_array($roleName, ['teacher', 'student'], true)) {
+        if (! in_array($roleName, ['teacher', 'child'], true)) {
             throw new \InvalidArgumentException('Invalid role for organisation invite.');
         }
 
@@ -39,7 +39,7 @@ class InviteOrganisationMember
             ]);
             $user->assignRole($roleName);
 
-            $roleLabel = $roleName === 'teacher' ? __('Teacher') : __('Student');
+            $roleLabel = $roleName === 'teacher' ? __('Teacher') : __('Child');
 
             $status = Password::broker()->sendResetLink(
                 ['email' => $user->email],

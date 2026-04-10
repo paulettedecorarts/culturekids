@@ -70,9 +70,6 @@ class RoleSeeder extends Seeder
             'teacher' => [
                 'manage classes', 'monitor student progress', 'assign rewards', 'play activities',
             ],
-            'student' => [
-                'play activities', 'earn badges', 'view child progress',
-            ],
             'parent' => [
                 'manage child profiles', 'view child progress', 'set usage limits', 'play activities',
             ],

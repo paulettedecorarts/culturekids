@@ -46,4 +46,34 @@ class OrgAdminInviteMemberTest extends TestCase
 
         Notification::assertSentTo($invited, OrganisationMemberInviteNotification::class);
     }
+
+    public function test_org_admin_can_invite_child_and_notification_is_sent(): void
+    {
+        Notification::fake();
+        $this->seed(RoleSeeder::class);
+
+        $org = Organisation::create([
+            'name' => 'Test School',
+            'code' => 'test-school-'.uniqid(),
+            'plan' => 'school',
+            'status' => 'active',
+        ]);
+        $admin = User::factory()->create(['organisation_id' => $org->id]);
+        $admin->assignRole('org_admin');
+
+        $this->actingAs($admin);
+
+        Livewire::test(OrgPeopleManager::class)
+            ->set('inviteName', 'Alex Child')
+            ->set('inviteEmail', 'alex-child-invite@example.test')
+            ->set('inviteRole', 'child')
+            ->call('invite')
+            ->assertHasNoErrors();
+
+        $invited = User::where('email', 'alex-child-invite@example.test')->first();
+        $this->assertNotNull($invited);
+        $this->assertTrue($invited->hasRole('child'));
+
+        Notification::assertSentTo($invited, OrganisationMemberInviteNotification::class);
+    }
 }

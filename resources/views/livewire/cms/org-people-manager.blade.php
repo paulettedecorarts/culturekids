@@ -1,7 +1,7 @@
 <div>
     <div class="cms-header">
         <div>
-            <h1 class="cms-page-title">Teachers &amp; students</h1>
+            <h1 class="cms-page-title">Teachers &amp; children</h1>
             <div class="cms-breadcrumb">Invite people · Your organisation</div>
         </div>
         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end">
@@ -67,7 +67,7 @@
                     <div>
                         <h2 id="org-invite-title" style="font-family:var(--font-display); font-size:22px; font-weight:800; color:var(--ink); margin-bottom:4px">Send invitation</h2>
                         <div style="font-size:12px; color:var(--stone); font-weight:600; line-height:1.45">
-                            Add a <strong>teacher</strong> or <strong>student</strong> to {{ $organization->name }}. They get an email with a link to set their password, then they can sign in.
+                            Add a <strong>teacher</strong> or <strong>child</strong> account to {{ $organization->name }}. They get an email with a link to set their password, then they can sign in.
                         </div>
                     </div>
                     <button
@@ -96,7 +96,7 @@
                         <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--stone); margin-bottom:6px">Role</label>
                         <select wire:model="inviteRole" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--cream-mid); font-family:var(--font-admin); font-size:15px; background:#fff">
                             <option value="teacher">Teacher</option>
-                            <option value="student">Student</option>
+                            <option value="child">Child</option>
                         </select>
                         @error('inviteRole') <div style="color:var(--clay-red); font-size:12px; margin-top:6px; font-weight:600">{{ $message }}</div> @enderror
                     </div>

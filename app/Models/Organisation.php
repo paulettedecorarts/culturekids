@@ -73,4 +73,9 @@ class Organisation extends Model
             ->withPivot('is_enabled')
             ->withTimestamps();
     }
+
+    public function classrooms(): HasMany
+    {
+        return $this->hasMany(Classroom::class);
+    }
 }

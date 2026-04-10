@@ -15,7 +15,7 @@
         <div class="cms-stat"><div class="cms-stat-val">{{ $totalUsers }}</div><div class="cms-stat-label">Total people</div></div>
         <div class="cms-stat"><div class="cms-stat-val">{{ $adminCount }}</div><div class="cms-stat-label">Admins</div></div>
         <div class="cms-stat"><div class="cms-stat-val">{{ $teacherCount }}</div><div class="cms-stat-label">Teachers</div></div>
-        <div class="cms-stat"><div class="cms-stat-val">{{ $studentCount }}</div><div class="cms-stat-label">Students</div></div>
+        <div class="cms-stat"><div class="cms-stat-val">{{ $childCount }}</div><div class="cms-stat-label">Children</div></div>
     </div>
 
     <div style="background:#fff; border:1px solid var(--cream-mid); border-radius:var(--r-xl); padding:var(--sp-6); box-shadow:0 8px 32px rgba(26,18,8,.05)">

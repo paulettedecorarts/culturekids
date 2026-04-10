@@ -31,7 +31,7 @@ class Organizations extends Component
 
     public int $teacherCount = 0;
 
-    public int $studentCount = 0;
+    public int $childCount = 0;
 
     public int $totalUsers = 0;
 
@@ -118,7 +118,7 @@ class Organizations extends Component
         if (! $orgId) {
             $this->adminCount = 0;
             $this->teacherCount = 0;
-            $this->studentCount = 0;
+            $this->childCount = 0;
             $this->totalUsers = 0;
 
             return;
@@ -134,9 +134,9 @@ class Organizations extends Component
             ->whereHas('roles', fn ($query) => $query->where('name', 'teacher'))
             ->count();
 
-        $this->studentCount = User::query()
+        $this->childCount = User::query()
             ->where('organisation_id', $orgId)
-            ->whereHas('roles', fn ($query) => $query->where('name', 'student'))
+            ->whereHas('roles', fn ($query) => $query->where('name', 'child'))
             ->count();
 
         $this->totalUsers = User::query()->where('organisation_id', $orgId)->count();
