@@ -147,6 +147,7 @@
             @if($isAdmin || $isSuper)
                 <div class="cms-nav-section">Management</div>
                 <a href="{{ route('cms.admin.review') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.review') ? 'active' : '' }}">✅ Review Queue</a>
+                <a href="{{ route('cms.admin.approved-content') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.approved-content*') ? 'active' : '' }}">📚 Approved Content</a>
                 <a href="{{ route('cms.admin.site') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.site') ? 'active' : '' }}">🌐 Site Module</a>
                 <a href="{{ route('cms.admin.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.themes') ? 'active' : '' }}">🎨 Themes</a>
                 <a href="{{ route('cms.admin.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
