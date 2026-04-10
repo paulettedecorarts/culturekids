@@ -5,8 +5,8 @@ namespace App\Livewire\CMS;
 use App\Models\AuditLog;
 use App\Models\Organisation;
 use App\Models\User;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.cms')]
 class Organizations extends Component
@@ -30,6 +30,8 @@ class Organizations extends Component
     public int $adminCount = 0;
 
     public int $teacherCount = 0;
+
+    public int $studentCount = 0;
 
     public int $totalUsers = 0;
 
@@ -116,6 +118,7 @@ class Organizations extends Component
         if (! $orgId) {
             $this->adminCount = 0;
             $this->teacherCount = 0;
+            $this->studentCount = 0;
             $this->totalUsers = 0;
 
             return;
@@ -131,7 +134,12 @@ class Organizations extends Component
             ->whereHas('roles', fn ($query) => $query->where('name', 'teacher'))
             ->count();
 
-        $this->totalUsers = $this->adminCount + $this->teacherCount;
+        $this->studentCount = User::query()
+            ->where('organisation_id', $orgId)
+            ->whereHas('roles', fn ($query) => $query->where('name', 'student'))
+            ->count();
+
+        $this->totalUsers = User::query()->where('organisation_id', $orgId)->count();
     }
 
     public function render()

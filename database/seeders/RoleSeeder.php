@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RoleSeeder extends Seeder
@@ -58,26 +58,29 @@ class RoleSeeder extends Seeder
 
         // 2. Define ALL Roles as per the PDF Workflows
         $roles = [
-            'super_admin'  => $permissions, // Everything
-            'org_admin'    => [
+            'super_admin' => $permissions, // Everything
+            'org_admin' => [
                 'manage organisation', 'manage organisation users', 'configure branding',
                 'manage classes', 'monitor student progress', 'view org analytics',
-                'ingest assets', 'publish content'
+                'ingest assets', 'publish content',
             ],
-            'cms_editor'   => [
-                'ingest assets', 'verify translations', 'tag heritage assets', 'curate activities'
+            'cms_editor' => [
+                'ingest assets', 'verify translations', 'tag heritage assets', 'curate activities',
             ],
-            'teacher'      => [
-                'manage classes', 'monitor student progress', 'assign rewards', 'play activities'
+            'teacher' => [
+                'manage classes', 'monitor student progress', 'assign rewards', 'play activities',
             ],
-            'parent'       => [
-                'manage child profiles', 'view child progress', 'set usage limits', 'play activities'
+            'student' => [
+                'play activities', 'earn badges', 'view child progress',
             ],
-            'child'        => [
-                'play activities', 'earn badges'
+            'parent' => [
+                'manage child profiles', 'view child progress', 'set usage limits', 'play activities',
             ],
-            'kiosk_mode'   => [
-                'access kiosk activities', 'play activities'
+            'child' => [
+                'play activities', 'earn badges',
+            ],
+            'kiosk_mode' => [
+                'access kiosk activities', 'play activities',
             ],
         ];
 
