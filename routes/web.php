@@ -40,7 +40,6 @@ use App\Livewire\CMS\Assets;
 use App\Livewire\CMS\Organizations;
 use App\Livewire\CMS\ReviewQueue;
 use App\Livewire\CMS\SongPreview;
-use App\Livewire\CMS\Site;
 use App\Livewire\CMS\Songs;
 use App\Livewire\CMS\StoryPreview;
 use App\Livewire\CMS\StoryPacks;
@@ -153,7 +152,6 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
     Route::get('/approved-content', ApprovedContent::class)->name('approved-content');
     Route::get('/approved-content/stories/{id}', StoryPreview::class)->name('approved-content.stories.show');
     Route::get('/approved-content/songs/{id}', SongPreview::class)->name('approved-content.songs.show');
-    Route::get('/site', Site::class)->name('site');
     // Reuse mature admin theme management with org-admin scoping.
     Route::get('/themes', ThemesManager::class)->name('themes');
     Route::get('/organizations', Organizations::class)->name('organizations');

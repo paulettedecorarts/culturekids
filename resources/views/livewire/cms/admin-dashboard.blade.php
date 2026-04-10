@@ -22,17 +22,17 @@
     </div>
 
     <div class="admin-grid">
-        <!-- Site & Branding Status -->
+        <!-- Content & Branding Status -->
         <div class="admin-card">
-            <h3 class="card-title">Site & Digital Presence</h3>
+            <h3 class="card-title">Content & Branding</h3>
             <div class="presence-status">
                 <div class="preview-thumb">🌍</div>
                 <div class="presence-info">
-                    <div class="presence-name">Main Landing Page</div>
+                    <div class="presence-name">Approved Content Library</div>
                     <div class="presence-link">culturekids.app/{{ $organizationCode ?: strtolower(str_replace(' ', '-', $organization)) }}</div>
                     <div class="status-pill {{ $siteStatus === 'Published' ? 'status-published' : 'status-draft' }}">{{ $siteStatus }}</div>
                 </div>
-                <a href="{{ route('cms.admin.site') }}" class="btn-primary" style="padding: 10px 24px; font-size: 11px; text-decoration: none;">Manage</a>
+                <a href="{{ route('cms.admin.approved-content') }}" class="btn-primary" style="padding: 10px 24px; font-size: 11px; text-decoration: none;">View</a>
             </div>
             
             <div class="theme-overview">
