@@ -2,27 +2,46 @@
 
 namespace App\Livewire\Teacher;
 
+use App\Models\Classroom;
+use App\Support\TeacherActiveClassroom;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
+#[Layout('layouts.teacher')]
 class MyClass extends Component
 {
-    public $students = [];
-
-    public function mount()
+    #[On('teacher-classroom-changed')]
+    public function onClassroomChanged(): void
     {
-        // Mock student data
-        $this->students = [
-            ['name' => 'Musa K.', 'id' => 'STU001', 'engagement' => '72%', 'lastStory' => 'The Clever Hare'],
-            ['name' => 'Sarah N.', 'id' => 'STU002', 'engagement' => '84%', 'lastStory' => 'The Clever Hare'],
-            ['name' => 'David O.', 'id' => 'STU003', 'engagement' => '61%', 'lastStory' => 'Garden Words'],
-            ['name' => 'Joy B.', 'id' => 'STU004', 'engagement' => '92%', 'lastStory' => 'The Clever Hare'],
-            ['name' => 'Peter W.', 'id' => 'STU005', 'engagement' => '45%', 'lastStory' => 'Draft Story'],
-        ];
+        //
     }
 
     public function render()
     {
-        return view('livewire.teacher.my-class')
-            ->layout('layouts.teacher');
+        $user = auth()->user();
+        $hasOrg = (bool) ($user?->organisation_id);
+        $assignedClasses = $user
+            ? TeacherActiveClassroom::teachingClassroomsFor($user)
+            : collect();
+
+        $activeClassroomId = null;
+        $children = collect();
+
+        if ($user && $assignedClasses->isNotEmpty()) {
+            $active = TeacherActiveClassroom::activeClassroom($user);
+            $activeClassroomId = $active?->id;
+
+            if ($active instanceof Classroom) {
+                $children = $active->children()->orderBy('name')->get();
+            }
+        }
+
+        return view('livewire.teacher.my-class', [
+            'hasOrganisation' => $hasOrg,
+            'assignedClasses' => $assignedClasses,
+            'activeClassroomId' => $activeClassroomId,
+            'children' => $children,
+        ]);
     }
 }

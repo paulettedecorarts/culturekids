@@ -2,27 +2,73 @@
 
 namespace App\Livewire\Teacher;
 
+use App\Support\TeacherActiveClassroom;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
+#[Layout('layouts.teacher')]
 class MainDashboard extends Component
 {
-    public $teacherName = 'Mrs. Nakato';
-    public $className = 'P3B - Buganda Tribe';
-    public $upcomingLesson = 'The Clever Hare - Intro';
-    public $performanceStats = [];
+    public string $teacherName = '';
 
-    public function mount()
+    public string $className = '';
+
+    public string $organisationName = '';
+
+    /** @var array<int, array{attainment: string, label: string}> */
+    public array $performanceStats = [];
+
+    public function mount(): void
     {
+        $this->refreshDashboard();
+    }
+
+    #[On('teacher-classroom-changed')]
+    public function refreshDashboard(): void
+    {
+        $user = auth()->user();
+        $this->teacherName = $user?->name ? (string) $user->name : __('Teacher');
+
+        $org = $user?->organisation;
+        $this->organisationName = $org?->name ? (string) $org->name : '';
+
+        $classrooms = $user
+            ? TeacherActiveClassroom::teachingClassroomsFor($user)
+            : collect();
+
+        $active = $user
+            ? TeacherActiveClassroom::activeClassroom($user)
+            : null;
+
+        if ($classrooms->isEmpty()) {
+            $this->className = __('No class assigned yet');
+            $this->performanceStats = [
+                ['attainment' => '0', 'label' => __('Children in active class')],
+                ['attainment' => '0', 'label' => __('Classes you teach')],
+                ['attainment' => '—', 'label' => __('Engagement (soon)')],
+            ];
+
+            return;
+        }
+
+        $this->className = $active
+            ? $active->name
+            : (string) $classrooms->first()->name;
+
+        $childCount = $active
+            ? $active->children()->count()
+            : 0;
+
         $this->performanceStats = [
-            ['attainment' => '92%', 'label' => 'Attendance'],
-            ['attainment' => '78%', 'label' => 'Engagement'],
-            ['attainment' => '64%', 'label' => 'Packs Finished'],
+            ['attainment' => (string) $childCount, 'label' => __('Children in active class')],
+            ['attainment' => (string) $classrooms->count(), 'label' => __('Classes you teach')],
+            ['attainment' => '—', 'label' => __('Engagement (soon)')],
         ];
     }
 
     public function render()
     {
-        return view('livewire.teacher.main-dashboard')
-            ->layout('layouts.teacher');
+        return view('livewire.teacher.main-dashboard');
     }
 }

@@ -86,6 +86,8 @@
                 <span>{{ auth()->user()->name ?? 'Teacher' }}</span>
             </div>
 
+            @livewire('teacher.classroom-switcher')
+
             <a href="{{ route('teacher.dashboard') }}" class="nav-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
                 <em style="font-size: 14px">🏠</em>
                 <span>Dashboard</span>
