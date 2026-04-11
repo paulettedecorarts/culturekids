@@ -118,6 +118,7 @@
             request()->routeIs('cms.editor.translations*') ||
             request()->routeIs('cms.editor.songs*') ||
             request()->routeIs('cms.editor.flashcards*') ||
+            request()->routeIs('cms.editor.puzzles*') ||
             request()->routeIs('cms.editor.activities*') ||
             request()->routeIs('cms.editor.offline-bundles*') ||
             request()->routeIs('cms.admin.themes*');
@@ -141,6 +142,7 @@
                 <a href="{{ route('cms.editor.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
                 <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs') ? 'active' : '' }}">🎵 Songs</a>
                 <a href="{{ route('cms.editor.flashcards') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.flashcards') ? 'active' : '' }}">🃏 Flashcards</a>
+                <a href="{{ route('cms.editor.puzzles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.puzzles*') ? 'active' : '' }}">🧩 Puzzles</a>
                 <a href="{{ route('cms.editor.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.translations') ? 'active' : '' }}">🌐 Language Packs</a>
                 <a href="{{ route('cms.editor.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.assets') ? 'active' : '' }}">🖼 Assets</a>
                 <a href="{{ route('cms.editor.offline-bundles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.offline-bundles') ? 'active' : '' }}">📦 Offline Bundles</a>

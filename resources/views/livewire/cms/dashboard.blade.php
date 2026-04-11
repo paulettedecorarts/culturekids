@@ -65,6 +65,10 @@
                     <div class="shortcut-icon">🃏</div>
                     <div class="shortcut-label">Flashcards</div>
                 </a>
+                <a href="{{ route('cms.editor.puzzles') }}" class="shortcut-item">
+                    <div class="shortcut-icon">🧩</div>
+                    <div class="shortcut-label">Puzzles</div>
+                </a>
                 <a href="{{ route('cms.editor.assets') }}" class="shortcut-item">
                     <div class="shortcut-icon">🖼️</div>
                     <div class="shortcut-label">Media Assets</div>

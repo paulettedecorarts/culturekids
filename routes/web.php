@@ -41,6 +41,9 @@ use App\Livewire\CMS\OfflineBundles;
 use App\Livewire\CMS\Organizations;
 use App\Livewire\CMS\OrgClassroomsManager;
 use App\Livewire\CMS\OrgPeopleManager;
+use App\Livewire\CMS\Puzzles\PuzzleEditor;
+use App\Livewire\CMS\Puzzles\PuzzleShow;
+use App\Livewire\CMS\Puzzles\PuzzlesIndex;
 use App\Livewire\CMS\ReviewQueue;
 use App\Livewire\CMS\SongPreview;
 use App\Livewire\CMS\StoryPreview;
@@ -90,6 +93,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('songs', SongsManager::class)->name('songs');
     Route::get('songs/create', SongDetailPage::class)->name('songs.create');
     Route::get('songs/{id}', SongDetailPage::class)->name('songs.detail');
+    Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
+    Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
+    Route::get('puzzles/{id}', PuzzleShow::class)->name('puzzles.show');
+    Route::get('puzzles', PuzzlesIndex::class)->name('puzzles');
+
     Route::get('activities', ActivitiesManager::class)->name('activities');
     Route::get('activities/create', ActivityDetailPage::class)->name('activities.create');
     Route::get('activities/{id}', ActivityDetailPage::class)->name('activities.detail');
@@ -142,6 +150,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
     Route::get('/offline-bundles', OfflineBundles::class)->name('offline-bundles');
+
+    Route::get('/puzzles/create', PuzzleEditor::class)->name('puzzles.create');
+    Route::get('/puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
+    Route::get('/puzzles/{id}', PuzzleShow::class)->name('puzzles.show');
+    Route::get('/puzzles', PuzzlesIndex::class)->name('puzzles');
 
     Route::get('/activities', ActivitiesManager::class)->name('activities');
     Route::get('/activities/create', ActivityDetailPage::class)->name('activities.create');
