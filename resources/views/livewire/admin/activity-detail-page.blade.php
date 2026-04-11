@@ -297,17 +297,53 @@
             </div>
             @if($activity->type === 'flashcard')
                 <div style="margin-bottom:14px">
-                    <div class="act-label">Flashcard deck</div>
+                    <div class="act-label" style="margin-bottom:6px">Flashcard deck</div>
                     @if($activity->flashcardSlides->isNotEmpty())
-                        <ol style="margin:8px 0 0;padding-left:18px;color:rgba(255,255,255,.85);line-height:1.55;font-size:13px">
+                        <p style="font-size:11px;color:rgba(255,255,255,.42);margin:0 0 12px;line-height:1.45">Preview how cards look in the app. Click a card to flip between the prompt and the answer.</p>
+                        <div class="act-fc-preview-grid">
                             @foreach($activity->flashcardSlides as $slide)
-                                <li style="margin-bottom:6px">
+                                @php
+                                    $fcBackTone = match ($loop->index % 4) {
+                                        0 => 'act-fc-back-a',
+                                        1 => 'act-fc-back-b',
+                                        2 => 'act-fc-back-c',
+                                        default => 'act-fc-back-d',
+                                    };
+                                    $flipId = 'act-fc-'.$activity->id.'-'.($slide->id ?? $loop->index);
+                                @endphp
+                                <div class="act-fc-preview-item">
+                                    <input type="checkbox" id="{{ $flipId }}" class="act-fc-flip-input">
+                                    <label for="{{ $flipId }}" class="act-fc-flip-scene" title="Click to flip">
+                                        <span class="act-fc-flip-inner">
+                                            <span class="act-fc-face act-fc-front">
+                                                <span class="act-fc-badge">Card {{ $loop->iteration }}</span>
+                                                <span class="act-fc-emoji" aria-hidden="true">{{ filled($slide->emoji) ? $slide->emoji : '🎴' }}</span>
+                                                <span class="act-fc-front-text">{{ $slide->front_label ?: '—' }}</span>
+                                                <span class="act-fc-hint">Tap to reveal →</span>
+                                            </span>
+                                            <span class="act-fc-face act-fc-back {{ $fcBackTone }}">
+                                                @if(filled($slide->emoji))
+                                                    <span class="act-fc-emoji act-fc-emoji-sm" aria-hidden="true">{{ $slide->emoji }}</span>
+                                                @endif
+                                                <span class="act-fc-back-text">{{ $slide->back_label ?: '—' }}</span>
+                                                @if(filled($slide->phonetic))
+                                                    <span class="act-fc-phonetic">{{ $slide->phonetic }}</span>
+                                                @endif
+                                            </span>
+                                        </span>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        <ol class="act-fc-outline" aria-label="Card list (text)">
+                            @foreach($activity->flashcardSlides as $slide)
+                                <li>
                                     @if(filled($slide->emoji))
-                                        <span style="font-size:18px;margin-right:6px;vertical-align:middle" aria-hidden="true">{{ $slide->emoji }}</span>
+                                        <span class="act-fc-outline-emoji" aria-hidden="true">{{ $slide->emoji }}</span>
                                     @endif
                                     <strong>{{ $slide->front_label ?: '—' }}</strong>
                                     @if(filled($slide->back_label))
-                                        <span style="color:rgba(255,255,255,.45)"> → </span>{{ $slide->back_label }}
+                                        <span class="act-fc-outline-sep">→</span>{{ $slide->back_label }}
                                     @endif
                                 </li>
                             @endforeach
@@ -389,5 +425,136 @@
             border-color:rgba(212,160,23,.35);
             transform:scale(1.06);
         }
+
+        /* Flashcard deck preview (read-only details) */
+        .act-fc-preview-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(158px, 1fr));
+            gap:14px;
+            margin-bottom:14px;
+        }
+        .act-fc-preview-item {
+            position:relative;
+        }
+        .act-fc-flip-input {
+            position:absolute;
+            opacity:0;
+            width:0;
+            height:0;
+            pointer-events:none;
+        }
+        .act-fc-flip-scene {
+            display:block;
+            cursor:pointer;
+            perspective:960px;
+            width:100%;
+            max-width:220px;
+            margin:0 auto;
+        }
+        .act-fc-flip-inner {
+            position:relative;
+            width:100%;
+            min-height:148px;
+            transform-style:preserve-3d;
+            transition:transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            display:block;
+        }
+        .act-fc-flip-input:checked + .act-fc-flip-scene .act-fc-flip-inner {
+            transform:rotateY(180deg);
+        }
+        .act-fc-face {
+            position:absolute;
+            inset:0;
+            border-radius:14px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:6px;
+            padding:14px 12px 12px;
+            backface-visibility:hidden;
+            -webkit-backface-visibility:hidden;
+            box-sizing:border-box;
+            border:1px solid rgba(255,255,255,.12);
+            text-align:center;
+        }
+        .act-fc-front {
+            background:linear-gradient(165deg, rgba(255,248,235,.16) 0%, rgba(139,94,60,.2) 55%, rgba(26,39,68,.35) 100%);
+            box-shadow:0 10px 28px rgba(0,0,0,.28);
+            color:#f5f0e8;
+        }
+        .act-fc-back {
+            transform:rotateY(180deg);
+            color:#fff;
+            box-shadow:0 10px 28px rgba(0,0,0,.35);
+        }
+        .act-fc-back.act-fc-back-a { background:linear-gradient(145deg, #3d6b4f 0%, #1e3a2c 100%); }
+        .act-fc-back.act-fc-back-b { background:linear-gradient(145deg, #a84a32 0%, #5c2414 100%); }
+        .act-fc-back.act-fc-back-c { background:linear-gradient(145deg, #3d5a80 0%, #1f3044 100%); }
+        .act-fc-back.act-fc-back-d { background:linear-gradient(145deg, #7a5c2e 0%, #3d2e12 100%); }
+        .act-fc-badge {
+            position:absolute;
+            top:8px;
+            left:8px;
+            font-size:9px;
+            font-weight:800;
+            letter-spacing:0.6px;
+            text-transform:uppercase;
+            color:rgba(255,255,255,.45);
+        }
+        .act-fc-emoji {
+            font-size:40px;
+            line-height:1;
+            filter:drop-shadow(0 2px 6px rgba(0,0,0,.2));
+        }
+        .act-fc-emoji-sm { font-size:32px; margin-bottom:2px; }
+        .act-fc-front-text {
+            font-size:14px;
+            font-weight:700;
+            line-height:1.35;
+            max-height:4.2em;
+            overflow:hidden;
+            display:-webkit-box;
+            -webkit-line-clamp:3;
+            -webkit-box-orient:vertical;
+        }
+        .act-fc-hint {
+            position:absolute;
+            bottom:8px;
+            right:10px;
+            font-size:9px;
+            font-weight:700;
+            letter-spacing:0.4px;
+            text-transform:uppercase;
+            color:rgba(255,255,255,.35);
+        }
+        .act-fc-back-text {
+            font-size:15px;
+            font-weight:800;
+            line-height:1.35;
+            max-height:4.5em;
+            overflow:hidden;
+            display:-webkit-box;
+            -webkit-line-clamp:4;
+            -webkit-box-orient:vertical;
+        }
+        .act-fc-phonetic {
+            font-size:11px;
+            font-style:italic;
+            color:rgba(255,255,255,.65);
+            margin-top:4px;
+        }
+        .act-fc-outline {
+            margin:0;
+            padding-left:18px;
+            color:rgba(255,255,255,.72);
+            line-height:1.55;
+            font-size:12px;
+            border-top:1px solid rgba(255,255,255,.08);
+            padding-top:12px;
+        }
+        .act-fc-outline li { margin-bottom:6px; }
+        .act-fc-outline-emoji { font-size:16px; margin-right:6px; vertical-align:middle; }
+        .act-fc-outline-sep { color:rgba(255,255,255,.35); margin:0 5px; }
     </style>
 </div>
