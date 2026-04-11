@@ -38,12 +38,7 @@
                 <div>
                     <label class="act-label">Type</label>
                     <select wire:model.live="type" class="act-input">
-                        <option value="worksheet">Worksheet</option>
-                        <option value="vocab_pack">Vocab Pack</option>
-                        <option value="puzzle">Puzzle</option>
                         <option value="flashcard">Flashcard</option>
-                        <option value="drawing_kit">Drawing Kit</option>
-                        <option value="game">Game</option>
                     </select>
                 </div>
                 <div>
