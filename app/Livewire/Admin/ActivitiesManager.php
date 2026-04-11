@@ -11,8 +11,8 @@ use Livewire\WithPagination;
 
 class ActivitiesManager extends Component
 {
-    use WithPagination;
     use UsesPortalContext;
+    use WithPagination;
 
     public string $search = '';
 
@@ -22,12 +22,23 @@ class ActivitiesManager extends Component
 
     public string $statusFilter = '';
 
+    /** When true, this is the dedicated Flashcards screen (doc-aligned nav). */
+    public bool $flashcardsPortal = false;
+
     protected $queryString = [
         'search' => ['except' => ''],
         'typeFilter' => ['except' => ''],
         'tribeFilter' => ['except' => ''],
         'statusFilter' => ['except' => ''],
     ];
+
+    public function mount(): void
+    {
+        if (request()->routeIs('cms.editor.flashcards')) {
+            $this->flashcardsPortal = true;
+            $this->typeFilter = 'flashcard';
+        }
+    }
 
     public function updatedSearch(): void
     {
@@ -61,6 +72,10 @@ class ActivitiesManager extends Component
         return Activity::query()
             ->with('tribe')
             ->whereNotIn('type', ['song', 'story'])
+            ->when(
+                request()->routeIs('cms.editor.activities') && $this->typeFilter === '',
+                fn ($q) => $q->where('type', '!=', 'flashcard')
+            )
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('title', 'like', '%'.$this->search.'%')
                     ->orWhere('description', 'like', '%'.$this->search.'%')

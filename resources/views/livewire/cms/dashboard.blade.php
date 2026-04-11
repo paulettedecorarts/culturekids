@@ -59,7 +59,11 @@
                 </a>
                 <a href="{{ route('cms.editor.translations') }}" class="shortcut-item">
                     <div class="shortcut-icon">🌐</div>
-                    <div class="shortcut-label">Vocab Pairs</div>
+                    <div class="shortcut-label">Language Packs</div>
+                </a>
+                <a href="{{ route('cms.editor.flashcards') }}" class="shortcut-item">
+                    <div class="shortcut-icon">🃏</div>
+                    <div class="shortcut-label">Flashcards</div>
                 </a>
                 <a href="{{ route('cms.editor.assets') }}" class="shortcut-item">
                     <div class="shortcut-icon">🖼️</div>
@@ -69,13 +73,7 @@
 
             <div class="org-status-box">
                 <div style="font-size:10px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px">System Health</div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
-                    <span style="font-size:12px; font-weight:700;">Storage Quota</span>
-                    <span style="font-size:11px; color:var(--stone)">1.4GB / 5GB</span>
-                </div>
-                <div style="height:6px; background:var(--cream-mid); border-radius:3px; overflow:hidden">
-                    <div style="width:28%; height:100%; background:var(--clay-red)"></div>
-                </div>
+                <p style="font-size:12px; color:var(--stone); line-height:1.5; margin:0">Org storage reporting is not wired yet; use your host or S3 console for usage.</p>
             </div>
         </div>
     </div>

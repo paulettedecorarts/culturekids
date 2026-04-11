@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,6 +48,14 @@ class Activity extends Model
     public function tribe(): BelongsTo
     {
         return $this->belongsTo(Tribe::class);
+    }
+
+    /**
+     * Ordered slides for flashcard-type activities (deck of cards, like comic panels).
+     */
+    public function flashcardSlides(): HasMany
+    {
+        return $this->hasMany(ActivityFlashcardSlide::class)->orderBy('order_index');
     }
 
     /**

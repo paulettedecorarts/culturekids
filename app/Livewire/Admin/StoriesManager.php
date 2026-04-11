@@ -13,8 +13,8 @@ use Livewire\WithPagination;
 
 class StoriesManager extends Component
 {
-    use WithPagination;
     use UsesPortalContext;
+    use WithPagination;
 
     public $searchTerm = '';
 
@@ -58,11 +58,19 @@ class StoriesManager extends Component
     public function togglePublish($id)
     {
         $comic = Comic::findOrFail($id);
+        $canPublish = auth()->user()?->can('publish content') ?? false;
 
         if ($comic->status === 'published') {
+            if (! $canPublish) {
+                session()->flash('message', 'Only users with publish permission can change published stories. Use the org review queue to approve content.');
+
+                return;
+            }
             $comic->status = 'draft';
-        } else {
+        } elseif ($canPublish) {
             $comic->status = 'published';
+        } else {
+            $comic->status = $comic->status === 'review' ? 'draft' : 'review';
         }
 
         $comic->save();
@@ -72,7 +80,11 @@ class StoriesManager extends Component
             'status' => $comic->status,
         ]);
 
-        $statusText = $comic->status === 'published' ? 'published' : 'unpublished';
+        $statusText = match ($comic->status) {
+            'published' => 'published',
+            'review' => 'submitted for review',
+            default => 'moved to draft',
+        };
         session()->flash('message', "Story {$statusText} successfully.");
     }
 
@@ -113,6 +125,7 @@ class StoriesManager extends Component
             'tribes' => $tribes,
             'stats' => $stats,
             'storyRouteBase' => $this->isEditorPortal() ? 'cms.editor.story-packs' : 'admin.stories',
+            'canPublishContent' => auth()->user()?->can('publish content') ?? false,
         ])->layout($this->portalLayout());
     }
 }

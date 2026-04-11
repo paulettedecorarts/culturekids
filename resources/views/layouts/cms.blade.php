@@ -117,7 +117,9 @@
             request()->routeIs('cms.editor.assets*') ||
             request()->routeIs('cms.editor.translations*') ||
             request()->routeIs('cms.editor.songs*') ||
+            request()->routeIs('cms.editor.flashcards*') ||
             request()->routeIs('cms.editor.activities*') ||
+            request()->routeIs('cms.editor.offline-bundles*') ||
             request()->routeIs('cms.admin.themes*');
     @endphp
 
@@ -137,12 +139,14 @@
                 <div class="cms-nav-section">Content Production</div>
                 <a href="{{ route('cms.editor.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.tribes') ? 'active' : '' }}">🌍 Tribe Directory</a>
                 <a href="{{ route('cms.editor.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
+                <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs') ? 'active' : '' }}">🎵 Songs</a>
+                <a href="{{ route('cms.editor.flashcards') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.flashcards') ? 'active' : '' }}">🃏 Flashcards</a>
+                <a href="{{ route('cms.editor.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.translations') ? 'active' : '' }}">🌐 Language Packs</a>
                 <a href="{{ route('cms.editor.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.assets') ? 'active' : '' }}">🖼 Assets</a>
-                <a href="{{ route('cms.editor.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.translations') ? 'active' : '' }}">🌐 Translations</a>
+                <a href="{{ route('cms.editor.offline-bundles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.offline-bundles') ? 'active' : '' }}">📦 Offline Bundles</a>
                 
                 <div class="cms-nav-section">Activities</div>
-                <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs') ? 'active' : '' }}">🎵 Songs</a>
-                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities') ? 'active' : '' }}">🧩 Activities</a>
+                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities') ? 'active' : '' }}">🧩 Other activities</a>
             @endif
             
             @if($isAdmin || $isSuper)

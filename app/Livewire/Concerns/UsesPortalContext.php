@@ -2,29 +2,46 @@
 
 namespace App\Livewire\Concerns;
 
+/**
+ * Portal-aware routing for admin modules reused under /cms/editor and /cms/admin.
+ *
+ * Livewire sub-requests (e.g. POST /livewire/update) are not named cms.editor.* — we cache the
+ * prefix from the initial full-page load so redirects and route() calls stay on the correct portal.
+ */
 trait UsesPortalContext
 {
+    /** @var 'cms.editor'|'cms.admin'|'admin'|null */
+    public ?string $portalRoutePrefixCache = null;
+
+    protected function resolvePortalRoutePrefix(): string
+    {
+        if ($this->portalRoutePrefixCache !== null) {
+            return $this->portalRoutePrefixCache;
+        }
+
+        $this->portalRoutePrefixCache = match (true) {
+            request()->routeIs('cms.editor.*') => 'cms.editor',
+            request()->routeIs('cms.admin.*') => 'cms.admin',
+            request()->routeIs('admin.*') => 'admin',
+            default => 'admin',
+        };
+
+        return $this->portalRoutePrefixCache;
+    }
+
     protected function isEditorPortal(): bool
     {
-        return request()->routeIs('cms.editor.*');
+        return $this->resolvePortalRoutePrefix() === 'cms.editor';
     }
 
     protected function isOrgAdminPortal(): bool
     {
-        return request()->routeIs('cms.admin.*');
+        return $this->resolvePortalRoutePrefix() === 'cms.admin';
     }
 
     protected function portalRoutePrefix(): string
     {
-        if ($this->isEditorPortal()) {
-            return 'cms.editor';
-        }
-
-        if ($this->isOrgAdminPortal()) {
-            return 'cms.admin';
-        }
-
-        return 'admin';
+        return $this->resolvePortalRoutePrefix();
     }
 
     protected function portalLayout(): string

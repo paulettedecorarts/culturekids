@@ -58,7 +58,23 @@
                 </div>
                 <div>
                     <label class="act-label">Age range</label>
-                    <input wire:model="age_range" type="text" placeholder="e.g. 3-5" class="act-input">
+                    <select wire:model="age_range" class="act-input">
+                        <option value="">Select age range</option>
+                        @php
+                            $labels = $this->ageProfiles->map(fn ($p) => $p->age_range_label)->all();
+                            $legacy = $age_range && ! in_array($age_range, $labels, true);
+                        @endphp
+                        @if($legacy)
+                            <option value="{{ $age_range }}">Legacy: {{ $age_range }}</option>
+                        @endif
+                        @foreach($this->ageProfiles as $profile)
+                            <option value="{{ $profile->age_range_label }}">{{ $profile->name }} — {{ $profile->age_range_label }}</option>
+                        @endforeach
+                    </select>
+                    @if($this->ageProfiles->isEmpty())
+                        <p class="act-error" style="margin-top:6px;font-weight:600">No active age categories in the database. Add them under Admin → Age categories.</p>
+                    @endif
+                    @error('age_range') <div class="act-error">{{ $message }}</div> @enderror
                 </div>
                 <div>
                     <label class="act-label">Star points</label>
@@ -117,11 +133,78 @@
                         </div>
                     </div>
                 @elseif($type === 'flashcard')
-                    <div class="act-grid">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap">
                         <div>
-                            <label class="act-label">Flashcard count</label>
-                            <input wire:model="flashcard_count" type="number" min="0" class="act-input" placeholder="20">
+                            <div class="act-label" style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:4px">Cards in this deck</div>
+                            <p style="font-size:11px;color:rgba(255,255,255,.45);margin:0;max-width:520px;line-height:1.45">Each row is one flashcard (like pages in a comic). Front is what the child sees first; back is the reveal — e.g. English then Luganda.</p>
                         </div>
+                        <button type="button" wire:click="addFlashcardSlide" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:8px 14px;border-radius:var(--r-full);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-admin)">+ Add card</button>
+                    </div>
+                    @error('flashcardSlides') <div class="act-error" style="margin-bottom:8px">{{ $message }}</div> @enderror
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                        @foreach($flashcardSlides as $idx => $card)
+                            <div wire:key="fc-{{ $idx }}-{{ $card['id'] ?? 'n' }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1)">
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+                                    <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.5)">CARD {{ $idx + 1 }}</span>
+                                    <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                        <button type="button" wire:click="moveFlashcardSlideUp({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === 0 ? 'opacity:0.35;pointer-events:none' : '' }}">↑</button>
+                                        <button type="button" wire:click="moveFlashcardSlideDown({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === count($flashcardSlides) - 1 ? 'opacity:0.35;pointer-events:none' : '' }}">↓</button>
+                                        <button type="button" wire:click="removeFlashcardSlide({{ $idx }})" wire:confirm="Remove this card?" class="btn btn-sm" style="padding:4px 10px;font-size:10px;background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Remove</button>
+                                    </div>
+                                </div>
+                                <div class="act-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+                                    <div style="grid-column:1/-1">
+                                        <label class="act-label">Emoji (optional)</label>
+                                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                                            <span class="fc-emoji-preview" title="Preview">{{ filled($card['emoji'] ?? null) ? $card['emoji'] : '◇' }}</span>
+                                            <input type="text" wire:model.live="flashcardSlides.{{ $idx }}.emoji" class="act-input" placeholder="Type, paste, or browse" maxlength="32" style="flex:1;min-width:140px;max-width:280px">
+                                            <button type="button" wire:click="openFlashcardEmojiPicker({{ $idx }})" class="btn btn-sm" style="padding:8px 14px;font-size:12px;font-weight:700;white-space:nowrap;background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)">{{ $flashcardEmojiPickerSlide === $idx ? 'Hide library' : 'Browse library' }}</button>
+                                            @if(filled($card['emoji'] ?? null))
+                                                <button type="button" wire:click="clearFlashcardEmoji({{ $idx }})" class="btn btn-sm" style="padding:8px 12px;font-size:11px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15)">Clear</button>
+                                            @endif
+                                        </div>
+                                        @if($flashcardEmojiPickerSlide === $idx)
+                                            <div class="fc-emoji-panel" wire:key="fc-picker-{{ $idx }}">
+                                                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+                                                    <label class="act-label" style="margin:0">Library</label>
+                                                    <button type="button" wire:click="closeFlashcardEmojiPicker" class="btn btn-sm" style="padding:6px 12px;font-size:11px">Done</button>
+                                                </div>
+                                                @if(count($this->flashcardEmojiCategories) === 0)
+                                                    <p style="font-size:11px;color:rgba(255,255,255,.5);margin:0">No bundled emoji list found. Use the field above to type or paste any emoji.</p>
+                                                @else
+                                                    <select wire:model.live="flashcardEmojiCategory" class="act-input" style="width:100%;max-width:420px;margin-bottom:10px">
+                                                        @foreach(array_keys($this->flashcardEmojiCategories) as $catName)
+                                                            <option value="{{ $catName }}">{{ $catName }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="fc-emoji-grid">
+                                                        @foreach($this->flashcardEmojiCategories[$flashcardEmojiCategory] ?? [] as $emo)
+                                                            <button type="button" class="fc-emoji-tile" wire:key="fc-em-{{ $idx }}-{{ $loop->index }}" wire:click="selectFlashcardEmoji({{ $idx }}, @js($emo))" title="Pick emoji">{{ $emo }}</button>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        @error('flashcardSlides.'.$idx.'.emoji') <div class="act-error">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div style="grid-column:1/-1">
+                                        <label class="act-label">Front (prompt)</label>
+                                        <input type="text" wire:model="flashcardSlides.{{ $idx }}.front_label" class="act-input" placeholder="e.g. Banana">
+                                        @error('flashcardSlides.'.$idx.'.front_label') <div class="act-error">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div style="grid-column:1/-1">
+                                        <label class="act-label">Back (answer)</label>
+                                        <input type="text" wire:model="flashcardSlides.{{ $idx }}.back_label" class="act-input" placeholder="e.g. Omutooke">
+                                        @error('flashcardSlides.'.$idx.'.back_label') <div class="act-error">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div style="grid-column:1/-1">
+                                        <label class="act-label">Pronunciation hint (optional)</label>
+                                        <input type="text" wire:model="flashcardSlides.{{ $idx }}.phonetic" class="act-input" placeholder="e.g. oo-moo-TOH-kay">
+                                        @error('flashcardSlides.'.$idx.'.phonetic') <div class="act-error">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 @elseif($type === 'drawing_kit')
                     <div class="act-grid">
@@ -150,10 +233,30 @@
                 <textarea wire:model="description" rows="3" class="act-textarea"></textarea>
             </div>
 
-            <div style="margin-top:10px">
-                <label class="act-label">Metadata (JSON)</label>
-                <textarea wire:model="metadata_json" rows="7" class="act-textarea" placeholder='{"tag":"animals","difficulty":"easy"}'></textarea>
-                @error('metadata_json') <div class="act-error">{{ $message }}</div> @enderror
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+                <div class="act-label" style="margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.75)">Extras (optional)</div>
+                <div class="act-grid">
+                    <div>
+                        <label class="act-label">Topic tag</label>
+                        <input wire:model="content_tag" type="text" class="act-input" placeholder="e.g. animals, family, counting">
+                        @error('content_tag') <div class="act-error">{{ $message }}</div> @enderror
+                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin-top:6px;line-height:1.45">Helps group or search for this activity in the app. One short phrase is enough.</p>
+                    </div>
+                    <div>
+                        <label class="act-label">Challenge level</label>
+                        <select wire:model="learning_difficulty" class="act-input">
+                            <option value="">Not set</option>
+                            @if($learning_difficulty && ! in_array($learning_difficulty, ['easy', 'medium', 'hard'], true))
+                                <option value="{{ $learning_difficulty }}">Keep: {{ $learning_difficulty }}</option>
+                            @endif
+                            <option value="easy">Easy — gentle pace</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard — more challenge</option>
+                        </select>
+                        @error('learning_difficulty') <div class="act-error">{{ $message }}</div> @enderror
+                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin-top:6px;line-height:1.45">Rough guide for parents and teachers (not the same as puzzle difficulty).</p>
+                    </div>
+                </div>
             </div>
         </div>
     @else
@@ -162,18 +265,64 @@
                 <div class="act-stat"><span>Title</span><strong>{{ $activity->title }}</strong></div>
                 <div class="act-stat"><span>Type</span><strong>{{ str_replace('_', ' ', $activity->type) }}</strong></div>
                 <div class="act-stat"><span>Tribe</span><strong>{{ $activity->tribe->name }}</strong></div>
-                <div class="act-stat"><span>Age Range</span><strong>{{ $activity->age_range ?: '—' }}</strong></div>
+                <div class="act-stat"><span>Age range</span><strong>
+                    @php
+                        $ar = $activity->age_range;
+                        $band = $ar ? $this->ageProfiles->first(fn ($p) => $p->age_range_label === $ar) : null;
+                    @endphp
+                    {{ $band ? $band->name.' · '.$ar : ($ar ?: '—') }}
+                </strong></div>
                 <div class="act-stat"><span>Star Points</span><strong>{{ $activity->star_points }}</strong></div>
                 <div class="act-stat"><span>Status</span><strong>{{ $activity->is_published ? 'Published' : 'Draft' }}</strong></div>
+                @php
+                    $m = is_array($activity->metadata) ? $activity->metadata : [];
+                    $tag = data_get($m, 'tag');
+                    $diff = data_get($m, 'difficulty');
+                    $metaRoots = ['vocab','worksheet','puzzle','flashcard','drawing_kit','game','tag','difficulty'];
+                    $orphanMeta = collect($m)->except($metaRoots)->filter(fn ($v) => $v !== null && $v !== [] && $v !== '');
+                @endphp
+                @if($tag)
+                    <div class="act-stat"><span>Topic tag</span><strong>{{ $tag }}</strong></div>
+                @endif
+                @if($diff)
+                    <div class="act-stat"><span>Challenge level</span><strong>{{ match ($diff) { 'easy' => 'Easy', 'medium' => 'Medium', 'hard' => 'Hard', default => $diff } }}</strong></div>
+                @endif
+                @if($activity->type === 'flashcard')
+                    <div class="act-stat"><span>Cards in deck</span><strong>{{ $activity->flashcardSlides->count() }}</strong></div>
+                @endif
             </div>
             <div style="margin-bottom:14px">
                 <div class="act-label">Description</div>
                 <div style="color:rgba(255,255,255,.85);line-height:1.6">{{ $activity->description ?: '—' }}</div>
             </div>
-            <div>
-                <div class="act-label">Metadata</div>
-                <pre style="margin:0;padding:12px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.82);overflow:auto">{{ json_encode($activity->metadata ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
-            </div>
+            @if($activity->type === 'flashcard')
+                <div style="margin-bottom:14px">
+                    <div class="act-label">Flashcard deck</div>
+                    @if($activity->flashcardSlides->isNotEmpty())
+                        <ol style="margin:8px 0 0;padding-left:18px;color:rgba(255,255,255,.85);line-height:1.55;font-size:13px">
+                            @foreach($activity->flashcardSlides as $slide)
+                                <li style="margin-bottom:6px">
+                                    @if(filled($slide->emoji))
+                                        <span style="font-size:18px;margin-right:6px;vertical-align:middle" aria-hidden="true">{{ $slide->emoji }}</span>
+                                    @endif
+                                    <strong>{{ $slide->front_label ?: '—' }}</strong>
+                                    @if(filled($slide->back_label))
+                                        <span style="color:rgba(255,255,255,.45)"> → </span>{{ $slide->back_label }}
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ol>
+                    @else
+                        <p style="margin:6px 0 0;font-size:12px;color:rgba(255,255,255,.4)">No cards saved yet.</p>
+                    @endif
+                </div>
+            @endif
+            @if($orphanMeta->isNotEmpty())
+                <details style="margin-top:8px">
+                    <summary style="cursor:pointer;font-size:12px;color:rgba(255,255,255,.45);margin-bottom:8px">Other saved fields (technical)</summary>
+                    <pre style="margin:0;padding:12px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.75);overflow:auto;font-size:11px">{{ json_encode($orphanMeta->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                </details>
+            @endif
         </div>
     @endif
 
@@ -195,6 +344,50 @@
         .activity-detail-page select.act-input optgroup {
             background:#1a2744;
             color:#fff;
+        }
+        .fc-emoji-preview {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-width:44px;
+            height:44px;
+            font-size:28px;
+            line-height:1;
+            border-radius:10px;
+            background:rgba(0,0,0,.25);
+            border:1px solid rgba(255,255,255,.12);
+        }
+        .fc-emoji-panel {
+            margin-top:12px;
+            padding:12px;
+            border-radius:12px;
+            background:rgba(0,0,0,.28);
+            border:1px solid rgba(255,255,255,.1);
+        }
+        .fc-emoji-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(40px, 1fr));
+            gap:6px;
+            max-height:240px;
+            overflow-y:auto;
+            overflow-x:hidden;
+            padding:4px 2px 4px 0;
+        }
+        .fc-emoji-tile {
+            font-size:22px;
+            line-height:1;
+            padding:8px 4px;
+            border-radius:8px;
+            border:1px solid rgba(255,255,255,.08);
+            background:rgba(255,255,255,.04);
+            color:inherit;
+            cursor:pointer;
+            transition:background .12s ease, transform .12s ease;
+        }
+        .fc-emoji-tile:hover {
+            background:rgba(212,160,23,.18);
+            border-color:rgba(212,160,23,.35);
+            transform:scale(1.06);
         }
     </style>
 </div>

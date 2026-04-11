@@ -121,13 +121,21 @@
                         >
                             View
                         </a>
-                        <button
-                            wire:click="togglePublish({{ $story->id }})"
-                            class="btn btn-sm"
-                            style="flex:1;min-width:72px;background:rgba(74,124,89,.15);color:var(--banana-light);border:1px solid rgba(74,124,89,.3);font-size:10px;padding:8px"
-                        >
-                            {{ $story->status === 'published' ? 'Unpublish' : 'Publish' }}
-                        </button>
+                        @if(($canPublishContent ?? false) || $story->status !== 'published')
+                            <button
+                                wire:click="togglePublish({{ $story->id }})"
+                                class="btn btn-sm"
+                                style="flex:1;min-width:72px;background:rgba(74,124,89,.15);color:var(--banana-light);border:1px solid rgba(74,124,89,.3);font-size:10px;padding:8px"
+                            >
+                                @if($canPublishContent ?? false)
+                                    {{ $story->status === 'published' ? 'Unpublish' : 'Publish' }}
+                                @else
+                                    {{ $story->status === 'review' ? 'Withdraw to draft' : 'Submit for review' }}
+                                @endif
+                            </button>
+                        @else
+                            <span class="btn btn-sm" style="flex:1;min-width:72px;opacity:.5;font-size:10px;padding:8px;text-align:center;border:1px dashed rgba(255,255,255,.2);border-radius:8px">Published</span>
+                        @endif
                         <a
                             href="{{ route($storyRouteBase . '.edit', $story->id) }}"
                             class="btn btn-sm"

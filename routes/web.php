@@ -37,6 +37,7 @@ use App\Livewire\CMS\Activities;
 use App\Livewire\CMS\AdminDashboard;
 use App\Livewire\CMS\Analytics;
 use App\Livewire\CMS\ApprovedContent;
+use App\Livewire\CMS\OfflineBundles;
 use App\Livewire\CMS\Organizations;
 use App\Livewire\CMS\OrgClassroomsManager;
 use App\Livewire\CMS\OrgPeopleManager;
@@ -138,6 +139,9 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/songs', SongsManager::class)->name('songs');
     Route::get('/songs/create', SongDetailPage::class)->name('songs.create');
     Route::get('/songs/{id}', SongDetailPage::class)->name('songs.detail');
+
+    Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
+    Route::get('/offline-bundles', OfflineBundles::class)->name('offline-bundles');
 
     Route::get('/activities', ActivitiesManager::class)->name('activities');
     Route::get('/activities/create', ActivityDetailPage::class)->name('activities.create');

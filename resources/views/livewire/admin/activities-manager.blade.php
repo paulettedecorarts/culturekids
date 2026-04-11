@@ -1,11 +1,17 @@
 <div class="activities-manager-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div>
-            <div class="sa-page-title">Activities</div>
-            <div class="sa-breadcrumb">Doc-aligned generic activities (excluding Songs domain)</div>
+            <div class="sa-page-title">{{ $flashcardsPortal ? 'Flashcards' : 'Activities' }}</div>
+            <div class="sa-breadcrumb">
+                @if($flashcardsPortal)
+                    Vocab flashcards · tribe-linked (per product spec)
+                @else
+                    Puzzles, worksheets, games, vocab packs — flashcards use the Flashcards nav
+                @endif
+            </div>
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <a href="{{ route($routePrefix . '.activities.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ Add Activity</a>
+            <a href="{{ route($routePrefix . '.activities.create', $flashcardsPortal ? ['type' => 'flashcard'] : []) }}" class="btn btn-primary btn-sm" style="text-decoration:none">{{ $flashcardsPortal ? '+ Add flashcard' : '+ Add Activity' }}</a>
         </div>
     </div>
 
@@ -40,12 +46,14 @@
 
     <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap">
         <input wire:model.live.debounce.300ms="search" placeholder="Search activities..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
-        <select wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select @if($flashcardsPortal) disabled @endif wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Types</option>
             <option value="vocab_pack">Vocab Pack</option>
             <option value="worksheet">Worksheet</option>
             <option value="puzzle">Puzzle</option>
-            <option value="flashcard">Flashcard</option>
+            @if(!request()->routeIs('cms.editor.activities') || $flashcardsPortal)
+                <option value="flashcard">Flashcard</option>
+            @endif
             <option value="drawing_kit">Drawing Kit</option>
             <option value="game">Game</option>
         </select>

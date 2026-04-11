@@ -4,7 +4,13 @@ namespace App\Livewire\Admin;
 
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Activity;
+use App\Models\ActivityFlashcardSlide;
+use App\Models\AgeProfile;
 use App\Models\Tribe;
+use App\Support\FlashcardEmojiLibrary;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -32,7 +38,11 @@ class ActivityDetailPage extends Component
 
     public bool $is_published = false;
 
-    public string $metadata_json = '';
+    /** Optional label for filtering/grouping in the app (stored as metadata.tag). */
+    public ?string $content_tag = null;
+
+    /** Stored as metadata.difficulty — separate from puzzle “difficulty”. */
+    public ?string $learning_difficulty = null;
 
     // Type-specific fields (doc-aligned custom forms)
     public ?string $vocab_language = null;
@@ -47,7 +57,18 @@ class ActivityDetailPage extends Component
 
     public ?int $puzzle_pieces = null;
 
-    public ?int $flashcard_count = null;
+    /**
+     * Flashcard deck: each item is one card (like comic panels). Persisted in activity_flashcard_slides.
+     *
+     * @var array<int, array{id: ?int, emoji: string, front_label: string, back_label: string, phonetic: string}>
+     */
+    public array $flashcardSlides = [];
+
+    /** Which card row has the emoji picker open (null = closed). */
+    public ?int $flashcardEmojiPickerSlide = null;
+
+    /** Active category tab inside the picker (matches a key in flashcard_emojis.json). */
+    public string $flashcardEmojiCategory = '';
 
     public ?string $drawing_materials = null;
 
@@ -55,8 +76,12 @@ class ActivityDetailPage extends Component
 
     public function mount(?int $id = null): void
     {
+        if (request()->query('type') === 'flashcard') {
+            $this->type = 'flashcard';
+        }
+
         if ($id) {
-            $this->activity = Activity::with('tribe')->findOrFail($id);
+            $this->activity = Activity::with(['tribe', 'flashcardSlides'])->findOrFail($id);
             $this->fillFromActivity($this->activity);
             $this->isCreate = false;
             $this->isEditing = false;
@@ -66,35 +91,150 @@ class ActivityDetailPage extends Component
 
         $this->isCreate = true;
         $this->isEditing = true;
+
+        if ($this->type === 'flashcard') {
+            $this->flashcardSlides = [$this->blankFlashcardSlide()];
+        }
+
+        $this->syncDefaultFlashcardEmojiCategory();
+    }
+
+    public function updatedType(string $value): void
+    {
+        if ($value === 'flashcard' && $this->flashcardSlides === []) {
+            $this->flashcardSlides = [$this->blankFlashcardSlide()];
+        }
+        if ($value !== 'flashcard') {
+            $this->flashcardSlides = [];
+            $this->flashcardEmojiPickerSlide = null;
+        }
     }
 
     protected function rules(): array
     {
-        return [
+        $allowedAgeLabels = $this->ageProfiles->map(fn (AgeProfile $p) => $p->age_range_label)->all();
+        if ($this->age_range !== null && $this->age_range !== '' && ! in_array($this->age_range, $allowedAgeLabels, true)) {
+            $allowedAgeLabels[] = $this->age_range;
+        }
+
+        $ageRangeRules = ['nullable', 'string', 'max:50'];
+        if ($allowedAgeLabels !== []) {
+            $ageRangeRules[] = Rule::in($allowedAgeLabels);
+        }
+
+        $difficultyChoices = ['easy', 'medium', 'hard'];
+        if ($this->learning_difficulty !== null && $this->learning_difficulty !== '' && ! in_array($this->learning_difficulty, $difficultyChoices, true)) {
+            $difficultyChoices[] = $this->learning_difficulty;
+        }
+
+        $rules = [
             'tribe_id' => ['required', 'exists:tribes,id'],
             'type' => ['required', 'string', 'max:60'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'age_range' => ['nullable', 'string', 'max:50'],
+            'age_range' => $ageRangeRules,
             'star_points' => ['required', 'integer', 'min:0', 'max:1000'],
             'is_published' => ['boolean'],
-            'metadata_json' => ['nullable', 'string'],
+            'content_tag' => ['nullable', 'string', 'max:120'],
+            'learning_difficulty' => ['nullable', 'string', 'max:40', Rule::in($difficultyChoices)],
             'vocab_language' => ['nullable', 'string', 'max:100'],
             'vocab_words_count' => ['nullable', 'integer', 'min:0', 'max:500'],
             'worksheet_format' => ['nullable', 'string', 'max:80'],
             'worksheet_topic' => ['nullable', 'string', 'max:120'],
             'puzzle_difficulty' => ['nullable', 'string', 'max:40'],
             'puzzle_pieces' => ['nullable', 'integer', 'min:0', 'max:1000'],
-            'flashcard_count' => ['nullable', 'integer', 'min:0', 'max:1000'],
             'drawing_materials' => ['nullable', 'string', 'max:160'],
             'game_mode' => ['nullable', 'string', 'max:80'],
         ];
+
+        if ($this->type === 'flashcard') {
+            $rules['flashcardSlides'] = ['required', 'array', 'min:1'];
+            $rules['flashcardSlides.*.emoji'] = ['nullable', 'string', 'max:32'];
+            $rules['flashcardSlides.*.front_label'] = ['nullable', 'string', 'max:2000'];
+            $rules['flashcardSlides.*.back_label'] = ['nullable', 'string', 'max:2000'];
+            $rules['flashcardSlides.*.phonetic'] = ['nullable', 'string', 'max:255'];
+        }
+
+        return $rules;
     }
 
     #[Computed]
     public function tribes()
     {
         return Tribe::query()->orderBy('name')->get();
+    }
+
+    /**
+     * Active age bands from age_profiles (same labels persisted in activities.age_range).
+     */
+    #[Computed]
+    public function ageProfiles()
+    {
+        return AgeProfile::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('min_age')
+            ->get();
+    }
+
+    /**
+     * Curated emoji keyboard for flashcard covers (resources/data/flashcard_emojis.json).
+     *
+     * @return array<string, list<string>>
+     */
+    #[Computed]
+    public function flashcardEmojiCategories(): array
+    {
+        return FlashcardEmojiLibrary::categories();
+    }
+
+    protected function syncDefaultFlashcardEmojiCategory(): void
+    {
+        $cats = $this->flashcardEmojiCategories;
+        if ($cats === []) {
+            $this->flashcardEmojiCategory = '';
+
+            return;
+        }
+        if ($this->flashcardEmojiCategory === '' || ! array_key_exists($this->flashcardEmojiCategory, $cats)) {
+            $this->flashcardEmojiCategory = (string) array_key_first($cats);
+        }
+    }
+
+    public function openFlashcardEmojiPicker(int $index): void
+    {
+        if (! isset($this->flashcardSlides[$index])) {
+            return;
+        }
+        if ($this->flashcardEmojiPickerSlide === $index) {
+            $this->flashcardEmojiPickerSlide = null;
+
+            return;
+        }
+        $this->flashcardEmojiPickerSlide = $index;
+        $this->syncDefaultFlashcardEmojiCategory();
+    }
+
+    public function closeFlashcardEmojiPicker(): void
+    {
+        $this->flashcardEmojiPickerSlide = null;
+    }
+
+    public function selectFlashcardEmoji(int $index, string $emoji): void
+    {
+        if (! isset($this->flashcardSlides[$index])) {
+            return;
+        }
+        $this->flashcardSlides[$index]['emoji'] = $emoji;
+        $this->flashcardEmojiPickerSlide = null;
+    }
+
+    public function clearFlashcardEmoji(int $index): void
+    {
+        if (! isset($this->flashcardSlides[$index])) {
+            return;
+        }
+        $this->flashcardSlides[$index]['emoji'] = '';
     }
 
     public function startEditing(): void
@@ -105,7 +245,7 @@ class ActivityDetailPage extends Component
     public function cancelEditing()
     {
         if ($this->activity) {
-            $this->activity->refresh()->load('tribe');
+            $this->activity->refresh()->load(['tribe', 'flashcardSlides']);
             $this->fillFromActivity($this->activity);
             $this->isEditing = false;
 
@@ -119,31 +259,29 @@ class ActivityDetailPage extends Component
     {
         $validated = $this->validate();
 
-        $metadata = [];
-        if (trim($validated['metadata_json'] ?? '') !== '') {
-            $decoded = json_decode((string) $validated['metadata_json'], true);
-            if (json_last_error() !== JSON_ERROR_NONE || ! is_array($decoded)) {
-                $this->addError('metadata_json', 'Metadata must be valid JSON object.');
-
-                return null;
-            }
-            $metadata = $decoded;
-        }
-
-        $metadata = array_merge($metadata, $this->typeSpecificMetadata());
+        $metadata = $this->buildMetadata();
 
         $activity = $this->activity ?? new Activity;
-        $activity->fill([
-            'tribe_id' => $validated['tribe_id'],
-            'type' => $validated['type'],
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'age_range' => $validated['age_range'],
-            'star_points' => $validated['star_points'],
-            'is_published' => (bool) $validated['is_published'],
-            'metadata' => $metadata,
-        ]);
-        $activity->save();
+
+        DB::transaction(function () use ($validated, $metadata, $activity): void {
+            $activity->fill([
+                'tribe_id' => $validated['tribe_id'],
+                'type' => $validated['type'],
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'age_range' => $validated['age_range'],
+                'star_points' => $validated['star_points'],
+                'is_published' => (bool) $validated['is_published'],
+                'metadata' => $metadata,
+            ]);
+            $activity->save();
+
+            if ($activity->type === 'flashcard') {
+                $this->syncFlashcardSlides($activity);
+            } else {
+                $activity->flashcardSlides()->delete();
+            }
+        });
 
         session()->flash('message', $this->activity ? 'Activity updated.' : 'Activity created.');
 
@@ -171,20 +309,156 @@ class ActivityDetailPage extends Component
         $this->age_range = $activity->age_range;
         $this->star_points = $activity->star_points;
         $this->is_published = (bool) $activity->is_published;
-        $this->metadata_json = $activity->metadata
-            ? json_encode($activity->metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            : '';
 
         $metadata = is_array($activity->metadata) ? $activity->metadata : [];
+        $this->content_tag = data_get($metadata, 'tag');
+        $this->learning_difficulty = data_get($metadata, 'difficulty');
         $this->vocab_language = data_get($metadata, 'vocab.language');
         $this->vocab_words_count = data_get($metadata, 'vocab.words_count');
         $this->worksheet_format = data_get($metadata, 'worksheet.format');
         $this->worksheet_topic = data_get($metadata, 'worksheet.topic');
         $this->puzzle_difficulty = data_get($metadata, 'puzzle.difficulty');
         $this->puzzle_pieces = data_get($metadata, 'puzzle.pieces');
-        $this->flashcard_count = data_get($metadata, 'flashcard.count');
         $this->drawing_materials = data_get($metadata, 'drawing_kit.materials');
         $this->game_mode = data_get($metadata, 'game.mode');
+
+        if ($activity->type === 'flashcard') {
+            $this->flashcardSlides = $activity->flashcardSlides->map(fn (ActivityFlashcardSlide $s) => [
+                'id' => $s->id,
+                'emoji' => (string) ($s->emoji ?? ''),
+                'front_label' => (string) ($s->front_label ?? ''),
+                'back_label' => (string) ($s->back_label ?? ''),
+                'phonetic' => (string) ($s->phonetic ?? ''),
+            ])->values()->all();
+            if ($this->flashcardSlides === []) {
+                $this->flashcardSlides = [$this->blankFlashcardSlide()];
+            }
+        } else {
+            $this->flashcardSlides = [];
+        }
+    }
+
+    /**
+     * @return array{id: null, emoji: string, front_label: string, back_label: string, phonetic: string}
+     */
+    protected function blankFlashcardSlide(): array
+    {
+        return [
+            'id' => null,
+            'emoji' => '',
+            'front_label' => '',
+            'back_label' => '',
+            'phonetic' => '',
+        ];
+    }
+
+    public function addFlashcardSlide(): void
+    {
+        $this->flashcardSlides[] = $this->blankFlashcardSlide();
+    }
+
+    public function removeFlashcardSlide(int $index): void
+    {
+        unset($this->flashcardSlides[$index]);
+        $this->flashcardSlides = array_values($this->flashcardSlides);
+        if ($this->flashcardSlides === []) {
+            $this->flashcardSlides = [$this->blankFlashcardSlide()];
+        }
+        $this->flashcardEmojiPickerSlide = null;
+    }
+
+    public function moveFlashcardSlideUp(int $index): void
+    {
+        if ($index < 1) {
+            return;
+        }
+        $tmp = $this->flashcardSlides[$index - 1];
+        $this->flashcardSlides[$index - 1] = $this->flashcardSlides[$index];
+        $this->flashcardSlides[$index] = $tmp;
+        $this->flashcardEmojiPickerSlide = null;
+    }
+
+    public function moveFlashcardSlideDown(int $index): void
+    {
+        if ($index >= count($this->flashcardSlides) - 1) {
+            return;
+        }
+        $tmp = $this->flashcardSlides[$index + 1];
+        $this->flashcardSlides[$index + 1] = $this->flashcardSlides[$index];
+        $this->flashcardSlides[$index] = $tmp;
+        $this->flashcardEmojiPickerSlide = null;
+    }
+
+    protected function syncFlashcardSlides(Activity $activity): void
+    {
+        $idsKept = [];
+
+        foreach (array_values($this->flashcardSlides) as $index => $row) {
+            $payload = [
+                'order_index' => $index,
+                'emoji' => filled($row['emoji'] ?? null) ? $row['emoji'] : null,
+                'front_label' => filled($row['front_label'] ?? null) ? $row['front_label'] : null,
+                'back_label' => filled($row['back_label'] ?? null) ? $row['back_label'] : null,
+                'phonetic' => filled($row['phonetic'] ?? null) ? $row['phonetic'] : null,
+            ];
+
+            if (! empty($row['id'])) {
+                $slide = ActivityFlashcardSlide::query()
+                    ->where('activity_id', $activity->id)
+                    ->whereKey($row['id'])
+                    ->first();
+                if ($slide) {
+                    $slide->update($payload);
+                    $idsKept[] = $slide->id;
+                }
+            } else {
+                $slide = $activity->flashcardSlides()->create($payload);
+                $idsKept[] = $slide->id;
+            }
+        }
+
+        if ($idsKept !== []) {
+            $activity->flashcardSlides()->whereNotIn('id', $idsKept)->delete();
+        }
+    }
+
+    /**
+     * Root keys fully controlled by this form (type blocks + tag + difficulty).
+     */
+    protected function managedMetadataRootKeys(): array
+    {
+        return ['vocab', 'worksheet', 'puzzle', 'flashcard', 'drawing_kit', 'game', 'tag', 'difficulty'];
+    }
+
+    /**
+     * Preserve custom keys editors may have had in JSON before (everything except managed roots).
+     */
+    protected function orphanMetadata(): array
+    {
+        if (! $this->activity?->metadata || ! is_array($this->activity->metadata)) {
+            return [];
+        }
+
+        return Arr::except($this->activity->metadata, $this->managedMetadataRootKeys());
+    }
+
+    protected function buildMetadata(): array
+    {
+        $metadata = array_merge($this->orphanMetadata(), $this->typeSpecificMetadata());
+
+        if (filled($this->content_tag)) {
+            $metadata['tag'] = $this->content_tag;
+        } else {
+            unset($metadata['tag']);
+        }
+
+        if (filled($this->learning_difficulty)) {
+            $metadata['difficulty'] = $this->learning_difficulty;
+        } else {
+            unset($metadata['difficulty']);
+        }
+
+        return $metadata;
     }
 
     protected function typeSpecificMetadata(): array
@@ -210,7 +484,7 @@ class ActivityDetailPage extends Component
             ],
             'flashcard' => [
                 'flashcard' => [
-                    'count' => $this->flashcard_count,
+                    'count' => count($this->flashcardSlides),
                 ],
             ],
             'drawing_kit' => [
@@ -229,6 +503,10 @@ class ActivityDetailPage extends Component
 
     public function render()
     {
+        if ($this->activity?->exists && $this->activity->type === 'flashcard') {
+            $this->activity->loadMissing('flashcardSlides');
+        }
+
         return view('livewire.admin.activity-detail-page', [
             'routePrefix' => $this->portalRoutePrefix(),
         ])->layout($this->portalLayout());
