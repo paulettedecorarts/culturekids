@@ -12,6 +12,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @stack('styles')
 
     <style>
         /* Exact Design Tokens from the Live Demo */
@@ -192,5 +193,6 @@
     </div>
 
     @livewireScripts
+    @stack('scripts')
 </body>
 </html>

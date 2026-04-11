@@ -117,6 +117,23 @@ class PuzzleEditor extends Component
             ->get();
     }
 
+    /**
+     * Row/column layout for the live preview overlay (same algorithm as save-time slicing).
+     *
+     * @return array{rows: int, cols: int}|null
+     */
+    #[Computed]
+    public function previewGrid(): ?array
+    {
+        $n = (int) ($this->puzzle_pieces ?? 0);
+        if ($n < 4 || $n > 400) {
+            return null;
+        }
+        [$rows, $cols] = app(JigsawPuzzleGenerator::class)->gridDimensions($n);
+
+        return ['rows' => $rows, 'cols' => $cols];
+    }
+
     protected function fillFromActivity(Activity $activity): void
     {
         $this->tribe_id = $activity->tribe_id;
