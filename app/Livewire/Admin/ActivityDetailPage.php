@@ -10,13 +10,16 @@ use App\Models\Tribe;
 use App\Support\FlashcardEmojiLibrary;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ActivityDetailPage extends Component
 {
     use UsesPortalContext;
+    use WithFileUploads;
 
     public ?Activity $activity = null;
 
@@ -60,9 +63,12 @@ class ActivityDetailPage extends Component
     /**
      * Flashcard deck: each item is one card (like comic panels). Persisted in activity_flashcard_slides.
      *
-     * @var array<int, array{id: ?int, emoji: string, front_label: string, back_label: string, phonetic: string}>
+     * @var array<int, array{id: ?int, slide_uid: string, emoji: string, image_path: string, front_label: string, back_label: string, phonetic: string}>
      */
     public array $flashcardSlides = [];
+
+    /** Pending image uploads keyed by slide_uid (stable across reorder; see blankFlashcardSlide). */
+    public array $flashcardSlideImageUploads = [];
 
     /** Which card row has the emoji picker open (null = closed). */
     public ?int $flashcardEmojiPickerSlide = null;
@@ -107,6 +113,7 @@ class ActivityDetailPage extends Component
         if ($value !== 'flashcard') {
             $this->flashcardSlides = [];
             $this->flashcardEmojiPickerSlide = null;
+            $this->flashcardSlideImageUploads = [];
         }
     }
 
@@ -149,10 +156,14 @@ class ActivityDetailPage extends Component
 
         if ($this->type === 'flashcard') {
             $rules['flashcardSlides'] = ['required', 'array', 'min:1'];
+            $rules['flashcardSlides.*.slide_uid'] = ['required', 'string', 'max:40'];
             $rules['flashcardSlides.*.emoji'] = ['nullable', 'string', 'max:32'];
+            $rules['flashcardSlides.*.image_path'] = ['nullable', 'string', 'max:500'];
             $rules['flashcardSlides.*.front_label'] = ['nullable', 'string', 'max:2000'];
             $rules['flashcardSlides.*.back_label'] = ['nullable', 'string', 'max:2000'];
             $rules['flashcardSlides.*.phonetic'] = ['nullable', 'string', 'max:255'];
+            $rules['flashcardSlideImageUploads'] = ['nullable', 'array'];
+            $rules['flashcardSlideImageUploads.*'] = ['nullable', 'image', 'max:5120'];
         }
 
         return $rules;
@@ -237,6 +248,20 @@ class ActivityDetailPage extends Component
         $this->flashcardSlides[$index]['emoji'] = '';
     }
 
+    public function removeFlashcardSlideImage(int $index): void
+    {
+        if (! isset($this->flashcardSlides[$index])) {
+            return;
+        }
+        $row = $this->flashcardSlides[$index];
+        $uid = $row['slide_uid'] ?? '';
+        if ($uid !== '') {
+            unset($this->flashcardSlideImageUploads[$uid]);
+        }
+        $this->deleteSlideImageFromDisk(filled($row['image_path'] ?? null) ? (string) $row['image_path'] : null);
+        $this->flashcardSlides[$index]['image_path'] = '';
+    }
+
     public function startEditing(): void
     {
         $this->isEditing = true;
@@ -247,6 +272,7 @@ class ActivityDetailPage extends Component
         if ($this->activity) {
             $this->activity->refresh()->load(['tribe', 'flashcardSlides']);
             $this->fillFromActivity($this->activity);
+            $this->flashcardSlideImageUploads = [];
             $this->isEditing = false;
 
             return null;
@@ -294,6 +320,13 @@ class ActivityDetailPage extends Component
             return null;
         }
 
+        if ($this->activity->type === 'flashcard') {
+            $this->activity->load('flashcardSlides');
+            foreach ($this->activity->flashcardSlides as $slide) {
+                $this->deleteSlideImageFromDisk($slide->image_path);
+            }
+        }
+
         $this->activity->delete();
         session()->flash('message', 'Activity deleted.');
 
@@ -325,7 +358,9 @@ class ActivityDetailPage extends Component
         if ($activity->type === 'flashcard') {
             $this->flashcardSlides = $activity->flashcardSlides->map(fn (ActivityFlashcardSlide $s) => [
                 'id' => $s->id,
+                'slide_uid' => 'd'.$s->id,
                 'emoji' => (string) ($s->emoji ?? ''),
+                'image_path' => (string) ($s->image_path ?? ''),
                 'front_label' => (string) ($s->front_label ?? ''),
                 'back_label' => (string) ($s->back_label ?? ''),
                 'phonetic' => (string) ($s->phonetic ?? ''),
@@ -339,13 +374,15 @@ class ActivityDetailPage extends Component
     }
 
     /**
-     * @return array{id: null, emoji: string, front_label: string, back_label: string, phonetic: string}
+     * @return array{id: null, slide_uid: string, emoji: string, image_path: string, front_label: string, back_label: string, phonetic: string}
      */
     protected function blankFlashcardSlide(): array
     {
         return [
             'id' => null,
+            'slide_uid' => 'n'.bin2hex(random_bytes(8)),
             'emoji' => '',
+            'image_path' => '',
             'front_label' => '',
             'back_label' => '',
             'phonetic' => '',
@@ -359,6 +396,13 @@ class ActivityDetailPage extends Component
 
     public function removeFlashcardSlide(int $index): void
     {
+        $row = $this->flashcardSlides[$index] ?? null;
+        if ($row) {
+            $uid = $row['slide_uid'] ?? '';
+            if ($uid !== '') {
+                unset($this->flashcardSlideImageUploads[$uid]);
+            }
+        }
         unset($this->flashcardSlides[$index]);
         $this->flashcardSlides = array_values($this->flashcardSlides);
         if ($this->flashcardSlides === []) {
@@ -394,9 +438,21 @@ class ActivityDetailPage extends Component
         $idsKept = [];
 
         foreach (array_values($this->flashcardSlides) as $index => $row) {
+            $uid = (string) ($row['slide_uid'] ?? '');
+            $imagePath = filled($row['image_path'] ?? null) ? (string) $row['image_path'] : null;
+
+            if ($uid !== '' && ! empty($this->flashcardSlideImageUploads[$uid])) {
+                $upload = $this->flashcardSlideImageUploads[$uid];
+                if ($imagePath) {
+                    $this->deleteSlideImageFromDisk($imagePath);
+                }
+                $imagePath = $upload->store('flashcard-slides/'.$activity->id, 'public');
+            }
+
             $payload = [
                 'order_index' => $index,
                 'emoji' => filled($row['emoji'] ?? null) ? $row['emoji'] : null,
+                'image_path' => $imagePath,
                 'front_label' => filled($row['front_label'] ?? null) ? $row['front_label'] : null,
                 'back_label' => filled($row['back_label'] ?? null) ? $row['back_label'] : null,
                 'phonetic' => filled($row['phonetic'] ?? null) ? $row['phonetic'] : null,
@@ -418,8 +474,22 @@ class ActivityDetailPage extends Component
         }
 
         if ($idsKept !== []) {
+            $removed = $activity->flashcardSlides()->whereNotIn('id', $idsKept)->get();
+            foreach ($removed as $old) {
+                $this->deleteSlideImageFromDisk($old->image_path);
+            }
             $activity->flashcardSlides()->whereNotIn('id', $idsKept)->delete();
         }
+
+        $this->flashcardSlideImageUploads = [];
+    }
+
+    protected function deleteSlideImageFromDisk(?string $path): void
+    {
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            return;
+        }
+        Storage::disk('public')->delete($path);
     }
 
     /**

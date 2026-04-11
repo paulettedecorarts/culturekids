@@ -136,14 +136,14 @@
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap">
                         <div>
                             <div class="act-label" style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:4px">Cards in this deck</div>
-                            <p style="font-size:11px;color:rgba(255,255,255,.45);margin:0;max-width:520px;line-height:1.45">Each row is one flashcard (like pages in a comic). Front is what the child sees first; back is the reveal — e.g. English then Luganda.</p>
+                            <p style="font-size:11px;color:rgba(255,255,255,.45);margin:0;max-width:520px;line-height:1.45">Each row is one flashcard (like pages in a comic). Front is what the child sees first; back is the reveal — e.g. English then Luganda. You can illustrate the front with an <strong style="color:rgba(255,255,255,.65)">uploaded image</strong>, an <strong style="color:rgba(255,255,255,.65)">emoji</strong>, both, or neither.</p>
                         </div>
                         <button type="button" wire:click="addFlashcardSlide" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:8px 14px;border-radius:var(--r-full);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-admin)">+ Add card</button>
                     </div>
                     @error('flashcardSlides') <div class="act-error" style="margin-bottom:8px">{{ $message }}</div> @enderror
                     <div style="display:flex;flex-direction:column;gap:10px">
                         @foreach($flashcardSlides as $idx => $card)
-                            <div wire:key="fc-{{ $idx }}-{{ $card['id'] ?? 'n' }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1)">
+                            <div wire:key="fc-{{ $card['slide_uid'] ?? $idx }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1)">
                                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
                                     <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.5)">CARD {{ $idx + 1 }}</span>
                                     <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -153,6 +153,29 @@
                                     </div>
                                 </div>
                                 <div class="act-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+                                    <div style="grid-column:1/-1">
+                                        <label class="act-label">Cover image (optional)</label>
+                                        <p style="font-size:10px;color:rgba(255,255,255,.38);margin:0 0 8px;line-height:1.4">PNG or JPEG, up to 5&nbsp;MB. Shown on the front of the card instead of (or next to) the emoji.</p>
+                                        <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+                                            <div class="fc-cover-preview-box">
+                                                @if(! empty($flashcardSlideImageUploads[$card['slide_uid']] ?? null))
+                                                    <img src="{{ $flashcardSlideImageUploads[$card['slide_uid']]->temporaryUrl() }}" alt="" class="fc-cover-preview-img">
+                                                @elseif(filled($card['image_path'] ?? null))
+                                                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($card['image_path']) }}" alt="" class="fc-cover-preview-img">
+                                                @else
+                                                    <span class="fc-cover-preview-placeholder">No image</span>
+                                                @endif
+                                            </div>
+                                            <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px">
+                                                <input type="file" accept="image/*" wire:model="flashcardSlideImageUploads.{{ $card['slide_uid'] }}" class="act-input" style="padding:8px;font-size:11px">
+                                                <div wire:loading wire:target="flashcardSlideImageUploads.{{ $card['slide_uid'] }}" style="font-size:10px;color:rgba(212,160,23,.85)">Uploading…</div>
+                                                @if(filled($card['image_path'] ?? null) || ! empty($flashcardSlideImageUploads[$card['slide_uid']] ?? null))
+                                                    <button type="button" wire:click="removeFlashcardSlideImage({{ $idx }})" class="btn btn-sm" style="align-self:flex-start;padding:6px 12px;font-size:11px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15)">Remove image</button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        @error('flashcardSlideImageUploads.'.$card['slide_uid']) <div class="act-error">{{ $message }}</div> @enderror
+                                    </div>
                                     <div style="grid-column:1/-1">
                                         <label class="act-label">Emoji (optional)</label>
                                         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -317,7 +340,14 @@
                                         <span class="act-fc-flip-inner">
                                             <span class="act-fc-face act-fc-front">
                                                 <span class="act-fc-badge">Card {{ $loop->iteration }}</span>
-                                                <span class="act-fc-emoji" aria-hidden="true">{{ filled($slide->emoji) ? $slide->emoji : '🎴' }}</span>
+                                                @if(filled($slide->image_path))
+                                                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($slide->image_path) }}" alt="" class="act-fc-front-img">
+                                                @endif
+                                                @if(filled($slide->emoji))
+                                                    <span class="act-fc-emoji {{ filled($slide->image_path) ? 'act-fc-emoji-compact' : '' }}" aria-hidden="true">{{ $slide->emoji }}</span>
+                                                @elseif(! filled($slide->image_path))
+                                                    <span class="act-fc-emoji" aria-hidden="true">🎴</span>
+                                                @endif
                                                 <span class="act-fc-front-text">{{ $slide->front_label ?: '—' }}</span>
                                                 <span class="act-fc-hint">Tap to reveal →</span>
                                             </span>
@@ -338,7 +368,9 @@
                         <ol class="act-fc-outline" aria-label="Card list (text)">
                             @foreach($activity->flashcardSlides as $slide)
                                 <li>
-                                    @if(filled($slide->emoji))
+                                    @if(filled($slide->image_path))
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($slide->image_path) }}" alt="" class="act-fc-outline-thumb" width="22" height="22" loading="lazy">
+                                    @elseif(filled($slide->emoji))
                                         <span class="act-fc-outline-emoji" aria-hidden="true">{{ $slide->emoji }}</span>
                                     @endif
                                     <strong>{{ $slide->front_label ?: '—' }}</strong>
@@ -425,6 +457,29 @@
             border-color:rgba(212,160,23,.35);
             transform:scale(1.06);
         }
+        .fc-cover-preview-box {
+            width:88px;
+            height:88px;
+            border-radius:10px;
+            background:rgba(0,0,0,.25);
+            border:1px solid rgba(255,255,255,.1);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            flex-shrink:0;
+        }
+        .fc-cover-preview-img {
+            max-width:100%;
+            max-height:100%;
+            object-fit:contain;
+        }
+        .fc-cover-preview-placeholder {
+            font-size:10px;
+            color:rgba(255,255,255,.35);
+            text-align:center;
+            padding:8px;
+        }
 
         /* Flashcard deck preview (read-only details) */
         .act-fc-preview-grid {
@@ -502,11 +557,19 @@
             text-transform:uppercase;
             color:rgba(255,255,255,.45);
         }
+        .act-fc-front-img {
+            max-width:100%;
+            max-height:72px;
+            object-fit:contain;
+            border-radius:8px;
+            margin-bottom:2px;
+        }
         .act-fc-emoji {
             font-size:40px;
             line-height:1;
             filter:drop-shadow(0 2px 6px rgba(0,0,0,.2));
         }
+        .act-fc-emoji-compact { font-size:26px; }
         .act-fc-emoji-sm { font-size:32px; margin-bottom:2px; }
         .act-fc-front-text {
             font-size:14px;
@@ -555,6 +618,7 @@
         }
         .act-fc-outline li { margin-bottom:6px; }
         .act-fc-outline-emoji { font-size:16px; margin-right:6px; vertical-align:middle; }
+        .act-fc-outline-thumb { object-fit:cover; border-radius:4px; margin-right:8px; vertical-align:middle; }
         .act-fc-outline-sep { color:rgba(255,255,255,.35); margin:0 5px; }
     </style>
 </div>
