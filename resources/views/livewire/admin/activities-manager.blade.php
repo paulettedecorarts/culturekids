@@ -10,9 +10,6 @@
                 @endif
             </div>
         </div>
-        <div style="display:flex;gap:var(--sp-2);align-items:center">
-            <a href="{{ route($routePrefix . '.activities.create', $flashcardsPortal ? ['type' => 'flashcard'] : []) }}" class="btn btn-primary btn-sm" style="text-decoration:none">{{ $flashcardsPortal ? '+ Add flashcard' : '+ Add Activity' }}</a>
-        </div>
     </div>
 
     @if(session()->has('message'))
@@ -48,14 +45,8 @@
         <input wire:model.live.debounce.300ms="search" placeholder="Search activities..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
         <select @if($flashcardsPortal) disabled @endif wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Types</option>
-            <option value="vocab_pack">Vocab Pack</option>
-            <option value="worksheet">Worksheet</option>
+            <option value="flashcard">Flashcard</option>
             <option value="puzzle">Puzzle</option>
-            @if(!request()->routeIs('cms.editor.activities') || $flashcardsPortal)
-                <option value="flashcard">Flashcard</option>
-            @endif
-            <option value="drawing_kit">Drawing Kit</option>
-            <option value="game">Game</option>
         </select>
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>

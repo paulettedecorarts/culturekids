@@ -71,11 +71,7 @@ class ActivitiesManager extends Component
     {
         return Activity::query()
             ->with('tribe')
-            ->whereNotIn('type', ['song', 'story'])
-            ->when(
-                request()->routeIs('cms.editor.activities') && $this->typeFilter === '',
-                fn ($q) => $q->where('type', '!=', 'flashcard')
-            )
+            ->whereIn('type', ['flashcard', 'puzzle'])
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('title', 'like', '%'.$this->search.'%')
                     ->orWhere('description', 'like', '%'.$this->search.'%')

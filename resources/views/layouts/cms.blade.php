@@ -149,7 +149,7 @@
                 <a href="{{ route('cms.editor.offline-bundles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.offline-bundles') ? 'active' : '' }}">📦 Offline Bundles</a>
                 
                 <div class="cms-nav-section">Activities</div>
-                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities') ? 'active' : '' }}">🧩 Other activities</a>
+                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities') ? 'active' : '' }}">🧩 All activities</a>
             @endif
             
             @if($isAdmin || $isSuper)
