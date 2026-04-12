@@ -138,6 +138,10 @@ class AssetsManager extends Component
                 $map[$song->audio_path]['label'] = 'Song: '.$song->title;
                 $map[$song->audio_path]['refs'][] = "Song #{$song->id}";
             }
+            if ($song->video_path) {
+                $map[$song->video_path]['label'] = 'Song Video: '.$song->title;
+                $map[$song->video_path]['refs'][] = "Song #{$song->id}";
+            }
             if ($song->cover_image_path) {
                 $map[$song->cover_image_path]['label'] = 'Song: '.$song->title;
                 $map[$song->cover_image_path]['refs'][] = "Song #{$song->id} Cover";
@@ -154,7 +158,7 @@ class AssetsManager extends Component
     protected function scanStoredAssets(array $linkedMap, bool $isSuperAdmin): Collection
     {
         $disk = Storage::disk('public');
-        $dirs = ['comics/covers', 'comics/panels', 'comics/audio', 'songs/audio', 'songs/covers'];
+        $dirs = ['comics/covers', 'comics/panels', 'comics/audio', 'songs/audio', 'songs/videos', 'songs/covers'];
 
         $allFiles = collect($dirs)
             ->flatMap(fn (string $dir) => $disk->allFiles($dir))

@@ -21,9 +21,16 @@
 
         @if($song->audio_path)
             <div style="margin-bottom:14px;">
-                <audio controls style="width:100%;">
-                    <source src="{{ asset('storage/'.$song->audio_path) }}">
-                </audio>
+                <div style="font-size:12px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:6px;">Playback</div>
+                @if(str_ends_with(strtolower($song->audio_path), '.mp4') || str_ends_with(strtolower($song->audio_path), '.webm') || str_ends_with(strtolower($song->audio_path), '.mov') || str_ends_with(strtolower($song->audio_path), '.avi'))
+                    <video controls style="width:100%; max-width:640px; border-radius:12px;">
+                        <source src="{{ asset('storage/'.$song->audio_path) }}">
+                    </video>
+                @else
+                    <audio controls style="width:100%;">
+                        <source src="{{ asset('storage/'.$song->audio_path) }}">
+                    </audio>
+                @endif
             </div>
         @endif
 

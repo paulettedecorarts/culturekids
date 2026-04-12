@@ -54,10 +54,10 @@ class AdminDashboard extends Component
 
         $songs = Song::query()
             ->where('org_id', $orgId)
-            ->get(['audio_path', 'cover_image_path']);
+            ->get(['audio_path', 'video_path', 'cover_image_path']);
 
         foreach ($songs as $song) {
-            $paths->push($song->audio_path, $song->cover_image_path);
+            $paths->push($song->audio_path, $song->video_path, $song->cover_image_path);
         }
 
         $disk = Storage::disk('public');

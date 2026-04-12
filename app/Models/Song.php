@@ -18,6 +18,7 @@ class Song extends Model
         'song_type',
         'lyrics',
         'audio_path',
+        'video_path',
         'cover_image_path',
         'duration_seconds',
         'age_min',
@@ -114,6 +115,7 @@ class Song extends Model
             'song_type' => $this->song_type,
             'lyrics' => $this->lyrics,
             'audio_path' => $this->audio_path,
+            'video_path' => $this->video_path,
             'cover_image_path' => $this->cover_image_path,
             'duration_seconds' => $this->duration_seconds,
         ]);

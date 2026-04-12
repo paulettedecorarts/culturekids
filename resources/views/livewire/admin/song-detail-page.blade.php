@@ -14,7 +14,7 @@
                 <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit Song</button>
             @endif
             @if($isEditing)
-                <button type="button" class="btn btn-sm" wire:click="saveSong" wire:loading.attr="disabled" wire:target="saveSong,audio_file,cover_image" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">
+                <button type="button" class="btn btn-sm" wire:click="saveSong" wire:loading.attr="disabled" wire:target="saveSong,media_file,cover_image" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">
                     {{ $song ? 'Save Changes' : 'Create Song' }}
                 </button>
                 <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">
@@ -68,20 +68,33 @@
 
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:10px">
                 <div>
-                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Audio file (any type)</label>
-                    <input wire:model="audio_file" type="file" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    @error('audio_file') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
+                    <label style="font-size:11px;color:rgba(255,255,255,.6)">Song upload (audio or video)</label>
+                    <input wire:model="media_file" type="file" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
+                    <div wire:loading wire:target="media_file" style="font-size:10px;color:var(--savanna-gold);margin-top:4px">
+                        ⏳ Uploading file...
+                    </div>
+                    @error('media_file') <div style="font-size:10px;color:#ff8c8c;margin-top:4px">{{ $message }}</div> @enderror
+                    <div style="font-size:9px;color:rgba(255,255,255,.35);margin-top:4px">Max 2GB. Accepts audio/video files.</div>
                     @if($song?->audio_path)
-                        <a href="{{ asset('storage/' . $song->audio_path) }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;font-size:11px;color:var(--savanna-gold)">Open current audio</a>
-                        <audio controls style="width:100%;margin-top:8px">
-                            <source src="{{ asset('storage/' . $song->audio_path) }}">
-                        </audio>
+                        <a href="{{ asset('storage/' . $song->audio_path) }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;font-size:11px;color:var(--savanna-gold)">Open current file</a>
+                        @if(str_ends_with(strtolower($song->audio_path), '.mp4') || str_ends_with(strtolower($song->audio_path), '.webm') || str_ends_with(strtolower($song->audio_path), '.mov') || str_ends_with(strtolower($song->audio_path), '.avi'))
+                            <video controls style="width:100%;margin-top:8px;max-height:120px;border-radius:8px">
+                                <source src="{{ asset('storage/' . $song->audio_path) }}">
+                            </video>
+                        @else
+                            <audio controls style="width:100%;margin-top:8px">
+                                <source src="{{ asset('storage/' . $song->audio_path) }}">
+                            </audio>
+                        @endif
                     @endif
                 </div>
                 <div>
                     <label style="font-size:11px;color:rgba(255,255,255,.6)">Cover image</label>
                     <input wire:model="cover_image" type="file" accept="image/*" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff">
-                    @error('cover_image') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
+                    <div wire:loading wire:target="cover_image" style="font-size:10px;color:var(--savanna-gold);margin-top:4px">
+                        ⏳ Uploading...
+                    </div>
+                    @error('cover_image') <div style="font-size:10px;color:#ff8c8c;margin-top:4px">{{ $message }}</div> @enderror
                 </div>
                 <div>
                     <label style="font-size:11px;color:rgba(255,255,255,.6)">Duration (sec)</label>
@@ -128,12 +141,18 @@
                     <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)">
                         <div style="font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:8px">Playback</div>
                         @if($song?->audio_path)
-                            <audio controls style="width:100%">
-                                <source src="{{ asset('storage/' . $song->audio_path) }}">
-                            </audio>
-                            <a href="{{ asset('storage/' . $song->audio_path) }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--savanna-gold)">Open audio in new tab</a>
+                            @if(str_ends_with(strtolower($song->audio_path), '.mp4') || str_ends_with(strtolower($song->audio_path), '.webm') || str_ends_with(strtolower($song->audio_path), '.mov') || str_ends_with(strtolower($song->audio_path), '.avi'))
+                                <video controls style="width:100%;border-radius:8px">
+                                    <source src="{{ asset('storage/' . $song->audio_path) }}">
+                                </video>
+                            @else
+                                <audio controls style="width:100%">
+                                    <source src="{{ asset('storage/' . $song->audio_path) }}">
+                                </audio>
+                            @endif
+                            <a href="{{ asset('storage/' . $song->audio_path) }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--savanna-gold)">Open in new tab</a>
                         @else
-                            <div style="font-size:12px;color:rgba(255,255,255,.45)">No audio uploaded yet.</div>
+                            <div style="font-size:12px;color:rgba(255,255,255,.45)">No media uploaded yet.</div>
                         @endif
                     </div>
                 </aside>

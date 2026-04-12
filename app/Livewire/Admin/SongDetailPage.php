@@ -44,7 +44,7 @@ class SongDetailPage extends Component
 
     public string $status = 'draft';
 
-    public $audio_file = null;
+    public $media_file = null;
 
     public $cover_image = null;
 
@@ -95,8 +95,15 @@ class SongDetailPage extends Component
             'age_max' => ['nullable', 'integer', 'min:1', 'max:18'],
             'star_points' => ['required', 'integer', 'min:0', 'max:1000'],
             'status' => ['required', 'in:draft,review,published'],
-            'audio_file' => [$this->song ? 'nullable' : 'required', 'file'],
+            'media_file' => ['nullable', 'file', 'max:2097152'], // 2GB in KB
             'cover_image' => ['nullable', 'image', 'max:20480'],
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'media_file.max' => 'The media file must not be larger than 2GB.',
         ];
     }
 
@@ -122,17 +129,18 @@ class SongDetailPage extends Component
 
         $song = $this->song ?? new Song;
 
-        if ($this->audio_file) {
-            $song->audio_path = app(AudioUploadService::class)->store(
-                $this->audio_file,
-                'songs/audio',
-                $song->audio_path,
-                [
-                    'feature' => 'song_detail_page',
-                    'entity' => 'song',
-                    'entity_id' => $song->id,
-                ],
-            );
+        if ($this->media_file) {
+            // Delete old file if exists
+            if ($song->audio_path) {
+                Storage::disk('public')->delete($song->audio_path);
+            }
+            if ($song->video_path) {
+                Storage::disk('public')->delete($song->video_path);
+            }
+            
+            // Store new file in audio_path (works for both audio and video)
+            $song->audio_path = $this->media_file->store('songs/media', 'public');
+            $song->video_path = null; // Clear video_path since we're using audio_path for all media
         }
 
         if ($this->cover_image) {
@@ -174,11 +182,10 @@ class SongDetailPage extends Component
         }
 
         if ($this->song->audio_path) {
-            app(AudioUploadService::class)->delete($this->song->audio_path, [
-                'feature' => 'song_detail_page',
-                'entity' => 'song',
-                'entity_id' => $this->song->id,
-            ]);
+            Storage::disk('public')->delete($this->song->audio_path);
+        }
+        if ($this->song->video_path) {
+            Storage::disk('public')->delete($this->song->video_path);
         }
         if ($this->song->cover_image_path) {
             Storage::disk('public')->delete($this->song->cover_image_path);
@@ -203,7 +210,7 @@ class SongDetailPage extends Component
         $this->age_max = $song->age_max;
         $this->star_points = $song->star_points;
         $this->status = $song->status;
-        $this->audio_file = null;
+        $this->media_file = null;
         $this->cover_image = null;
     }
 
