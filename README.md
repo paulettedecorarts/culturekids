@@ -34,6 +34,14 @@ Ensure you have the following installed on your machine:
     ```powershell
     php artisan migrate
     ```
+4.1 **Seed data**
+    ```powershell
+    php artisan db:seed
+    ```
+    or
+    ```
+    php artisan migrate:fresh --seed
+    ```
 
 5.  **Run API Server**:
     ```powershell

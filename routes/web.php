@@ -61,10 +61,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 // Super Admin Routes
 Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard');
