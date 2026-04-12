@@ -164,7 +164,7 @@
                     @if ($content_kind === 'comic')
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Story') }}</label>
-                            <select wire:model="selected_comic_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                            <select wire:model.live="selected_comic_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($comicOptions as $co)
                                     <option value="{{ $co->id }}">{{ $co->title }}</option>
@@ -175,7 +175,7 @@
                     @else
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Activity') }}</label>
-                            <select wire:model="selected_activity_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                            <select wire:model.live="selected_activity_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($activityOptions as $ao)
                                     <option value="{{ $ao->id }}">{{ $ao->title }} ({{ $ao->type }})</option>
@@ -199,9 +199,25 @@
 
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
                     <button type="button" wire:click="closeCreateModal" class="btn btn-outline" style="padding:10px 20px; border-radius:12px;">{{ __('Cancel') }}</button>
-                    <button type="button" wire:click="saveLesson" class="btn btn-primary" style="padding:10px 20px; border-radius:12px;">{{ __('Save') }}</button>
+                    <button type="button" wire:click="saveLesson" wire:loading.attr="disabled" class="btn btn-primary lesson-save-btn" style="padding:10px 20px; border-radius:12px;">
+                        <span class="save-text">{{ __('Save') }}</span>
+                        <span class="saving-text" style="display:none; align-items:center; gap:8px;">
+                            <svg style="width:14px; height:14px; animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="8" opacity="0.25"/>
+                                <path d="M12 2a10 10 0 0 1 10 10" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                            {{ __('Saving...') }}
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
     @endif
+
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .lesson-save-btn[disabled] { opacity: 0.7; pointer-events: none; cursor: not-allowed; }
+        .lesson-save-btn[disabled] .save-text { display: none; }
+        .lesson-save-btn[disabled] .saving-text { display: flex !important; }
+    </style>
 </div>
