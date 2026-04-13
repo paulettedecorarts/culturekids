@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Jobs\SendPasswordResetEmail;
 use App\Models\AuditLog;
 use App\Models\Organisation;
 use App\Models\User;
@@ -27,7 +28,7 @@ class UserForm extends Component
 
     public $organisation_id;
 
-    public $userRoles = [];
+    public $selectedRole;
 
     public function mount(?User $user = null)
     {
@@ -37,7 +38,7 @@ class UserForm extends Component
             $this->name = $user->name;
             $this->email = $user->email;
             $this->organisation_id = $user->organisation_id;
-            $this->userRoles = $user->roles->pluck('name')->toArray();
+            $this->selectedRole = $user->roles->first()?->name;
         } elseif (request()->filled('organisation_id')) {
             $oid = (int) request('organisation_id');
             if (Organisation::whereKey($oid)->exists()) {
@@ -51,9 +52,8 @@ class UserForm extends Component
         return [
             'name' => 'required|min:3|max:100',
             'email' => ['required', 'email', Rule::unique('users')->ignore($this->user?->id)],
-            'password' => $this->editing ? 'nullable|min:8' : 'required|min:8',
             'organisation_id' => 'nullable|exists:organisations,id',
-            'userRoles' => 'required|array|min:1',
+            'selectedRole' => 'required|string',
         ];
     }
 
@@ -67,35 +67,48 @@ class UserForm extends Component
             'organisation_id' => $this->organisation_id,
         ];
 
-        if ($this->password) {
-            $data['password'] = Hash::make($this->password);
+        try {
+            if ($this->editing) {
+                $this->user->update($data);
+                $this->user->syncRoles([$this->selectedRole]);
+
+                // Log the update
+                AuditLog::record('UPDATE', "users/{$this->user->id}", [
+                    'user_email' => $this->email,
+                    'role' => $this->selectedRole,
+                ]);
+
+                session()->flash('message', 'Account updated successfully.');
+                return redirect()->route('admin.users');
+            } else {
+                // Create new user with temporary password
+                $data['password'] = Hash::make(uniqid());
+                $data['email_verified_at'] = now();
+                
+                $newUser = User::create($data);
+                $newUser->assignRole($this->selectedRole);
+
+                // Log the creation
+                AuditLog::record('CREATE', "users/{$newUser->id}", [
+                    'user_email' => $this->email,
+                    'role' => $this->selectedRole,
+                ]);
+
+                // Queue password reset email (non-blocking)
+                SendPasswordResetEmail::dispatch($this->email);
+                
+                session()->flash('message', 'Account created successfully. Password reset email will be sent to ' . $this->email);
+                
+                // Clear form
+                $this->reset(['name', 'email', 'organisation_id', 'selectedRole']);
+                $this->resetValidation();
+                
+                return redirect()->route('admin.users');
+            }
+        } catch (\Throwable $e) {
+            report($e);
+            session()->flash('error', 'Failed to save account. Please try again.');
         }
-
-        if ($this->editing) {
-            $this->user->update($data);
-            $this->user->syncRoles($this->userRoles);
-
-            // Log the update
-            AuditLog::record('UPDATE', "users/{$this->user->id}", [
-                'user_email' => $this->email,
-                'roles' => $this->userRoles,
-            ]);
-
-            session()->flash('message', 'Platform account updated successfully.');
-        } else {
-            $newUser = User::create($data);
-            $newUser->assignRole($this->userRoles);
-
-            // Log the creation
-            AuditLog::record('CREATE', "users/{$newUser->id}", [
-                'user_email' => $this->email,
-                'roles' => $this->userRoles,
-            ]);
-
-            session()->flash('message', 'Platform account created successfully.');
-        }
-
-        return redirect()->route('admin.users');
     }
 
     public function render()

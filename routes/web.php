@@ -155,6 +155,8 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/activities', ActivitiesManager::class)->name('activities');
     Route::get('/activities/create', ActivityDetailPage::class)->name('activities.create');
     Route::get('/activities/{id}', ActivityDetailPage::class)->name('activities.detail');
+    
+    Route::get('/people', App\Livewire\CMS\EditorPeopleManager::class)->name('people');
 });
 
 // CMS Organisational Admin (Management & Site)
