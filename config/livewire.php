@@ -66,7 +66,7 @@ return [
     'temporary_file_upload' => [
         'disk' => null,        // Example: 'local', 's3'              | Default: 'default'
         // No max rule: size is bounded only by PHP ini (upload_max_filesize / post_max_size) and web server.
-        'rules' => ['required', 'file'],
+        'rules' => ['required', 'file', 'max:1048576'], // 1GB = 1048576 KB
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
         'middleware' => ['throttle:120,1', 'log.livewire.upload'],
         // Livewire only accepts extensions listed here for /livewire/upload-file — include broad audio + existing media.
@@ -79,7 +79,7 @@ return [
             'ra', 'snd', 'tta', 'voc', 'weba', 'webm', 'wma', 'wv',
             '3gp', '3g2', 'gsm', 'awb', 'dvf', 'mmf', 'nmf', 'nsf', 'spx',
         ],
-        'max_upload_time' => 120,
+        'max_upload_time' => 600, // 10 minutes for large files
         'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
     ],
 
