@@ -74,6 +74,15 @@
                 </div>
 
                 <div style="display:flex; gap:8px; justify-content:flex-end">
+                    <button 
+                        wire:click="resendSetupEmail({{ $user->id }})" 
+                        wire:loading.attr="disabled"
+                        title="Resend Setup Email"
+                        class="btn" 
+                        style="width:36px; height:36px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer">
+                        <span wire:loading.remove wire:target="resendSetupEmail({{ $user->id }})">📧</span>
+                        <span wire:loading wire:target="resendSetupEmail({{ $user->id }})" style="font-size:10px">⏳</span>
+                    </button>
                     <a href="{{ route('admin.users.edit', $user->id) }}" class="btn" style="width:36px; height:36px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
                     @if($user->id !== auth()->id())
                         <button wire:click="delete({{ $user->id }})" onclick="return confirm('Archive this account permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>

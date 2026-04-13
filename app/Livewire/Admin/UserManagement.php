@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Admin;
 
+use App\Jobs\SendPasswordResetEmail;
+use App\Models\AuditLog;
+use App\Models\User;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use App\Models\User;
-use App\Models\AuditLog;
 use Spatie\Permission\Models\Role;
 
 #[Layout('layouts.admin')]
@@ -25,6 +26,22 @@ class UserManagement extends Component
     public function updatingRoleFilter()
     {
         $this->resetPage();
+    }
+
+    public function resendSetupEmail($userId)
+    {
+        $user = User::findOrFail($userId);
+        
+        // Queue password reset email
+        SendPasswordResetEmail::dispatch($user->email);
+        
+        // Log the action
+        AuditLog::record('RESEND_SETUP_EMAIL', "users/{$user->id}", [
+            'user_email' => $user->email,
+            'user_name' => $user->name,
+        ]);
+        
+        session()->flash('message', 'Setup email sent to ' . $user->email);
     }
 
     public function delete($id)
