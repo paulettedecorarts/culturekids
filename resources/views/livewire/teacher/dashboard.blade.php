@@ -88,6 +88,7 @@
                                 $lessonable = $plan->lessonable;
                                 $slot = $this->slotLabel($plan);
                                 $isComic = $lessonable instanceof \App\Models\Comic;
+                                $isSong = $lessonable instanceof \App\Models\Song;
                                 $title = $lessonable?->title ?? '—';
                                 $tribeName = $lessonable?->tribe?->name ?? '—';
                                 $emoji = $isComic ? ($lessonable->tribe?->hero_emoji ?? '📖') : '🖨';
@@ -125,6 +126,10 @@
                                         @if ($isComic)
                                             <a href="{{ route('teacher.stories.show', $lessonable->id) }}" wire:navigate class="btn btn-outline btn-sm" style="padding:6px 12px; font-size:11px; text-decoration:none">{{ __('Read') }}</a>
                                             <a href="{{ route('teacher.stories.show', $lessonable->id) }}?print=1" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="padding:6px 12px; font-size:11px; text-decoration:none">{{ __('Print') }}</a>
+                                        @elseif ($isSong)
+                                            @if ($lessonable->audio_path)
+                                                <a href="{{ Storage::url($lessonable->audio_path) }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="padding:6px 12px; font-size:11px; text-decoration:none">🎵 {{ __('Play') }}</a>
+                                            @endif
                                         @else
                                             @if ($url = $lessonable->printableAssetUrl())
                                                 <a href="{{ $url }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="padding:6px 12px; font-size:11px; text-decoration:none">{{ __('PDF') }}</a>
@@ -157,6 +162,7 @@
                         <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Content type') }}</label>
                         <select wire:model.live="content_kind" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
                             <option value="comic">{{ __('Story / comic') }}</option>
+                            <option value="song">{{ __('Song') }}</option>
                             <option value="activity">{{ __('Activity') }}</option>
                         </select>
                     </div>
@@ -171,6 +177,17 @@
                                 @endforeach
                             </select>
                             @error('selected_comic_id') <div style="color:#b91c1c; font-size:12px; margin-top:4px">{{ $message }}</div> @enderror
+                        </div>
+                    @elseif ($content_kind === 'song')
+                        <div>
+                            <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Song') }}</label>
+                            <select wire:model.live="selected_song_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                                <option value="">{{ __('Select…') }}</option>
+                                @foreach ($songOptions as $so)
+                                    <option value="{{ $so->id }}">{{ $so->title }}</option>
+                                @endforeach
+                            </select>
+                            @error('selected_song_id') <div style="color:#b91c1c; font-size:12px; margin-top:4px">{{ $message }}</div> @enderror
                         </div>
                     @else
                         <div>

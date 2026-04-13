@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Classroom;
 use App\Models\Comic;
 use App\Models\LessonPlan;
+use App\Models\Song;
 use App\Support\TeacherActiveClassroom;
 use App\Support\TeacherCatalogScope;
 use App\Support\TeacherPrintScope;
@@ -31,6 +32,8 @@ class Dashboard extends Component
     public ?int $selected_comic_id = null;
 
     public ?int $selected_activity_id = null;
+
+    public ?int $selected_song_id = null;
 
     public string $form_scheduled_on = '';
 
@@ -70,8 +73,13 @@ class Dashboard extends Component
         // Clear the opposite selection when switching content type
         if ($value === 'comic') {
             $this->selected_activity_id = null;
+            $this->selected_song_id = null;
+        } elseif ($value === 'activity') {
+            $this->selected_comic_id = null;
+            $this->selected_song_id = null;
         } else {
             $this->selected_comic_id = null;
+            $this->selected_activity_id = null;
         }
     }
 
@@ -81,6 +89,7 @@ class Dashboard extends Component
         $this->content_kind = 'comic';
         $this->selected_comic_id = null;
         $this->selected_activity_id = null;
+        $this->selected_song_id = null;
         $this->form_scheduled_on = Carbon::today()->toDateString();
         $this->form_notes = '';
         $this->showCreateModal = true;
@@ -120,15 +129,17 @@ class Dashboard extends Component
         try {
             Log::info('Starting validation...');
             $rules = [
-                'content_kind' => 'required|in:comic,activity',
+                'content_kind' => 'required|in:comic,activity,song',
                 'form_scheduled_on' => 'required|date',
                 'form_notes' => 'nullable|string|max:2000',
             ];
 
             if ($this->content_kind === 'comic') {
                 $rules['selected_comic_id'] = 'required|exists:comics,id';
-            } else {
+            } elseif ($this->content_kind === 'activity') {
                 $rules['selected_activity_id'] = 'required|exists:activities,id';
+            } else {
+                $rules['selected_song_id'] = 'required|exists:songs,id';
             }
 
             $validated = $this->validate($rules, [], [
@@ -153,6 +164,19 @@ class Dashboard extends Component
             }
             $lessonableId = $comic->id;
             $lessonableType = Comic::class;
+        } elseif ($this->content_kind === 'song') {
+            Log::info('Resolving song model...');
+            $song = Song::query()->findOrFail((int) $this->selected_song_id);
+            Log::info('Checking song scope...');
+            if (! TeacherCatalogScope::userCanViewSong($user, $song)) {
+                Log::warning('User unauthorized to assign song to lesson.', ['user_id' => $user->id, 'song_id' => $song->id]);
+                session()->flash('error', __('You cannot assign this song to a lesson.'));
+                $this->closeCreateModal();
+
+                return;
+            }
+            $lessonableId = $song->id;
+            $lessonableType = Song::class;
         } else {
             Log::info('Resolving activity model...');
             try {
@@ -292,6 +316,7 @@ class Dashboard extends Component
 
         $comicOptions = collect();
         $activityOptions = collect();
+        $songOptions = collect();
 
         if ($user && $activeClassroom) {
             $lessonPlans = LessonPlan::query()
@@ -305,6 +330,7 @@ class Dashboard extends Component
             $lessonPlans->loadMorph('lessonable', [
                 Comic::class => ['tribe'],
                 Activity::class => ['tribe'],
+                Song::class => ['tribe'],
             ]);
 
             $stats[0]['val'] = (string) $lessonPlans->count();
@@ -312,6 +338,7 @@ class Dashboard extends Component
 
             $comicOptions = TeacherCatalogScope::comicsQueryFor($user)->limit(300)->get(['id', 'title', 'tribe_id']);
             $activityOptions = TeacherPrintScope::activitiesQueryFor($user)->limit(300)->get(['id', 'title', 'type', 'tribe_id']);
+            $songOptions = TeacherCatalogScope::songsQueryFor($user)->limit(300)->get(['id', 'title', 'tribe_id']);
         }
 
         return view('livewire.teacher.dashboard', [
@@ -323,6 +350,7 @@ class Dashboard extends Component
             'activeClassroom' => $activeClassroom,
             'comicOptions' => $comicOptions,
             'activityOptions' => $activityOptions,
+            'songOptions' => $songOptions,
         ]);
     }
 }
