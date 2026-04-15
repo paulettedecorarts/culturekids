@@ -26,6 +26,14 @@ class Activity extends Model
         'is_published' => 'boolean',
     ];
 
+    /**
+     * Accessor for stars (maps to star_points for backward compatibility)
+     */
+    public function getStarsAttribute()
+    {
+        return $this->star_points ?? 10;
+    }
+
     protected static function booted(): void
     {
         static::saving(function (Activity $activity): void {

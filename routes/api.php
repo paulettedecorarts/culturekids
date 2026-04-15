@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tribes', [TribeCatalogController::class, 'index']);
     
     // Activities
+    Route::get('/activities', [ActivityController::class, 'index']);
     Route::get('/tribes/{tribeId}/activities', [ActivityController::class, 'getTribeActivities']);
     Route::get('/activities/{id}', [ActivityController::class, 'show']);
     

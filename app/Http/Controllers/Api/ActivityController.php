@@ -10,6 +10,45 @@ use Illuminate\Http\Request;
 class ActivityController extends Controller
 {
     /**
+     * Get all activities (flashcards, puzzles) - no organization scoping needed
+     * Activities are already scoped through tribes
+     */
+    public function index(Request $request)
+    {
+        $type = $request->query('type'); // flashcard or puzzle
+        
+        $query = Activity::query()
+            ->with('tribe:id,name,hero_emoji,hero_icon,color')
+            ->where('is_published', true)
+            ->orderBy('title');
+
+        // Filter by type if provided
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        $activities = $query->get()->map(function ($activity) {
+            return [
+                'id' => $activity->id,
+                'title' => $activity->title,
+                'type' => $activity->type,
+                'age_range' => $activity->age_range,
+                'stars' => $activity->star_points ?? 10,
+                'icon' => $activity->icon,
+                'description' => $activity->description,
+                'tribe' => $activity->tribe ? [
+                    'id' => $activity->tribe->id,
+                    'name' => $activity->tribe->name,
+                    'icon' => $activity->tribe->hero_emoji ?? $activity->tribe->hero_icon,
+                    'color' => $activity->tribe->color,
+                ] : null,
+            ];
+        });
+
+        return response()->json($activities);
+    }
+
+    /**
      * Get all activities for a specific tribe
      */
     public function getTribeActivities(Request $request, $tribeId)
@@ -43,26 +82,66 @@ class ActivityController extends Controller
     }
 
     /**
-     * Get a single activity
+     * Get a single activity with slides for flashcards
      */
     public function show(Request $request, $id)
     {
-        $activity = Activity::with('tribe:id,name,color,hero_emoji,hero_icon')
-            ->findOrFail($id);
+        $user = $request->user();
+        
+        $activity = Activity::with([
+            'tribe:id,name,color,hero_emoji,hero_icon',
+            'flashcardSlides' => function ($q) {
+                $q->orderBy('order_index');
+            }
+        ])->findOrFail($id);
 
-        return response()->json([
+        // Check organization access
+        if ($user->organisation_id && $activity->tribe) {
+            if ($activity->tribe->org_id && $activity->tribe->org_id !== $user->organisation_id) {
+                abort(403, 'Unauthorized');
+            }
+        } elseif (!$user->organisation_id && $activity->tribe && $activity->tribe->org_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $response = [
             'id' => $activity->id,
             'title' => $activity->title,
             'type' => $activity->type,
             'age_range' => $activity->age_range,
-            'stars' => $activity->stars,
+            'stars' => $activity->star_points ?? 10,
             'icon' => $activity->icon,
             'description' => $activity->description,
-            'tribe' => [
+            'tribe' => $activity->tribe ? [
                 'id' => $activity->tribe->id,
                 'name' => $activity->tribe->name,
                 'color' => $activity->tribe->color,
-            ],
-        ]);
+                'icon' => $activity->tribe->hero_emoji ?? $activity->tribe->hero_icon,
+            ] : null,
+        ];
+
+        // Add slides for flashcards
+        if ($activity->type === 'flashcard') {
+            $response['slides'] = $activity->flashcardSlides->map(function ($slide) {
+                return [
+                    'id' => $slide->id,
+                    'order' => $slide->order_index,
+                    'emoji' => $slide->emoji,
+                    'front_label' => $slide->front_label,
+                    'back_label' => $slide->back_label,
+                    'phonetic' => $slide->phonetic,
+                    'image_path' => $slide->image_path ? asset('storage/' . $slide->image_path) : null,
+                    'audio_path' => $slide->audio_path ? asset('storage/' . $slide->audio_path) : null,
+                ];
+            });
+        }
+
+        // Add puzzle data if needed
+        if ($activity->type === 'puzzle') {
+            $response['puzzle_data'] = $activity->metadata;
+            $response['printable_url'] = $activity->printableAssetUrl();
+        }
+
+        return response()->json($response);
     }
 }
