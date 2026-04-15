@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AgeProfileController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChildProfileController;
 use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
+use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\PushDeviceController;
 use App\Http\Controllers\Api\TribeCatalogController;
 use Illuminate\Support\Facades\Route;
@@ -14,11 +17,33 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 // Protected Mobile API Routes
 Route::middleware('auth:sanctum')->group(function () {
+    // Auth
+    Route::get('/auth/user', [AuthController::class, 'me']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    
+    // Content
     Route::get('/age-profiles', [AgeProfileController::class, 'index']);
     Route::get('/languages', [LanguageRegistryController::class, 'index']);
     Route::get('/tribes', [TribeCatalogController::class, 'index']);
+    
+    // Activities
+    Route::get('/tribes/{tribeId}/activities', [ActivityController::class, 'getTribeActivities']);
+    Route::get('/activities/{id}', [ActivityController::class, 'show']);
+    
+    // Child Profiles
+    Route::get('/child-profiles', [ChildProfileController::class, 'index']);
+    Route::post('/child-profiles', [ChildProfileController::class, 'store']);
+    Route::get('/child-profiles/{id}', [ChildProfileController::class, 'show']);
+    Route::put('/child-profiles/{id}', [ChildProfileController::class, 'update']);
+    Route::delete('/child-profiles/{id}', [ChildProfileController::class, 'destroy']);
+    
+    // Progress & Sync
+    Route::post('/progress/events', [ProgressController::class, 'recordEvents']);
+    Route::get('/progress/child/{childId}', [ProgressController::class, 'getChildProgress']);
+    Route::post('/sync', [ProgressController::class, 'sync']);
+    
+    // Push Notifications
     Route::get('/push/devices', [PushDeviceController::class, 'index']);
     Route::post('/push/devices/register', [PushDeviceController::class, 'register']);
     Route::post('/push/devices/unregister', [PushDeviceController::class, 'unregister']);

@@ -33,10 +33,19 @@ class TribeCatalogController extends Controller
             'greeting',
             'region',
             'color',
-        ]);
+        ])->map(function ($tribe) {
+            return [
+                'id' => $tribe->id,
+                'name' => $tribe->name,
+                'hero' => $tribe->hero_name,
+                'language' => 'Luganda', // Default for now
+                'region' => $tribe->region,
+                'color' => $tribe->color,
+                'icon' => $tribe->hero_emoji ?? $tribe->hero_icon,
+                'animal' => '', // Not in current schema
+            ];
+        });
 
-        return response()->json([
-            'tribes' => $tribes,
-        ]);
+        return response()->json($tribes);
     }
 }
