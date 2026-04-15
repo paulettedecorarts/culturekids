@@ -88,6 +88,8 @@ class ProgressController extends Controller
             ->pluck('activity_id')
             ->toArray();
 
+        $totalCompleted = count($completedActivityIds);
+
         // Get stars per tribe
         $tribeStars = DB::table('progress_events')
             ->join('activities', 'progress_events.activity_id', '=', 'activities.id')
@@ -121,11 +123,165 @@ class ProgressController extends Controller
             ];
         });
 
+        // Count completed tribes
+        $completedTribes = $tribeStars->filter(function ($tribe) use ($totalActivitiesPerTribe) {
+            $total = $totalActivitiesPerTribe[$tribe->tribe_id] ?? 20;
+            return $tribe->completed_activities >= $total;
+        })->count();
+
+        // Calculate milestones
+        $totalStars = $child->total_stars;
+        $milestones = [
+            [
+                'id' => 'bronze_explorer',
+                'title' => 'Bronze Explorer',
+                'description' => 'Earn 100 stars',
+                'icon' => '🥉',
+                'target' => 100,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 100,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'silver_learner',
+                'title' => 'Silver Learner',
+                'description' => 'Earn 500 stars',
+                'icon' => '🥈',
+                'target' => 500,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 500,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'gold_hero',
+                'title' => 'Gold Hero',
+                'description' => 'Earn 1,000 stars',
+                'icon' => '🥇',
+                'target' => 1000,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 1000,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'platinum_champion',
+                'title' => 'Platinum Champion',
+                'description' => 'Earn 2,000 stars',
+                'icon' => '💎',
+                'target' => 2000,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 2000,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'heritage_master',
+                'title' => 'Heritage Master',
+                'description' => 'Earn 3,500 stars',
+                'icon' => '👑',
+                'target' => 3500,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 3500,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'tribe_explorer',
+                'title' => 'Tribe Explorer',
+                'description' => 'Complete 1 tribe',
+                'icon' => '🗺️',
+                'target' => 1,
+                'current' => $completedTribes,
+                'unlocked' => $completedTribes >= 1,
+                'type' => 'tribes',
+            ],
+            [
+                'id' => 'cultural_learner',
+                'title' => 'Cultural Learner',
+                'description' => 'Complete 3 tribes',
+                'icon' => '📚',
+                'target' => 3,
+                'current' => $completedTribes,
+                'unlocked' => $completedTribes >= 3,
+                'type' => 'tribes',
+            ],
+            [
+                'id' => 'heritage_hero',
+                'title' => 'Heritage Hero',
+                'description' => 'Complete 5 tribes',
+                'icon' => '🦸',
+                'target' => 5,
+                'current' => $completedTribes,
+                'unlocked' => $completedTribes >= 5,
+                'type' => 'tribes',
+            ],
+            [
+                'id' => 'uganda_master',
+                'title' => 'Uganda Master',
+                'description' => 'Complete all 10 tribes',
+                'icon' => '🏆',
+                'target' => 10,
+                'current' => $completedTribes,
+                'unlocked' => $completedTribes >= 10,
+                'type' => 'tribes',
+            ],
+            [
+                'id' => 'first_steps',
+                'title' => 'First Steps',
+                'description' => 'Complete your first activity',
+                'icon' => '👣',
+                'target' => 1,
+                'current' => $totalCompleted,
+                'unlocked' => $totalCompleted >= 1,
+                'type' => 'activities',
+            ],
+            [
+                'id' => 'getting_started',
+                'title' => 'Getting Started',
+                'description' => 'Complete 10 activities',
+                'icon' => '🌱',
+                'target' => 10,
+                'current' => $totalCompleted,
+                'unlocked' => $totalCompleted >= 10,
+                'type' => 'activities',
+            ],
+            [
+                'id' => 'dedicated_learner',
+                'title' => 'Dedicated Learner',
+                'description' => 'Complete 50 activities',
+                'icon' => '🌳',
+                'target' => 50,
+                'current' => $totalCompleted,
+                'unlocked' => $totalCompleted >= 50,
+                'type' => 'activities',
+            ],
+            [
+                'id' => 'activity_champion',
+                'title' => 'Activity Champion',
+                'description' => 'Complete 100 activities',
+                'icon' => '🎯',
+                'target' => 100,
+                'current' => $totalCompleted,
+                'unlocked' => $totalCompleted >= 100,
+                'type' => 'activities',
+            ],
+            [
+                'id' => 'ultimate_explorer',
+                'title' => 'Ultimate Explorer',
+                'description' => 'Complete all 200 activities',
+                'icon' => '🌟',
+                'target' => 200,
+                'current' => $totalCompleted,
+                'unlocked' => $totalCompleted >= 200,
+                'type' => 'activities',
+            ],
+        ];
+
         return response()->json([
             'child' => $child,
             'completed_activity_ids' => $completedActivityIds,
             'total_stars' => $child->total_stars,
+            'total_activities_completed' => $totalCompleted,
+            'tribes_completed' => $completedTribes,
             'badges' => $badges,
+            'milestones' => $milestones,
         ]);
     }
 
