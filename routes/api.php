@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Progress & Sync
     Route::post('/progress/events', [ProgressController::class, 'recordEvents']);
     Route::get('/progress/child/{childId}', [ProgressController::class, 'getChildProgress']);
+    Route::get('/progress/user', [ProgressController::class, 'getUserProgress']);
     Route::post('/sync', [ProgressController::class, 'sync']);
     
     // Reading Progress
