@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\PushDeviceController;
+use App\Http\Controllers\Api\SongController;
 use App\Http\Controllers\Api\TribeCatalogController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/comics', [ComicController::class, 'index']);
     Route::get('/comics/{id}', [ComicController::class, 'show']);
     Route::get('/tribes/{tribeId}/comics', [ComicController::class, 'getByTribe']);
+    
+    // Songs
+    Route::get('/songs', [SongController::class, 'index']);
+    Route::get('/songs/{id}', [SongController::class, 'show']);
+    Route::get('/tribes/{tribeId}/songs', [SongController::class, 'getByTribe']);
     
     // Child Profiles
     Route::get('/child-profiles', [ChildProfileController::class, 'index']);
