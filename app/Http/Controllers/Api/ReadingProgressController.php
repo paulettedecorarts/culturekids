@@ -16,7 +16,7 @@ class ReadingProgressController extends Controller
     public function updateProgress(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'comic_id' => 'required|exists:comics,id',
+            'comic_id' => 'required|integer',
             'current_page' => 'required|integer|min:0',
         ]);
 
@@ -25,7 +25,12 @@ class ReadingProgressController extends Controller
         }
 
         $user = $request->user();
-        $comic = Comic::findOrFail($request->comic_id);
+        $comic = Comic::find($request->comic_id);
+        
+        if (!$comic) {
+            return response()->json(['error' => 'Comic not found'], 404);
+        }
+        
         $totalPages = $comic->panels()->count();
 
         // Update or create progress

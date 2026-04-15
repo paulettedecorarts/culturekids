@@ -34,7 +34,12 @@ class ComicController extends Controller
             $query->whereNull('org_id');
         }
 
-        $comics = $query->get()->map(function ($comic) {
+        $comics = $query->get()->map(function ($comic) use ($user) {
+            // Get reading progress for this comic
+            $progress = ReadingProgress::where('user_id', $user->id)
+                ->where('comic_id', $comic->id)
+                ->first();
+
             return [
                 'id' => $comic->id,
                 'title' => $comic->title,
@@ -49,6 +54,12 @@ class ComicController extends Controller
                     'name' => $comic->tribe->name,
                     'icon' => $comic->tribe->hero_emoji ?? $comic->tribe->hero_icon,
                     'color' => $comic->tribe->color,
+                ] : null,
+                'progress' => $progress ? [
+                    'current_page' => $progress->current_page,
+                    'total_pages' => $progress->total_pages,
+                    'status' => $progress->status,
+                    'percentage' => $progress->progress_percentage,
                 ] : null,
             ];
         });
@@ -152,7 +163,12 @@ class ComicController extends Controller
     public function complete(Request $request, $id)
     {
         $user = $request->user();
-        $comic = Comic::with('tribe')->findOrFail($id);
+        $comic = Comic::with('tribe')->find($id);
+        
+        if (!$comic) {
+            return response()->json(['error' => 'Comic not found'], 404);
+        }
+        
         $totalPages = $comic->panels()->count();
 
         // Update reading progress to completed
@@ -179,7 +195,7 @@ class ComicController extends Controller
 
         $newBadges = [];
         
-        // Check milestone achievements
+        // Check milestone achievements - only show badge if just unlocked
         if ($totalCompleted == 1) {
             $newBadges[] = [
                 'id' => 'first_steps',
