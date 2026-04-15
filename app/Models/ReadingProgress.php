@@ -37,11 +37,14 @@ class ReadingProgress extends Model
      */
     public function getProgressPercentageAttribute(): int
     {
-        if ($this->total_pages === 0) {
+        if ($this->total_pages === 0 || $this->total_pages === null) {
             return 0;
         }
         
-        return (int) round(($this->current_page / $this->total_pages) * 100);
+        // Ensure current_page doesn't exceed total_pages
+        $currentPage = min($this->current_page, $this->total_pages);
+        
+        return (int) round(($currentPage / $this->total_pages) * 100);
     }
 
     /**
