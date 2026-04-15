@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comic;
+use App\Models\ReadingProgress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ComicController extends Controller
 {
@@ -142,5 +144,77 @@ class ComicController extends Controller
         });
 
         return response()->json($comics);
+    }
+
+    /**
+     * Mark a comic as completed
+     */
+    public function complete(Request $request, $id)
+    {
+        $user = $request->user();
+        $comic = Comic::with('tribe')->findOrFail($id);
+        $totalPages = $comic->panels()->count();
+
+        // Update reading progress to completed
+        $progress = ReadingProgress::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'comic_id' => $id,
+            ],
+            [
+                'current_page' => $totalPages,
+                'total_pages' => $totalPages,
+                'status' => 'completed',
+                'last_read_at' => now(),
+            ]
+        );
+
+        // Award stars
+        $starsEarned = $comic->star_points ?? 10;
+
+        // Check for newly unlocked badges
+        $totalCompleted = ReadingProgress::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+
+        $newBadges = [];
+        
+        // Check milestone achievements
+        if ($totalCompleted == 1) {
+            $newBadges[] = [
+                'id' => 'first_steps',
+                'title' => 'First Steps',
+                'icon' => '👣',
+                'color' => '#10B981',
+            ];
+        } elseif ($totalCompleted == 10) {
+            $newBadges[] = [
+                'id' => 'getting_started',
+                'title' => 'Getting Started',
+                'icon' => '🌱',
+                'color' => '#3B82F6',
+            ];
+        } elseif ($totalCompleted == 50) {
+            $newBadges[] = [
+                'id' => 'dedicated_learner',
+                'title' => 'Dedicated Learner',
+                'icon' => '🌳',
+                'color' => '#059669',
+            ];
+        } elseif ($totalCompleted == 100) {
+            $newBadges[] = [
+                'id' => 'activity_champion',
+                'title' => 'Activity Champion',
+                'icon' => '🎯',
+                'color' => '#DC2626',
+            ];
+        }
+
+        return response()->json([
+            'message' => 'Comic completed successfully',
+            'stars_earned' => $starsEarned,
+            'total_completed' => $totalCompleted,
+            'new_badges' => $newBadges,
+        ]);
     }
 }

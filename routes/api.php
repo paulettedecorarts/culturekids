@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\PushDeviceController;
+use App\Http\Controllers\Api\ReadingProgressController;
 use App\Http\Controllers\Api\SongController;
 use App\Http\Controllers\Api\TribeCatalogController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Comics/Stories
     Route::get('/comics', [ComicController::class, 'index']);
     Route::get('/comics/{id}', [ComicController::class, 'show']);
+    Route::post('/comics/{id}/complete', [ComicController::class, 'complete']);
     Route::get('/tribes/{tribeId}/comics', [ComicController::class, 'getByTribe']);
     
     // Songs
@@ -54,6 +56,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/progress/events', [ProgressController::class, 'recordEvents']);
     Route::get('/progress/child/{childId}', [ProgressController::class, 'getChildProgress']);
     Route::post('/sync', [ProgressController::class, 'sync']);
+    
+    // Reading Progress
+    Route::post('/reading-progress', [ReadingProgressController::class, 'updateProgress']);
+    Route::get('/reading-progress/{comicId}', [ReadingProgressController::class, 'getProgress']);
+    Route::get('/reading-progress', [ReadingProgressController::class, 'getAllProgress']);
     
     // Push Notifications
     Route::get('/push/devices', [PushDeviceController::class, 'index']);

@@ -18,8 +18,8 @@ class ProgressController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'events' => 'required|array',
-            'events.*.child_profile_id' => 'required|exists:child_profiles,id',
-            'events.*.activity_id' => 'required|exists:activities,id',
+            'events.*.child_profile_id' => 'required|integer',
+            'events.*.activity_id' => 'required|integer',
             'events.*.idempotency_key' => 'required|string',
             'events.*.completed_at' => 'required|date',
         ]);
