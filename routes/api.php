@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AgeProfileController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChildProfileController;
+use App\Http\Controllers\Api\ComicController;
 use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
 use App\Http\Controllers\Api\ProgressController;
@@ -30,6 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Activities
     Route::get('/tribes/{tribeId}/activities', [ActivityController::class, 'getTribeActivities']);
     Route::get('/activities/{id}', [ActivityController::class, 'show']);
+    
+    // Comics/Stories
+    Route::get('/comics', [ComicController::class, 'index']);
+    Route::get('/comics/{id}', [ComicController::class, 'show']);
+    Route::get('/tribes/{tribeId}/comics', [ComicController::class, 'getByTribe']);
     
     // Child Profiles
     Route::get('/child-profiles', [ChildProfileController::class, 'index']);
