@@ -98,7 +98,7 @@
                 <em style="font-size: 14px">🗓️</em>
                 <span>Lesson Plans</span>
             </a>
-            <a href="{{ route('teacher.class') }}" class="nav-item {{ request()->routeIs('teacher.class') ? 'active' : '' }}">
+            <a href="{{ route('teacher.my-class') }}" class="nav-item {{ request()->routeIs('teacher.my-class') ? 'active' : '' }}">
                 <em style="font-size: 14px">👪</em>
                 <span>My Class</span>
             </a>

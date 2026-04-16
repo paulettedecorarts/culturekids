@@ -180,7 +180,8 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
 Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', MainDashboard::class)->name('dashboard');
     Route::get('/lessons', App\Livewire\Teacher\Dashboard::class)->name('lessons');
-    Route::get('/my-class', MyClass::class)->name('class');
+    Route::get('/my-class', MyClass::class)->name('my-class');
+    Route::get('/my-class/{id}', App\Livewire\Teacher\ChildDetail::class)->name('child-detail');
     Route::get('/reports', Reports::class)->name('reports');
 
     // Content Modules

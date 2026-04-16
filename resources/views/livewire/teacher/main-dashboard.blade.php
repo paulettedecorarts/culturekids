@@ -35,7 +35,7 @@
                         {{ __('Review your class roster under My Class, then open Lesson plans when you are ready to run a session. Progress and engagement metrics will appear here as learners use the app.') }}
                     </p>
                     <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px">
-                        <a href="{{ route('teacher.class') }}" class="btn" style="background:#fff; color:var(--indigo-night); padding:10px 24px; border-radius:99px; font-size:12px; font-weight:800; text-decoration:none">{{ __('View roster') }}</a>
+                        <a href="{{ route('teacher.my-class') }}" class="btn" style="background:#fff; color:var(--indigo-night); padding:10px 24px; border-radius:99px; font-size:12px; font-weight:800; text-decoration:none">{{ __('View roster') }}</a>
                         <a href="{{ route('teacher.lessons') }}" class="btn" style="background:transparent; border:2px solid rgba(255,255,255,.6); color:#fff; padding:10px 24px; border-radius:99px; font-size:12px; font-weight:800; text-decoration:none">{{ __('Lesson plans') }}</a>
                     </div>
                 </div>

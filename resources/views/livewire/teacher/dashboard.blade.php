@@ -48,7 +48,7 @@
 
     <div class="tab-nav">
         <span class="tab-item active">🗓️ {{ __('Lessons') }}</span>
-        <a href="{{ route('teacher.class') }}" wire:navigate class="tab-item">👪 {{ __('My class') }}</a>
+        <a href="{{ route('teacher.my-class') }}" wire:navigate class="tab-item">👪 {{ __('My class') }}</a>
         <a href="{{ route('teacher.reports') }}" wire:navigate class="tab-item">📊 {{ __('Reports') }}</a>
     </div>
 
