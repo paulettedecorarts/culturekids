@@ -75,7 +75,7 @@
                             </span>
                         </td>
                         <td style="padding:24px 32px; text-align:right">
-                            <button class="btn-outline" style="padding:6px 12px; font-size:11px">View Full Profile</button>
+                            <a href="{{ route('teacher.child-detail', $s['id']) }}" class="btn-outline" style="padding:6px 12px; font-size:11px; text-decoration:none; display:inline-block">View Full Profile</a>
                         </td>
                     </tr>
                 @endforeach
