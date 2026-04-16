@@ -28,6 +28,12 @@ class ChildDetail extends Component
     public $newName = '';
     public $newDob = '';
     public $newAgeBand = 'simple';
+    
+    // Activity history
+    public $activityFilter = 'all'; // all, completed, in_progress
+    public $stories = [];
+    public $activities = [];
+    public $badges = [];
 
     public function mount($id)
     {
@@ -70,6 +76,114 @@ class ChildDetail extends Component
             });
         
         $this->canEdit = true;
+        
+        // Load activity history
+        $this->loadActivityHistory();
+        
+        // Load badges
+        $this->loadBadges();
+    }
+    
+    public function loadActivityHistory()
+    {
+        // Get stories/comics progress
+        $storiesQuery = \App\Models\ReadingProgress::where('user_id', $this->childId)
+            ->with('comic.tribe');
+        
+        if ($this->activityFilter === 'completed') {
+            $storiesQuery->where('reading_progress.status', 'completed');
+        } elseif ($this->activityFilter === 'in_progress') {
+            $storiesQuery->where('reading_progress.status', 'in_progress');
+        }
+        
+        $this->stories = $storiesQuery->orderBy('last_read_at', 'desc')->get();
+        
+        // Get activities (flashcards, puzzles) - only completed ones are tracked
+        if ($this->childProfiles->isNotEmpty()) {
+            $childProfileIds = $this->childProfiles->pluck('id');
+            
+            $activitiesQuery = \App\Models\ProgressEvent::whereIn('child_profile_id', $childProfileIds)
+                ->with('activity.tribe');
+            
+            $this->activities = $activitiesQuery->orderBy('completed_at', 'desc')->get();
+        }
+    }
+    
+    public function loadBadges()
+    {
+        if ($this->childProfiles->isEmpty()) {
+            $this->badges = [];
+            return;
+        }
+        
+        $profile = $this->childProfiles->first();
+        
+        // Calculate total stars and completed counts
+        $totalStars = $profile->calculated_total_stars ?? 0;
+        $completedStories = \App\Models\ReadingProgress::where('user_id', $this->childId)
+            ->where('reading_progress.status', 'completed')
+            ->count();
+        $completedActivities = \App\Models\ProgressEvent::where('child_profile_id', $profile->id)->count();
+        
+        // Define milestone badges
+        $this->badges = [
+            [
+                'id' => 'first_steps',
+                'title' => 'First Steps',
+                'description' => 'Complete your first story',
+                'icon' => '👣',
+                'target' => 1,
+                'current' => $completedStories,
+                'unlocked' => $completedStories >= 1,
+                'type' => 'stories',
+            ],
+            [
+                'id' => 'getting_started',
+                'title' => 'Getting Started',
+                'description' => 'Complete 10 stories',
+                'icon' => '🌱',
+                'target' => 10,
+                'current' => $completedStories,
+                'unlocked' => $completedStories >= 10,
+                'type' => 'stories',
+            ],
+            [
+                'id' => 'bronze_explorer',
+                'title' => 'Bronze Explorer',
+                'description' => 'Earn 100 stars',
+                'icon' => '🥉',
+                'target' => 100,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 100,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'silver_learner',
+                'title' => 'Silver Learner',
+                'description' => 'Earn 500 stars',
+                'icon' => '🥈',
+                'target' => 500,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 500,
+                'type' => 'stars',
+            ],
+            [
+                'id' => 'gold_hero',
+                'title' => 'Gold Hero',
+                'description' => 'Earn 1,000 stars',
+                'icon' => '🥇',
+                'target' => 1000,
+                'current' => $totalStars,
+                'unlocked' => $totalStars >= 1000,
+                'type' => 'stars',
+            ],
+        ];
+    }
+    
+    public function setActivityFilter($filter)
+    {
+        $this->activityFilter = $filter;
+        $this->loadActivityHistory();
     }
 
     public function startEditProfile($profileId)
