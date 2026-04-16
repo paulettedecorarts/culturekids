@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'me']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
+    Route::post('/auth/resend-verification', [AuthController::class, 'resendVerificationCode']);
     
     // Content
     Route::get('/age-profiles', [AgeProfileController::class, 'index']);
