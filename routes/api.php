@@ -71,6 +71,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/offline/tribes/{tribeId}/assets', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getTribeBundleAssets']);
     Route::get('/offline/comics/{comicId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'downloadComicBundle']);
     
+    // Parent Downloaded Packs Management
+    Route::post('/offline/packs/{tribeId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'markPackAsDownloaded']);
+    Route::delete('/offline/packs/{tribeId}', [\App\Http\Controllers\Api\OfflineBundleController::class, 'removeDownloadedPack']);
+    Route::get('/offline/packs', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getDownloadedPacks']);
+    Route::get('/offline/child-content', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getChildAccessibleContent']);
+    
     // Push Notifications
     Route::get('/push/devices', [PushDeviceController::class, 'index']);
     Route::post('/push/devices/register', [PushDeviceController::class, 'register']);

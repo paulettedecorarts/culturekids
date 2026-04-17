@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comic;
+use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
 use Illuminate\Http\JsonResponse;
@@ -231,6 +232,130 @@ class OfflineBundleController extends Controller
         }
 
         return response()->json($assets);
+    }
+
+    /**
+     * Mark a tribe pack as downloaded for the authenticated parent
+     */
+    public function markPackAsDownloaded(Request $request, int $tribeId): JsonResponse
+    {
+        $request->validate([
+            'downloaded_at' => 'nullable|date',
+        ]);
+
+        $tribe = Tribe::findOrFail($tribeId);
+        $user = $request->user();
+
+        // Create or update the download record
+        $pack = ParentDownloadedPack::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'tribe_id' => $tribeId,
+            ],
+            [
+                'downloaded_at' => $request->input('downloaded_at', now()),
+            ]
+        );
+
+        return response()->json([
+            'message' => 'Pack marked as downloaded',
+            'pack' => [
+                'id' => $pack->id,
+                'tribe_id' => $pack->tribe_id,
+                'tribe_name' => $tribe->name,
+                'downloaded_at' => $pack->downloaded_at,
+            ],
+        ]);
+    }
+
+    /**
+     * Remove a downloaded pack record for the authenticated parent
+     */
+    public function removeDownloadedPack(Request $request, int $tribeId): JsonResponse
+    {
+        $user = $request->user();
+
+        $deleted = ParentDownloadedPack::where('user_id', $user->id)
+            ->where('tribe_id', $tribeId)
+            ->delete();
+
+        if ($deleted) {
+            return response()->json([
+                'message' => 'Pack removed successfully',
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Pack not found',
+        ], 404);
+    }
+
+    /**
+     * Get all downloaded packs for the authenticated parent
+     */
+    public function getDownloadedPacks(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $packs = ParentDownloadedPack::where('user_id', $user->id)
+            ->with('tribe:id,name,hero_name,hero_emoji,region,color')
+            ->get()
+            ->map(function ($pack) {
+                return [
+                    'id' => $pack->id,
+                    'tribe_id' => $pack->tribe_id,
+                    'tribe_name' => $pack->tribe->name,
+                    'tribe' => $pack->tribe,
+                    'downloaded_at' => $pack->downloaded_at,
+                ];
+            });
+
+        return response()->json($packs);
+    }
+
+    /**
+     * Get content accessible to a child (based on parent's downloaded packs)
+     */
+    public function getChildAccessibleContent(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        
+        // Get parent user (if child, get their parent)
+        $parentId = $user->parent_id ?? $user->id;
+
+        // Get all tribe IDs that the parent has downloaded
+        $downloadedTribeIds = ParentDownloadedPack::where('user_id', $parentId)
+            ->pluck('tribe_id')
+            ->toArray();
+
+        if (empty($downloadedTribeIds)) {
+            return response()->json([
+                'comics' => [],
+                'songs' => [],
+                'tribes' => [],
+            ]);
+        }
+
+        // Get comics from downloaded tribes
+        $comics = Comic::whereIn('tribe_id', $downloadedTribeIds)
+            ->where('status', 'published')
+            ->with('tribe:id,name,icon,color')
+            ->get();
+
+        // Get songs from downloaded tribes
+        $songs = Song::whereIn('tribe_id', $downloadedTribeIds)
+            ->where('status', 'published')
+            ->with('tribe:id,name,icon,color')
+            ->get();
+
+        // Get tribe info
+        $tribes = Tribe::whereIn('id', $downloadedTribeIds)->get();
+
+        return response()->json([
+            'comics' => $comics,
+            'songs' => $songs,
+            'tribes' => $tribes,
+        ]);
     }
 }
 
