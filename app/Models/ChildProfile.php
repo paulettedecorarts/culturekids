@@ -14,7 +14,9 @@ class ChildProfile extends Model
 
     protected $fillable = [
         'user_id',
+        'child_user_id',
         'name',
+        'avatar',
         'dob',
         'age_band',
         'age_profile_id',
@@ -22,11 +24,19 @@ class ChildProfile extends Model
     ];
 
     /**
-     * Get the parent user
+     * Get the parent user who created this profile
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the child's own user account
+     */
+    public function childUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'child_user_id');
     }
 
     protected static function booted(): void
