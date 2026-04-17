@@ -66,6 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reading-progress/{comicId}', [ReadingProgressController::class, 'getProgress']);
     Route::get('/reading-progress', [ReadingProgressController::class, 'getAllProgress']);
     
+    // Offline Bundles
+    Route::get('/offline/tribes/{tribeId}/bundle', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getTribeBundle']);
+    Route::get('/offline/tribes/{tribeId}/assets', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getTribeBundleAssets']);
+    Route::get('/offline/comics/{comicId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'downloadComicBundle']);
+    
     // Push Notifications
     Route::get('/push/devices', [PushDeviceController::class, 'index']);
     Route::post('/push/devices/register', [PushDeviceController::class, 'register']);
