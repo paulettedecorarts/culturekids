@@ -52,18 +52,22 @@ class ProgressController extends Controller
                 continue;
             }
 
+            // Get the activity to determine stars earned
+            $activity = \App\Models\Activity::find($event['activity_id']);
+            $starsEarned = $activity?->stars ?? 10;
+
             // Create progress event
             $progressEvent = ProgressEvent::create([
                 'child_profile_id' => $event['child_profile_id'],
                 'activity_id' => $event['activity_id'],
+                'stars_earned' => $starsEarned,
                 'idempotency_key' => $event['idempotency_key'],
                 'completed_at' => $event['completed_at'],
                 'synced_at' => now(),
             ]);
 
             // Update child's total stars
-            $activity = $progressEvent->activity;
-            $child->increment('total_stars', $activity->stars ?? 10);
+            $child->increment('total_stars', $starsEarned);
 
             $recorded[] = $event['idempotency_key'];
         }
