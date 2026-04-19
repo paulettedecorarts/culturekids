@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\ParentDownloadedPack;
 use App\Models\Song;
@@ -35,10 +36,51 @@ class OfflineBundleController extends Controller
             ->where('status', 'published')
             ->get();
 
+        // Get all published activities for this tribe
+        $activities = Activity::where('tribe_id', $tribeId)
+            ->where('is_published', true)
+            ->with('flashcardSlides')
+            ->get();
+
+        // Calculate total bundle size
+        $totalSize = 0;
+        
+        // Add comic bundle sizes
+        foreach ($comics as $comic) {
+            $totalSize += $comic->bundle_size_bytes ?? 0;
+        }
+        
+        // Estimate song sizes (if not stored)
+        foreach ($songs as $song) {
+            if ($song->audio_path && Storage::disk('public')->exists($song->audio_path)) {
+                $totalSize += Storage::disk('public')->size($song->audio_path);
+            }
+            if ($song->cover_image_path && Storage::disk('public')->exists($song->cover_image_path)) {
+                $totalSize += Storage::disk('public')->size($song->cover_image_path);
+            }
+        }
+        
+        // Estimate activity sizes (metadata + slides)
+        foreach ($activities as $activity) {
+            // Base metadata size
+            $totalSize += 1024; // 1KB for metadata
+            
+            // Add slide assets
+            foreach ($activity->flashcardSlides as $slide) {
+                if ($slide->image_path && Storage::disk('public')->exists($slide->image_path)) {
+                    $totalSize += Storage::disk('public')->size($slide->image_path);
+                }
+                if ($slide->audio_path && Storage::disk('public')->exists($slide->audio_path)) {
+                    $totalSize += Storage::disk('public')->size($slide->audio_path);
+                }
+            }
+        }
+
         // Build manifest
         $manifest = [
             'schema' => 'culturekids.tribe-bundle.v1',
             'generated_at' => now()->toIso8601String(),
+            'bundle_size_bytes' => $totalSize,
             'tribe' => [
                 'id' => $tribe->id,
                 'name' => $tribe->name,
@@ -106,10 +148,38 @@ class OfflineBundleController extends Controller
                     'duration_seconds' => $song->duration_seconds,
                 ];
             }),
+            'activities' => $activities->map(function ($activity) {
+                return [
+                    'id' => $activity->id,
+                    'type' => $activity->type,
+                    'title' => $activity->title,
+                    'description' => $activity->description,
+                    'age_range' => $activity->age_range,
+                    'star_points' => $activity->star_points,
+                    'metadata' => $activity->metadata,
+                    'slides' => $activity->flashcardSlides->map(function ($slide) {
+                        return [
+                            'id' => $slide->id,
+                            'order_index' => $slide->order_index,
+                            'title' => $slide->title,
+                            'description' => $slide->description,
+                            'image_path' => $slide->image_path,
+                            'image_url' => $slide->image_path 
+                                ? Storage::disk('public')->url($slide->image_path) 
+                                : null,
+                            'audio_path' => $slide->audio_path,
+                            'audio_url' => $slide->audio_path 
+                                ? Storage::disk('public')->url($slide->audio_path) 
+                                : null,
+                        ];
+                    }),
+                ];
+            }),
             'stats' => [
                 'comics_count' => $comics->count(),
                 'songs_count' => $songs->count(),
-                'total_items' => $comics->count() + $songs->count(),
+                'activities_count' => $activities->count(),
+                'total_items' => $comics->count() + $songs->count() + $activities->count(),
             ],
         ];
 

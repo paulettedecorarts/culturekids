@@ -34,7 +34,6 @@ class ActivityController extends Controller
                 'type' => $activity->type,
                 'age_range' => $activity->age_range,
                 'stars' => $activity->star_points ?? 10,
-                'icon' => $activity->icon,
                 'description' => $activity->description,
                 'tribe' => $activity->tribe ? [
                     'id' => $activity->tribe->id,
@@ -63,10 +62,18 @@ class ActivityController extends Controller
                 'title',
                 'type',
                 'age_range',
-                'stars',
-                'icon',
+                'star_points',
                 'description',
-            ]);
+            ])->map(function ($activity) {
+                return [
+                    'id' => $activity->id,
+                    'title' => $activity->title,
+                    'type' => $activity->type,
+                    'age_range' => $activity->age_range,
+                    'stars' => $activity->star_points ?? 10,
+                    'description' => $activity->description,
+                ];
+            });
 
         return response()->json([
             'tribe' => [
@@ -110,7 +117,6 @@ class ActivityController extends Controller
             'type' => $activity->type,
             'age_range' => $activity->age_range,
             'stars' => $activity->star_points ?? 10,
-            'icon' => $activity->icon,
             'description' => $activity->description,
             'tribe' => $activity->tribe ? [
                 'id' => $activity->tribe->id,
