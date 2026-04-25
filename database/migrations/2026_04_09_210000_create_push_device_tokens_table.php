@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('organisation_id')->nullable()->constrained('organisations')->nullOnDelete();
             $table->string('platform', 20); // ios|android|web
-            $table->string('token', 1024)->unique();
+            $table->text('token');
             $table->string('device_name')->nullable();
             $table->string('app_version')->nullable();
             $table->boolean('is_active')->default(true);
@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->index(['organisation_id', 'is_active']);
             $table->index(['user_id', 'is_active']);
+            $table->index([DB::raw('token(768)')], 'push_device_tokens_token_index');
         });
     }
 
