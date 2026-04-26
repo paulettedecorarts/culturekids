@@ -2,8 +2,9 @@
 set -e
 
 echo "⏳ Waiting for MySQL..."
-until php artisan db:monitor --databases=mysql > /dev/null 2>&1; do
-    sleep 2
+until mysqladmin ping -h"${DB_HOST:-mysql}" -u"${DB_USERNAME}" -p"${DB_PASSWORD}" --silent 2>/dev/null; do
+    echo "  MySQL not ready, retrying in 3s..."
+    sleep 3
 done
 echo "✅ MySQL ready."
 
