@@ -11,6 +11,9 @@ echo "✅ MySQL ready."
 echo "⏳ Running migrations..."
 php artisan migrate --force
 
+echo "⏳ Seeding database..."
+php artisan db:seed --force
+
 echo "⏳ Caching config & routes..."
 php artisan config:cache
 php artisan route:cache
