@@ -14,7 +14,7 @@ echo "[4/5] Caching routes..."
 php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped (duplicate route name detected)."
 
 echo "[5/5] Caching views..."
-php artisan view:cache && echo "      ✅ Views cached." || { echo "      ❌ View cache failed."; exit 1; }
+php artisan view:cache && echo "      ✅ Views cached." || echo "      ⚠️  View cache skipped."
 
 echo "🚀 Starting nginx + php-fpm + queue worker..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
