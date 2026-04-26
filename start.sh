@@ -28,17 +28,7 @@ echo "✅ Cache/Redis is ready."
 echo "⏳ Running migrations..."
 php artisan migrate --force
 
-# 5. Build Assets (Vite)
-echo "⏳ Building assets (npm run build)..."
-npm install && npm run build
-if [ $? -ne 0 ]; then
-    echo "❌ Asset build failed. Attempting fallback manifest..."
-    mkdir -p public/build
-    echo '{"resources/css/app.css":{"file":"resources/css/app.css"},"resources/js/app.js":{"file":"resources/js/app.js"}}' > public/build/manifest.json
-fi
-echo "✅ Assets ready."
-
-# 6. Start Queue Worker in background
+# 5. Start Queue Worker in background
 echo "⚙️ Starting Queue Worker (background)..."
 php artisan queue:work --queue=default,media-processing,pdf-extraction,image-processing --tries=3 --timeout=300 &
 QUEUE_PID=$!
