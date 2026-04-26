@@ -3,8 +3,7 @@ services:
     build:
       context: .
       target: production
-    ports:
-      - "8000:80"
+
     environment:
       APP_ENV: production
       APP_KEY: ${APP_KEY}
@@ -20,6 +19,8 @@ services:
       QUEUE_CONNECTION: database
       CACHE_STORE: redis
       SESSION_DRIVER: redis
+    ports:
+      - "7000:80"
     depends_on:
       mysql:
         condition: service_healthy
