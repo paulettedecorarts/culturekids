@@ -1,23 +1,20 @@
 #!/bin/sh
 set -e
 
-echo "⏳ Waiting for MySQL to be ready and user provisioned..."
-until mysql -h"${DB_HOST:-mysql}" -u"${DB_USERNAME}" -p"${DB_PASSWORD}" -e "SELECT 1;" "${DB_DATABASE}" > /dev/null 2>&1; do
-    echo "  Not ready yet, retrying in 3s..."
-    sleep 3
-done
-echo "✅ MySQL ready."
+echo "[1/5] Running migrations..."
+php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }
 
-echo "⏳ Running migrations..."
-php artisan migrate --force
+echo "[2/5] Seeding database..."
+php artisan db:seed --force && echo "      ✅ Seeding done." || { echo "      ❌ Seeding failed."; exit 1; }
 
-echo "⏳ Seeding database..."
-php artisan db:seed --force
+echo "[3/5] Caching config..."
+php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
 
-echo "⏳ Caching config & routes..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+echo "[4/5] Caching routes..."
+php artisan route:cache && echo "      ✅ Routes cached." || { echo "      ❌ Route cache failed."; exit 1; }
 
-echo "🚀 Starting services..."
+echo "[5/5] Caching views..."
+php artisan view:cache && echo "      ✅ Views cached." || { echo "      ❌ View cache failed."; exit 1; }
+
+echo "🚀 Starting nginx + php-fpm + queue worker..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

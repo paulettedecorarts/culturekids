@@ -10,7 +10,6 @@ RUN apk add --no-cache \
     curl \
     zip \
     unzip \
-    mysql-client \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
