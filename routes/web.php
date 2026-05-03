@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ImpersonationController;
 use App\Livewire\Admin\ActivitiesManager;
 use App\Livewire\Admin\ActivityDetailPage;
+use App\Livewire\Admin\ActivityTypeSelector;
 use App\Livewire\Admin\AgeCategories;
 use App\Livewire\Admin\AgeProfileDetailPage;
 use App\Livewire\Admin\AnalyticsManager;
@@ -95,6 +96,7 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('puzzles', PuzzlesIndex::class)->name('puzzles');
 
     Route::get('activities', ActivitiesManager::class)->name('activities');
+    Route::get('activities/types', ActivityTypeSelector::class)->name('activities.types');
     Route::get('activities/create', ActivityDetailPage::class)->name('activities.create');
     Route::get('activities/{id}', ActivityDetailPage::class)->name('activities.detail');
     Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
@@ -153,6 +155,7 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/puzzles', PuzzlesIndex::class)->name('puzzles');
 
     Route::get('/activities', ActivitiesManager::class)->name('activities');
+    Route::get('/activities/types', ActivityTypeSelector::class)->name('activities.types');
     Route::get('/activities/create', ActivityDetailPage::class)->name('activities.create');
     Route::get('/activities/{id}', ActivityDetailPage::class)->name('activities.detail');
     

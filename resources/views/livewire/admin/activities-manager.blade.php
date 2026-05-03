@@ -10,7 +10,7 @@
                 @endif
             </div>
         </div>
-        <a href="{{ route($routePrefix . '.activities.create') }}{{ $flashcardsPortal ? '?type=flashcard' : '' }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">
+        <a href="{{ route($routePrefix . '.activities.types') }}{{ $flashcardsPortal ? '?type=flashcard' : '' }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">
             + {{ $flashcardsPortal ? 'Create Flashcard' : 'Add Activity' }}
         </a>
     </div>

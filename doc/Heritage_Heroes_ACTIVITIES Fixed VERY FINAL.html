@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Heritage Heroes Uganda — Complete Activity Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06040F;--surf:#0C0820;--card:#13102A;--card2:#1A1638;
+  --border:#251E45;--border2:#352A60;
+  --text:#F0EAFF;--muted:#7A6FA0;--faint:#2A2248;
+  --gold:#F5C518;--gold2:#C9952A;
+  --r:20px;--rs:12px;
+  --sh:0 14px 44px rgba(0,0,0,.65);
+  --glow:0 0 32px rgba(245,197,24,.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
+  background-image:radial-gradient(ellipse at 8% 0%,rgba(245,197,24,.055) 0%,transparent 52%),
+  radial-gradient(ellipse at 92% 100%,rgba(90,30,180,.07) 0%,transparent 52%)}
+
+/* Stars */
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.st{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d) ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.07;transform:scale(1)}50%{opacity:.8;transform:scale(1.6)}}
+
+#app{position:relative;z-index:1}
+
+/* ── Header ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:15px 26px;
+  border-bottom:1px solid var(--border);background:rgba(6,4,15,.93);backdrop-filter:blur(24px);
+  position:sticky;top:0;z-index:90;gap:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none}
+.logo-ico{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:13px;
+  display:grid;place-items:center;font-size:22px;box-shadow:0 4px 16px rgba(245,197,24,.38);flex-shrink:0}
+.logo-t{font-family:'Baloo 2',cursive;font-weight:900;font-size:1.25rem;color:var(--gold);line-height:1.1}
+.logo-s{font-size:.62rem;color:var(--muted);font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.hdr-r{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.star-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.24);
+  border-radius:50px;padding:6px 14px;font-weight:900;color:var(--gold);font-size:.95rem}
+.hdr-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:6px 16px;
+  border-radius:50px;cursor:pointer;font-family:inherit;font-weight:800;font-size:.82rem;transition:all .2s}
+.hdr-btn:hover{background:rgba(255,255,255,.12)}
+.hdr-btn.hidden{display:none}
+
+/* ── Views ── */
+.view{display:none}
+.view.active{display:block;animation:fu .4s ease}
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Home Banner ── */
+.hero-sec{padding:52px 26px 44px;text-align:center}
+.hero-sec h1{font-family:'Baloo 2',cursive;font-weight:900;font-size:clamp(1.9rem,5vw,3.5rem);line-height:1.1;margin-bottom:13px;
+  background:linear-gradient(130deg,#FFD700 0%,#F5A623 30%,#E74C3C 65%,#9B59B6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sec p{color:var(--muted);font-size:1rem;font-weight:600;max-width:540px;margin:0 auto 26px}
+.h-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.h-stat{text-align:center}
+.h-sn{font-family:'Baloo 2',cursive;font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1}
+.h-sl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+
+/* ── Section title ── */
+.s-title{font-family:'Baloo 2',cursive;font-size:1.45rem;font-weight:900;padding:0 26px;margin-bottom:18px}
+.s-title em{color:var(--gold);font-style:normal}
+
+/* ── Tribe grid ── */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:16px;padding:0 26px 48px}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;
+  cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;animation:fu .4s ease both}
+.tc::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;
+  background:radial-gradient(circle at 50% 0%,var(--tc) 0%,transparent 68%)}
+.tc:hover{transform:translateY(-8px) scale(1.018);box-shadow:var(--sh);border-color:var(--tc)}
+.tc:hover::before{opacity:.1}
+.tc-top{display:flex;align-items:center;gap:13px;margin-bottom:13px}
+.tc-badge{width:52px;height:52px;border-radius:14px;background:var(--tc);display:grid;place-items:center;font-size:24px;flex-shrink:0;
+  box-shadow:0 4px 14px color-mix(in srgb,var(--tc) 42%,transparent)}
+.tc-name{font-family:'Baloo 2',cursive;font-size:1.2rem;font-weight:900}
+.tc-hero{font-size:.72rem;color:var(--tc);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.tc-greet{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--rs);padding:9px 13px;margin-bottom:12px}
+.tc-phrase{font-family:'Baloo 2',cursive;font-size:1.05rem;font-weight:900;color:var(--tc)}
+.tc-ph,.tc-mn{font-size:.73rem;color:var(--muted)}
+.tc-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pill{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:2px 10px;font-size:.68rem;font-weight:800;color:var(--muted);white-space:nowrap}
+.tc-prog{margin-bottom:14px}
+.tc-pl{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);font-weight:800;margin-bottom:5px}
+.tc-pb{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.tc-pf{height:100%;border-radius:3px;background:var(--tc);transition:width .9s ease}
+.tc-btn{width:100%;padding:10px;border-radius:var(--rs);background:var(--tc);border:none;color:#fff;
+  font-family:inherit;font-size:.88rem;font-weight:900;cursor:pointer;transition:all .2s;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tc-btn:hover{filter:brightness(1.18);transform:translateY(-2px)}
+
+/* ── Tribe view ── */
+.tb-banner{padding:32px 26px 24px;border-bottom:1px solid var(--border)}
+.tb-inner{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.tb-ico{font-size:56px;line-height:1;flex-shrink:0}
+.tb-info h2{font-family:'Baloo 2',cursive;font-size:1.9rem;font-weight:900;margin-bottom:3px}
+.tb-sub{color:var(--muted);font-size:.9rem;font-weight:700;margin:3px 0 12px}
+.tb-gb{display:inline-flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--rs);padding:10px 18px;margin-bottom:12px}
+.tb-phrase{font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:900}
+.tb-ph,.tb-mn{font-size:.8rem;color:var(--muted)}
+
+/* ── Progress section ── */
+.tps{padding:18px 26px;background:rgba(255,255,255,.018);border-bottom:1px solid var(--border)}
+.tps-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.tps-nums{display:flex;gap:22px;flex-wrap:wrap}
+.tps-stat{text-align:center}
+.tps-n{font-family:'Baloo 2',cursive;font-size:1.7rem;font-weight:900;color:var(--gold);line-height:1}
+.tps-l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.tps-bw{flex:1;min-width:180px}
+.tps-bar{height:7px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.tps-fill{height:100%;border-radius:4px;transition:width 1s ease}
+
+/* ── Filter bar ── */
+.fwrap{padding:18px 26px 14px;position:sticky;top:72px;z-index:50;background:rgba(6,4,15,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.fbar{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.fbar::-webkit-scrollbar{display:none}
+.fb{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:50px;padding:6px 14px;white-space:nowrap;font-family:inherit;font-size:.76rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all .2s;flex-shrink:0}
+.fb:hover{border-color:var(--gold);color:var(--text)}
+.fb.act{background:var(--gold);border-color:var(--gold);color:#000}
+.dbar{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
+.db{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:4px 12px;font-family:inherit;font-size:.7rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all .2s}
+.db:hover{border-color:var(--gold);color:var(--text)}
+.db.act{background:linear-gradient(135deg,#FFD700,#F5A623);border-color:var(--gold);color:#000}
+
+/* ── Activity grid ── */
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px;padding:20px 26px 56px}
+.ac{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:19px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.ac::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.ac:hover{transform:translateY(-5px);box-shadow:var(--sh);border-color:var(--ac)}
+.ac:hover::after,.ac.done::after{transform:scaleX(1)}
+.ac.done{border-color:rgba(245,197,24,.32)}
+.ac.done::after{background:var(--gold)}
+.done-b{position:absolute;top:11px;right:11px;background:var(--gold);color:#000;border-radius:50%;width:24px;height:24px;display:none;place-items:center;font-size:11px;font-weight:900}
+.ac.done .done-b{display:grid}
+.a-hdr{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px}
+.a-ico{width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--ac) 17%,transparent);border:1px solid color-mix(in srgb,var(--ac) 33%,transparent);display:grid;place-items:center;font-size:19px;flex-shrink:0}
+.a-tag{display:inline-block;background:color-mix(in srgb,var(--ac) 13%,transparent);border:1px solid color-mix(in srgb,var(--ac) 30%,transparent);color:var(--ac);border-radius:50px;padding:2px 8px;font-size:.63rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.a-title{font-family:'Baloo 2',cursive;font-size:.97rem;font-weight:900;color:var(--text);line-height:1.3}
+.a-desc{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:13px}
+.a-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.a-age{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:2px 9px;font-size:.66rem;font-weight:800;color:var(--muted)}
+.a-diff{display:flex;gap:2px}
+.a-dd{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.13)}
+.a-dd.l{background:var(--ac)}
+.a-pts{display:flex;align-items:center;gap:3px;font-weight:900;font-size:.8rem;color:var(--gold)}
+
+/* ── Detail view ── */
+#act-view{padding:0 26px 56px}
+.av-back{padding:18px 0 14px;display:flex;gap:9px}
+.av-bb{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);padding:7px 16px;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:800;font-size:.82rem;transition:all .2s}
+.av-bb:hover{background:rgba(255,255,255,.13)}
+.av-card{background:var(--card2);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.av-top{padding:28px 28px 22px}
+.av-tag{display:inline-block;border-radius:50px;padding:3px 13px;font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.av-title{font-family:'Baloo 2',cursive;font-size:1.65rem;font-weight:900;margin-bottom:7px}
+.av-meta{display:flex;gap:8px;flex-wrap:wrap}
+.av-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:50px;padding:3px 11px;font-size:.7rem;font-weight:800;color:var(--muted)}
+.av-body{padding:24px 28px 28px}
+.av-box{background:rgba(255,255,255,.025);border:2px dashed rgba(255,255,255,.08);border-radius:16px;padding:16px 12px;text-align:center;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;margin-bottom:20px;overflow:hidden}
+.av-big-ico{font-size:52px;line-height:1}
+.av-desc{font-size:.95rem;color:var(--text);line-height:1.76;max-width:480px}
+/* ── Activity engine ── */
+.act-canvas{border-radius:12px;cursor:crosshair;touch-action:none;max-width:100%;display:block;margin:0 auto}
+.act-msg{font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:900;padding:8px 20px;border-radius:50px;margin:4px auto;text-align:center}
+.act-msg.good{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3)}
+.act-msg.bad{background:rgba(231,76,60,.13);color:#e74c3c;border:1px solid rgba(231,76,60,.25)}
+.act-msg.info{background:rgba(245,197,24,.1);color:var(--gold);border:1px solid rgba(245,197,24,.25)}
+.act-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.act-btn{padding:9px 20px;border-radius:50px;border:none;font-family:inherit;font-weight:900;font-size:.85rem;cursor:pointer;transition:all .18s}
+.act-btn.pri{background:var(--gold);color:#000}
+.act-btn.sec{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--text)}
+.act-btn:hover{filter:brightness(1.15);transform:translateY(-2px)}
+.act-score{font-family:'Baloo 2',cursive;font-size:.85rem;color:var(--muted);font-weight:800}
+/* word-trace */
+.wt-canvas{border-radius:12px;cursor:crosshair;touch-action:none;background:rgba(255,255,255,.03);border:2px solid rgba(255,255,255,.08)}
+/* matching game */
+.match-grid{display:grid;gap:8px;width:100%}
+.m-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all .2s;text-align:center;font-weight:800;font-size:.95rem;user-select:none}
+.m-card:hover{border-color:var(--gold)}
+.m-card.sel{border-color:var(--gold);background:rgba(245,197,24,.12)}
+.m-card.matched{border-color:#2ecc71;background:rgba(46,204,113,.1);opacity:.7;cursor:default}
+.m-card.wrong{border-color:#e74c3c;background:rgba(231,76,60,.1);animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* word search */
+.ws-grid{display:inline-grid;gap:2px;margin:0 auto}
+.ws-cell{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.88rem;border-radius:6px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);user-select:none;transition:background .15s}
+.ws-cell:hover{background:rgba(255,255,255,.1)}
+.ws-cell.hi{background:rgba(245,197,24,.22);border-color:var(--gold)}
+.ws-cell.found{background:rgba(46,204,113,.22);border-color:#2ecc71;color:#2ecc71}
+/* proverb jumble */
+.pj-zone{min-height:52px;background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.pj-word{background:var(--card2);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;cursor:pointer;font-weight:800;font-size:.87rem;transition:all .18s;user-select:none}
+.pj-word:hover{border-color:var(--gold);background:rgba(245,197,24,.1)}
+/* quiz */
+.quiz-opt{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;font-size:.9rem;transition:all .2s;text-align:left;width:100%}
+.quiz-opt:hover{border-color:var(--gold)}
+.quiz-opt.correct{border-color:#2ecc71;background:rgba(46,204,113,.1)}
+.quiz-opt.wrong{border-color:#e74c3c;background:rgba(231,76,60,.1)}
+/* drum pads */
+.drum-pad{width:72px;height:72px;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:28px;transition:all .1s;user-select:none;box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.drum-pad:active,.drum-pad.hit{transform:scale(.9) translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.4)}
+/* colouring */
+.col-palette{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.col-swatch{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color .15s}
+.col-swatch.active{border-color:#fff;transform:scale(1.2)}
+/* karaoke */
+.lyric-line{font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:900;padding:6px 14px;border-radius:8px;margin:2px;display:inline-block;transition:background .3s,color .3s}
+.lyric-line.active{background:var(--gold);color:#000}
+/* bead fall game */
+#beadCanvas{background:rgba(0,0,0,.4);border-radius:12px}
+.av-tip{background:rgba(245,197,24,.065);border:1px solid rgba(245,197,24,.17);border-radius:var(--rs);padding:14px 18px;margin-bottom:18px}
+.av-tip-t{font-size:.75rem;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.av-tip-b{font-size:.87rem;color:var(--muted);line-height:1.58}
+.av-actions{display:flex;gap:11px;flex-wrap:wrap}
+.av-done{flex:1;min-width:160px;padding:13px 22px;border-radius:var(--rs);border:none;font-family:inherit;font-size:.95rem;font-weight:900;cursor:pointer;transition:all .2s;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.av-done:hover{filter:brightness(1.18);transform:translateY(-2px)}
+.av-done:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.av-back2{padding:13px 22px;border-radius:var(--rs);background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .2s}
+.av-back2:hover{background:rgba(255,255,255,.12)}
+.near-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px;margin-top:18px}
+
+/* ── Passport ── */
+.pv{padding:36px 26px 56px}
+.pv-title{font-family:'Baloo 2',cursive;font-size:1.85rem;font-weight:900;color:var(--gold);margin-bottom:7px}
+.pv-sub{color:var(--muted);margin-bottom:24px}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:13px}
+.pc{background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:20px 16px;text-align:center;transition:all .3s;cursor:pointer}
+.pc:hover{transform:translateY(-4px);border-color:var(--gold)}
+.pc.earned{border-color:var(--gold);background:rgba(245,197,24,.05)}
+.pc-ico{font-size:38px;margin-bottom:9px;filter:grayscale(1) opacity(.22);transition:filter .4s}
+.pc.earned .pc-ico{filter:none}
+.pc-name{font-weight:900;font-size:.87rem;color:var(--muted);margin-bottom:3px}
+.pc.earned .pc-name{color:var(--text)}
+.pc-prog{font-size:.72rem;color:var(--muted);margin-bottom:7px}
+.pc-bar{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.pc-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.pc-st{font-size:.7rem;font-weight:900;color:var(--gold);margin-top:5px;display:none}
+.pc.earned .pc-st{display:block}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);
+  background:linear-gradient(135deg,#1A1638,#261E4A);border:2px solid var(--gold);border-radius:20px;
+  padding:14px 24px;display:flex;align-items:center;gap:13px;z-index:400;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);min-width:290px;
+  box-shadow:0 10px 38px rgba(0,0,0,.55),var(--glow)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.t-ico{font-size:36px}
+.t-title{font-family:'Baloo 2',cursive;font-size:1rem;font-weight:900;color:var(--gold)}
+.t-sub{font-size:.8rem;color:var(--muted)}
+
+/* ── Confetti ── */
+.cfc{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.cf{position:absolute;animation:cfall var(--dur) ease-in forwards}
+@keyframes cfall{0%{transform:translateY(-15px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ── Leaderboard ── */
+.lb{padding:32px 26px;border-top:1px solid var(--border)}
+.lb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-top:16px}
+.lb-c{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:13px 11px;text-align:center;transition:all .2s;cursor:pointer}
+.lb-c:hover{border-color:var(--gold);transform:translateY(-3px)}
+.lb-ico{font-size:20px;margin-bottom:4px}
+.lb-name{font-family:'Baloo 2',cursive;font-size:.87rem;font-weight:900;margin-bottom:2px}
+.lb-stars{color:var(--gold);font-size:1.05rem;font-weight:900}
+.lb-pct{font-size:.65rem;color:var(--muted);margin-top:2px}
+.lb-bar{height:3px;border-radius:2px;margin-top:6px}
+
+/* ── Clan badge ── */
+.clan-badge{background:linear-gradient(135deg,rgba(245,197,24,.15),rgba(245,197,24,.05));border:1px solid rgba(245,197,24,.3);border-radius:50px;padding:3px 10px;font-size:.65rem;font-weight:900;color:var(--gold);white-space:nowrap}
+
+/* ── Responsive ── */
+@media(max-width:640px){
+  header,.hero-sec,.tgrid,.agrid,.s-title,.tb-banner,.tps,.fwrap,.pv,.lb{padding-left:14px;padding-right:14px}
+  .av-top,.av-body{padding:18px 16px}
+  #act-view{padding:0 14px 40px}
+  .h-stats{gap:20px}
+  .logo-t{font-size:1.05rem}
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="toast" id="toast"><div class="t-ico" id="tIco">⭐</div><div><div class="t-title" id="tTitle"></div><div class="t-sub" id="tSub"></div></div></div>
+<div class="cfc" id="cfc"></div>
+
+<div id="app">
+<header>
+  <div class="logo" onclick="navStack=[];_applyView('home')">
+    <div class="logo-ico">🦅</div>
+    <div><div class="logo-t">Heritage Heroes</div><div class="logo-s">Uganda · 1,100+ Activities</div></div>
+  </div>
+  <div class="hdr-r">
+    <button class="hdr-btn" id="btnP" onclick="nav('passport')">🎫 Passport</button>
+    <button class="hdr-btn hidden" id="btnBack" onclick="goBack()">← Back</button>
+    <div class="star-pill">⭐ <span id="totS">0</span></div>
+  </div>
+</header>
+
+<div class="view active" id="view-home">
+  <div class="hero-sec">
+    <h1>Uganda Heritage Heroes</h1>
+    <p>1,100+ activities across 11 tribes — language, songs, mazes, clan stories, puzzles, missions & more!</p>
+    <div class="h-stats">
+      <div class="h-stat"><div class="h-sn">11</div><div class="h-sl">Tribes</div></div>
+      <div class="h-stat"><div class="h-sn">1,110</div><div class="h-sl">Activities</div></div>
+      <div class="h-stat"><div class="h-sn">11</div><div class="h-sl">Categories</div></div>
+      <div class="h-stat"><div class="h-sn">2–10</div><div class="h-sl">Ages</div></div>
+    </div>
+  </div>
+  <div class="s-title">Choose Your <em>Tribe</em></div>
+  <div class="tgrid" id="tribeGrid"></div>
+  <div class="lb">
+    <div class="s-title" style="padding:0;margin-bottom:6px">Your <em>Progress</em></div>
+    <p style="color:var(--muted);font-size:.86rem;margin-bottom:0">Stars across all tribes</p>
+    <div class="lb-grid" id="lbGrid"></div>
+  </div>
+</div>
+
+<div class="view" id="view-tribe">
+  <div class="tb-banner" id="tbBanner"></div>
+  <div class="tps" id="tbProg"></div>
+  <div class="fwrap"><div class="fbar" id="fbar"></div><div class="dbar" id="dbar"></div></div>
+  <div class="agrid" id="actGrid"></div>
+</div>
+
+<div class="view" id="view-act">
+  <div id="act-view">
+    <div class="av-back"><button class="av-bb" onclick="goBack()">← Back to activities</button></div>
+    <div class="av-card" id="avCard"></div>
+    <div class="s-title" style="padding:0;margin:18px 0 13px">More in this category</div>
+    <div class="near-grid" id="nearGrid"></div>
+  </div>
+</div>
+
+<div class="view" id="view-passport">
+  <div class="pv">
+    <div class="pv-title">🎫 Heritage Hero Passport</div>
+    <div class="pv-sub">Complete all activities in a tribe to earn their stamp!</div>
+    <div class="pg" id="passGrid"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// COMPLETE TRIBE + ACTIVITY DATABASE
+// ══════════════════════════════════════════════════════════════════════
+const TRIBES = [
+  // ── 1. ALUR ─────────────────────────────────────────────────────────
+  { id:"alur", name:"Alur", hero:"Gipir", heroTitle:"Keeper of the Sacred Beads",
+    greeting:"Kop Ango?", phonetic:"Kop Ang-goh?", meaning:"What's the news?",
+    language:"Dho-Alur", region:"West Nile, Northwestern Uganda",
+    animal:"Nile Crocodile", symbol:"💎", color:"#1B6CA8", accent:"#F4C430",
+    clans:["Kaal","Gora","Ayago","Agur","Pawidi"],
+    activities:[
+      // Language (1-30)
+      {id:1,cat:"language",tag:"Language Trace",age:"2-4",diff:1,title:'Trace "KOP ANGO?"',desc:'Trace the Alur greeting KOP ANGO? with dotted letters and directional arrows. A glowing blue bead sits at the end to link to Gipir\'s story.',icon:"✏️",pts:5},
+      {id:2,cat:"language",tag:"Word Trace",age:"2-4",diff:1,title:"Trace: Pii (Water)",desc:"Trace the word PIJ (Water) with a droplet icon. The Nile River is sacred to the Alur!",icon:"✏️",pts:5},
+      {id:3,cat:"language",tag:"Word Trace",age:"2-4",diff:1,title:"Trace: Bwaa (Forest)",desc:"Trace BWAA (Forest) with a tree icon — the forest where Gipir found the old woman.",icon:"✏️",pts:5},
+      {id:4,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Omego (Brother)",desc:"Trace OMEGO (Brother) with two boys holding hands — like Gipir and Labongo!",icon:"✏️",pts:5},
+      {id:5,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Tik (Beads)",desc:"Trace TIK (Beads) with the signature blue bead icon — Gipir's sacred gift!",icon:"✏️",pts:8},
+      {id:6,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Kwaru (Grandfather)",desc:"Trace KWARU (Grandfather) with an elder's walking stick icon.",icon:"✏️",pts:5},
+      {id:7,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Mego (Mother)",desc:"Trace MEGO (Mother) with a heart icon — celebrating the nurturing spirit of Alur mothers.",icon:"✏️",pts:5},
+      {id:8,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Nile (River)",desc:"Trace NILE with a winding blue line icon — the great river of the Alur people.",icon:"✏️",pts:5},
+      {id:9,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Rwot (King/Leader)",desc:"Trace RWOT (King) with a royal crown icon — the leaders who guided the Alur.",icon:"✏️",pts:8},
+      {id:10,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Atum (Bow)",desc:"Trace ATUM (Bow) with a bow and arrow icon — the Alur were skilled hunters.",icon:"✏️",pts:8},
+      {id:11,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Tong (Spear)",desc:"Trace TONG (Spear) with Labongo's royal spear icon — the lost treasure of the story.",icon:"✏️",pts:8},
+      {id:12,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Mac (Fire)",desc:"Trace MAC (Fire) with a campfire flame icon — fire is sacred in Alur ceremonies.",icon:"✏️",pts:8},
+      {id:13,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Dhano (Person)",desc:"Trace DHANO (Person) with a simple human figure — every person has value!",icon:"✏️",pts:8},
+      {id:14,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Ot (House/Hut)",desc:"Trace OT (House) with a traditional thatched hut icon.",icon:"✏️",pts:8},
+      {id:15,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Yat (Medicine Tree)",desc:"Trace YAT (Medicine/Tree) with a herbal leaf icon — Alur healers use forest plants.",icon:"✏️",pts:8},
+      {id:16,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:'Hear "Kop Ang-goh?" — Tap It!',desc:'Audio plays "Kop Ang-goh?" — tap the KOP ANGO? button before the timer runs out! Get it right 3 times to earn a bead.',icon:"🔊",pts:10},
+      {id:17,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:'Hear "Gipir" — Tap the Hero!',desc:'Audio plays "Gipir" — tap the image of the hero holding the sacred blue beads!',icon:"🔊",pts:10},
+      {id:18,cat:"language",tag:"Audio Match",age:"4-7",diff:2,title:'Hear "Tong" — Tap the Spear!',desc:'Audio plays TONG (Spear) — tap the spear icon to help Gipir find Labongo\'s lost treasure!',icon:"🔊",pts:10},
+      {id:19,cat:"language",tag:"Audio Match",age:"4-7",diff:2,title:"River Sound — Tap the Nile!",desc:'Audio plays flowing river sound — tap the word "Nile" before the water flows away!',icon:"🔊",pts:10},
+      {id:20,cat:"language",tag:"Audio Match",age:"4-7",diff:3,title:'Hear "Omego" — Tap the Brother!',desc:'Audio plays OMEGO (Brother) — tap the icon of Labongo, Gipir\'s brother!',icon:"🔊",pts:10},
+      {id:21,cat:"language",tag:"Speak Back",age:"4-7",diff:2,title:"Say Hello to Gipir!",desc:'Record yourself saying "Kop Ango?" to greet the hero! The app will play your voice back with a magical forest echo.',icon:"🎤",pts:15},
+      {id:22,cat:"language",tag:"Speak Back",age:"5-7",diff:2,title:'Whisper "Tik" (Bead)',desc:'Say the word TIK softly like a secret — the way the sacred bead secret was kept in the forest.',icon:"🎤",pts:15},
+      {id:23,cat:"language",tag:"Speak Back",age:"5-7",diff:3,title:'Call Out "Omego!" (Brother)',desc:'Record OMEGO (Brother) with strength — like Gipir calling out for his brother Labongo.',icon:"🎤",pts:15},
+      {id:24,cat:"language",tag:"Speak Back",age:"5-8",diff:3,title:'Echo in the Forest: "Bwaa!"',desc:'Say BWAA (Forest) and hear the app apply a magical forest echo effect to your voice!',icon:"🎤",pts:15},
+      {id:25,cat:"language",tag:"Hero Voice Badge",age:"5-8",diff:3,title:"Hero Voice Badge Challenge",desc:'Pronounce "Kop Ango?" three times clearly to unlock a gold-star badge in your Heritage Passport!',icon:"🎤",pts:20},
+      {id:26,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:"Unity Puzzle: Family Together",desc:'Drag the words to build: "Brothers who stay together are stronger than any spear." Based on Gipir and Labongo\'s bond.',icon:"🧩",pts:20},
+      {id:27,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:"Ancestor's Wisdom: Kind Heart",desc:'Arrange words about the kindness Gipir showed the old woman in the forest.',icon:"🧩",pts:20},
+      {id:28,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:"The Nile's Journey Proverb",desc:'Build: "A river does not refuse water" — the Alur proverb about welcoming others.',icon:"🧩",pts:20},
+      {id:29,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:5,title:"Sacred Bead Motto",desc:'Complete: "A kind heart is worth more than a ___" and drag the blue bead to finish the Alur motto!',icon:"🧩",pts:25},
+      {id:30,cat:"language",tag:"Sentence Builder",age:"7-10",diff:5,title:"Build an Alur Sentence",desc:'Use word tiles to build: "An nying na en Gipir" (My name is Gipir). Then replace Gipir with YOUR name!',icon:"🔤",pts:25},
+      // Puzzles (31-60)
+      {id:31,cat:"puzzle",tag:"Easy Maze",age:"2-4",diff:1,title:"Village Path Maze",desc:"A simple path helping Gipir leave his hut to find his brother's spear. Trace with your finger!",icon:"🌀",pts:5},
+      {id:32,cat:"puzzle",tag:"Maze",age:"3-5",diff:2,title:"Twisted Vines Maze",desc:"Navigate through the first dead ends — thick forest undergrowth blocking the way!",icon:"🌀",pts:8},
+      {id:33,cat:"puzzle",tag:"Maze",age:"3-5",diff:2,title:"The River Crossing",desc:"Find the bridge across the Nile to continue the search for the old woman's hut!",icon:"🌀",pts:8},
+      {id:34,cat:"puzzle",tag:"Maze",age:"4-6",diff:2,title:"The Night Trail",desc:"A darker themed maze — only the path near Gipir's torch is visible! Find the way in the dark.",icon:"🌀",pts:10},
+      {id:35,cat:"puzzle",tag:"Maze",age:"4-6",diff:3,title:"The Old Woman's Garden",desc:"A circular maze leading to the centre where the mysterious woman waits!",icon:"🌀",pts:12},
+      {id:36,cat:"puzzle",tag:"Maze",age:"5-7",diff:3,title:"Lost in the Thicket — Collect Beads",desc:"Multi-path maze! Collect all 5 blue beads along the way to open the exit.",icon:"🌀",pts:15},
+      {id:37,cat:"puzzle",tag:"Maze",age:"5-7",diff:3,title:"The Spear's Shadow Maze",desc:"A complex maze where the walls are shaped like long spears!",icon:"🌀",pts:15},
+      {id:38,cat:"puzzle",tag:"Timed Maze",age:"6-8",diff:4,title:"Forest Shortcut — Beat the Clock!",desc:"A timed maze challenge to test speed and precision. Can you find the shortcut?",icon:"🌀",pts:20},
+      {id:39,cat:"puzzle",tag:"Expert Maze",age:"6-9",diff:4,title:"The Great Bwaa (Forest) Maze",desc:"A large-scale maze with multiple entry and exit points through the great Alur forest!",icon:"🌀",pts:22},
+      {id:40,cat:"puzzle",tag:"Master Maze",age:"7-10",diff:5,title:"The Way Home — Reverse Maze",desc:"Help Gipir bring the sacred beads BACK to his people. A reverse maze challenge!",icon:"🌀",pts:25},
+      {id:41,cat:"puzzle",tag:"Jigsaw 2pc",age:"2-4",diff:1,title:"The Blue Bead (2 pieces)",desc:"A super-simple jigsaw for toddlers! Focus on the single glowing sacred bead.",icon:"🧩",pts:5},
+      {id:42,cat:"puzzle",tag:"Jigsaw 4pc",age:"2-5",diff:1,title:"Gipir's Face (4 pieces)",desc:"Piece together the hero's determined expression! What do you think Gipir is thinking?",icon:"🧩",pts:8},
+      {id:43,cat:"puzzle",tag:"Jigsaw 6pc",age:"3-5",diff:2,title:"The Campfire (6 pieces)",desc:"Rebuild the coloring scene where Gipir receives the sacred beads by firelight!",icon:"🧩",pts:10},
+      {id:44,cat:"puzzle",tag:"Jigsaw 9pc",age:"3-6",diff:2,title:"The Old Woman (9 pieces)",desc:"A portrait puzzle of the mysterious forest woman who gave Gipir the sacred beads.",icon:"🧩",pts:12},
+      {id:45,cat:"puzzle",tag:"Jigsaw 12pc",age:"4-7",diff:3,title:"Forest Background (12 pieces)",desc:"A landscape puzzle of the beautiful Alur forest — Bwaa!",icon:"🧩",pts:15},
+      {id:46,cat:"puzzle",tag:"Jigsaw 12pc",age:"4-7",diff:3,title:"The Royal Spear (12 pieces)",desc:"Reconstruct the spear that Labongo lost — the treasure that started Gipir's journey!",icon:"🧩",pts:15},
+      {id:47,cat:"puzzle",tag:"Jigsaw 16pc",age:"5-8",diff:3,title:"The Full Hero Poster (16 pieces)",desc:"The complete scene of Gipir and the sacred beads — the most beautiful scene!",icon:"🧩",pts:18},
+      {id:48,cat:"puzzle",tag:"Jigsaw 20pc",age:"6-9",diff:4,title:"Tribe Gathering (20 pieces)",desc:"A complex scene showing the Alur people celebrating Gipir's return!",icon:"🧩",pts:20},
+      {id:49,cat:"puzzle",tag:"Jigsaw 24pc",age:"6-9",diff:4,title:"The Nile Landscape (24 pieces)",desc:"A wide-angle puzzle of the Nile River at golden hour — the lifeblood of the Alur.",icon:"🧩",pts:22},
+      {id:50,cat:"puzzle",tag:"Master Jigsaw 30pc",age:"7-10",diff:5,title:"Master Hero Jigsaw (30 pieces)",desc:"The ultimate challenge! All story elements combined in one magnificent scene.",icon:"🧩",pts:30},
+      {id:51,cat:"puzzle",tag:"Spot 3 Differences",age:"3-5",diff:1,title:"Campfire Glow — Find 3 Differences",desc:"Find 3 differences in the flames and the sacred beads glowing by the fire!",icon:"🔍",pts:8},
+      {id:52,cat:"puzzle",tag:"Spot 5 Differences",age:"4-6",diff:2,title:"Forest Flora — Find 5 Differences",desc:"Spot 5 differences in the trees and birds of the Bwaa forest scene.",icon:"🔍",pts:12},
+      {id:53,cat:"puzzle",tag:"Spot 5 Differences",age:"5-7",diff:3,title:"Gipir's Gear — Find 5 Changes",desc:"Look for changes in Gipir's clothing and the spear he carries on his journey.",icon:"🔍",pts:15},
+      {id:54,cat:"puzzle",tag:"Spot 5 Differences",age:"5-7",diff:3,title:"Old Woman's Hut — Find 5 Items",desc:"Find 5 items that have moved or changed colour in the old woman's hut.",icon:"🔍",pts:15},
+      {id:55,cat:"puzzle",tag:"Spot Logic",age:"6-9",diff:4,title:"Night vs Day — Forest Logic",desc:"Identify what looks different in the forest at NIGHT versus during the DAY.",icon:"🔍",pts:18},
+      {id:56,cat:"puzzle",tag:"Word Search",age:"4-6",diff:1,title:"Hero Search: GIPIR, BEADS, TIK",desc:"Find the hero's name and sacred words in the word grid! Words go across only.",icon:"🔠",pts:8},
+      {id:57,cat:"puzzle",tag:"Word Search",age:"5-7",diff:2,title:"Geography Search: NILE, FOREST, ALUR",desc:"Find the Alur homeland words in the grid! Across and down.",icon:"🔠",pts:10},
+      {id:58,cat:"puzzle",tag:"Word Search",age:"5-7",diff:2,title:"Family Search: OMEGO, KWARU, MEGO",desc:"Find the Alur family words — brother, grandfather, mother.",icon:"🔠",pts:12},
+      {id:59,cat:"puzzle",tag:"Word Search",age:"6-8",diff:3,title:"Nature Search: PII, BWAA, MAC",desc:"Find the Alur nature words: water, forest, fire — all sacred to the Alur.",icon:"🔠",pts:15},
+      {id:60,cat:"puzzle",tag:"Word Search",age:"6-9",diff:3,title:"Legend Search: SPEAR, LABONGO, GIFT",desc:"Find the story's key words — the spear, the brother, and the sacred gift!",icon:"🔠",pts:15},
+      // Arts (61-80)
+      {id:61,cat:"arts",tag:"Colour: Scene",age:"2-5",diff:1,title:"Colour the Great Bwaa Forest",desc:"A lush forest scene with exotic birds and tall trees. Colour it in deep greens!",icon:"🎨",pts:5},
+      {id:62,cat:"arts",tag:"Colour: Hero",age:"2-5",diff:1,title:"Colour Gipir the Explorer",desc:"Gipir holds his walking staff, ready for his journey. Colour his barkcloth and skin!",icon:"🎨",pts:5},
+      {id:63,cat:"arts",tag:"Colour: Story",age:"3-5",diff:1,title:"Colour the Lost Spear",desc:"The royal spear hidden among river reeds. Colour the silver tip and wooden shaft!",icon:"🎨",pts:5},
+      {id:64,cat:"arts",tag:"Colour: Scene",age:"3-6",diff:2,title:"Colour the Mysterious Hut",desc:"The old woman's home tucked in the deep woods. Use dark forest colours!",icon:"🎨",pts:8},
+      {id:65,cat:"arts",tag:"Colour: Story",age:"3-6",diff:2,title:"Colour the Meeting of Heroes",desc:"Gipir talking to the old woman by her garden. A magical moment!",icon:"🎨",pts:8},
+      {id:66,cat:"arts",tag:"Colour: Night",age:"4-6",diff:2,title:"Colour the Campfire Glow",desc:"A night scene where the fire provides the only light. Use warm oranges and dark blues!",icon:"🎨",pts:10},
+      {id:67,cat:"arts",tag:"Colour: Gift",age:"4-6",diff:2,title:"Colour the Gift of Tik",desc:"The old woman's hand placing sacred blue beads in Gipir's palm. Make the beads glow!",icon:"🎨",pts:10},
+      {id:68,cat:"arts",tag:"Colour by Number",age:"4-7",diff:2,title:"Sacred Bead Palette: Colour by Number",desc:'Use "Bead Blue", "River Teal", and "Sky Azure" to colour the giant sacred bead!',icon:"🎨",pts:12},
+      {id:69,cat:"arts",tag:"Colour by Number",age:"4-7",diff:2,title:"Forest Camouflage by Number",desc:"Match numbers to shades of green and brown to hide Gipir in the forest!",icon:"🎨",pts:12},
+      {id:70,cat:"arts",tag:"Colour by Number",age:"5-7",diff:3,title:"Sunset Nile by Number",desc:"A landscape using warm oranges, reds and deep purples — the Nile at sunset!",icon:"🎨",pts:15},
+      {id:71,cat:"arts",tag:"Colour by Number",age:"5-7",diff:3,title:"Traditional Attire by Number",desc:"Colour Gipir's clothing based on traditional Alur barkcloth and skin patterns!",icon:"🎨",pts:15},
+      {id:72,cat:"arts",tag:"Colour by Number",age:"5-8",diff:3,title:"Hero's Crest by Number",desc:"A geometric design featuring the spear and sacred bead — colour each section!",icon:"🎨",pts:15},
+      {id:73,cat:"arts",tag:"Design Tool",age:"5-8",diff:3,title:"Bead Smith Studio",desc:"A drag-and-drop tool! Choose the shape (round, oval, diamond) and pattern of your own sacred beads.",icon:"🎨",pts:15},
+      {id:74,cat:"arts",tag:"Design Tool",age:"5-8",diff:3,title:"Necklace Weaver",desc:"String together different coloured beads to create a digital gift for a family member!",icon:"🎨",pts:15},
+      {id:75,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"Paint the Totem",desc:"An open canvas to draw what BRAVERY looks like to you using Alur symbols!",icon:"🎨",pts:18},
+      {id:76,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"The Pattern Maker",desc:"Create a repetitive TIK (Bead) pattern to use as a digital wallpaper!",icon:"🎨",pts:18},
+      {id:77,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"Forest Sticker Book",desc:"Drag stickers of Gipir, the old woman, and forest animals to create your unique scene!",icon:"🎨",pts:20},
+      {id:78,cat:"arts",tag:"Hero Drawing",age:"6-9",diff:4,title:"Draw Gipir's Reunion with Labongo",desc:"Draw the moment Gipir returns with the sacred beads and reunites with his brother!",icon:"🎨",pts:20},
+      {id:79,cat:"arts",tag:"Map Art",age:"7-10",diff:4,title:"Colour the Alur Region Map",desc:"Colour the map of Northwestern Uganda and South Sudan — the Alur homeland! Blue rivers, green forests, orange villages.",icon:"🎨",pts:20},
+      {id:80,cat:"arts",tag:"Hero Poster",age:"7-10",diff:5,title:"Create the Alur Hero Poster",desc:"Design your own Gipir hero poster with beads, forest, and the words KOP ANGO? in big letters!",icon:"🎨",pts:25},
+      // Music (81-90)
+      {id:81,cat:"music",tag:"Hero Karaoke",age:"2-6",diff:1,title:'Hero Anthem: "Gipir Song" Karaoke',desc:'(Tune: Twinkle Twinkle) Words light up as you sing: "Gipir found a bead of blue, Shiny, bright and brand new! A kind old woman gave the gift, Giving Gipir\'s heart a lift!"',icon:"🎵",pts:8},
+      {id:82,cat:"music",tag:"Remix Game",age:"3-7",diff:2,title:'"Kop Ango?" Afrobeat Remix',desc:"A high-energy version of the greeting! Tap the screen to trigger \"Hey!\" and \"Ho!\" shouts on the Afrobeat percussion.",icon:"🎵",pts:10},
+      {id:83,cat:"music",tag:"Fill the Lyric",age:"4-7",diff:2,title:"Fill-in-the-Lyric Game",desc:'The song plays and stops at a keyword (e.g., "blue"). Tap the correct icon — the Tik/Bead — to make the music continue!',icon:"🎵",pts:12},
+      {id:84,cat:"music",tag:"Instrument Explorer",age:"4-8",diff:2,title:"Alur Instrument Explorer",desc:"Tap different parts of the screen to hear the Adungu (arched harp) and the Likembe (thumb piano) — traditional Alur instruments!",icon:"🎵",pts:12},
+      {id:85,cat:"music",tag:"Recording Studio",age:"5-9",diff:3,title:"Recording Studio: Your Gipir Song",desc:"Record your own version of the Gipir song! The app adds a forest echo or campfire crackle effect to your voice!",icon:"🎵",pts:15},
+      {id:86,cat:"music",tag:"Rhythm Game",age:"4-8",diff:2,title:"Shimmering Bead Tap Game",desc:"Guitar Hero style! Blue beads fall from the top — tap them exactly when they hit the shimmer sound. Don't miss a bead!",icon:"🎵",pts:15},
+      {id:87,cat:"music",tag:"Sound Match",age:"4-7",diff:2,title:"Forest Sound-Match",desc:"The app plays a sound (hippo grunt, forest leaves, river flow). Tap the correct image — can you identify all the Nile sounds?",icon:"🎵",pts:12},
+      {id:88,cat:"music",tag:"Drum Game",age:"4-8",diff:3,title:"The Drum Call: Repeat the Beat",desc:"The app plays a 3-beat drum pattern. Repeat it by tapping the digital drum! Patterns get harder each round.",icon:"🎵",pts:15},
+      {id:89,cat:"music",tag:"Pronunciation Game",age:"5-9",diff:3,title:"Pronunciation Parrot: Speed Challenge",desc:"Words are spoken at different speeds (Pii, Mac, Tik). Copy the speed and tone to earn Speedy Hero points!",icon:"🎵",pts:15},
+      {id:90,cat:"music",tag:"Lullaby Composer",age:"2-6",diff:1,title:"Lullaby of the Nile: Star Composer",desc:"Calm music with flowing water and soft harp. Drag stars onto the night sky to compose a peaceful Nile soundscape!",icon:"🎵",pts:8},
+      // Missions (91-100)
+      {id:91,cat:"mission",tag:"Passport Mission",age:"5-9",diff:3,title:"Mission: The Greeting Master",desc:'Complete the Speak-Back greeting challenge AND the Greeting Trace 3 times without mistakes. Reward: "Kop Ango?" Speech Bubble Stamp!',icon:"🏆",pts:20},
+      {id:92,cat:"mission",tag:"Passport Mission",age:"5-9",diff:3,title:"Mission: Keeper of the Tik",desc:"Complete all 5 bead design activities. Reward: Glow-in-the-Dark Blue Bead Passport Stamp!",icon:"🏆",pts:20},
+      {id:93,cat:"mission",tag:"Timed Mission",age:"6-10",diff:4,title:"Mission: Forest Navigator",desc:"Finish the Master level Forest Maze (Activity 40) in under 60 seconds! Reward: Golden Compass Stamp!",icon:"🏆",pts:25},
+      {id:94,cat:"mission",tag:"Map Mission",age:"6-10",diff:4,title:"Mission: Nile Explorer",desc:"Identify the Alur tribe on the interactive Uganda map and match PIJ (Water) to the river! Reward: Nile River Wave Stamp!",icon:"🏆",pts:25},
+      {id:95,cat:"mission",tag:"Proverb Mission",age:"7-10",diff:4,title:"Mission: Family Historian",desc:"Complete all 4 Proverb Jumbles about family unity! Reward: Two-Brothers (Omego) Shield Stamp!",icon:"🏆",pts:25},
+      {id:96,cat:"mission",tag:"Story Quest",age:"6-10",diff:4,title:"Quest: The Old Woman's Secret",desc:"A choose-your-path comic! Should Gipir help an elder carry water OR keep searching for the spear? The Kind Heart path unlocks a secret audio story!",icon:"🏆",pts:25},
+      {id:97,cat:"mission",tag:"Peace Quest",age:"6-10",diff:4,title:"Quest: The Peace-Maker",desc:"A simulation: Gipir and Labongo disagree. Select the correct peaceful words in Dho-Alur to help the brothers shake hands!",icon:"🏆",pts:25},
+      {id:98,cat:"mission",tag:"Real-World Quest",age:"5-10",diff:3,title:"Quest: Offline Treasure Hunt",desc:'Find something BLUE in your house that looks like a Sacred Bead! Take a photo and share it. "Tik in my home" challenge!',icon:"🏆",pts:20},
+      {id:99,cat:"mission",tag:"Ceremony Quest",age:"5-9",diff:3,title:"Quest: The Hero's Ceremony",desc:"A celebratory animation where the Alur village gathers! Tap to drum along with the community as they welcome Gipir home!",icon:"🏆",pts:20},
+      {id:100,cat:"mission",tag:"Graduation",age:"6-10",diff:5,title:"🎓 Alur Heritage Hero Graduation",desc:'A 5-question Grand Quiz covering language, hero story, and geography. Complete to earn your printable "Official Alur Heritage Hero Certificate"!',icon:"🏆",pts:30},
+      // CLAN ACTIVITIES (101-110)
+      {id:101,cat:"clan",tag:"Clan Story",age:"4-7",diff:2,title:"Meet the Kaal Clan",desc:"The Kaal are the royal clan of the Alur — guardians of the Rwot (kingship). Draw the Kaal clan's royal symbol and colour it in blue and gold!",icon:"🌳",pts:12},
+      {id:102,cat:"clan",tag:"Clan Match",age:"4-8",diff:2,title:"Clan Totem Matching Game",desc:"Match each Alur clan to their totem animal: Kaal (Hippo), Gora (Crocodile), Ayago (Eagle), Agur (Leopard), Pawidi (Python). Find all 5 pairs!",icon:"🌳",pts:15},
+      {id:103,cat:"clan",tag:"Clan Trace",age:"3-6",diff:1,title:"Trace Your Clan Name",desc:"The Alur have 5 major clans. Trace the name of the KAAL clan in large dotted letters and say it out loud: K-A-A-L!",icon:"🌳",pts:10},
+      {id:104,cat:"clan",tag:"Clan Colour",age:"3-6",diff:1,title:"Colour the Clan Totem Tree",desc:"In Alur tradition, each clan gathers under a special tree. Colour the great clan meeting tree with royal purple, gold, and green!",icon:"🌳",pts:8},
+      {id:105,cat:"clan",tag:"Clan Story",age:"5-8",diff:3,title:"The Gora Clan: Guardians of the Nile",desc:"The Gora clan are fierce protectors of the River Nile. Read their story and answer: What animal is the Gora clan's totem, and why was it chosen?",icon:"🌳",pts:15},
+      {id:106,cat:"clan",tag:"Clan Word Search",age:"6-9",diff:3,title:"Clan Names Word Search",desc:"Find all 5 Alur clan names hidden in the grid: KAAL, GORA, AYAGO, AGUR, PAWIDI. Can you find them all?",icon:"🌳",pts:15},
+      {id:107,cat:"clan",tag:"Clan Song",age:"2-6",diff:1,title:"The Clan Greeting Song",desc:'(Tune: If You\'re Happy) "If you\'re Kaal and you know it, say KOP ANGO! If you\'re Gora and you know it, clap your hands! We are Alur, we are proud, let our heritage ring loud!"',icon:"🌳",pts:10},
+      {id:108,cat:"clan",tag:"Clan Proverb",age:"6-10",diff:4,title:"Clan Wisdom: Unity Proverb",desc:'"A clan divided falls like a single reed; a clan united stands like the papyrus of the Nile." Write what this means and draw the Nile papyrus reeds!',icon:"🌳",pts:20},
+      {id:109,cat:"clan",tag:"Clan Quiz",age:"7-10",diff:4,title:"Alur Clan Champion Quiz",desc:"10 questions about the 5 Alur clans — their totems, their roles, their history, and their connection to Gipir's story. Score 8+ to earn the Clan Elder badge!",icon:"🌳",pts:25},
+      {id:110,cat:"clan",tag:"Clan Heritage",age:"6-10",diff:4,title:"Design a Clan Crest",desc:"Design a beautiful crest for the Alur Kaal clan! Include: their totem animal, a Nile River motif, blue sacred beads, and the greeting KOP ANGO?",icon:"🌳",pts:20},
+    ]
+  },
+  // ── 2. ACHOLI ───────────────────────────────────────────────────────
+  { id:"acholi", name:"Acholi", hero:"Labongo", heroTitle:"Keeper of the Royal Spear",
+    greeting:"Itye-di?", phonetic:"Ee-tyeh-dee?", meaning:"How are you?",
+    language:"Acholi Luo", region:"Northern Uganda — Gulu, Kitgum, Pader",
+    animal:"Lion", symbol:"🏹", color:"#8B1A1A", accent:"#F5D020",
+    clans:["Patiko","Payira","Padibe","Palaro","Lamogi"],
+    activities:[
+      {id:1,cat:"language",tag:"Language Trace",age:"2-4",diff:1,title:'Trace "ITYE-DI?"',desc:"Trace the Acholi greeting with a silver spear icon. Large dotted font with directional arrows.",icon:"✏️",pts:5},
+      {id:2,cat:"language",tag:"Word Trace",age:"2-4",diff:1,title:"Trace: Tong (Spear)",desc:"Trace TONG (Spear) with a sharp spear icon — the royal spear Labongo guarded!",icon:"✏️",pts:5},
+      {id:3,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Lum (Grass/Savanna)",desc:"Trace LUM (Grass) with tall elephant grass icon — the golden home of the Acholi!",icon:"✏️",pts:5},
+      {id:4,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Pii (Water)",desc:"Trace PII (Water) with a droplet icon.",icon:"✏️",pts:5},
+      {id:5,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Won (Father)",desc:"Trace WON (Father) with a protective figure icon.",icon:"✏️",pts:5},
+      {id:6,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Min (Mother)",desc:"Trace MIN (Mother) with a nurturing figure icon.",icon:"✏️",pts:5},
+      {id:7,cat:"language",tag:"Word Trace",age:"3-5",diff:1,title:"Trace: Lamin (Sister)",desc:"Trace LAMIN (Sister) with a girl's silhouette.",icon:"✏️",pts:5},
+      {id:8,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Omego (Brother)",desc:"Trace OMEGO (Brother) — like the bond between Labongo and Gipir!",icon:"✏️",pts:8},
+      {id:9,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Dyang (Cow)",desc:"Trace DYANG (Cow) with a cattle icon — cattle are wealth for the Acholi!",icon:"✏️",pts:8},
+      {id:10,cat:"language",tag:"Word Trace",age:"3-5",diff:2,title:"Trace: Cwiny (Heart/Spirit)",desc:"Trace CWINY (Heart) — Labongo protected his people with all his heart!",icon:"✏️",pts:8},
+      {id:11,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Lwak (The People)",desc:"Trace LWAK (The Community) — the Acholi believe in community strength!",icon:"✏️",pts:8},
+      {id:12,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Lyel (Hill)",desc:"Trace LYEL (Hill) — the rocky hills of Acholiland.",icon:"✏️",pts:8},
+      {id:13,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Yat (Tree/Medicine)",desc:"Trace YAT (Tree/Medicine) — the Acholi healers used forest plants.",icon:"✏️",pts:8},
+      {id:14,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Pa (Home/Place)",desc:"Trace PA (Home) — the Acholi village compound is called a Gang.",icon:"✏️",pts:8},
+      {id:15,cat:"language",tag:"Word Trace",age:"4-6",diff:2,title:"Trace: Gweno (Chicken)",desc:"Trace GWENO (Chicken) — chickens are kept in every Acholi homestead!",icon:"✏️",pts:8},
+      {id:16,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:'Hear "Tong" — Tap the Spear!',desc:'Audio plays TONG (Spear) — tap the spear icon! The royal spear Labongo kept safe.',icon:"🔊",pts:10},
+      {id:17,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:'Hear "Dyang" — Tap the Cow!',desc:'Audio plays DYANG (Cow) — tap the cow icon!',icon:"🔊",pts:10},
+      {id:18,cat:"language",tag:"Audio Match",age:"4-7",diff:2,title:'Hear "Itye-di?" — Tap the Hero!',desc:'Audio plays "Itye-di?" — tap the waving Labongo hero!',icon:"🔊",pts:10},
+      {id:19,cat:"language",tag:"Audio Match",age:"4-7",diff:2,title:'Hear "Lum" — Tap the Grasslands!',desc:'Audio plays LUM (Grass) — tap the golden grasslands of the north!',icon:"🔊",pts:10},
+      {id:20,cat:"language",tag:"Audio Match",age:"4-7",diff:3,title:'Hear "Lwak" — Tap the People!',desc:'Audio plays LWAK (The Community) — tap the group of Acholi people!',icon:"🔊",pts:10},
+      {id:21,cat:"language",tag:"Speak Back",age:"4-7",diff:2,title:'Record "Itye-di?" to Greet Labongo',desc:'Record yourself saying "Itye-di?" to greet the great warrior Labongo!',icon:"🎤",pts:15},
+      {id:22,cat:"language",tag:"Speak Back",age:"5-7",diff:2,title:'Say "Tong" Like a Brave Warrior!',desc:'Record TONG (Spear) with a strong warrior voice — Labongo himself would be proud!',icon:"🎤",pts:15},
+      {id:23,cat:"language",tag:"Speak Back",age:"5-7",diff:3,title:'Record "Lamin" or "Omego"',desc:"Record your sibling's name in Acholi — sister (Lamin) or brother (Omego)!",icon:"🎤",pts:15},
+      {id:24,cat:"language",tag:"Speak Back",age:"5-8",diff:3,title:'Say "Cwiny" with Your Heart',desc:'Record CWINY (Heart) with a soft, gentle voice — showing the heart of a true leader!',icon:"🎤",pts:15},
+      {id:25,cat:"language",tag:"Speak Back",age:"5-8",diff:3,title:'Shout "Apwoyo!" (Well Done!)',desc:'Record a loud APWOYO (Thank you/Well done) — celebrate yourself for learning Acholi!',icon:"🎤",pts:20},
+      {id:26,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:'Proverb: "A spear for the day of trouble"',desc:'Drag words to build: "A spear is kept for the day of trouble." What does this teach about being prepared?',icon:"🧩",pts:20},
+      {id:27,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:'Proverb: "The reed of the door"',desc:'Build: "The reed of the door is not a hoe." A proverb about respecting the right tools for each purpose.',icon:"🧩",pts:20},
+      {id:28,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:'Proverb: "One finger cannot"',desc:'Build: "One finger cannot kill a louse." This famous Acholi proverb teaches unity and community!',icon:"🧩",pts:20},
+      {id:29,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:5,title:'Proverb: "The path to the well"',desc:'Complete: "The path to the well is made by many ___." The more people use a path, the clearer it becomes!',icon:"🧩",pts:25},
+      {id:30,cat:"language",tag:"Sentence Builder",age:"7-10",diff:5,title:"Build an Acholi Sentence",desc:'Use Acholi word tiles to build: "Labongo en rwot ma tek" (Labongo is a strong leader). Then write it from memory!',icon:"🔤",pts:25},
+      // Puzzles 31-60
+      {id:31,cat:"puzzle",tag:"Easy Maze",age:"2-4",diff:1,title:"Help Labongo Find the Nile (Easy)",desc:"Simple path to the Nile River — trace with your finger!",icon:"🌀",pts:5},
+      {id:32,cat:"puzzle",tag:"Easy Maze",age:"3-5",diff:1,title:"Savanna Path (Easy)",desc:"Navigate the beginning of the savanna trail — follow the grass!",icon:"🌀",pts:8},
+      {id:33,cat:"puzzle",tag:"Maze",age:"3-5",diff:2,title:"Finding the Nile (Beginner)",desc:"Help Labongo find his way to the great Nile River!",icon:"🌀",pts:8},
+      {id:34,cat:"puzzle",tag:"Maze",age:"4-6",diff:2,title:"Elephant Tracks Through Tall Grass",desc:"Follow the elephant tracks through the tall grass without getting lost!",icon:"🌀",pts:10},
+      {id:35,cat:"puzzle",tag:"Maze",age:"4-6",diff:2,title:"Golden Grassland Trail",desc:"Navigate the golden grasslands of Northern Uganda — the Acholi homeland!",icon:"🌀",pts:10},
+      {id:36,cat:"puzzle",tag:"Maze",age:"5-7",diff:3,title:"Collect 3 Spears to Open the Gate",desc:"Navigate AND collect 3 hidden spears to open the final gate of Labongo's compound!",icon:"🌀",pts:15},
+      {id:37,cat:"puzzle",tag:"Maze",age:"5-7",diff:3,title:"Through the Tall Grass (Intermediate)",desc:"Intermediate maze following elephant tracks through the tall savanna grass!",icon:"🌀",pts:15},
+      {id:38,cat:"puzzle",tag:"Timed Maze",age:"6-8",diff:4,title:"Master Maze: Collect All 3 Spears",desc:"Complex maze — collect three spears AND reach the final gate! Timed challenge!",icon:"🌀",pts:20},
+      {id:39,cat:"puzzle",tag:"Expert Maze",age:"6-9",diff:4,title:"The Acholi Plains: Expert Journey",desc:"Large-scale maze across the Acholi savanna with multiple entry and exit points!",icon:"🌀",pts:22},
+      {id:40,cat:"puzzle",tag:"Master Maze",age:"7-10",diff:5,title:"Sunset Race: Beat the Light!",desc:"A timed expert maze — get Labongo home before the sun sets on the savanna!",icon:"🌀",pts:25},
+      {id:41,cat:"puzzle",tag:"Jigsaw 4pc",age:"2-5",diff:1,title:"Royal Spear Head (4 pieces)",desc:"The tip of Labongo's royal spear — simple puzzle for small hands!",icon:"🧩",pts:5},
+      {id:42,cat:"puzzle",tag:"Jigsaw 6pc",age:"3-5",diff:2,title:"Labongo's Shield (6 pieces)",desc:"Piece together the warrior's protective shield!",icon:"🧩",pts:10},
+      {id:43,cat:"puzzle",tag:"Jigsaw 9pc",age:"3-6",diff:2,title:"An Acholi Homestead (9 pieces)",desc:"Rebuild the traditional round Acholi Gang (homestead)!",icon:"🧩",pts:12},
+      {id:44,cat:"puzzle",tag:"Jigsaw 12pc",age:"4-7",diff:3,title:"Elephant in the Grass (12 pieces)",desc:"The majestic elephant hiding in the tall elephant grass of the savanna!",icon:"🧩",pts:15},
+      {id:45,cat:"puzzle",tag:"Jigsaw 12pc",age:"4-7",diff:3,title:"Labongo at the Horizon (12 pieces)",desc:"Labongo looking toward the horizon — protecting his people!",icon:"🧩",pts:15},
+      {id:46,cat:"puzzle",tag:"Jigsaw 16pc",age:"5-8",diff:3,title:"Map of Acholiland (16 pieces)",desc:"The map of Northern Uganda — the great land of the Acholi people!",icon:"🧩",pts:18},
+      {id:47,cat:"puzzle",tag:"Jigsaw 20pc",age:"6-9",diff:4,title:"Traditional Acholi Dancers (20 pieces)",desc:"The beautiful Larakaraka dance — the most famous Acholi dance!",icon:"🧩",pts:20},
+      {id:48,cat:"puzzle",tag:"Jigsaw 24pc",age:"6-9",diff:4,title:"Brothers Reunited (24 pieces)",desc:"The emotional reunion of Gipir and Labongo!",icon:"🧩",pts:22},
+      {id:49,cat:"puzzle",tag:"Jigsaw 30pc",age:"7-10",diff:4,title:"Sunset over the Gulu Hills (30 pieces)",desc:"The golden sunset over the hills of Gulu — the capital of Acholiland!",icon:"🧩",pts:25},
+      {id:50,cat:"puzzle",tag:"Master Jigsaw 36pc",age:"7-10",diff:5,title:"Full Acholi Hero Poster (36 pieces)",desc:"The complete Labongo hero poster — the ultimate jigsaw challenge!",icon:"🧩",pts:30},
+      {id:51,cat:"puzzle",tag:"Spot 3",age:"3-5",diff:1,title:"Two Elephant Hunters — Find 3 Differences",desc:"Spot 3 differences between the two Acholi elephant hunters!",icon:"🔍",pts:8},
+      {id:52,cat:"puzzle",tag:"Spot 5",age:"4-6",diff:2,title:"The Acholi Granary (Dero) — Find 5",desc:"Spot 5 differences in the traditional Acholi grain storage hut!",icon:"🔍",pts:12},
+      {id:53,cat:"puzzle",tag:"Spot 7",age:"5-7",diff:3,title:"Village Sunrise vs Sunset — Find 7",desc:"What looks different in the village at sunrise versus sunset?",icon:"🔍",pts:15},
+      {id:54,cat:"puzzle",tag:"Spot 5",age:"5-7",diff:3,title:"Labongo's Sandals and Belt",desc:"Find the 5 differences in Labongo's traditional footwear and belt!",icon:"🔍",pts:15},
+      {id:55,cat:"puzzle",tag:"Spot Logic",age:"6-9",diff:4,title:"Royal Shield Pattern Differences",desc:"Find all differences in the intricate pattern on Labongo's royal shield!",icon:"🔍",pts:18},
+      {id:56,cat:"puzzle",tag:"Word Search",age:"4-6",diff:1,title:"Find: LABONGO, SPEAR, NORTH",desc:"Find the hero's name and key words in the grid!",icon:"🔠",pts:8},
+      {id:57,cat:"puzzle",tag:"Word Search",age:"5-7",diff:2,title:"Find: ACHOLI, GULU, SAVANNA",desc:"Find the Acholi homeland words!",icon:"🔠",pts:10},
+      {id:58,cat:"puzzle",tag:"Word Search",age:"5-7",diff:2,title:"Find: PROTECT, LEADER, BRAVE",desc:"Find the warrior virtues in the word search!",icon:"🔠",pts:12},
+      {id:59,cat:"puzzle",tag:"Word Search",age:"6-8",diff:3,title:"Find: GRASS, NILE, TRACKS",desc:"Find the savanna landscape words!",icon:"🔠",pts:15},
+      {id:60,cat:"puzzle",tag:"Word Search",age:"6-9",diff:3,title:"Find: CWINY, GANG, LWAK",desc:"Find the Acholi community words — heart, homestead, and the people!",icon:"🔠",pts:15},
+      // Arts 61-80
+      {id:61,cat:"arts",tag:"Colour: Hero",age:"2-5",diff:1,title:"Colour Labongo Holding the Spear",desc:"Labongo holding his royal spear high! Colour him in warrior colours.",icon:"🎨",pts:5},
+      {id:62,cat:"arts",tag:"Colour: Wildlife",age:"2-5",diff:1,title:"Colour Elephants by the River",desc:"A herd of elephants by the Nile — use grey and brown!",icon:"🎨",pts:5},
+      {id:63,cat:"arts",tag:"Colour: Home",age:"3-5",diff:1,title:"Colour the Traditional Round Hut",desc:"The Acholi thatched roof hut — brown walls, golden roof!",icon:"🎨",pts:5},
+      {id:64,cat:"arts",tag:"Colour: Dance",age:"3-6",diff:2,title:"Colour the Larakaraka Dancer",desc:"A girl performing the famous Larakaraka dance! Colourful attire!",icon:"🎨",pts:8},
+      {id:65,cat:"arts",tag:"Colour: Scene",age:"3-6",diff:2,title:"Colour the Savanna Sunset",desc:"The golden sun setting over the Acholi grasslands!",icon:"🎨",pts:8},
+      {id:66,cat:"arts",tag:"Colour: Story",age:"4-6",diff:2,title:"Colour Labongo and Gipir Parting",desc:"The brothers saying goodbye at the beginning of Gipir's forest journey.",icon:"🎨",pts:10},
+      {id:67,cat:"arts",tag:"Colour: Detail",age:"4-6",diff:2,title:"Colour the Royal Spear Carvings",desc:"Close-up of the intricate carvings on Labongo's royal spear!",icon:"🎨",pts:10},
+      {id:68,cat:"arts",tag:"Colour by Number",age:"4-7",diff:2,title:"Golden Grassland by Number",desc:"Colour the savanna in shades of yellow and gold!",icon:"🎨",pts:12},
+      {id:69,cat:"arts",tag:"Colour by Number",age:"4-7",diff:2,title:"The Iron Spear by Number",desc:"Colour the spear in silver and grey tones!",icon:"🎨",pts:12},
+      {id:70,cat:"arts",tag:"Colour by Number",age:"5-7",diff:3,title:"Bead Necklace by Number",desc:"Colour a traditional Acholi bead necklace!",icon:"🎨",pts:15},
+      {id:71,cat:"arts",tag:"Design Tool",age:"5-8",diff:3,title:"Spear Forge: Design Labongo's Spear",desc:"Choose the tip shape and handle decoration for Labongo's royal spear!",icon:"🎨",pts:15},
+      {id:72,cat:"arts",tag:"Design Tool",age:"5-8",diff:3,title:"Shield Painter: Add Tribal Symbols",desc:"Add personal tribal symbols — lion, spear, river — to Labongo's digital shield!",icon:"🎨",pts:15},
+      {id:73,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"Village Builder: Build an Acholi Gang",desc:"Drag and drop huts and granaries to build a traditional Acholi village compound!",icon:"🎨",pts:18},
+      {id:74,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"Headdress Maker: Ostrich Feathers",desc:"Assemble ostrich feathers on a digital Acholi headpiece for the Larakaraka dance!",icon:"🎨",pts:18},
+      {id:75,cat:"arts",tag:"Design Tool",age:"6-9",diff:4,title:"Stamp Maker: Acholi Pride Stamp",desc:"Create a custom Acholi Pride digital stamp to mark your achievements!",icon:"🎨",pts:18},
+      {id:76,cat:"arts",tag:"Colour: Wildlife",age:"4-7",diff:2,title:"Colour Birds over Aruu Falls",desc:"Colourful birds flying over the Aruu waterfalls of Acholiland!",icon:"🎨",pts:12},
+      {id:77,cat:"arts",tag:"Pattern Art",age:"5-8",diff:3,title:"Colour Geometric Acholi Pottery",desc:"Colour the traditional geometric patterns on Acholi pottery!",icon:"🎨",pts:15},
+      {id:78,cat:"arts",tag:"Hero Drawing",age:"6-9",diff:4,title:"Draw Labongo Under the Acacia Tree",desc:"Draw the hero standing tall under the flat-top acacia tree — the symbol of Acholiland!",icon:"🎨",pts:20},
+      {id:79,cat:"arts",tag:"Map Art",age:"7-10",diff:4,title:"Colour the Acholi Region Map",desc:"Colour Northern Uganda — the golden savanna, Nile River, and rocky hills of Acholiland!",icon:"🎨",pts:20},
+      {id:80,cat:"arts",tag:"Hero Poster",age:"7-10",diff:5,title:"Create the Acholi Hero Poster",desc:"Design a hero poster for Labongo with his spear, the savanna, and ITYE-DI? in bold!",icon:"🎨",pts:25},
+      // Music 81-90
+      {id:81,cat:"music",tag:"Hero Karaoke",age:"2-6",diff:1,title:"Acholi Hero Sing-Along Karaoke",desc:'(Tune: London Bridge) "Labongo\'s spear is made of steel, made of steel, made of steel! It protects our family — our hero Labongo!" Words light up as you sing!',icon:"🎵",pts:8},
+      {id:82,cat:"music",tag:"Drum Game",age:"3-7",diff:2,title:"Larakaraka Drummer: Tap the Beat",desc:"Tap the screen to the fast beat of the calabash and drum — the rhythm of the Larakaraka dance!",icon:"🎵",pts:10},
+      {id:83,cat:"music",tag:"Sound Match",age:"4-7",diff:2,title:'Match the Elephant Trumpet: "Lyec"',desc:'The app plays an elephant trumpet sound — tap the word "Lyec" to match!',icon:"🎵",pts:12},
+      {id:84,cat:"music",tag:"Instrument",age:"4-8",diff:2,title:"The Okem Thumb Piano",desc:"Tap the digital keys to play a melodic Acholi tune on the Okem (thumb piano)!",icon:"🎵",pts:12},
+      {id:85,cat:"music",tag:"Audio Story",age:"5-9",diff:3,title:"1-Minute Audio: Labongo's Bravery",desc:"A 1-minute narrated audio story of Labongo's bravery in defending the savanna!",icon:"🎵",pts:15},
+      {id:86,cat:"music",tag:"Sound Game",age:"4-8",diff:2,title:"Sound Scavenger: Walking in Tall Grass",desc:"Identify the sound of walking through tall elephant grass from 5 sound choices!",icon:"🎵",pts:12},
+      {id:87,cat:"music",tag:"Echo Game",age:"4-8",diff:2,title:'"Labongo!" Echo Through the Hills',desc:'Child shouts "Labongo!" and the app echoes it back through the digital Acholi hills!',icon:"🎵",pts:12},
+      {id:88,cat:"music",tag:"Rhythm Trace",age:"5-9",diff:3,title:"Rhythm Trace: Spear Shape",desc:"Trace the outline of a spear shape while keeping time with the Acholi drumbeat!",icon:"🎵",pts:15},
+      {id:89,cat:"music",tag:"Wind Game",age:"4-7",diff:2,title:'Savanna Wind Says "Itye-di?"',desc:'Tap the grass to hear the savanna wind whistle "Itye-di?" back at you!',icon:"🎵",pts:12},
+      {id:90,cat:"music",tag:"Lullaby",age:"2-6",diff:1,title:"Northern Lullaby: Acoustic Acholi",desc:"A soft, acoustic track of the Acholi hills at night — for calm and wind-down time.",icon:"🎵",pts:8},
+      // Missions 91-100
+      {id:91,cat:"mission",tag:"Passport Mission",age:"5-9",diff:3,title:"Mission: The Brave Greeter",desc:'Use "Itye-di" correctly in 3 different language games. Reward: Warrior Greeting Stamp!',icon:"🏆",pts:20},
+      {id:92,cat:"mission",tag:"Timed Mission",age:"6-10",diff:4,title:"Mission: The Savanna Scout",desc:"Complete the Master level maze across the savanna! Reward: Scout of the North Stamp!",icon:"🏆",pts:25},
+      {id:93,cat:"mission",tag:"Puzzle Mission",age:"6-10",diff:4,title:"Mission: Guardian of the Spear",desc:"Find the spear in all 5 Spot the Difference games! Reward: Royal Spear Guardian Stamp!",icon:"🏆",pts:25},
+      {id:94,cat:"mission",tag:"Language Mission",age:"7-10",diff:4,title:"Mission: Community Leader",desc:"Complete all 4 Proverb Jumbles about community! Reward: Lwak (Community) Shield Stamp!",icon:"🏆",pts:25},
+      {id:95,cat:"mission",tag:"Scholar Mission",age:"7-10",diff:4,title:"Mission: Acholi Scholar",desc:"Correctly identify 10 Acholi words from audio cues! Reward: Language Scholar Badge!",icon:"🏆",pts:25},
+      {id:96,cat:"mission",tag:"Story Quest",age:"6-10",diff:4,title:"Quest: The Elephant's Secret",desc:"Follow elephant tracks through the grass to find a hidden treasure — an interactive mini-game!",icon:"🏆",pts:25},
+      {id:97,cat:"mission",tag:"Action Quest",age:"5-9",diff:3,title:"Quest: The Royal Guard",desc:"Protect the village granary from digital birds by tapping them — the granary feeds the whole Lwak!",icon:"🏆",pts:20},
+      {id:98,cat:"mission",tag:"Real-World Quest",age:"5-10",diff:3,title:"Quest: Family Story Hunt",desc:'"Ask a family member to tell you a story about a brave leader in your family." Record what they tell you!',icon:"🏆",pts:20},
+      {id:99,cat:"mission",tag:"Ceremony",age:"5-9",diff:3,title:"The Hero's Salute",desc:"An animation where Labongo presents his royal spear to YOUR avatar as a badge of honour!",icon:"🏆",pts:20},
+      {id:100,cat:"mission",tag:"Graduation",age:"6-10",diff:5,title:"🎓 Acholi Heritage Hero Graduation",desc:"A final quiz to earn your printable ACHOLI HERITAGE HERO CERTIFICATE! 5 questions on language, hero story, and geography.",icon:"🏆",pts:30},
+      // CLAN ACTIVITIES (101-110)
+      {id:101,cat:"clan",tag:"Clan Story",age:"4-7",diff:2,title:"The Payira: Largest Acholi Clan",desc:"The Payira are the largest and most powerful Acholi clan, based in Gulu. Their chief is the Rwot of Payira. Draw the Payira chief's meeting under the great tree!",icon:"🌳",pts:12},
+      {id:102,cat:"clan",tag:"Clan Match",age:"4-8",diff:2,title:"Acholi Clan Totem Match",desc:"Match each Acholi clan to their identity: Patiko (the rocky hill clan), Payira (the grassland clan), Padibe (the river clan), Palaro (the forest clan), Lamogi (the brave resisters). Find all 5 pairs!",icon:"🌳",pts:15},
+      {id:103,cat:"clan",tag:"Clan History",age:"6-9",diff:4,title:"The Lamogi Rebellion Story",desc:"The Lamogi clan famously resisted colonial invasion in 1911! Read their story and answer: What made the Lamogi so brave? Write 3 qualities they showed.",icon:"🌳",pts:20},
+      {id:104,cat:"clan",tag:"Clan Colour",age:"3-6",diff:1,title:"Colour the Clan Meeting Tree",desc:"The Acholi Rwot (chief) meets his clan under a great shade tree. Colour this meeting scene with the colours of the golden savanna!",icon:"🌳",pts:8},
+      {id:105,cat:"clan",tag:"Clan Map",age:"6-9",diff:3,title:"Map the Acholi Clan Territories",desc:"Each Acholi clan has its own territory in Northern Uganda. Draw a simple map showing where Payira (Gulu), Patiko, and Padibe clans live!",icon:"🌳",pts:15},
+      {id:106,cat:"clan",tag:"Clan Word Search",age:"6-9",diff:3,title:"Clan Names Word Search",desc:"Find: PATIKO, PAYIRA, PADIBE, PALARO, LAMOGI in the grid. These are the 5 great Acholi clans!",icon:"🌳",pts:15},
+      {id:107,cat:"clan",tag:"Clan Song",age:"2-6",diff:1,title:"The Clan Pride Song",desc:'(Tune: London Bridge) "Payira stands strong and tall, strong and tall, strong and tall! Lamogi brave protects us all — we are Acholi!" Clap on ACHOLI!',icon:"🌳",pts:10},
+      {id:108,cat:"clan",tag:"Clan Proverb",age:"6-10",diff:4,title:"Clan Wisdom: The Reed Proverb",desc:'"The reed that stands alone breaks; the reeds that bundle together build the granary." Apply this Acholi clan wisdom to your own family. Write how you bundle together!',icon:"🌳",pts:20},
+      {id:109,cat:"clan",tag:"Clan Quiz",age:"7-10",diff:4,title:"Acholi Clan Champion Quiz",desc:"10 questions about the 5 Acholi clans — their chiefs, territories, totems, and history. Score 8+ for the Clan Champion badge!",icon:"🌳",pts:25},
+      {id:110,cat:"clan",tag:"Clan Design",age:"6-10",diff:4,title:"Design a Clan Banner",desc:"Design a clan banner for the Payira clan! Include their symbol, the Acholi spear, the savanna landscape, and the greeting ITYE-DI?",icon:"🌳",pts:20},
+    ]
+  },
+  // Tribes 3-11: Generate with same structure
+  ...["bunyoro","tooro","bagisu","baganda","basongora","jie","banyankole","bakiga","iteso"].map((id,i)=>{
+    const INFO = {
+      bunyoro:{name:"Bunyoro",hero:"King Isaza",heroTitle:"Builder of the First Empire",greeting:"Oraire ota?",phonetic:"Oh-rye-reh oh-tah?",meaning:"Good morning",language:"Runyoro",region:"Western Uganda — Hoima, Masindi",animal:"Leopard",symbol:"👑",color:"#4A1C60",accent:"#FFD700",
+        clans:["Abakama","Abasiita","Abachwezi","Abahinda","Abaranzi"],
+        clanInfo:["The Abakama are the royal clan — direct descendants of the first kings","The Abasiita are the clan of the gatekeepers of the Hidden Kingdom","The Abachwezi are associated with the legendary spirit kings","The Abahinda carried the royal drums (Mujaguzo) in ceremonies","The Abaranzi were the warrior protectors of the Kitara Empire"],
+        words:["Omukama (King)","Isaza (Hero)","Kwera (Palace)","Magezi (Wisdom)","Enziba (Well)","Ente (Cow)","Mukago (Friendship)","Kihira (Forest)","Ihembe (Horn)","Itaka (Earth)"],
+        proverbs:['"Wisdom is better than strength."','"A king is only a king through his people."','"The sun shines for everyone in the kingdom."','"Friendship is a shield against the dark."']
+      },
+      tooro:{name:"Tooro",hero:"Prince Kaboyo Olimi I",heroTitle:"Founder of the Mountain Kingdom",greeting:"Oraire ota?",phonetic:"Oh-rye-reh oh-tah?",meaning:"Good morning",language:"Rutooro",region:"Rwenzori Mountains, Fort Portal",animal:"Mountain Gorilla",symbol:"🏔️",color:"#1E5631",accent:"#C8A951",
+        clans:["Abakama","Abatooro","Abanyakabwa","Abagabe","Abahima"],
+        clanInfo:["The Abakama are the royal line of Kaboyo","The Abatooro are the original people of the mountain kingdom","The Abanyakabwa farm the mountain slopes","The Abagabe are the cattle-keepers of the highlands","The Abahima are the pastoral clan of the Rwenzori foothills"],
+        words:["Kaboyo (Hero)","Rwenzori (Mountains)","Engagi (Gorilla)","Kwera (Palace)","Omukama (King)","Amate (Milk)","Orusozi (Hill)","Amazzi (Water)","Ente (Cow)","Ensibo (Forest)"],
+        proverbs:['"He who climbs alone falls alone."','"The mountain belongs to those who respect it."','"Independence is the gift of courage."','"The mist hides the peak but not the path."']
+      },
+      bagisu:{name:"Bagisu",hero:"Masaba",heroTitle:"Father of Imbalu, Son of the Mountain",greeting:"Mulembe!",phonetic:"Moo-lem-beh!",meaning:"Hello / Peace",language:"Lumasaba",region:"Mount Elgon, Eastern Uganda",animal:"Elephant",symbol:"⛰️",color:"#7B3F00",accent:"#228B22",
+        clans:["Bameme","Babukusu","Babulema","Babwibyi","Bamasaba"],
+        clanInfo:["The Bamasaba are the founding clan — direct descendants of Masaba","The Bameme are the warriors who protect the mountain slopes","The Babukusu share kinship with the Luhya of Kenya","The Babulema are the healers and herbalists of Mount Elgon","The Babwibyi are the farmers who grow coffee on the volcanic soil"],
+        words:["Masaba (Hero)","Mulembe (Peace)","Imbalu (Ceremony)","Elgon (Mountain)","Simsim (Sesame)","Akasuku (Gourd)","Ekiswa (Strength)","Engagi (Gorilla)","Ente (Cow)","Amaizi (Water)"],
+        proverbs:['"The mountain does not laugh at another mountain."','"Courage is not the absence of fear, but facing it."','"A man who stands alone stands on nothing."','"Hard work turns a mountain into a garden."']
+      },
+      baganda:{name:"Baganda",hero:"Kintu",heroTitle:"First King of Buganda",greeting:"Oli otya?",phonetic:"Oh-lee oh-tyah?",meaning:"How are you?",language:"Luganda",region:"Central Uganda, Lake Victoria shores",animal:"Grey Crowned Crane",symbol:"🐄",color:"#8B6914",accent:"#E74C3C",
+        clans:["Ffumbe (Civet Cat)","Ngo (Leopard)","Mbogo (Buffalo)","Ngabi (Bushbuck)","Nkima (Monkey)"],
+        clanInfo:["Ffumbe clan — one of the original Buganda clans, providers of the first Kabaka","Ngo (Leopard) clan — royal protectors, warriors of the Kabaka's court","Mbogo (Buffalo) clan — fierce warriors known for strength","Ngabi (Bushbuck) clan — farmers and keepers of Buganda's food tradition","Nkima (Monkey) clan — the storytellers and historians of the kingdom"],
+        words:["Kabaka (King)","Kintu (Hero)","Nambi (Queen)","Matooke (Banana)","Ente (Cow)","Mirembe (Peace)","Lubiri (Palace)","Ssanyu (Joy)","Amazzi (Water)","Enjuba (Sun)"],
+        proverbs:['"Agali awamu gegaluma ennyama" (Unity helps solve problems).','"Wisdom is greater than gold."','"Peace starts in a happy home."','"Buganda nnamungi" (Buganda is great).']
+      },
+      basongora:{name:"Basongora",hero:"Queen Kitami",heroTitle:"The Warrior Priestess",greeting:"Agandi?",phonetic:"Ah-gan-dee?",meaning:"How are you?",language:"Rusongora",region:"Queen Elizabeth area, SW Uganda",animal:"Ankole Longhorn",symbol:"🥁",color:"#5C2D00",accent:"#E8B84B",
+        clans:["Abakama","Abasiita","Abahima","Abagabe","Abasongora"],
+        clanInfo:["The Abasongora are the founding pastoral clan","The Abakama are the royal line of Queen Kitami","The Abahima are cattle specialists with the finest long-horned herds","The Abagabe keep the sacred salt lake traditions","The Abasiita guard the Queen's ceremonial milk pots"],
+        words:["Kitami (Queen)","Ente (Cow)","Amate (Milk)","Ekisandago (Salt Lake)","Obusinge (Peace)","Ekyanzi (Milk Pot)","Rwenzuru (Mountains)","Engabu (Shield)","Itaka (Land)","Izoba (Sun)"],
+        proverbs:['"A Queen\'s wisdom is the valley\'s shield."','"Peace is the grass that feeds the heart."','"The sun rises over the salt lakes first."','"Kindness is a pot that never runs dry."']
+      },
+      jie:{name:"Jie Karamojong",hero:"Orwakol & Nayece",heroTitle:"The Bull Followers",greeting:"Ejoka?",phonetic:"Eh-joh-kah?",meaning:"Are you well?",language:"Ateso/Ngakarimojong",region:"Karamoja, NE Uganda",animal:"Spotted Bull",symbol:"🐂",color:"#B5451B",accent:"#F5C518",
+        clans:["Lokorwakol","Lorengedwat","Lotiira","Lomuso","Lokatap"],
+        clanInfo:["Lokorwakol are the clan of Orwakol himself — the founders of the Jie","Lorengedwat are warrior protectors of the cattle and Manyatta","Lotiira are the rainmakers — spiritual leaders of the Jie","Lomuso are the herbalists and healers using dry savanna plants","Lokatap are the cattle trackers who follow herds across Karamoja"],
+        words:["Orwakol (Hero)","Nayece (Heroine)","Engiro (Spotted Cow)","Akipi (Water)","Manyatta (Home)","Akuj (God)","Ngatuk (Cattle)","Ekicholong (Stool)","Akine (Goat)","Naoi (Sun)"],
+        proverbs:['"A man is only as rich as his herd."','"Water is the blood of the dry land."','"Even a spotted cow finds its way home."','"Respect the elder as you respect the mountain."']
+      },
+      banyankole:{name:"Banyankole",hero:"General Muguta",heroTitle:"Commander of the Nkondami Archers",greeting:"Agandi ota?",phonetic:"Ah-gan-dee oh-tah?",meaning:"How are you doing?",language:"Runyankore",region:"Ankole, SW Uganda",animal:"Ankole Longhorn",symbol:"🏹",color:"#2C5F2E",accent:"#E8B84B",
+        clans:["Abahinda","Abasiita","Abagabe","Abahima","Abairu"],
+        clanInfo:["Abahinda are the royal ruling clan — the Omugabe's lineage","Abasiita are the gatekeepers and palace guards of the Ankole kingdom","Abagabe keep the cattle traditions and milk ceremonies","Abahima are the elite pastoral class, keepers of long-horned Ankole cattle","Abairu are the agricultural clan who grow millet and sorghum"],
+        words:["Muguta (Hero)","Nkondami (Archers)","Obuta (Bow)","Akasheembe (Arrow)","Engabo (Shield)","Obumanzi (Bravery)","Orusozi (Hill)","Ente (Cow)","Amate (Milk)","Omukama (King)"],
+        proverbs:['"A brave heart is better than a thousand spears."','"The arrow follows the eye of the wise."','"Milk and peace go hand in hand."','"United hills stand against the wind."']
+      },
+      bakiga:{name:"Bakiga",hero:"Queen Muhumuza",heroTitle:"The Forest Freedom Fighter",greeting:"Agandi?",phonetic:"Ah-gan-dee?",meaning:"How are you?",language:"Rukiga",region:"Kigezi Highlands, SW Uganda",animal:"Mountain Gorilla",symbol:"🌿",color:"#1A3A2A",accent:"#C8E63C",
+        clans:["Abazigaba","Abasigi","Abahinda","Abaheesi","Abanyakabwa"],
+        clanInfo:["Abazigaba are the royal clan and protectors of Queen Muhumuza's legacy","Abasigi are the farmers who built the famous terraced hillsides of Kigezi","Abahinda are the cattle keepers of the highlands","Abaheesi are the healers and herbalists using mountain plants","Abanyakabwa are the traders who connected Kigezi to the wider Great Lakes region"],
+        words:["Muhumuza (Queen)","Orusozi (Mountain)","Obumanzi (Bravery)","Engabo (Shield)","Enjura (Rain)","Ekitookye (Banana)","Omuganda (Unity)","Amaizi (Water)","Mazima (Truth)","Kigezi (Place name)"],
+        proverbs:['"A brave woman is the pillar of the hills."','"Hard work turns a mountain into a garden."','"Unity is the strength of the Bakiga."','"Truth is a path that never ends."']
+      },
+      iteso:{name:"Iteso",hero:"Kide",heroTitle:"The Millet Farmer of the Plains",greeting:"Yoga!",phonetic:"Yo-gah!",meaning:"Hello!",language:"Ateso",region:"Teso, Eastern Uganda",animal:"Grey Crowned Crane",symbol:"🌾",color:"#9B6A2A",accent:"#FFB300",
+        clans:["Iworopom","Iseera","Ikomolo","Iteso proper","Ingoratok"],
+        clanInfo:["Iworopom are the ancient founding clan of the Iteso","Iseera are the farming clan who perfected finger millet cultivation","Ikomolo are the cattle keepers of the Teso plains","Iteso proper are the central clan connected to the hero Kide","Ingoratok are the musicians and keepers of the Emidiri (flute) tradition"],
+        words:["Kide (Hero)","Akatook (Millet)","Emidiri (Flute)","Akipi (Water)","Akita (Cattle)","Akwap (Land)","Akolong (Sun)","Iyali (Happiness)","Akasuku (Gourd)","Eituno (Family)"],
+        proverbs:['"A family that eats together stays together."','"The sun shines on the hardworking farmer."','"One grain of millet cannot fill a granary."','"Peace is the best harvest of all."']
+      }
+    };
+    const t = INFO[id];
+    return {
+      id, name:t.name, hero:t.hero, heroTitle:t.heroTitle,
+      greeting:t.greeting, phonetic:t.phonetic, meaning:t.meaning,
+      language:t.language, region:t.region, animal:t.animal,
+      symbol:t.symbol, color:t.color, accent:t.accent, clans:t.clans,
+      activities: [
+        // 100 structured activities using the document's framework
+        ...t.words.map((w,wi)=>({id:wi+1,cat:"language",tag:"Word Trace",age:wi<5?"3-5":"4-6",diff:wi<5?1:2,
+          title:`Trace: ${w}`,desc:`Trace the ${t.language} word ${w} with its cultural icon. Say it out loud!`,icon:"✏️",pts:wi<5?5:8})),
+        {id:11,cat:"language",tag:"Language Trace",age:"2-4",diff:1,title:`Trace "${t.greeting}"`,desc:`Trace the ${t.name} greeting with dotted letters and directional arrows!`,icon:"✏️",pts:5},
+        {id:12,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:"Audio Match: Tap the Hero!",desc:`Audio plays "${t.greeting}" — tap the image of ${t.hero}!`,icon:"🔊",pts:10},
+        {id:13,cat:"language",tag:"Audio Match",age:"4-6",diff:2,title:"Audio Match: Tap the Animal!",desc:`Audio plays the word for ${t.animal} — tap the correct icon!`,icon:"🔊",pts:10},
+        {id:14,cat:"language",tag:"Audio Match",age:"4-7",diff:2,title:"Audio Match: Nature Sounds",desc:`Three nature sounds from ${t.region}. Match each to the correct word!`,icon:"🔊",pts:10},
+        {id:15,cat:"language",tag:"Audio Match",age:"4-7",diff:3,title:"Audio Match: Family Words",desc:`Hear "father" and "mother" in ${t.language} — tap the right family icon!`,icon:"🔊",pts:10},
+        {id:16,cat:"language",tag:"Speak Back",age:"4-7",diff:2,title:`Say "${t.greeting}" to ${t.hero.split(' ')[0]}!`,desc:`Record yourself saying ${t.greeting} to greet the hero! Hear your voice played back!`,icon:"🎤",pts:15},
+        {id:17,cat:"language",tag:"Speak Back",age:"5-7",diff:2,title:"Say the Hero's Name!",desc:`Record the name ${t.hero.split(' ')[0]} with a proud, confident voice!`,icon:"🎤",pts:15},
+        {id:18,cat:"language",tag:"Speak Back",age:"5-8",diff:3,title:"Say Thank You!",desc:`Record "thank you" in ${t.language} and say it to someone in your family today!`,icon:"🎤",pts:15},
+        {id:19,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:`Proverb: ${t.proverbs[0].substring(0,30)}...`,desc:`Drag the words to build: ${t.proverbs[0]} — a wisdom proverb of the ${t.name} people!`,icon:"🧩",pts:20},
+        {id:20,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:4,title:`Proverb: ${t.proverbs[1].substring(0,30)}...`,desc:`Build: ${t.proverbs[1]} — what does this teach about community?`,icon:"🧩",pts:20},
+        {id:21,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:5,title:`Proverb: ${t.proverbs[2].substring(0,30)}...`,desc:`Complete: ${t.proverbs[2]}`,icon:"🧩",pts:25},
+        {id:22,cat:"language",tag:"Proverb Jumble",age:"7-10",diff:5,title:`Proverb: ${t.proverbs[3].substring(0,30)}...`,desc:`Build the final proverb: ${t.proverbs[3]}`,icon:"🧩",pts:25},
+        // 23-29 language
+        ...[23,24,25,26,27,28,29].map(n=>({id:n,cat:"language",tag:"Language Challenge",age:n<26?"5-7":"6-10",diff:n<26?2:3,
+          title:`${t.language} Challenge ${n-22}`,desc:`Advanced language activity ${n-22} for ${t.name} — numbers, colors, seasons, and sentence building in ${t.language}!`,icon:"🔤",pts:n<26?12:18})),
+        {id:30,cat:"language",tag:"Sentence Builder",age:"7-10",diff:5,title:"Build a Full Sentence",desc:`Use ${t.language} word tiles to write a full sentence about ${t.hero.split(' ')[0]}! Then write it from memory.`,icon:"🔤",pts:25},
+        // Mazes 31-40
+        ...Array.from({length:10},(_,mi)=>({id:31+mi,cat:"puzzle",tag:mi<3?"Easy Maze":mi<6?"Medium Maze":mi<8?"Hard Maze":mi===8?"Expert Maze":"Master Maze",age:mi<2?"2-4":mi<5?"4-6":mi<8?"5-8":"7-10",diff:mi<2?1:mi<4?2:mi<7?3:mi<9?4:5,
+          title:[`Simple Path to ${t.region.split(',')[0]} (Easy)`,`Follow the ${t.animal} Tracks`,`Navigate ${t.region.split(',')[0]} (Medium)`,`${t.hero.split(' ')[0]}'s Trail`,`Collect 5 Cultural Symbols`,`${t.name} Landscape Maze`,`${t.hero.split(' ')[0]}'s Hard Journey`,`Encounter with the ${t.animal}`,`Epic Journey Expert Maze`,`Master: The Final Challenge`][mi],
+          desc:`Maze ${mi+1} through the ${t.name} homeland of ${t.region.split(',')[0]}. ${mi<3?"Easy path for small heroes!":mi<7?"Navigate with care!":"Expert challenge!"}`,icon:"🌀",pts:[5,8,8,10,12,15,15,20,22,25][mi]})),
+        // Jigsaws 41-50
+        ...[[2,"Small Symbol",1],[4,"Hero's Face",1],[6,"Cultural Scene",2],[9,"Village Life",2],[12,"Landscape A",3],[12,"Landscape B",3],[16,"Kingdom Map",3],[20,"Celebration",4],[24,"Sunset Scene",4],[30,"Full Hero Poster",5]].map(([pcs,name,diff],ji)=>({id:41+ji,cat:"puzzle",tag:`Jigsaw ${pcs}pc`,age:diff===1?"2-5":diff===2?"3-7":diff===3?"4-8":"7-10",diff,
+          title:`${name} (${pcs} pieces)`,desc:`Piece together ${name} — a scene from the ${t.name} pack! Start with corner pieces.`,icon:"🧩",pts:[5,8,10,12,15,15,18,20,22,25][ji]})),
+        // Spot the difference 51-55
+        ...[3,5,5,7,7].map((diffs,si)=>({id:51+si,cat:"puzzle",tag:`Spot ${diffs} Differences`,age:si<2?"3-5":si<4?"5-7":"6-9",diff:si<2?1:si<4?2:3,
+          title:`${t.name} Scene ${si+1} — Find ${diffs} Differences`,desc:`Find ${diffs} differences in this scene from the ${t.name} story! Look carefully at the ${["cultural objects","landscape","clothing","ceremony","village"][si]}.`,icon:"🔍",pts:[8,12,12,15,18][si]})),
+        // Word searches 56-60
+        ...[["3 key words","Easy",1],["5 landscape words","Medium",2],["5 culture words","Medium",2],["6 heritage words","Hard",3],["8 vocabulary words","Expert",4]].map((ws,wsi)=>({id:56+wsi,cat:"puzzle",tag:"Word Search",age:wsi<2?"4-6":wsi<4?"5-8":"6-10",diff:ws[2],
+          title:`${t.name} Word Search: ${ws[1]}`,desc:`Find ${ws[0]} from the ${t.name} pack in the grid! ${ws[2]<3?"Words go across and down.":"Including diagonals!"}`,icon:"🔠",pts:[8,10,12,15,18][wsi]})),
+        // Arts 61-80
+        ...Array.from({length:10},(_,ai)=>({id:61+ai,cat:"arts",tag:`Colour: Scene ${ai+1}`,age:ai<3?"2-5":ai<7?"4-7":"6-9",diff:ai<3?1:ai<7?2:3,
+          title:`Colour ${t.name} Scene ${ai+1}: ${["Hero Portrait","Homeland Landscape","Sacred Animal","Cultural Objects","Village Life","Traditional Dance","Night Ceremony","Cultural Pattern","Heritage Map","Hero Poster"][ai]}`,desc:`Colour this ${t.name} scene in traditional ${t.name} colours! ${ai<3?"Simple for young heroes!":ai<7?"Use cultural colour guide!":"Advanced colouring challenge!"}`,icon:"🎨",pts:ai<3?5:ai<7?10:15})),
+        ...Array.from({length:5},(_,ci)=>({id:71+ci,cat:"arts",tag:"Colour by Number",age:ci<2?"4-7":"5-8",diff:ci<2?2:3,
+          title:`${t.name} Colour by Number ${ci+1}`,desc:`Use the cultural colour code to reveal a hidden ${t.name} scene! Each number = a traditional colour.`,icon:"🎨",pts:ci<2?12:15})),
+        ...Array.from({length:5},(_,di)=>({id:76+di,cat:"arts",tag:"Design Tool",age:di<2?"5-8":"6-10",diff:di<2?3:4,
+          title:`${t.name} Design Challenge ${di+1}: ${["Cultural Object Maker","Pattern Creator","Heritage Scene","Stamp Designer","Hero Poster Maker"][di]}`,desc:`A creative design tool to make your own ${t.name} cultural ${["objects","patterns","heritage scenes","stamps","hero posters"][di]}!`,icon:"🎨",pts:di<2?15:20})),
+        // Music 81-90
+        {id:81,cat:"music",tag:"Hero Karaoke",age:"2-6",diff:1,title:`${t.name} Hero Sing-Along Karaoke`,desc:`Sing the ${t.name} hero song! Words light up as the melody plays. Clap on the hero's name!`,icon:"🎵",pts:8},
+        ...[2,3,4,5].map(n=>({id:81+n,cat:"music",tag:"Music Game",age:n<4?"3-7":"5-9",diff:n<3?1:n<4?2:3,
+          title:`${t.name} Music Game ${n}`,desc:`Music activity ${n} for the ${t.name} pack — rhythm, instruments, nature sounds, and cultural audio from ${t.region.split(',')[0]}!`,icon:"🎵",pts:[10,12,12,15][n-2]})),
+        {id:86,cat:"music",tag:"Instrument Explorer",age:"4-8",diff:2,title:`${t.language} Instrument Explorer`,desc:`Explore traditional ${t.name} instruments! Tap each one to hear its unique sound and learn its ${t.language} name.`,icon:"🎵",pts:12},
+        {id:87,cat:"music",tag:"Echo Game",age:"4-8",diff:2,title:`Echo "${t.greeting}" Across ${t.region.split(',')[0]}!`,desc:`Child shouts ${t.greeting} and hears it echo across the digital ${t.region.split(',')[0]} landscape!`,icon:"🎵",pts:12},
+        {id:88,cat:"music",tag:"Rhythm Game",age:"5-9",diff:3,title:`${t.name} Rhythm Trace`,desc:`Trace the cultural symbol of the ${t.name} while keeping time with a traditional drumbeat!`,icon:"🎵",pts:15},
+        {id:89,cat:"music",tag:"Nature Sounds",age:"4-7",diff:2,title:`Nature Whispers: ${t.region.split(',')[0]}`,desc:`Tap the landscape elements to hear them whisper words in ${t.language}!`,icon:"🎵",pts:12},
+        {id:90,cat:"music",tag:"Lullaby",age:"2-6",diff:1,title:`${t.name} Heritage Lullaby`,desc:`A soft, peaceful lullaby from ${t.region.split(',')[0]} — featuring the sounds of the ${t.name} homeland.`,icon:"🎵",pts:8},
+        // Missions 91-100
+        ...[["Greeting Master","Use the greeting correctly in 3 games",3,20],["Trail Navigator","Complete the Master level maze",4,25],["Culture Guardian","Complete all themed activities",4,25],["Heritage Historian","Complete the hero story jigsaw",4,25],["Language Scholar","Identify 10 words from audio",4,25],["Secret Quest","A mini-game unlocking a hidden cultural treasure",4,25],["Heritage Quest","A choose-your-path cultural adventure",3,20],["Real-World Quest","A real-world activity connecting digital learning to home",3,20],["Hero's Blessing","Animation: the hero presents a gift to your avatar",3,20],["🎓 Graduation","Final quiz + printable Heritage Hero Certificate",5,30]].map(([title,desc,diff,pts],mi)=>({id:91+mi,cat:"mission",tag:mi<5?"Passport Mission":"Story Quest",age:mi<5?"6-10":"5-10",diff,
+          title:`Mission: The ${title}`,desc:`${desc}. Complete to earn your ${t.name} Heritage Stamp! Reward: ${pts} stars + badge!`,icon:"🏆",pts})),
+        // CLAN ACTIVITIES 101-110
+        ...t.clans.map((clan,ci)=>({id:101+ci,cat:"clan",tag:"Clan Story",age:ci<3?"4-7":"6-9",diff:ci<3?2:3,
+          title:`Meet the ${clan} Clan`,desc:`${t.clanInfo[ci]} Draw or describe what makes this clan special!`,icon:"🌳",pts:ci<3?12:15})),
+        {id:106,cat:"clan",tag:"Clan Match",age:"4-8",diff:2,title:`${t.name} Clan Totem Match`,desc:`Match each of the 5 ${t.name} clans to their totem or special role! ${t.clans.join(', ')}. Find all 5 pairs!`,icon:"🌳",pts:15},
+        {id:107,cat:"clan",tag:"Clan Song",age:"2-6",diff:1,title:`${t.name} Clan Pride Song`,desc:`A fun clan pride song celebrating all 5 ${t.name} clans! Sing together and clap on each clan name!`,icon:"🌳",pts:10},
+        {id:108,cat:"clan",tag:"Clan Word Search",age:"6-9",diff:3,title:`${t.name} Clan Names Word Search`,desc:`Find all 5 ${t.name} clan names hidden in the grid: ${t.clans.join(', ')}!`,icon:"🌳",pts:15},
+        {id:109,cat:"clan",tag:"Clan Quiz",age:"7-10",diff:4,title:`${t.name} Clan Champion Quiz`,desc:`10 questions about the 5 ${t.name} clans — their roles, history, and connections to the hero ${t.hero.split(' ')[0]}. Score 8+ for Clan Champion badge!`,icon:"🌳",pts:25},
+        {id:110,cat:"clan",tag:"Clan Design",age:"6-10",diff:4,title:`Design a ${t.name} Clan Crest`,desc:`Create a beautiful heritage crest for the ${t.clans[0]} clan! Include their symbol, the ${t.name} hero, the greeting ${t.greeting}, and traditional patterns.`,icon:"🌳",pts:20},
+      ]
+    };
+  })
+];
+
+const CATS={
+  language:{l:"Language",c:"#1B6CA8",e:"✏️"},
+  puzzle:{l:"Puzzles",c:"#2E7D32",e:"🌀"},
+  arts:{l:"Creative Arts",c:"#7B3F00",e:"🎨"},
+  music:{l:"Music & Audio",c:"#8B1A1A",e:"🎵"},
+  mission:{l:"Missions",c:"#4A1C60",e:"🏆"},
+  clan:{l:"Clan Activities",c:"#C8A951",e:"🌳"}
+};
+
+// ══════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════
+let S={stars:0,done:{},tStars:{}};
+try{const sv=localStorage.getItem('hh_v2');if(sv)S={...S,...JSON.parse(sv)}}catch(e){}
+const save=()=>{try{localStorage.setItem('hh_v2',JSON.stringify(S))}catch(e){}};
+
+let curT=null,curA=null,curF='all',curD=0,navStack=[];
+
+// =====================================================================
+// NAVIGATION — fixed: correct history stack, filter reset, no double-push
+// =====================================================================
+function _applyView(view,tid,aid){
+  if(_actCleanup){_actCleanup();_actCleanup=null;}
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('btnBack').classList.toggle('hidden',view==='home');
+  document.getElementById('btnP').classList.toggle('hidden',view!=='home');
+  if(view==='home'){curT=null;curA=null;curF='all';curD=0;renderHome();}
+  else if(view==='tribe'){
+    var newTribe=TRIBES.find(function(t){return t.id===tid;});
+    if(!curT||curT.id!==tid){curF='all';curD=0;}
+    curT=newTribe;curA=null;
+    renderTribeView();
+  }
+  else if(view==='act'){
+    curT=TRIBES.find(function(t){return t.id===tid;});
+    curA=curT?curT.activities.find(function(a){return a.id===aid;}):null;
+    renderActView();
+  }
+  else if(view==='passport'){renderPassport();}
+}
+function nav(view,tid,aid){
+  // Save where we are NOW before moving
+  var curView=curA?'act':(curT?'tribe':'home');
+  navStack.push({view:curView,tid:curT?curT.id:null,aid:curA?curA.id:null,f:curF,d:curD});
+  _applyView(view,tid,aid);
+}
+function goBack(){
+  if(navStack.length===0){_applyView('home');return;}
+  var p=navStack.pop();
+  if(!p||p.view==='home'){
+    _applyView('home');
+  } else if(p.view==='tribe'){
+    curF=p.f||'all';curD=p.d||0;
+    _applyView('tribe',p.tid);
+  } else {
+    _applyView(p.view,p.tid,p.aid);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// STARS
+// ══════════════════════════════════════════════════════════════════════
+(()=>{const c=document.getElementById('stars');for(let i=0;i<130;i++){const s=document.createElement('div');s.className='st';const sz=Math.random()*2.4+.4;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*5}s;animation-delay:${Math.random()*4}s`;c.appendChild(s)}})();
+
+// ══════════════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════════════
+const dk=(tid,aid)=>`${tid}_${aid}`;
+const getD=(tid)=>Object.keys(S.done).filter(k=>k.startsWith(tid+'_')).length;
+
+const TIPS={
+  language:"Say every word OUT LOUD! Hearing the language is as important as seeing it. Try using one new word with your family today.",
+  puzzle:"For younger children (ages 2-4), trace maze paths with your finger before using a pencil. For jigsaws, sort by colour first!",
+  arts:"Display your child's finished artwork on the wall! This shows them their culture and creativity both matter.",
+  music:"Sing slowly first, then speed up! Clapping the rhythm while singing helps it stick in the memory.",
+  mission:"Missions unlock after completing earlier activities. Work through the modules to open these special challenges!",
+  clan:"Clan activities connect your family to specific ancestral groups. Ask older family members: 'Which clan do WE belong to?'"
+};
+
+// ══════════════════════════════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════════════════════════════
+function renderHome(){
+  document.getElementById('totS').textContent=S.stars.toLocaleString();
+  // Tribe grid
+  document.getElementById('tribeGrid').innerHTML=TRIBES.map((t,i)=>{
+    const done=getD(t.id),tot=t.activities.length,pct=Math.round(done/tot*100),stars=S.tStars[t.id]||0;
+    return `<div class="tc" style="--tc:${t.color};animation-delay:${i*.05}s" onclick="nav('tribe','${t.id}')">
+      <div class="tc-top"><div class="tc-badge">${t.symbol}</div><div><div class="tc-name">${t.name}</div><div class="tc-hero">${t.hero}</div></div></div>
+      <div class="tc-greet"><div class="tc-phrase">${t.greeting}</div><div class="tc-ph">${t.phonetic}</div><div class="tc-mn">"${t.meaning}"</div></div>
+      <div class="tc-pills"><span class="pill">${t.region.split(',')[0]}</span><span class="pill">${t.language}</span><span class="pill">${t.clans.length} clans</span></div>
+      <div class="tc-prog">
+        <div class="tc-pl"><span>${done}/${tot} Activities</span><span>⭐ ${stars}</span></div>
+        <div class="tc-pb"><div class="tc-pf" style="width:${pct}%"></div></div>
+      </div>
+      <button class="tc-btn" onclick="event.stopPropagation();nav('tribe','${t.id}')">${done===0?'Start Adventure 🚀':done===tot?'✓ Complete! Review':'Continue → ('+pct+'%)'}</button>
+    </div>`;
+  }).join('');
+  // Leaderboard
+  const maxS=Math.max(...TRIBES.map(t=>S.tStars[t.id]||0),1);
+  document.getElementById('lbGrid').innerHTML=TRIBES.map(t=>{
+    const stars=S.tStars[t.id]||0,pct=Math.round(stars/maxS*100),done=getD(t.id);
+    return `<div class="lb-c" onclick="nav('tribe','${t.id}')">
+      <div class="lb-ico">${t.symbol}</div>
+      <div class="lb-name">${t.name}</div>
+      <div class="lb-stars">⭐ ${stars}</div>
+      <div class="lb-pct">${done}/${t.activities.length} done</div>
+      <div class="lb-bar" style="background:linear-gradient(90deg,${t.color} ${pct}%,rgba(255,255,255,.07) ${pct}%)"></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TRIBE VIEW
+// ══════════════════════════════════════════════════════════════════════
+function renderTribeView(){
+  const t=curT;if(!t)return;
+  // Banner
+  document.getElementById('tbBanner').innerHTML=`
+    <div class="tb-inner">
+      <div class="tb-ico" style="filter:drop-shadow(0 4px 20px color-mix(in srgb,${t.color} 50%,transparent))">${t.symbol}</div>
+      <div class="tb-info">
+        <div style="font-size:.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">TRIBE ${TRIBES.indexOf(t)+1} OF ${TRIBES.length}</div>
+        <h2 style="color:${t.color}">${t.name}</h2>
+        <div class="tb-sub">${t.hero} · ${t.heroTitle}</div>
+        <div class="tb-gb" style="border-color:color-mix(in srgb,${t.color} 32%,transparent)">
+          <span class="tb-phrase" style="color:${t.color}">${t.greeting}</span>
+          <span class="tb-ph">${t.phonetic}</span>
+          <span class="tb-mn">"${t.meaning}"</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <span class="pill">${t.region}</span>
+          <span class="pill">${t.language}</span>
+          <span class="pill">${t.animal}</span>
+          <span class="clan-badge">🌳 ${t.clans.length} Clans: ${t.clans.join(' · ')}</span>
+          <span style="background:color-mix(in srgb,${t.color} 12%,transparent);border:1px solid color-mix(in srgb,${t.color} 30%,transparent);color:${t.color};border-radius:50px;padding:3px 11px;font-size:.7rem;font-weight:900">⭐ ${S.tStars[t.id]||0} stars</span>
+        </div>
+      </div>
+    </div>`;
+  // Progress
+  const done=getD(t.id),tot=t.activities.length,pct=Math.round(done/tot*100);
+  document.getElementById('tbProg').style.setProperty('--tc',t.color);
+  document.getElementById('tbProg').innerHTML=`<div class="tps-inner">
+    <div class="tps-nums">
+      <div class="tps-stat"><div class="tps-n">${done}</div><div class="tps-l">Done</div></div>
+      <div class="tps-stat"><div class="tps-n">${tot-done}</div><div class="tps-l">Left</div></div>
+      <div class="tps-stat"><div class="tps-n">${S.tStars[t.id]||0}</div><div class="tps-l">Stars</div></div>
+    </div>
+    <div class="tps-bw">
+      <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);font-weight:800;margin-bottom:5px"><span>Progress</span><span>${pct}%</span></div>
+      <div class="tps-bar"><div class="tps-fill" style="width:${pct}%;background:linear-gradient(90deg,${t.color},color-mix(in srgb,${t.color} 70%,#fff))"></div></div>
+    </div>
+  </div>`;
+  renderFilterBar();renderActGrid();
+}
+
+function renderFilterBar(){
+  const t=curT;const cats=['all',...new Set(t.activities.map(a=>a.cat))];
+  document.getElementById('fbar').innerHTML=cats.map(c=>{
+    const info=c==='all'?{e:'🌟',l:`All ${t.activities.length}`}:(CATS[c]||{e:'📌',l:c});
+    const cnt=c==='all'?t.activities.length:t.activities.filter(a=>a.cat===c).length;
+    return `<button class="fb${curF===c?' act':''}" onclick="setF('${c}')">${info.e} ${info.l} <span style="opacity:.55;font-size:.65rem">(${cnt})</span></button>`;
+  }).join('');
+  document.getElementById('dbar').innerHTML=['All Levels','⭐ Easiest','⭐⭐ Easy','⭐⭐⭐ Medium','⭐⭐⭐⭐ Hard','⭐⭐⭐⭐⭐ Master'].map((l,i)=>`<button class="db${curD===i?' act':''}" onclick="setD(${i})">${l}</button>`).join('');
+}
+function setF(f){curF=f;renderFilterBar();renderActGrid()}
+function setD(d){curD=d;renderFilterBar();renderActGrid()}
+
+function renderActGrid(){
+  const t=curT;
+  let acts=curF==='all'?t.activities:t.activities.filter(a=>a.cat===curF);
+  if(curD>0)acts=acts.filter(a=>a.diff===curD);
+  document.getElementById('actGrid').innerHTML=acts.length===0?
+    `<div style="grid-column:1/-1;text-align:center;padding:56px;color:var(--muted);font-size:1rem">No activities match — try another filter!</div>`:
+    acts.map((a,i)=>{
+      const key=dk(t.id,a.id),done=!!S.done[key];
+      const ac=(CATS[a.cat]||{}).c||t.color;
+      return `<div class="ac${done?' done':''}" style="--ac:${ac};animation:fu .3s ease ${i*.03}s both" onclick="nav('act','${t.id}',${a.id})">
+        <div class="done-b">✓</div>
+        <div class="a-hdr"><div class="a-ico">${a.icon}</div>
+        <div><div class="a-tag">${a.tag}</div><div class="a-title">${a.title}</div></div></div>
+        <div class="a-desc">${(a.desc||'').length>115?a.desc.slice(0,115)+'…':a.desc||''}</div>
+        <div class="a-foot">
+          <span class="a-age">Ages ${a.age}</span>
+          <div class="a-diff">${Array.from({length:5},(_,di)=>`<div class="a-dd${di<a.diff?' l':''}"></div>`).join('')}</div>
+          <span class="a-pts">⭐ ${a.pts}</span>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// WEB AUDIO ENGINE  (no external files — all synthesised)
+// ══════════════════════════════════════════════════════════════════════
+let _actx=null;
+function AC(){if(!_actx)_actx=new(window.AudioContext||window.webkitAudioContext)();if(_actx.state==='suspended')_actx.resume();return _actx;}
+function playTone(freq,dur=0.18,type='sine',vol=0.25,delay=0){
+  try{const c=AC(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,c.currentTime+delay);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+delay+dur);o.connect(g);g.connect(c.destination);o.start(c.currentTime+delay);o.stop(c.currentTime+delay+dur);}catch(e){}
+}
+function playChord(freqs,dur=0.3,type='triangle'){freqs.forEach((f,i)=>playTone(f,dur,type,0.18,i*0.02));}
+function playSuccess(){[523,659,784,1047].forEach((f,i)=>playTone(f,0.22,'sine',0.22,i*0.1));}
+function playFail(){[300,250,200].forEach((f,i)=>playTone(f,0.18,'sawtooth',0.18,i*0.12));}
+function playPop(){playTone(880,0.08,'sine',0.3);setTimeout(()=>playTone(1100,0.06,'sine',0.25),60);}
+function playDrum(type='kick'){
+  try{const c=AC(),b=c.createBuffer(1,c.sampleRate*0.3,c.sampleRate),d=b.getChannelData(0);
+  if(type==='kick'){for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);}
+  else if(type==='snare'){for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,1.5);}
+  else{for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,8);}
+  const s=c.createBufferSource(),g=c.createGain();g.gain.value=0.6;s.buffer=b;s.connect(g);g.connect(c.destination);s.start();}catch(e){}
+}
+function speakWord(word,lang='en-US'){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(word);u.lang=lang;u.rate=0.85;u.pitch=1.1;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// ACTIVITY DETAIL
+// ══════════════════════════════════════════════════════════════════════
+var _actCleanup=null; // store cleanup fn for active mini-game loops
+
+function renderActView(){
+  if(_actCleanup){_actCleanup();_actCleanup=null;}
+  if(!curT||!curA)return;
+  const t=curT,a=curA;
+  const key=dk(t.id,a.id),done=!!S.done[key];
+  const ac=(CATS[a.cat]||{}).c||t.color;
+  document.getElementById('avCard').style.setProperty('--tc',t.color);
+  document.getElementById('avCard').innerHTML=`
+    <div class="av-top" style="background:linear-gradient(135deg,color-mix(in srgb,${t.color} 18%,transparent),color-mix(in srgb,${t.color} 4%,transparent));border-bottom:1px solid var(--border2)">
+      <div class="av-tag" style="background:color-mix(in srgb,${ac} 14%,transparent);border:1px solid color-mix(in srgb,${ac} 32%,transparent);color:${ac}">${(CATS[a.cat]||{}).e||'📌'} ${a.tag}</div>
+      <div class="av-title">${a.title}</div>
+      <div class="av-meta">
+        <span class="av-pill">Ages ${a.age}</span>
+        <span class="av-pill">${['','Easy','Medium','Hard','Expert','Master'][a.diff]} ${'⭐'.repeat(a.diff)}</span>
+        <span class="av-pill">⭐ ${a.pts} pts</span>
+        <span class="av-pill">${t.name}</span>
+        ${a.cat==='clan'?'<span class="av-pill" style="color:var(--gold)">🌳 Clan Activity</span>':''}
+        ${done?'<span style="background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);color:var(--gold);border-radius:50px;padding:3px 11px;font-size:.7rem;font-weight:900">✓ COMPLETED</span>':''}
+      </div>
+    </div>
+    <div class="av-body">
+      <div class="av-box" id="actBox"></div>
+      <div class="av-tip"><div class="av-tip-t">💡 Parent & Educator Tip</div><div class="av-tip-b">${TIPS[a.cat]||'Complete this activity to earn '+a.pts+' stars!'}</div></div>
+      <div class="av-actions">
+        <button class="av-done" id="doneBtn" style="background:${done?'rgba(245,197,24,.18)':ac};color:${done?'var(--gold)':'#fff'}" ${done?'disabled':''} onclick="doComplete()">
+          ${done?'✓ Completed! +'+a.pts+' stars':'✓ Mark as Done — Earn '+a.pts+' Stars!'}
+        </button>
+        <button class="av-back2" onclick="goBack()">← Back</button>
+      </div>
+    </div>`;
+  // Build the interactive activity
+  setTimeout(()=>buildActivity(t,a,done),30);
+  // Nearby
+  const nearby=t.activities.filter(x=>x.cat===a.cat&&x.id!==a.id).slice(0,4);
+  document.getElementById('nearGrid').innerHTML=nearby.map(na=>{
+    const ndone=!!S.done[dk(t.id,na.id)];
+    return `<div class="ac${ndone?' done':''}" style="--ac:${ac}" onclick="nav('act','${t.id}',${na.id})">
+      <div class="done-b">✓</div>
+      <div class="a-hdr"><div class="a-ico">${na.icon}</div><div><div class="a-tag">${na.tag}</div><div class="a-title">${na.title}</div></div></div>
+      <div class="a-foot" style="margin-top:8px"><span class="a-age">Ages ${na.age}</span><span class="a-pts">⭐ ${na.pts}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── ACTIVITY BUILDER — dispatches to correct mini-game ───────────────
+function buildActivity(t,a,done){
+  const box=document.getElementById('actBox');
+  if(!box)return;
+  const tag=a.tag.toLowerCase(), cat=a.cat;
+  if(cat==='puzzle'){
+    if(tag.includes('maze')||tag.includes('path')||tag.includes('trail'))return buildMaze(box,t,a,done);
+    if(tag.includes('jigsaw'))return buildJigsaw(box,t,a,done);
+    if(tag.includes('spot')||tag.includes('difference'))return buildSpotDiff(box,t,a,done);
+    if(tag.includes('word search')||tag.includes('clan names word'))return buildWordSearch(box,t,a,done);
+  }
+  if(cat==='language'){
+    if(tag.includes('trace')||tag.includes('word trace')||tag.includes('language trace'))return buildWordTrace(box,t,a,done);
+    if(tag.includes('audio match')||tag.includes('hear'))return buildAudioMatch(box,t,a,done);
+    if(tag.includes('speak')||tag.includes('voice')||tag.includes('hero voice'))return buildSpeakBack(box,t,a,done);
+    if(tag.includes('proverb')||tag.includes('jumble')||tag.includes('sentence'))return buildProverbJumble(box,t,a,done);
+  }
+  if(cat==='music'){
+    if(tag.includes('drum')||tag.includes('beat')||tag.includes('rhythm'))return buildDrumGame(box,t,a,done);
+    if(tag.includes('karaoke')||tag.includes('sing'))return buildKaraoke(box,t,a,done);
+    if(tag.includes('bead')||tag.includes('fall')||tag.includes('tap game'))return buildBeadFall(box,t,a,done);
+    if(tag.includes('instrument')||tag.includes('piano')||tag.includes('explorer'))return buildInstrument(box,t,a,done);
+    if(tag.includes('sound match')||tag.includes('sound-match')||tag.includes('sound scavenger'))return buildSoundMatch(box,t,a,done);
+    if(tag.includes('echo'))return buildEchoGame(box,t,a,done);
+    if(tag.includes('lullaby')||tag.includes('composer'))return buildLullaby(box,t,a,done);
+    return buildDrumGame(box,t,a,done);
+  }
+  if(cat==='arts'){
+    if(tag.includes('colour by number')||tag.includes('color by number'))return buildColourByNumber(box,t,a,done);
+    if(tag.includes('design')||tag.includes('bead smith')||tag.includes('necklace')||tag.includes('pattern')||tag.includes('poster')||tag.includes('stamp')||tag.includes('canvas')||tag.includes('drawing')||tag.includes('map art')||tag.includes('hero poster'))return buildDesignTool(box,t,a,done);
+    if(tag.includes('colour')||tag.includes('color'))return buildColouring(box,t,a,done);
+  }
+  if(cat==='mission'||cat==='clan'){
+    if(tag.includes('match')||tag.includes('totem'))return buildClanMatch(box,t,a,done);
+    if(tag.includes('quiz')||tag.includes('graduation'))return buildQuiz(box,t,a,done);
+    if(tag.includes('word search'))return buildWordSearch(box,t,a,done);
+    if(tag.includes('proverb')||tag.includes('wisdom'))return buildProverbJumble(box,t,a,done);
+    if(tag.includes('song')||tag.includes('pride song'))return buildKaraoke(box,t,a,done);
+    return buildMission(box,t,a,done);
+  }
+  // fallback
+  buildFallback(box,t,a,done);
+}
+
+// ─── HELPER: auto-complete trigger ────────────────────────────────────
+function actWin(msg){
+  playSuccess();
+  const b=document.getElementById('actBox');
+  if(b){const m=document.createElement('div');m.className='act-msg good';m.textContent='🎉 '+msg;b.appendChild(m);}
+  setTimeout(()=>{if(!S.done[dk(curT.id,curA.id)])doComplete();},1200);
+}
+function actMsg(text,type='info'){
+  const b=document.getElementById('actBox');
+  if(!b)return;
+  let m=b.querySelector('.act-msg-float');
+  if(!m){m=document.createElement('div');m.className='act-msg act-msg-float';b.appendChild(m);}
+  m.className='act-msg act-msg-float '+type;m.textContent=text;
+  clearTimeout(m._t);m._t=setTimeout(()=>m.remove(),1800);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MAZE
+// ══════════════════════════════════════════════════════════════════════
+function buildMaze(box,t,a,done){
+  const diff=a.diff,cols=4+diff*2,rows=4+diff*2;
+  const cw=Math.min(Math.floor((box.clientWidth||340)-16),420);
+  const cs=Math.floor(cw/cols);
+  const W=cs*cols,H=cs*rows;
+  box.innerHTML=`<div class="act-msg info">Find the path! ${done?'(Play again)':''}</div>
+    <canvas id="mazeCanvas" class="act-canvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px"></canvas>
+    <div class="act-score" id="mazeScore">Moves: 0</div>
+    <div class="act-btns"><button class="act-btn sec" onclick="buildMaze(document.getElementById('actBox'),curT,curA,false)">🔀 New Maze</button></div>`;
+  const cv=document.getElementById('mazeCanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  // Generate maze via recursive backtracking
+  const grid=[];
+  for(let r=0;r<rows;r++){grid[r]=[];for(let c=0;c<cols;c++)grid[r][c]={r,c,walls:[1,1,1,1],vis:false};}
+  const DR=[-1,0,1,0],DC=[0,1,0,-1];
+  function carve(r,c){
+    grid[r][c].vis=true;
+    const dirs=[0,1,2,3].sort(()=>Math.random()-.5);
+    dirs.forEach(d=>{const nr=r+DR[d],nc=c+DC[d];if(nr>=0&&nr<rows&&nc>=0&&nc<cols&&!grid[nr][nc].vis){grid[r][c].walls[d]=0;grid[nr][nc].walls[(d+2)%4]=0;carve(nr,nc);}});
+  }
+  carve(0,0);
+  // Remove extra walls for lower difficulty
+  if(diff<=2){for(let i=0;i<rows*cols*0.15;i++){const r=Math.floor(Math.random()*rows),c=Math.floor(Math.random()*cols),d=Math.floor(Math.random()*4),nr=r+DR[d],nc=c+DC[d];if(nr>=0&&nr<rows&&nc>=0&&nc<cols){grid[r][c].walls[d]=0;grid[nr][nc].walls[(d+2)%4]=0;}}}
+  let pr=0,pc=0,moves=0;
+  const ER=rows-1,EC=cols-1;
+  function draw(){
+    ctx.fillStyle='#0C0820';ctx.fillRect(0,0,W,H);
+    // cells
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      const x=c*cs,y=r*cs;
+      ctx.strokeStyle=t.color+'BB';ctx.lineWidth=2;
+      if(grid[r][c].walls[0]){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+cs,y);ctx.stroke();}
+      if(grid[r][c].walls[1]){ctx.beginPath();ctx.moveTo(x+cs,y);ctx.lineTo(x+cs,y+cs);ctx.stroke();}
+      if(grid[r][c].walls[2]){ctx.beginPath();ctx.moveTo(x,y+cs);ctx.lineTo(x+cs,y+cs);ctx.stroke();}
+      if(grid[r][c].walls[3]){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+cs);ctx.stroke();}
+    }
+    // Start
+    ctx.fillStyle='rgba(46,204,113,.35)';ctx.fillRect(1,1,cs-2,cs-2);
+    ctx.font=`${cs*.55}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('🏠',cs/2,cs/2);
+    // End
+    ctx.fillStyle='rgba(245,197,24,.25)';ctx.fillRect(EC*cs+1,ER*cs+1,cs-2,cs-2);
+    ctx.fillText('⭐',EC*cs+cs/2,ER*cs+cs/2);
+    // Player
+    ctx.fillStyle=t.color;ctx.beginPath();ctx.arc(pc*cs+cs/2,pr*cs+cs/2,cs*.34,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font=`${cs*.42}px serif`;ctx.fillText(t.symbol,pc*cs+cs/2,pr*cs+cs/2);
+  }
+  function move(dr,dc){
+    const d=dr===-1?0:dc===1?1:dr===1?2:3;
+    if(!grid[pr][pc].walls[d]){pr+=dr;pc+=dc;moves++;document.getElementById('mazeScore').textContent='Moves: '+moves;playTone(400+moves*5,0.08,'sine',0.18);draw();if(pr===ER&&pc===EC)actWin('Maze Complete! '+(moves<rows*cols*0.5?'Amazing path-finding!':'You made it!'));}
+    else{playTone(200,0.06,'sawtooth',0.1);}
+  }
+  // Keyboard
+  const kh=e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();move(e.key==='ArrowUp'?-1:e.key==='ArrowDown'?1:0,e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0);}};
+  document.addEventListener('keydown',kh);
+  // Touch swipe
+  let tx=0,ty=0;
+  cv.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+  cv.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>Math.abs(dy)){move(0,dx>0?1:-1);}else{move(dy>0?1:-1,0);}});
+  // On-screen arrows
+  box.insertAdjacentHTML('beforeend',`<div style="display:grid;grid-template:repeat(2,40px)/repeat(3,40px);gap:4px;margin-top:4px">
+    <div></div><button class="act-btn sec" style="padding:0;width:40px;height:40px;font-size:18px" onclick="(function(){const kh=document.querySelector('#mazeCanvas');})();_mazeMove(-1,0)">▲</button><div></div>
+    <button class="act-btn sec" style="padding:0;width:40px;height:40px;font-size:18px" onclick="_mazeMove(0,-1)">◀</button>
+    <button class="act-btn sec" style="padding:0;width:40px;height:40px;font-size:18px" onclick="_mazeMove(1,0)">▼</button>
+    <button class="act-btn sec" style="padding:0;width:40px;height:40px;font-size:18px" onclick="_mazeMove(0,1)">▶</button>
+  </div>`);
+  window._mazeMove=move;
+  _actCleanup=()=>document.removeEventListener('keydown',kh);
+  draw();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// JIGSAW
+// ══════════════════════════════════════════════════════════════════════
+function buildJigsaw(box,t,a,done){
+  const pcsMatch=a.tag.match(/(\d+)\s*pc/i);
+  const total=pcsMatch?parseInt(pcsMatch[1]):6;
+  const cols=Math.ceil(Math.sqrt(total)),rows=Math.ceil(total/cols);
+  const cw=Math.min((box.clientWidth||340)-16,360);
+  const pw=Math.floor(cw/cols),ph=Math.floor(pw*0.9);
+  const W=pw*cols,H=ph*rows;
+  // Draw the "picture" on an offscreen canvas using SVG-style shapes
+  const off=document.createElement('canvas');off.width=W;off.height=H;
+  const oc=off.getContext('2d');
+  // Draw a culturally-themed scene using tribe color and symbols
+  const grad=oc.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,t.color+'99');grad.addColorStop(1,t.color+'22');
+  oc.fillStyle=grad;oc.fillRect(0,0,W,H);
+  // Decorative elements
+  oc.fillStyle='rgba(255,255,255,.07)';
+  for(let i=0;i<8;i++){oc.beginPath();oc.arc(Math.random()*W,Math.random()*H,10+Math.random()*30,0,Math.PI*2);oc.fill();}
+  oc.font=`${Math.min(H,W)*0.25}px serif`;oc.textAlign='center';oc.textBaseline='middle';
+  oc.fillText(t.symbol,W/2,H/2);
+  oc.font=`bold ${Math.min(H,W)*0.1}px Nunito`;oc.fillStyle='rgba(255,255,255,.5)';
+  oc.fillText(t.name,W/2,H*0.85);
+  // Grid lines
+  oc.strokeStyle='rgba(255,255,255,.35)';oc.lineWidth=2;
+  for(let c=1;c<cols;c++){oc.beginPath();oc.moveTo(c*pw,0);oc.lineTo(c*pw,H);oc.stroke();}
+  for(let r=1;r<rows;r++){oc.beginPath();oc.moveTo(0,r*ph);oc.lineTo(W,r*ph);oc.stroke();}
+
+  // Create shuffled pieces
+  let pieces=[];
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(r*cols+c<total)pieces.push({r,c,placed:false});}
+  pieces=pieces.sort(()=>Math.random()-.5);
+
+  box.innerHTML=`<div class="act-msg info">Tap pieces to place them! (${total} pieces)</div>
+    <canvas id="jigsawMain" class="act-canvas" width="${W}" height="${H}"></canvas>
+    <div style="font-size:.8rem;color:var(--muted);margin:4px 0">Pieces left: <span id="jPLeft">${total}</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:${W}px" id="jTray"></div>`;
+
+  const mc=document.getElementById('jigsawMain');
+  if(!mc)return;
+  const mctx=mc.getContext('2d');
+  mctx.fillStyle='#1A1638';mctx.fillRect(0,0,W,H);
+  // Draw grid guide
+  mctx.strokeStyle='rgba(255,255,255,.08)';mctx.lineWidth=1;mctx.setLineDash([3,4]);
+  for(let c=1;c<cols;c++){mctx.beginPath();mctx.moveTo(c*pw,0);mctx.lineTo(c*pw,H);mctx.stroke();}
+  for(let r=1;r<rows;r++){mctx.beginPath();mctx.moveTo(0,r*ph);mctx.lineTo(W,r*ph);mctx.stroke();}
+  mctx.setLineDash([]);
+
+  const placed=Array.from({length:rows},()=>Array(cols).fill(false));
+  let remaining=total;
+
+  function drawPlaced(){
+    mctx.fillStyle='#1A1638';mctx.fillRect(0,0,W,H);
+    mctx.strokeStyle='rgba(255,255,255,.08)';mctx.lineWidth=1;mctx.setLineDash([3,4]);
+    for(let c=1;c<cols;c++){mctx.beginPath();mctx.moveTo(c*pw,0);mctx.lineTo(c*pw,H);mctx.stroke();}
+    for(let r2=1;r2<rows;r2++){mctx.beginPath();mctx.moveTo(0,r2*ph);mctx.lineTo(W,r2*ph);mctx.stroke();}
+    mctx.setLineDash([]);
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      if(placed[r][c])mctx.drawImage(off,c*pw,r*ph,pw,ph,c*pw,r*ph,pw,ph);
+    }
+  }
+
+  const tray=document.getElementById('jTray');
+  function buildTray(){
+    if(!tray)return;
+    tray.innerHTML='';
+    pieces.filter(p=>!p.placed).forEach(p=>{
+      const pc2=document.createElement('canvas');pc2.width=pw;pc2.height=ph;
+      pc2.style.cssText=`width:${pw}px;height:${ph}px;border-radius:8px;cursor:pointer;border:2px solid ${t.color}44;transition:border-color .2s`;
+      pc2.addEventListener('mouseover',()=>pc2.style.borderColor=t.color);
+      pc2.addEventListener('mouseout',()=>pc2.style.borderColor=t.color+'44');
+      const ptx=pc2.getContext('2d');ptx.drawImage(off,p.c*pw,p.r*ph,pw,ph,0,0,pw,ph);
+      pc2.addEventListener('click',()=>{
+        playPop();p.placed=true;placed[p.r][p.c]=true;remaining--;
+        document.getElementById('jPLeft').textContent=remaining;
+        drawPlaced();buildTray();
+        if(remaining===0)actWin('Puzzle Complete! 🧩');
+      });
+      tray.appendChild(pc2);
+    });
+  }
+  drawPlaced();buildTray();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SPOT THE DIFFERENCE
+// ══════════════════════════════════════════════════════════════════════
+function buildSpotDiff(box,t,a,done){
+  const diffsMatch=a.tag.match(/(\d+)/);
+  const numDiffs=diffsMatch?parseInt(diffsMatch[1]):3;
+  const cw=Math.min((box.clientWidth||340)-16,400);
+  const W=Math.floor(cw/2)-4,H=Math.floor(W*0.8);
+
+  // Generate a reproducible scene with tribe colour
+  function drawScene(ctx,w,h,changes,apply){
+    const grad=ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0,t.color+'55');grad.addColorStop(1,'#0C0820');
+    ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+    // Hills
+    ctx.fillStyle=t.color+'33';ctx.beginPath();ctx.ellipse(w*.3,h*.7,w*.35,h*.3,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=t.color+'22';ctx.beginPath();ctx.ellipse(w*.75,h*.75,w*.3,h*.25,0,0,Math.PI*2);ctx.fill();
+    // Sun
+    const sunX=apply&&changes[0]?w*.8:w*.7;
+    ctx.fillStyle='#F5C51888';ctx.beginPath();ctx.arc(sunX,h*.18,h*.1,0,Math.PI*2);ctx.fill();
+    // Tree
+    const treeH=apply&&changes[1]?h*.45:h*.38;
+    ctx.fillStyle='#2E7D3288';ctx.beginPath();ctx.arc(w*.25,h*.5-treeH*.3,treeH*.25,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#7B3F0055';ctx.fillRect(w*.23,h*.5-treeH*.05,treeH*.04,treeH*.3);
+    // Symbol
+    ctx.font=`${h*.18}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.globalAlpha=apply&&changes[2]?0.3:0.7;
+    ctx.fillText(t.symbol,w*.7,h*.55);ctx.globalAlpha=1;
+    // River
+    if(!(apply&&changes[3])){ctx.strokeStyle='#1B6CA855';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,h*.85);ctx.bezierCurveTo(w*.25,h*.75,w*.6,h*.95,w,h*.8);ctx.stroke();}
+    // Bird
+    const birdY=apply&&changes[4]?h*.25:h*.32;
+    ctx.fillStyle='#fff';ctx.font=`${h*.07}px serif`;ctx.fillText('🦅',w*.5,birdY);
+  }
+
+  const changes=Array.from({length:numDiffs},(_,i)=>i<numDiffs);
+  let found=new Set();
+
+  box.innerHTML=`<div class="act-msg info">Tap the differences in the RIGHT image! (0/${numDiffs} found)</div>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+      <div><div style="font-size:.7rem;color:var(--muted);text-align:center;margin-bottom:4px">Original</div>
+        <canvas id="sdLeft" width="${W}" height="${H}" class="act-canvas" style="cursor:default;width:${W}px;height:${H}px"></canvas></div>
+      <div><div style="font-size:.7rem;color:var(--muted);text-align:center;margin-bottom:4px">Spot the changes!</div>
+        <canvas id="sdRight" width="${W}" height="${H}" class="act-canvas" style="width:${W}px;height:${H}px"></canvas></div>
+    </div>
+    <div class="act-score" id="sdScore">Found: 0 / ${numDiffs}</div>`;
+
+  const lc=document.getElementById('sdLeft'),rc=document.getElementById('sdRight');
+  if(!lc||!rc)return;
+  drawScene(lc.getContext('2d'),W,H,changes,false);
+  drawScene(rc.getContext('2d'),W,H,changes,true);
+
+  // Click zones on right canvas mapped to changes
+  const zones=[{x:W*.6,y:H*.18,r:H*.15},{x:W*.2,y:H*.4,r:H*.15},{x:W*.65,y:H*.55,r:H*.15},{x:W*.45,y:H*.88,r:H*.1},{x:W*.5,y:H*.29,r:H*.1}];
+  rc.addEventListener('click',e=>{
+    const rect=rc.getBoundingClientRect(),mx=(e.clientX-rect.left)*(W/rect.width),my=(e.clientY-rect.top)*(H/rect.height);
+    let hit=false;
+    zones.slice(0,numDiffs).forEach((z,i)=>{
+      if(!found.has(i)&&Math.hypot(mx-z.x,my-z.y)<z.r+20){
+        found.add(i);hit=true;playPop();
+        const rctx=rc.getContext('2d');rctx.strokeStyle='#2ecc71';rctx.lineWidth=3;rctx.beginPath();rctx.arc(z.x,z.y,z.r,0,Math.PI*2);rctx.stroke();
+        document.getElementById('sdScore').textContent=`Found: ${found.size} / ${numDiffs}`;
+        if(found.size===numDiffs)actWin('All differences found! 🔍');
+      }
+    });
+    if(!hit){playTone(300,0.08,'sawtooth',0.15);actMsg('Not there — keep looking!','bad');}
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// WORD SEARCH
+// ══════════════════════════════════════════════════════════════════════
+function buildWordSearch(box,t,a,done){
+  const isClan=a.cat==='clan'||a.tag.toLowerCase().includes('clan');
+  let wordPool=isClan?t.clans:
+    (t.words||['HERO','TRIBE','UGANDA','RIVER','FOREST','DANCE','DRUM']).map(w=>w.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,''));
+  const maxW=a.diff<=2?3:a.diff<=3?5:Math.min(8,wordPool.length);
+  const words=wordPool.slice(0,Math.min(maxW,wordPool.length)).map(w=>w.toUpperCase().replace(/[^A-Z]/g,'').slice(0,10)).filter(w=>w.length>1);
+  const SIZE=a.diff<=1?8:a.diff<=2?10:a.diff<=3?12:14;
+
+  // Build grid
+  const grid=Array.from({length:SIZE},()=>Array(SIZE).fill(''));
+  const placed=[];
+  const DIRS=[[0,1],[1,0],...(a.diff>=3?[[1,1],[-1,1]]:[]),(a.diff>=4?[[-1,0],[0,-1]]:[])]
+    .filter((_,i)=>i<(a.diff<=2?2:a.diff<=3?4:6));
+
+  words.forEach(word=>{
+    let tries=0,ok=false;
+    while(!ok&&tries++<200){
+      const dir=DIRS[Math.floor(Math.random()*DIRS.length)];
+      const r0=Math.floor(Math.random()*SIZE),c0=Math.floor(Math.random()*SIZE);
+      const r1=r0+dir[0]*(word.length-1),c1=c0+dir[1]*(word.length-1);
+      if(r1<0||r1>=SIZE||c1<0||c1>=SIZE)continue;
+      let canPlace=true;
+      for(let i=0;i<word.length;i++){const r=r0+dir[0]*i,c=c0+dir[1]*i;if(grid[r][c]&&grid[r][c]!==word[i]){canPlace=false;break;}}
+      if(canPlace){for(let i=0;i<word.length;i++)grid[r0+dir[0]*i][c0+dir[1]*i]=word[i];placed.push({word,r0,c0,dir});ok=true;}
+    }
+  });
+  // Fill blanks
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(!grid[r][c])grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+
+  let sel=new Set(),foundWords=new Set(),firstCell=null,lastCell=null;
+  let clicking=false;
+
+  box.innerHTML=`<div class="act-msg info">Find: ${words.join(' · ')}</div>
+    <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${SIZE},32px)"></div>
+    <div class="act-score" id="wsScore">Found: 0 / ${words.length}</div>`;
+
+  const gridEl=document.getElementById('wsGrid');if(!gridEl)return;
+  words.forEach(w=>{const s=document.createElement('span');s.style.cssText=`background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:.72rem;font-weight:900;color:var(--muted)`;s.textContent=w;s.id='ws-word-'+w;gridEl.before(s);});
+
+  function cellId(r,c){return `wsc-${r}-${c}`;}
+  function highlight(r,c,on){const el=document.getElementById(cellId(r,c));if(el){el.classList.toggle('hi',on);}}
+
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){
+    const el=document.createElement('div');el.className='ws-cell';el.textContent=grid[r][c];
+    el.id=cellId(r,c);el.dataset.r=r;el.dataset.c=c;
+    el.addEventListener('mousedown',()=>{clicking=true;firstCell={r,c};sel.clear();sel.add(r+','+c);highlight(r,c,true);});
+    el.addEventListener('mouseover',()=>{if(!clicking)return;if(firstCell){sel.forEach(k=>{const[rr,cc]=k.split(',');highlight(Number(rr),Number(cc),false);});sel.clear();const dr=r-firstCell.r,dc=c-firstCell.c;const len=Math.max(Math.abs(dr),Math.abs(dc));const sr=dr?dr/Math.abs(dr):0,sc=dc?dc/Math.abs(dc):0;for(let i=0;i<=len;i++){const nr=firstCell.r+sr*i,nc=firstCell.c+sc*i;if(nr>=0&&nr<SIZE&&nc>=0&&nc<SIZE){sel.add(nr+','+nc);highlight(nr,nc,true);}}lastCell={r,c};}});
+    el.addEventListener('touchstart',ev=>{ev.preventDefault();clicking=true;firstCell={r,c};sel.clear();sel.add(r+','+c);highlight(r,c,true);},{passive:false});
+    el.addEventListener('touchmove',ev=>{ev.preventDefault();const touch=ev.touches[0];const target=document.elementFromPoint(touch.clientX,touch.clientY);if(target&&target.dataset.r){const nr=Number(target.dataset.r),nc=Number(target.dataset.c);if(firstCell){sel.forEach(k=>{const[rr,cc]=k.split(',');highlight(Number(rr),Number(cc),false);});sel.clear();const dr=nr-firstCell.r,dc=nc-firstCell.c;const len=Math.max(Math.abs(dr),Math.abs(dc));const srr=dr?dr/Math.abs(dr):0,scc=dc?dc/Math.abs(dc):0;for(let i=0;i<=len;i++){const r2=firstCell.r+srr*i,c2=firstCell.c+scc*i;if(r2>=0&&r2<SIZE&&c2>=0&&c2<SIZE){sel.add(r2+','+c2);highlight(r2,c2,true);}}lastCell={r:nr,c:nc};};}},{passive:false});
+    gridEl.appendChild(el);
+  }
+  function checkWord(){
+    clicking=false;
+    const selected=Array.from(sel).map(k=>{const[r,c]=k.split(',');return grid[Number(r)][Number(c)];}).join('');
+    const rev=selected.split('').reverse().join('');
+    const match=words.find(w=>!foundWords.has(w)&&(selected===w||rev===w));
+    if(match){
+      foundWords.add(match);playPop();
+      sel.forEach(k=>{const[r,c]=k.split(',');const el=document.getElementById(cellId(Number(r),Number(c)));if(el)el.classList.replace('hi','found');});
+      const wEl=document.getElementById('ws-word-'+match);if(wEl){wEl.style.textDecoration='line-through';wEl.style.color='#2ecc71';}
+      document.getElementById('wsScore').textContent=`Found: ${foundWords.size} / ${words.length}`;
+      if(foundWords.size===words.length)actWin('All words found! Great searching! 🔠');
+    } else {
+      sel.forEach(k=>{const[r,c]=k.split(',');highlight(Number(r),Number(c),false);});
+    }
+    sel.clear();
+  }
+  document.addEventListener('mouseup',checkWord);
+  document.addEventListener('touchend',checkWord);
+  _actCleanup=()=>{document.removeEventListener('mouseup',checkWord);document.removeEventListener('touchend',checkWord);};
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// WORD TRACE
+// ══════════════════════════════════════════════════════════════════════
+function buildWordTrace(box,t,a,done){
+  const titleMatch=a.title.match(/Trace[:\s]+[""]?([^"(]+)/i)||a.title.match(/([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/);
+  const localMatch=a.title.match(/Trace[:\s]+[""]?([^\s"(]+)/i);
+  const localWord=localMatch?localMatch[1].replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\-]/g,'').toUpperCase():'WORD';
+  const titleParts=a.title.split(/[:(]/);
+  const fullLabel=titleParts[1]?titleParts[1].trim().replace(/['"]/g,''):localWord;
+  const cw=Math.min((box.clientWidth||340)-16,380);
+  const W=cw,H=120;
+
+  box.innerHTML=`<div class="act-msg info">Trace over the dotted letters with your finger or mouse!</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:900;color:${t.color};margin:4px 0">${fullLabel}</div>
+    <canvas id="wtCanvas" class="wt-canvas act-canvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px;touch-action:none"></canvas>
+    <div class="act-score" id="wtPct">Coverage: 0%</div>
+    <div class="act-btns"><button class="act-btn sec" id="wtClear" onclick="buildWordTrace(document.getElementById('actBox'),curT,curA,false)">🔄 Clear</button>
+    <button class="act-btn sec" onclick="speakWord('${fullLabel.split(' ')[0]}')">🔊 Hear it</button></div>`;
+
+  speakWord(fullLabel.split(' ')[0]);
+  const cv=document.getElementById('wtCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+
+  // Draw dotted word
+  ctx.fillStyle='#0C0820';ctx.fillRect(0,0,W,H);
+  ctx.font=`bold ${H*.75}px 'Baloo 2',sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.setLineDash([6,6]);ctx.lineWidth=3;ctx.strokeStyle=t.color+'66';ctx.strokeText(fullLabel,W/2,H/2);
+  ctx.setLineDash([]);ctx.fillStyle=t.color+'22';ctx.fillText(fullLabel,W/2,H/2);
+
+  // Collect dotted region pixels
+  const imgData=ctx.getImageData(0,0,W,H).data;
+  let traceable=new Set();
+  for(let i=0;i<imgData.length;i+=4)if(imgData[i+3]>30)traceable.add(Math.floor(i/4));
+  const total=traceable.size;let covered=new Set();
+
+  let drawing=false;
+  function getPos(e){const r=cv.getBoundingClientRect();const touch=e.touches?e.touches[0]:e;return{x:(touch.clientX-r.left)*(W/r.width),y:(touch.clientY-r.top)*(H/r.height)};}
+  function trace(e){
+    if(!drawing)return;
+    const{x,y}=getPos(e);
+    ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fillStyle=t.color+'CC';ctx.fill();
+    for(let dx=-9;dx<=9;dx++)for(let dy=-9;dy<=9;dy++){const px=Math.round(x+dx),py=Math.round(y+dy);if(px>=0&&px<W&&py>=0&&py<H)covered.add(py*W+px);}
+    const pct=Math.min(100,Math.round([...covered].filter(p=>traceable.has(p)).size/total*110));
+    document.getElementById('wtPct').textContent=`Coverage: ${pct}%`;
+    if(pct>=80)actWin('Word traced! Keep practising! ✏️');
+  }
+  cv.addEventListener('mousedown',e=>{drawing=true;trace(e);});
+  cv.addEventListener('mousemove',trace);
+  cv.addEventListener('mouseup',()=>drawing=false);
+  cv.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;trace(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{e.preventDefault();trace(e);},{passive:false});
+  cv.addEventListener('touchend',()=>drawing=false);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// AUDIO MATCH
+// ══════════════════════════════════════════════════════════════════════
+function buildAudioMatch(box,t,a,done){
+  const wordMatch=a.title.match(/"([^"]+)"/)||a.title.match(/Hear\s+[""]?([^\s"!—]+)/i);
+  const targetWord=wordMatch?wordMatch[1]:t.greeting;
+  const wordFromDesc=a.desc.match(/"([A-Za-z\s?]+)"/g);
+  const pool=t.words?t.words.map(w=>w.split('(')[0].trim()).filter(w=>w.length>1&&w!==targetWord.split(' ')[0]).slice(0,5):['Forest','River','Sun','Moon','Star'];
+  const options=[targetWord.split('(')[0].trim(),...pool.slice(0,3)].sort(()=>Math.random()-.5).slice(0,4);
+  if(!options.includes(targetWord.split(' ')[0]))options[0]=targetWord.split(' ')[0];
+  const opt4=options.sort(()=>Math.random()-.5);
+  const correct=targetWord.split('(')[0].trim().split(' ')[0];
+  let score=0,total=3;
+
+  function playWord(){speakWord(targetWord);playChord([440,550],0.4,'sine');}
+
+  box.innerHTML=`<div class="act-msg info">Listen, then tap the correct word!</div>
+    <button class="act-btn pri" style="font-size:2rem;width:80px;height:80px;border-radius:50%;margin:8px auto" onclick="playWord()">🔊</button>
+    <div style="font-size:.8rem;color:var(--muted)">Tap the button to hear the word</div>
+    <div class="match-grid" style="grid-template-columns:1fr 1fr;max-width:320px;margin:8px auto" id="amOptions"></div>
+    <div class="act-score" id="amScore">Score: ${score}/${total}</div>`;
+
+  playWord();
+  function buildOpts(){
+    const el=document.getElementById('amOptions');if(!el)return;
+    el.innerHTML=opt4.map(w=>`<div class="m-card" onclick="checkAM('${w}','${correct}')">${w}</div>`).join('');
+  }
+  window.checkAM=function(chosen,target){
+    if(chosen.toLowerCase().startsWith(target.toLowerCase().slice(0,4))||chosen===target){
+      score++;playPop();actMsg('✓ Correct!','good');
+      document.getElementById('amScore').textContent=`Score: ${score}/${total}`;
+      if(score>=total)actWin('Audio Match Complete! 🔊');
+      else setTimeout(()=>playWord(),800);
+    } else {
+      playFail();actMsg('Try again — listen carefully!','bad');playWord();
+    }
+  };
+  buildOpts();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SPEAK BACK
+// ══════════════════════════════════════════════════════════════════════
+function buildSpeakBack(box,t,a,done){
+  const wordMatch=a.title.match(/"([^"]+)"/)||a.title.match(/Say\s+"?([^"!?]+)"?/i);
+  const targetWord=wordMatch?wordMatch[1]:t.greeting;
+  let attempts=0;
+  box.innerHTML=`<div style="font-size:3rem">${a.icon}</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:900;color:${t.color}">"${targetWord}"</div>
+    <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:300px">${a.desc}</div>
+    <button class="act-btn pri" style="font-size:1.1rem;padding:12px 28px;margin:8px" id="sbBtn" onclick="startSpeakBack()">🎤 Tap to Speak</button>
+    <button class="act-btn sec" onclick="speakWord('${targetWord}')">🔊 Hear example</button>
+    <div class="act-msg info" id="sbMsg">Tap the microphone to start!</div>`;
+  speakWord(targetWord);
+  let rec=null;
+  window.startSpeakBack=function(){
+    if(!navigator.mediaDevices){actMsg('Microphone not available in this browser','bad');attempts++;if(attempts>=2)actWin('Voice activity complete — great effort! 🎤');return;}
+    const btn=document.getElementById('sbBtn');
+    if(rec&&rec.state==='recording'){rec.stop();return;}
+    navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+      rec=new MediaRecorder(stream);btn.textContent='⏹ Stop Recording';btn.style.background='#e74c3c';
+      const chunks=[];rec.ondataavailable=e=>chunks.push(e.data);
+      rec.onstop=()=>{
+        stream.getTracks().forEach(t2=>t2.stop());btn.textContent='🎤 Tap to Speak';btn.style.background='';
+        const blob=new Blob(chunks,{type:'audio/webm'});const url=URL.createObjectURL(blob);
+        const au=new Audio(url);au.play();playChord([523,659,784],0.3);
+        actMsg('Great! Your voice echoes through the land! 🌟','good');
+        attempts++;if(attempts>=2)setTimeout(()=>actWin('Speak-Back complete! 🎤'),1500);
+      };
+      rec.start();setTimeout(()=>{if(rec.state==='recording')rec.stop();},4000);
+    }).catch(()=>{actMsg('Microphone access denied — count as done!','info');actWin('Speak-Back complete! 🎤');});
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// PROVERB JUMBLE / SENTENCE BUILDER
+// ══════════════════════════════════════════════════════════════════════
+function buildProverbJumble(box,t,a,done){
+  const isProverb=a.cat==='language'||a.cat==='clan';
+  const provPool=t.proverbs||['"Together we stand stronger."','"Wisdom guides the brave heart."'];
+  const rawProv=provPool[Math.floor(Math.random()*provPool.length)].replace(/['"]/g,'');
+  const words=rawProv.split(' ').filter(w=>w.length>0);
+  const shuffled=[...words].sort(()=>Math.random()-.5);
+  let placed=[];
+
+  box.innerHTML=`<div class="act-msg info">Arrange the words into the correct proverb!</div>
+    <div style="font-size:.8rem;color:var(--muted);margin:2px 0">Tap words to build the sentence:</div>
+    <div class="pj-zone" id="pjAnswer" style="min-height:48px"></div>
+    <div style="font-size:.75rem;color:var(--muted);margin:4px 0">Available words:</div>
+    <div class="pj-zone" id="pjBank"></div>
+    <div class="act-btns">
+      <button class="act-btn sec" onclick="buildProverbJumble(document.getElementById('actBox'),curT,curA,false)">🔄 Reset</button>
+      <button class="act-btn pri" onclick="checkProverb()">✓ Check</button>
+    </div>
+    <div class="act-score" id="pjMsg"></div>`;
+
+  const bank=document.getElementById('pjBank'),ans=document.getElementById('pjAnswer');
+  if(!bank||!ans)return;
+  function renderBank(){
+    bank.innerHTML='';
+    shuffled.filter((_,i)=>!placed.includes(i)).forEach((w,i)=>{
+      const el=document.createElement('div');el.className='pj-word';el.textContent=w;
+      el.onclick=()=>{placed.push(shuffled.indexOf(w,placed.length));playTone(500+placed.length*30,0.07,'sine',0.2);renderAll();};
+      bank.appendChild(el);
+    });
+  }
+  function renderAns(){
+    ans.innerHTML='';
+    placed.forEach((origI,pi)=>{
+      const el=document.createElement('div');el.className='pj-word';el.textContent=shuffled[origI];el.style.background='rgba(245,197,24,.1)';el.style.borderColor=t.color;
+      el.onclick=()=>{placed.splice(pi,1);playTone(400,0.06,'sine',0.15);renderAll();};
+      ans.appendChild(el);
+    });
+    if(!placed.length){const ph=document.createElement('div');ph.style.cssText='color:var(--muted);font-size:.8rem;padding:8px';ph.textContent='Your answer appears here...';ans.appendChild(ph);}
+  }
+  function renderAll(){renderBank();renderAns();}
+  window.checkProverb=function(){
+    const built=placed.map(i=>shuffled[i]).join(' ');
+    const correct=built.toLowerCase()===rawProv.toLowerCase();
+    if(correct){playSuccess();actMsg('✓ Perfect! Well done!','good');setTimeout(()=>actWin('Proverb mastered! 🧩'),1000);}
+    else{playFail();actMsg('Not quite — try again!','bad');}
+  };
+  renderAll();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// DRUM GAME
+// ══════════════════════════════════════════════════════════════════════
+function buildDrumGame(box,t,a,done){
+  const isRepeat=a.tag.toLowerCase().includes('repeat')||a.tag.toLowerCase().includes('call');
+  const pads=[{e:'🥁',type:'kick',color:'#E74C3C',f:80},{e:'🪘',type:'snare',color:t.color,f:200},{e:'🎵',type:'hat',color:'#F5C518',f:800},{e:'🔔',type:'hat',color:'#2ECC71',f:1200}];
+  let pattern=[],playerSeq=[],round=1,playing=false,score=0;
+
+  function genPattern(len){return Array.from({length:len},()=>Math.floor(Math.random()*pads.length));}
+  function playPattern(p,cb){
+    playing=true;let i=0;
+    const iv=setInterval(()=>{
+      if(i>=p.length){clearInterval(iv);playing=false;if(cb)cb();return;}
+      const pad=pads[p[i]];hitPad(p[i],false);i++;
+    },600);
+  }
+  function hitPad(idx,byUser){
+    playDrum(pads[idx].type);playTone(pads[idx].f,0.15,'triangle',0.25);
+    const el=document.querySelectorAll('.drum-pad')[idx];if(el){el.classList.add('hit');setTimeout(()=>el.classList.remove('hit'),120);}
+    if(byUser&&isRepeat){
+      playerSeq.push(idx);
+      const pos=playerSeq.length-1;
+      if(playerSeq[pos]!==pattern[pos]){playFail();actMsg('Wrong beat! Listen again.','bad');playerSeq=[];setTimeout(()=>playPattern(pattern,()=>playerSeq=[]),800);return;}
+      if(playerSeq.length===pattern.length){score++;playSuccess();actMsg(`✓ Round ${round} done!`,'good');round++;playerSeq=[];
+        if(score>=3)return actWin('Drum Master! 🥁');
+        setTimeout(()=>{pattern=genPattern(round+1);playPattern(pattern,()=>playerSeq=[]);},1000);}
+    }
+  }
+
+  pattern=genPattern(2);
+  box.innerHTML=`<div class="act-msg info">${isRepeat?'Listen to the pattern, then repeat it!':'Tap the drums to make music!'}</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:12px 0" id="drumPads">
+      ${pads.map((p,i)=>`<div class="drum-pad" style="background:${p.color}" onclick="hitPad(${i},true)">${p.e}</div>`).join('')}
+    </div>
+    ${isRepeat?`<button class="act-btn pri" onclick="playPattern(pattern,()=>playerSeq=[])">▶ Play Pattern</button>`:''}
+    <div class="act-score" id="drumScore">Score: ${score}/3</div>`;
+
+  window.hitPad=hitPad;window.playPattern=playPattern;window.pattern=pattern;window.playerSeq=playerSeq;
+  if(isRepeat)setTimeout(()=>playPattern(pattern,()=>playerSeq=[]),600);
+  else setTimeout(()=>actWin('Drums played! Great rhythm! 🥁'),8000);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// KARAOKE
+// ══════════════════════════════════════════════════════════════════════
+function buildKaraoke(box,t,a,done){
+  const lyricsFromDesc=a.desc.match(/"([^"]+)"/g);
+  const rawLyrics=lyricsFromDesc?lyricsFromDesc[0].replace(/"/g,''):'Sing along with us — our heritage shines bright! ('+t.name+')';
+  const lines=rawLyrics.split(/[,!.]+/).map(l=>l.trim()).filter(l=>l.length>2);
+  if(lines.length<2)lines.push(t.greeting+' — '+t.name+' forever!');
+  let cur=0,interval=null;
+
+  function highlight(i){
+    document.querySelectorAll('.lyric-line').forEach((el,idx)=>el.classList.toggle('active',idx===i));
+    speakWord(lines[i]);playChord([261+i*50,329+i*50],0.5,'triangle');
+  }
+  function start(){
+    if(interval)clearInterval(interval);cur=0;highlight(0);
+    interval=setInterval(()=>{cur++;if(cur>=lines.length){clearInterval(interval);interval=null;actWin('Song complete! 🎵');return;}highlight(cur);},2200);
+  }
+  _actCleanup=()=>{if(interval)clearInterval(interval);};
+
+  box.innerHTML=`<div style="font-size:2.5rem">🎵</div>
+    <div style="text-align:center;padding:8px;max-width:340px">
+      ${lines.map((l,i)=>`<div class="lyric-line" id="ll${i}">${l}</div>`).join('')}
+    </div>
+    <div class="act-btns">
+      <button class="act-btn pri" onclick="start()">▶ Sing Along!</button>
+      <button class="act-btn sec" onclick="speakWord('${t.greeting}')">🔊 Hear greeting</button>
+    </div>`;
+
+  window.start=start;
+  setTimeout(start,500);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// BEAD FALL GAME (Guitar Hero style)
+// ══════════════════════════════════════════════════════════════════════
+function buildBeadFall(box,t,a,done){
+  const W=Math.min((box.clientWidth||340)-16,320),H=360;
+  box.innerHTML=`<div class="act-msg info">Tap beads as they hit the bottom line!</div>
+    <canvas id="beadCanvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px;border-radius:12px"></canvas>
+    <div class="act-score" id="bfScore">Score: 0 — Tap the beads!</div>`;
+  const cv=document.getElementById('beadCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const COLS=4,CW=W/COLS;const TARGET_Y=H-50;
+  let beads=[],score=0,misses=0,raf=null,gameActive=true;
+  function spawnBead(){beads.push({x:CW*(Math.floor(Math.random()*COLS))+CW/2,y:-14,vy:1.8+score*0.04,r:18});}
+  let spawnTimer=0;
+  function frame(){
+    ctx.fillStyle='rgba(10,8,30,.92)';ctx.fillRect(0,0,W,H);
+    // Target line
+    ctx.strokeStyle=t.color+'66';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,TARGET_Y);ctx.lineTo(W,TARGET_Y);ctx.stroke();
+    ctx.fillStyle=t.color+'22';ctx.fillRect(0,TARGET_Y-25,W,50);
+    beads=beads.filter(b=>{
+      b.y+=b.vy;
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      const g=ctx.createRadialGradient(b.x-4,b.y-4,2,b.x,b.y,b.r);
+      g.addColorStop(0,'#fff');g.addColorStop(0.4,t.color);g.addColorStop(1,t.color+'44');
+      ctx.fillStyle=g;ctx.fill();
+      ctx.font=`${b.r}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💎',b.x,b.y);
+      if(b.y>H+20){misses++;if(misses>=5){gameActive=false;cancelAnimationFrame(raf);actWin(`Game over! Score: ${score} 💎`);}return false;}
+      return true;
+    });
+    spawnTimer++;if(spawnTimer>Math.max(40,90-score*3)){spawnTimer=0;spawnBead();}
+    if(gameActive)raf=requestAnimationFrame(frame);
+  }
+  cv.addEventListener('click',e=>{
+    if(!gameActive)return;
+    const rect=cv.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width),my=(e.clientY-rect.top)*(H/rect.height);
+    beads=beads.filter(b=>{
+      if(Math.abs(b.y-TARGET_Y)<40&&Math.abs(b.x-mx)<CW/2){score++;playPop();document.getElementById('bfScore').textContent=`Score: ${score}`;if(score>=15)actWin(`Champion! ${score} beads caught! 💎`);return false;}
+      return true;
+    });
+  });
+  cv.addEventListener('touchstart',e=>{e.preventDefault();const r=cv.getBoundingClientRect();const t2=e.touches[0];const mx=(t2.clientX-r.left)*(W/r.width);beads=beads.filter(b=>{if(Math.abs(b.y-TARGET_Y)<50&&Math.abs(b.x-mx)<CW/2){score++;playPop();document.getElementById('bfScore').textContent=`Score: ${score}`;if(score>=15)actWin(`Champion! ${score} beads caught! 💎`);return false;}return true;});},{passive:false});
+  _actCleanup=()=>{gameActive=false;if(raf)cancelAnimationFrame(raf);};
+  frame();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// INSTRUMENT EXPLORER
+// ══════════════════════════════════════════════════════════════════════
+function buildInstrument(box,t,a,done){
+  const instruments=[
+    {name:'Drum / Engoma',emoji:'🥁',freqs:[80,100,120],type:'kick',desc:'Beat the drum!'},
+    {name:'Harp / Adungu',emoji:'🪕',freqs:[329,392,523,659,784],type:'sine',desc:'Pluck the strings'},
+    {name:'Thumb Piano',emoji:'🎹',freqs:[261,294,329,349,392,440,494,523],type:'triangle',desc:'Tap the keys'},
+    {name:'Flute / Endere',emoji:'🪈',freqs:[784,880,988,1047,1175],type:'sine',desc:'Play the flute'},
+    {name:'Shaker',emoji:'🪇',freqs:[600,700,800,900],type:'sine',desc:'Shake it!'}
+  ];
+  let played=new Set();
+  box.innerHTML=`<div class="act-msg info">Tap each instrument to hear it!</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0">
+    ${instruments.map((ins,i)=>`<div onclick="playInst(${i})" style="background:var(--card);border:2px solid var(--border);border-radius:16px;padding:14px 12px;cursor:pointer;text-align:center;min-width:90px;transition:all .2s" id="inst${i}">
+      <div style="font-size:2.2rem">${ins.emoji}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:.78rem;font-weight:900;margin-top:4px">${ins.name}</div>
+      <div style="font-size:.68rem;color:var(--muted)">${ins.desc}</div>
+    </div>`).join('')}
+    </div>
+    <div class="act-score" id="instScore">Explored: 0/${instruments.length}</div>`;
+  window.playInst=function(i){
+    const ins=instruments[i];
+    ins.freqs.forEach((f,fi)=>playTone(f,0.35,ins.type===('kick')?'triangle':'sine',0.22,fi*0.12));
+    if(ins.type==='kick')playDrum('kick');
+    speakWord(ins.name.split('/')[0].trim());
+    const el=document.getElementById('inst'+i);
+    if(el){el.style.borderColor=t.color;el.style.background='rgba(245,197,24,.08)';}
+    played.add(i);
+    document.getElementById('instScore').textContent=`Explored: ${played.size}/${instruments.length}`;
+    if(played.size>=instruments.length)actWin('All instruments explored! 🎵');
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SOUND MATCH
+// ══════════════════════════════════════════════════════════════════════
+function buildSoundMatch(box,t,a,done){
+  const items=t.words?t.words.slice(0,4).map(w=>({word:w.split('(')[0].trim(),emoji:['🌊','🌳','🌅','🥁','🦁','🐘','🌾','🌿'][Math.floor(Math.random()*8)],freq:200+Math.random()*600})):
+    [{word:'River',emoji:'🌊',freq:300},{word:'Forest',emoji:'🌳',freq:500},{word:'Drum',emoji:'🥁',freq:150},{word:'Bird',emoji:'🐦',freq:800}];
+  let cur=0,score=0,total=items.length;
+  function playNext(){
+    if(cur>=total)return actWin('Sound match champion! 🔊');
+    speakWord(items[cur].word);playTone(items[cur].freq,0.4,'sine',0.3);
+    actMsg(`Listen: what is this?`,'info');
+  }
+  box.innerHTML=`<div class="act-msg info">Listen to the sound, then tap the matching word!</div>
+    <button class="act-btn pri" style="font-size:2rem;width:80px;height:80px;border-radius:50%;margin:8px auto" onclick="playNext()">🔊</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:300px;margin:8px auto" id="smOpts"></div>
+    <div class="act-score" id="smScore">Score: 0/${total}</div>`;
+  const opts=document.getElementById('smOpts');
+  function buildOpts(){
+    if(!opts)return;
+    const shuffled=[...items].sort(()=>Math.random()-.5);
+    opts.innerHTML=shuffled.map(it=>`<div class="m-card" onclick="checkSM('${it.word}')">${it.emoji} ${it.word}</div>`).join('');
+  }
+  window.checkSM=function(w){
+    if(cur>=total)return;
+    if(w===items[cur].word){score++;playPop();actMsg('✓ Correct!','good');cur++;document.getElementById('smScore').textContent=`Score: ${score}/${total}`;buildOpts();setTimeout(playNext,600);}
+    else{playFail();actMsg('Try again!','bad');}
+  };
+  buildOpts();setTimeout(playNext,500);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// ECHO GAME
+// ══════════════════════════════════════════════════════════════════════
+function buildEchoGame(box,t,a,done){
+  const word=t.greeting;let echoes=0;
+  box.innerHTML=`<div style="font-size:3rem">🏔️</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:900;color:${t.color}">"${word}"</div>
+    <div style="font-size:.9rem;color:var(--muted);text-align:center;margin:8px 0">${a.desc}</div>
+    <button class="act-btn pri" style="font-size:1.1rem;margin:8px" onclick="doEcho()">📢 Shout it!</button>
+    <div id="echoVisual" style="min-height:60px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap"></div>
+    <div class="act-score" id="echoScore">Echoes: 0/3</div>`;
+  window.doEcho=function(){
+    echoes++;playTone(440,0.3,'sine',0.3);
+    setTimeout(()=>playTone(440,0.25,'sine',0.2),400);
+    setTimeout(()=>playTone(440,0.15,'sine',0.1),800);
+    speakWord(word);
+    const vis=document.getElementById('echoVisual');
+    if(vis){for(let i=0;i<3;i++){const e=document.createElement('div');e.style.cssText=`font-family:'Baloo 2',cursive;font-weight:900;color:${t.color};opacity:1;animation:echoFade 1.5s ease ${i*.4}s forwards`;e.textContent=word;vis.appendChild(e);}}
+    document.getElementById('echoScore').textContent=`Echoes: ${echoes}/3`;
+    if(echoes>=3)actWin('Echo master across the land! 🏔️');
+  };
+  if(!document.getElementById('echoStyle')){const s=document.createElement('style');s.id='echoStyle';s.textContent='@keyframes echoFade{0%{opacity:1;font-size:1.2rem}100%{opacity:0;font-size:.6rem;transform:translateX(40px)}}';document.head.appendChild(s);}
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// LULLABY / COMPOSER
+// ══════════════════════════════════════════════════════════════════════
+function buildLullaby(box,t,a,done){
+  const notes=[261,294,329,349,392,440,494,523];
+  const noteNames=['Do','Re','Mi','Fa','Sol','La','Si','Do'];
+  let stars=[],playing=false,raf=null;
+  const W=Math.min((box.clientWidth||340)-16,360),H=180;
+  box.innerHTML=`<div class="act-msg info">Tap stars to add them, then press Play to hear your lullaby!</div>
+    <canvas id="lulCanvas" width="${W}" height="${H}" class="act-canvas" style="width:${W}px;height:${H}px"></canvas>
+    <div class="act-btns">
+      <button class="act-btn pri" onclick="playLullaby()">▶ Play Lullaby</button>
+      <button class="act-btn sec" onclick="stars=[];drawLulBg()">✨ Clear</button>
+    </div>`;
+  const cv=document.getElementById('lulCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  function drawLulBg(){
+    ctx.fillStyle='#060412';ctx.fillRect(0,0,W,H);
+    for(let i=0;i<40;i++){ctx.fillStyle=`rgba(255,255,220,${Math.random()*.5+.1})`;ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()*2+.5,0,Math.PI*2);ctx.fill();}
+    stars.forEach(s=>{ctx.fillStyle=t.color;ctx.beginPath();ctx.arc(s.x,s.y,8,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='12px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⭐',s.x,s.y);});
+  }
+  cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();const x=(e.clientX-r.left)*(W/r.width),y=(e.clientY-r.top)*(H/r.height);stars.push({x,y,note:notes[Math.floor(y/H*notes.length)]});playTone(notes[Math.floor(y/H*notes.length)],0.4,'sine',0.2);drawLulBg();if(stars.length>=5)actWin('Lullaby composed! Sweet dreams! 🌙');});
+  window.playLullaby=function(){stars.forEach((s,i)=>{playTone(s.note,0.5,'sine',0.22,i*0.35);});if(stars.length===0)actMsg('Add some stars first!','info');};
+  drawLulBg();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// COLOURING
+// ══════════════════════════════════════════════════════════════════════
+function buildColouring(box,t,a,done){
+  const cw=Math.min((box.clientWidth||340)-16,360);
+  const W=cw,H=Math.floor(W*.85);
+  const palette=['#E74C3C','#E67E22','#F1C40F','#2ECC71','#1ABC9C','#3498DB','#9B59B6','#7B3F00','#2C3E50',t.color,'#ECF0F1','#95A5A6'];
+  let curCol=palette[0];
+
+  box.innerHTML=`<div class="act-msg info">Select a colour and paint!</div>
+    <div class="col-palette" id="colPal">${palette.map((c,i)=>`<div class="col-swatch${i===0?' active':''}" style="background:${c}" onclick="selectCol('${c}',this)"></div>`).join('')}</div>
+    <canvas id="colCanvas" class="act-canvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px;touch-action:none"></canvas>
+    <div class="act-btns"><button class="act-btn sec" onclick="buildColouring(document.getElementById('actBox'),curT,curA,false)">🔄 New Scene</button>
+    <button class="act-btn pri" onclick="actWin('Artwork complete! Beautiful! 🎨')">✓ Finished!</button></div>`;
+
+  window.selectCol=function(c,el){curCol=c;document.querySelectorAll('.col-swatch').forEach(s=>s.classList.remove('active'));el.classList.add('active');};
+  const cv=document.getElementById('colCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+
+  // Draw a tribe scene as line art
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#333';ctx.lineWidth=2;
+  // Sky/ground
+  ctx.fillStyle='#E8F4FD';ctx.fillRect(0,0,W,H*.55);
+  ctx.fillStyle='#C8E6C9';ctx.fillRect(0,H*.55,W,H*.45);
+  // Sun
+  ctx.strokeStyle='#AAA';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(W*.8,H*.15,H*.1,0,Math.PI*2);ctx.stroke();
+  // Tree
+  ctx.beginPath();ctx.moveTo(W*.2,H*.55);ctx.lineTo(W*.2,H*.3);ctx.stroke();
+  ctx.beginPath();ctx.arc(W*.2,H*.22,H*.14,0,Math.PI*2);ctx.stroke();
+  // Hut
+  ctx.beginPath();ctx.rect(W*.38,H*.37,W*.24,H*.2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W*.34,H*.37);ctx.lineTo(W*.5,H*.22);ctx.lineTo(W*.66,H*.37);ctx.stroke();
+  // Symbol
+  ctx.font=`${H*.2}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='rgba(0,0,0,.07)';ctx.fillText(t.symbol,W*.6,H*.72);
+  ctx.strokeStyle='rgba(0,0,0,.12)';ctx.lineWidth=1;ctx.strokeText(t.symbol,W*.6,H*.72);
+
+  let painting=false;
+  function paint(e){
+    const r=cv.getBoundingClientRect();const touch=e.touches?e.touches[0]:e;
+    const x=(touch.clientX-r.left)*(W/r.width),y=(touch.clientY-r.top)*(H/r.height);
+    ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fillStyle=curCol;ctx.fill();
+  }
+  cv.addEventListener('mousedown',e=>{painting=true;paint(e);});
+  cv.addEventListener('mousemove',e=>{if(painting)paint(e);});
+  cv.addEventListener('mouseup',()=>painting=false);
+  cv.addEventListener('touchstart',e=>{e.preventDefault();painting=true;paint(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{e.preventDefault();paint(e);},{passive:false});
+  cv.addEventListener('touchend',()=>painting=false);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// COLOUR BY NUMBER
+// ══════════════════════════════════════════════════════════════════════
+function buildColourByNumber(box,t,a,done){
+  const cw=Math.min((box.clientWidth||340)-16,360);
+  const W=cw,H=Math.floor(W*.85);
+  const numCols=5;
+  const colMap=['#3498DB','#2ECC71','#E74C3C','#F1C40F',t.color];
+  const labels=['1-Blue','2-Green','3-Red','4-Gold','5-Tribe'];
+  let curNum=1;
+
+  // Build a grid of numbered zones
+  const zones=[];const ZW=Math.floor(W/8),ZH=Math.floor(H/6);
+  for(let r=0;r<6;r++)for(let c=0;c<8;c++){const n=(r+c)%numCols+1;zones.push({x:c*ZW+2,y:r*ZH+2,w:ZW-4,h:ZH-4,n,col:null});}
+
+  box.innerHTML=`<div class="act-msg info">Select a number colour, then tap zones to fill them!</div>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0" id="cbnPal">
+      ${colMap.map((c,i)=>`<div onclick="setCBN(${i+1})" id="cbn${i+1}" style="background:${c};width:44px;height:44px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#fff;border:3px solid ${i===0?'#fff':'transparent'}">${i+1}</div>`).join('')}
+    </div>
+    <canvas id="cbnCanvas" class="act-canvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px;touch-action:none"></canvas>
+    <div class="act-score" id="cbnScore">Filled: 0/${zones.length}</div>`;
+
+  const cv=document.getElementById('cbnCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  window.setCBN=function(n){curNum=n;document.querySelectorAll('[id^=cbn]').forEach((el,i)=>el.style.border=`3px solid ${i+1===n?'#fff':'transparent'}`);};
+  function drawZones(){
+    ctx.fillStyle='#1A1638';ctx.fillRect(0,0,W,H);
+    zones.forEach(z=>{
+      ctx.fillStyle=z.col||(z.n===1?'#1B2A4A':z.n===2?'#1A3A2A':z.n===3?'#3A1A1A':z.n===4?'#3A3410':t.color+'22');
+      ctx.fillRect(z.x,z.y,z.w,z.h);
+      ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.strokeRect(z.x,z.y,z.w,z.h);
+      if(!z.col){ctx.fillStyle='rgba(255,255,255,.5)';ctx.font=`bold ${ZH*.5}px Nunito`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(z.n,z.x+z.w/2,z.y+z.h/2);}
+    });
+    const filled=zones.filter(z=>z.col).length;
+    document.getElementById('cbnScore').textContent=`Filled: ${filled}/${zones.length}`;
+    if(filled===zones.length)actWin('Colour by number complete! 🎨');
+  }
+  cv.addEventListener('click',e=>{
+    const r=cv.getBoundingClientRect();const mx=(e.clientX-r.left)*(W/r.width),my=(e.clientY-r.top)*(H/r.height);
+    const zone=zones.find(z=>mx>=z.x&&mx<=z.x+z.w&&my>=z.y&&my<=z.y+z.h);
+    if(zone&&zone.n===curNum){zone.col=colMap[curNum-1];playTone(300+curNum*80,0.08,'sine',0.2);drawZones();}
+    else if(zone){playFail();actMsg('Wrong colour for this zone!','bad');}
+  });
+  cv.addEventListener('touchstart',e=>{e.preventDefault();const r=cv.getBoundingClientRect();const t2=e.touches[0];const mx=(t2.clientX-r.left)*(W/r.width),my=(t2.clientY-r.top)*(H/r.height);const zone=zones.find(z=>mx>=z.x&&mx<=z.x+z.w&&my>=z.y&&my<=z.y+z.h);if(zone&&zone.n===curNum){zone.col=colMap[curNum-1];playTone(300+curNum*80,0.08,'sine',0.2);drawZones();}},{passive:false});
+  drawZones();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// DESIGN TOOL (free canvas)
+// ══════════════════════════════════════════════════════════════════════
+function buildDesignTool(box,t,a,done){
+  const cw=Math.min((box.clientWidth||340)-16,360);
+  const W=cw,H=Math.floor(W*.8);
+  const palette=['#E74C3C','#E67E22','#F1C40F','#2ECC71','#3498DB','#9B59B6','#FFFFFF',t.color,'#000000'];
+  const stamps=['💎','🌳','🏹','⭐','🌊','🥁',t.symbol,t.symbol];
+  let curCol=t.color,curTool='pen',brushSize=8;
+
+  box.innerHTML=`<div class="act-msg info">${a.desc.slice(0,80)}... Create your design!</div>
+    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:4px 0">
+      <div onclick="curTool='pen';actMsg('Pen mode','info')" class="act-btn sec" style="padding:5px 10px;cursor:pointer">✏️</div>
+      <div onclick="curTool='erase';actMsg('Eraser mode','info')" class="act-btn sec" style="padding:5px 10px;cursor:pointer">🧹</div>
+      ${stamps.slice(0,4).map(s=>`<div onclick="curTool='stamp';curStamp='${s}'" class="act-btn sec" style="padding:5px 10px;cursor:pointer">${s}</div>`).join('')}
+    </div>
+    <div class="col-palette">${palette.map(c=>`<div class="col-swatch" style="background:${c}" onclick="curCol='${c}';document.querySelectorAll('.col-swatch').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></div>`).join('')}</div>
+    <canvas id="dtCanvas" class="act-canvas" width="${W}" height="${H}" style="width:${W}px;height:${H}px;touch-action:none;background:#fff;border-radius:12px"></canvas>
+    <div class="act-btns"><button class="act-btn sec" onclick="dtClear()">🔄 Clear</button>
+    <button class="act-btn pri" onclick="actWin('Design saved! Beautiful work! 🎨')">✓ Done!</button></div>`;
+
+  const cv=document.getElementById('dtCanvas');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#FFF8EE';ctx.fillRect(0,0,W,H);
+  ctx.font=`${H*.3}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.globalAlpha=.07;ctx.fillText(t.symbol,W/2,H/2);ctx.globalAlpha=1;
+
+  let painting=false;
+  window.dtClear=function(){ctx.fillStyle='#FFF8EE';ctx.fillRect(0,0,W,H);ctx.globalAlpha=.07;ctx.fillText(t.symbol,W/2,H/2);ctx.globalAlpha=1;};
+  window.curStamp='⭐';
+  function getP(e){const r=cv.getBoundingClientRect();const touch=e.touches?e.touches[0]:e;return{x:(touch.clientX-r.left)*(W/r.width),y:(touch.clientY-r.top)*(H/r.height)};}
+  function draw(e){
+    const{x,y}=getP(e);
+    if(window.curTool==='stamp'){ctx.font=`${brushSize*3}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(window.curStamp||'⭐',x,y);playPop();}
+    else if(window.curTool==='erase'){ctx.fillStyle='#FFF8EE';ctx.beginPath();ctx.arc(x,y,brushSize*2,0,Math.PI*2);ctx.fill();}
+    else{ctx.beginPath();ctx.arc(x,y,brushSize,0,Math.PI*2);ctx.fillStyle=window.curCol||t.color;ctx.fill();}
+  }
+  cv.addEventListener('mousedown',e=>{painting=true;draw(e);});
+  cv.addEventListener('mousemove',e=>{if(painting)draw(e);});
+  cv.addEventListener('mouseup',()=>painting=false);
+  cv.addEventListener('touchstart',e=>{e.preventDefault();painting=true;draw(e);},{passive:false});
+  cv.addEventListener('touchmove',e=>{e.preventDefault();if(painting)draw(e);},{passive:false});
+  cv.addEventListener('touchend',()=>painting=false);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// CLAN MATCH
+// ══════════════════════════════════════════════════════════════════════
+function buildClanMatch(box,t,a,done){
+  const clans=t.clans.slice(0,5);
+  const emojis=['🦁','🐊','🦅','🐆','🐍','🦛','🦒','🐘','🦓','🌊'];
+  const pairs=clans.map((c,i)=>({clan:c,totem:emojis[i%emojis.length]}));
+  const cards=[...pairs.map(p=>({text:p.clan,type:'clan',pair:p.clan})),...pairs.map(p=>({text:p.totem,type:'totem',pair:p.clan}))].sort(()=>Math.random()-.5);
+  let sel=null,matched=new Set(),wrong=null;
+
+  box.innerHTML=`<div class="act-msg info">Match each clan to its totem! Tap a clan, then its totem.</div>
+    <div class="match-grid" style="grid-template-columns:repeat(3,1fr);max-width:360px;margin:8px auto" id="cmGrid"></div>
+    <div class="act-score" id="cmScore">Matched: 0/${pairs.length}</div>`;
+  const grid=document.getElementById('cmGrid');if(!grid)return;
+  function render(){
+    grid.innerHTML=cards.map((c,i)=>{
+      const cls=matched.has(c.pair+c.type)?'m-card matched':wrong===i?'m-card wrong':sel===i?'m-card sel':'m-card';
+      return `<div class="${cls}" onclick="cmTap(${i})">${c.text}</div>`;
+    }).join('');
+  }
+  window.cmTap=function(i){
+    if(matched.has(cards[i].pair+cards[i].type)){return;}
+    if(sel===null||cards[sel].type===cards[i].type){sel=i;render();return;}
+    if(cards[sel].pair===cards[i].pair&&cards[sel].type!==cards[i].type){
+      matched.add(cards[sel].pair+cards[sel].type);matched.add(cards[i].pair+cards[i].type);
+      sel=null;playPop();render();
+      document.getElementById('cmScore').textContent=`Matched: ${matched.size/2}/${pairs.length}`;
+      if(matched.size===cards.length)actWin('All clans matched! 🌳');
+    } else {
+      wrong=i;render();playFail();setTimeout(()=>{wrong=null;sel=null;render();},700);
+    }
+  };
+  render();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// QUIZ (Clan quiz, graduation, missions)
+// ══════════════════════════════════════════════════════════════════════
+function buildQuiz(box,t,a,done){
+  const isGrad=a.tag.toLowerCase().includes('grad');
+  const pool=[
+    {q:`What is the ${t.name} hero's name?`,opts:[t.hero.split(' ')[0],t.clans[0],'Kintu','Kaboyo'],ans:0},
+    {q:`What does "${t.greeting}" mean?`,opts:[t.meaning,'Good night','Farewell','Come here'],ans:0},
+    {q:`Which region do the ${t.name} people live in?`,opts:[t.region.split(',')[0],'Kampala','Nairobi','Mombasa'],ans:0},
+    {q:`What language do the ${t.name} speak?`,opts:[t.language,'Luganda','Kiswahili','French'],ans:0},
+    {q:`Which is a ${t.name} clan?`,opts:[t.clans[0],t.clans[1]||t.clans[0],'Nkima','Payira'].sort(()=>Math.random()-.5),ans:0},
+    {q:`What is the ${t.name} sacred animal?`,opts:[t.animal,'Elephant','Giraffe','Rhino'],ans:0},
+    {q:`Complete: "${t.greeting} means ___"`,opts:[t.meaning,'Goodbye','Sleep well','Thank you'],ans:0},
+    {q:`Which proverb is from the ${t.name}?`,opts:[(t.proverbs?t.proverbs[0]:'Wisdom guides us').replace(/['"]/g,'').slice(0,40),'London is great','The sky is blue','Money rules all'],ans:0},
+    {q:`How many clans does ${t.name} have?`,opts:[String(t.clans.length),'2','10','20'],ans:0},
+    {q:`Who is the ${t.name} hero's title?`,opts:[t.heroTitle||'Hero',t.clans[0],'Elder','Chief'],ans:0},
+  ];
+  // shuffle opts but track correct
+  const qSet=pool.slice(0,isGrad?5:4).map(q=>{const opts=[...q.opts];const correct=opts[q.ans];opts.sort(()=>Math.random()-.5);return{q:q.q,opts,ans:opts.indexOf(correct)};});
+  let cur=0,score=0,answered=false;
+
+  function showQ(){
+    if(cur>=qSet.length){const el=document.getElementById('quizArea');if(el)el.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:3rem">${score>=qSet.length*0.8?'🏆':'⭐'}</div><div style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:900;color:var(--gold)">Score: ${score}/${qSet.length}</div><div style="color:var(--muted);margin-top:8px">${score>=qSet.length*0.8?'Outstanding! '+t.name+' Champion!':'Good effort! Try again!'}</div></div>`;if(score>=Math.ceil(qSet.length*0.6))actWin(`Quiz passed! ${score}/${qSet.length} correct! 🏆`);return;}
+    const q=qSet[cur];answered=false;
+    const el=document.getElementById('quizArea');if(!el)return;
+    el.innerHTML=`<div style="font-size:.75rem;color:var(--muted);font-weight:800;margin-bottom:8px">Question ${cur+1}/${qSet.length}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1rem;font-weight:900;margin-bottom:14px">${q.q}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i},${q.ans})">${o.slice(0,60)}</button>`).join('')}
+      </div>`;
+  }
+  window.answerQ=function(chosen,correct){
+    if(answered)return;answered=true;
+    const btns=document.querySelectorAll('.quiz-opt');
+    btns[correct].classList.add('correct');
+    if(chosen===correct){score++;playPop();actMsg('✓ Correct!','good');}
+    else{btns[chosen].classList.add('wrong');playFail();actMsg('Incorrect — see the right answer','bad');}
+    document.getElementById('quizScore').textContent=`Score: ${score}/${qSet.length}`;
+    setTimeout(()=>{cur++;showQ();},1400);
+  };
+
+  box.innerHTML=`<div id="quizArea" style="width:100%;max-width:420px"></div>
+    <div class="act-score" id="quizScore">Score: 0/${qSet.length}</div>`;
+  showQ();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MISSION (story quest, action quest, ceremony)
+// ══════════════════════════════════════════════════════════════════════
+function buildMission(box,t,a,done){
+  const isChoose=a.tag.toLowerCase().includes('quest')||a.tag.toLowerCase().includes('story');
+  if(isChoose){
+    const choices=[
+      {text:`Help the elder — show kindness like ${t.hero.split(' ')[0]}!`,pts:true},
+      {text:`Press on quickly — time is important!`,pts:false},
+    ];
+    let chosen=false;
+    box.innerHTML=`<div style="font-size:2.5rem">${a.icon}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1rem;font-weight:900;margin:8px 0;max-width:340px;text-align:center">${a.desc.slice(0,120)}...</div>
+      <div style="font-size:.8rem;color:var(--gold);font-weight:800;margin:6px 0">What would you do?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px">
+        ${choices.map((c,i)=>`<button class="quiz-opt" onclick="chooseMission(${i})">${c.text}</button>`).join('')}
+      </div>
+      <div id="mResult" style="min-height:40px"></div>`;
+    window.chooseMission=function(i){
+      if(chosen)return;chosen=true;
+      const r=document.getElementById('mResult');
+      if(choices[i].pts){playSuccess();r.innerHTML=`<div class="act-msg good">Excellent choice! The path of kindness is always right! 🌟</div>`;setTimeout(()=>actWin('Mission complete! Kind heart wins! 🏆'),1200);}
+      else{playTone(400,0.3,'triangle',0.2);r.innerHTML=`<div class="act-msg info">A fair choice — but kindness earns the greatest reward! Try again?</div>`;chosen=false;}
+    };
+  } else {
+    // Ceremony / celebration mission — tap drum together
+    let taps=0;
+    box.innerHTML=`<div style="font-size:3rem">${a.icon}</div>
+      <div style="font-size:.95rem;color:var(--text);text-align:center;max-width:320px;margin:8px 0">${a.desc.slice(0,140)}</div>
+      <div style="font-family:'Baloo 2',cursive;font-size:1rem;font-weight:900;color:var(--gold);margin:8px 0">Tap the drum 10 times to celebrate!</div>
+      <div class="drum-pad" style="background:${t.color};width:100px;height:100px;border-radius:50%;margin:10px auto;font-size:3rem;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="tapCeremony()">🥁</div>
+      <div class="act-score" id="cerScore">Taps: 0/10</div>`;
+    window.tapCeremony=function(){taps++;playDrum('kick');playTone(200+taps*20,0.15,'triangle',0.2);confetti(8);document.getElementById('cerScore').textContent=`Taps: ${taps}/10`;if(taps>=10)actWin('Ceremony complete! The village celebrates! 🎉');};
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// FALLBACK (static display with speak)
+// ══════════════════════════════════════════════════════════════════════
+function buildFallback(box,t,a,done){
+  box.innerHTML=`<div style="font-size:3.5rem;margin-bottom:8px">${a.icon}</div>
+    <div style="font-family:'Baloo 2',cursive;font-size:1rem;font-weight:900;color:${t.color};margin-bottom:6px">${a.title}</div>
+    <div style="font-size:.9rem;color:var(--text);line-height:1.7;max-width:400px;text-align:center">${a.desc}</div>
+    <div class="act-btns" style="margin-top:12px">
+      <button class="act-btn sec" onclick="speakWord('${a.title.slice(0,40)}')">🔊 Read aloud</button>
+    </div>`;
+  speakWord(a.desc.slice(0,80));
+}
+
+function doComplete(){
+  if(!curT||!curA)return;
+  const t=curT,a=curA,key=dk(t.id,a.id);
+  if(S.done[key])return;
+  S.done[key]=true;S.stars+=a.pts;S.tStars[t.id]=(S.tStars[t.id]||0)+a.pts;save();
+  document.getElementById('totS').textContent=S.stars.toLocaleString();
+  confetti(50);showToast(a.icon,`${a.title} — Done!`,`+${a.pts} stars · Total: ${S.stars.toLocaleString()} ⭐`);
+  renderActView();
+  if(getD(t.id)===t.activities.length)setTimeout(()=>{confetti(100);showToast(t.symbol,`${t.name} Pack Complete! 🎉`,`You earned the ${t.name} passport stamp!`);},2200);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// PASSPORT
+// ══════════════════════════════════════════════════════════════════════
+function renderPassport(){
+  document.getElementById('passGrid').innerHTML=TRIBES.map(t=>{
+    const done=getD(t.id),tot=t.activities.length,pct=Math.round(done/tot*100),earned=done===tot;
+    return `<div class="pc${earned?' earned':''}" onclick="nav('tribe','${t.id}')" style="--tc:${t.color}">
+      <div class="pc-ico">${t.symbol}</div>
+      <div class="pc-name">${t.name}</div>
+      <div class="pc-prog">${done}/${tot} · ⭐ ${S.tStars[t.id]||0}</div>
+      <div class="pc-bar"><div class="pc-fill" style="width:${pct}%;background:${t.color}"></div></div>
+      <div class="pc-st">✓ STAMP EARNED!</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// TOAST & CONFETTI
+// ══════════════════════════════════════════════════════════════════════
+function showToast(ico,title,sub){
+  const el=document.getElementById('toast');
+  document.getElementById('tIco').textContent=ico;
+  document.getElementById('tTitle').textContent=title;
+  document.getElementById('tSub').textContent=sub;
+  el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3800);
+}
+function confetti(n=50){
+  const c=document.getElementById('cfc');
+  const cols=['#F5C518','#E74C3C','#2ECC71','#3498DB','#9B59B6','#FF6B35','#00BCD4','#E91E8C'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='cf';
+    p.style.cssText=`left:${Math.random()*100}vw;top:-12px;width:${7+Math.random()*9}px;height:${7+Math.random()*9}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};--dur:${1.4+Math.random()*1.5}s;animation-delay:${Math.random()*.8}s`;
+    c.appendChild(p);setTimeout(()=>p.remove(),3200);
+  }
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')goBack()});
+_applyView('home');
+</script>
+</body>
+</html>
