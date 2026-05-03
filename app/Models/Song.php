@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 class Song extends Model
 {
     protected $fillable = [
-        'org_id',
         'tribe_id',
         'title',
         'description',
@@ -26,6 +25,11 @@ class Song extends Model
         'star_points',
         'status',
         'metadata',
+        'activity_type',
+        'difficulty_level',
+        'has_karaoke_timing',
+        'has_fill_blanks',
+        'interaction_config',
     ];
 
     protected $casts = [
@@ -34,6 +38,9 @@ class Song extends Model
         'age_max' => 'integer',
         'star_points' => 'integer',
         'metadata' => 'array',
+        'has_karaoke_timing' => 'boolean',
+        'has_fill_blanks' => 'boolean',
+        'interaction_config' => 'array',
     ];
 
     protected static bool $syncingLegacyActivity = false;
@@ -83,6 +90,16 @@ class Song extends Model
     public function organisationSongDecisions(): HasMany
     {
         return $this->hasMany(OrganisationSongDecision::class);
+    }
+
+    public function lyricSegments(): HasMany
+    {
+        return $this->hasMany(SongLyricSegment::class)->orderBy('order_index');
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(SongActivity::class);
     }
 
     public function getAgeRangeAttribute(): string

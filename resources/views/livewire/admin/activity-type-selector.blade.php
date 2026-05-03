@@ -26,12 +26,12 @@
             <div class="activity-type-status ready">Ready to use</div>
         </div>
         
-        <div class="activity-type-card disabled">
+        <div class="activity-type-card" wire:click="selectType('song')">
             <div class="activity-type-icon">🎵</div>
             <div class="activity-type-title">Song</div>
             <div class="activity-type-desc">Karaoke, lullabies, clan pride songs, and cultural music activities</div>
-            <div class="activity-type-count">Coming soon</div>
-            <div class="activity-type-status coming-soon">In development</div>
+            <div class="activity-type-count">{{ \App\Models\Song::count() }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
         </div>
         
         <div class="activity-type-card disabled">
