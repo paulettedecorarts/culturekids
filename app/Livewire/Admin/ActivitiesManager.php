@@ -71,7 +71,7 @@ class ActivitiesManager extends Component
     {
         return Activity::query()
             ->with('tribe')
-            ->whereIn('type', ['flashcard', 'puzzle'])
+            ->whereIn('type', ['flashcard', 'puzzle', 'song'])
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('title', 'like', '%'.$this->search.'%')
                     ->orWhere('description', 'like', '%'.$this->search.'%')

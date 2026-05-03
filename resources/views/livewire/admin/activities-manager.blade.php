@@ -28,19 +28,19 @@
             <div class="sa-stat-delta">All activity types</div>
         </div>
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ \App\Models\Activity::whereNotIn('type', ['song', 'story'])->where('is_published', true)->count() }}</div>
+            <div class="sa-stat-val">{{ \App\Models\Activity::whereIn('type', ['flashcard', 'puzzle', 'song'])->where('is_published', true)->count() }}</div>
             <div class="sa-stat-label">Published</div>
             <div class="sa-stat-delta">Visible records</div>
         </div>
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ \App\Models\Activity::whereNotIn('type', ['song', 'story'])->where('type', 'vocab_pack')->count() }}</div>
-            <div class="sa-stat-label">Vocab Packs</div>
-            <div class="sa-stat-delta">Language learning</div>
+            <div class="sa-stat-val">{{ \App\Models\Activity::where('type', 'song')->count() }}</div>
+            <div class="sa-stat-label">Songs</div>
+            <div class="sa-stat-delta">Music activities</div>
         </div>
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ \App\Models\Activity::whereNotIn('type', ['song', 'story'])->where('type', 'worksheet')->count() }}</div>
-            <div class="sa-stat-label">Worksheets</div>
-            <div class="sa-stat-delta">Practice content</div>
+            <div class="sa-stat-val">{{ \App\Models\Activity::where('type', 'puzzle')->count() }}</div>
+            <div class="sa-stat-label">Puzzles</div>
+            <div class="sa-stat-delta">Interactive games</div>
         </div>
     </div>
 
@@ -50,6 +50,7 @@
             <option value="">All Types</option>
             <option value="flashcard">Flashcard</option>
             <option value="puzzle">Puzzle</option>
+            <option value="song">Song</option>
         </select>
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>
@@ -77,7 +78,17 @@
         @forelse($this->activities as $activity)
             <div class="sa-table-row act-table-grid">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0">
-                    <div style="font-size:20px;width:32px;text-align:center">🧩</div>
+                    <div style="font-size:20px;width:32px;text-align:center">
+                        @if($activity->type === 'song')
+                            🎵
+                        @elseif($activity->type === 'flashcard')
+                            🃏
+                        @elseif($activity->type === 'puzzle')
+                            🧩
+                        @else
+                            📝
+                        @endif
+                    </div>
                     <div style="min-width:0">
                         <div style="font-weight:700;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->title }}</div>
                         <div style="font-size:11px;color:rgba(255,255,255,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->description ?: 'No description' }}</div>
@@ -88,7 +99,19 @@
                 <span class="status-pill {{ $activity->is_published ? 'status-published' : 'status-draft' }}">{{ $activity->is_published ? 'Published' : 'Draft' }}</span>
                 <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $activity->age_range ?: '—' }}</span>
                 <div style="display:flex;gap:6px">
-                    <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                    @if($activity->type === 'song')
+                        @php
+                            $metadata = is_string($activity->metadata) ? json_decode($activity->metadata, true) : $activity->metadata;
+                            $songId = $metadata['legacy_song_id'] ?? null;
+                        @endphp
+                        @if($songId)
+                            <a href="{{ route($routePrefix . '.songs.activities.show', $songId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @else
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @endif
+                    @else
+                        <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                    @endif
                 </div>
             </div>
         @empty
