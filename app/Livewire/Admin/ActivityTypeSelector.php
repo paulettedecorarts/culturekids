@@ -20,6 +20,10 @@ class ActivityTypeSelector extends Component
             return $this->redirectRoute($this->portalRouteName('songs.activities.create'), navigate: true);
         }
         
+        if ($type === 'drawing') {
+            return $this->redirectRoute($this->portalRouteName('drawings.create'), navigate: true);
+        }
+        
         if ($type === 'flashcard') {
             return $this->redirectRoute($this->portalRouteName('activities.create'), ['type' => 'flashcard'], navigate: true);
         }

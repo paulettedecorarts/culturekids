@@ -1,29 +1,22 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\CMS\Drawings;
 
 use App\Livewire\Concerns\UsesPortalContext;
-use App\Models\Activity;
+use App\Models\Drawing;
 use App\Models\Tribe;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ActivitiesManager extends Component
+class DrawingManager extends Component
 {
-    use UsesPortalContext;
-    use WithPagination;
+    use UsesPortalContext, WithPagination;
 
     public string $search = '';
-
     public string $typeFilter = '';
-
     public string $tribeFilter = '';
-
     public string $statusFilter = '';
-
-    /** When true, this is the dedicated Flashcards screen (doc-aligned nav). */
-    public bool $flashcardsPortal = false;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -31,14 +24,6 @@ class ActivitiesManager extends Component
         'tribeFilter' => ['except' => ''],
         'statusFilter' => ['except' => ''],
     ];
-
-    public function mount(): void
-    {
-        if (request()->routeIs('cms.editor.flashcards')) {
-            $this->flashcardsPortal = true;
-            $this->typeFilter = 'flashcard';
-        }
-    }
 
     public function updatedSearch(): void
     {
@@ -67,26 +52,25 @@ class ActivitiesManager extends Component
     }
 
     #[Computed]
-    public function activities()
+    public function drawings()
     {
-        return Activity::query()
+        return Drawing::query()
             ->with('tribe')
-            ->whereIn('type', ['flashcard', 'puzzle', 'song', 'drawing_kit'])
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('title', 'like', '%'.$this->search.'%')
                     ->orWhere('description', 'like', '%'.$this->search.'%')
-                    ->orWhere('type', 'like', '%'.$this->search.'%');
+                    ->orWhere('drawing_type', 'like', '%'.$this->search.'%');
             }))
-            ->when($this->typeFilter !== '', fn ($q) => $q->where('type', $this->typeFilter))
+            ->when($this->typeFilter !== '', fn ($q) => $q->where('drawing_type', $this->typeFilter))
             ->when($this->tribeFilter !== '', fn ($q) => $q->where('tribe_id', (int) $this->tribeFilter))
-            ->when($this->statusFilter !== '', fn ($q) => $q->where('is_published', $this->statusFilter === 'published'))
+            ->when($this->statusFilter !== '', fn ($q) => $q->where('status', $this->statusFilter))
             ->latest()
             ->paginate(12);
     }
 
     public function render()
     {
-        return view('livewire.admin.activities-manager', [
+        return view('livewire.cms.drawings.drawing-manager', [
             'routePrefix' => $this->portalRoutePrefix(),
         ])->layout($this->portalLayout());
     }

@@ -94,6 +94,14 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('songs/activities/{id}/edit', \App\Livewire\CMS\Songs\SongEditor::class)->name('songs.activities.edit');
     Route::get('songs/activities/{id}', \App\Livewire\CMS\Songs\SongShow::class)->name('songs.activities.show');
     Route::get('songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
+    
+    // Drawing activities
+    Route::get('drawings', \App\Livewire\CMS\Drawings\DrawingManager::class)->name('drawings');
+    Route::get('drawings/create', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.create');
+    Route::get('drawings/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.edit');
+    Route::get('drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
+    Route::get('drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
+    
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
     Route::get('puzzles/{id}', PuzzleShow::class)->name('puzzles.show');
@@ -152,6 +160,12 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/songs/activities/create', \App\Livewire\CMS\Songs\SongEditor::class)->name('songs.activities.create');
     Route::get('/songs/activities/{id}/edit', \App\Livewire\CMS\Songs\SongEditor::class)->name('songs.activities.edit');
     Route::get('/songs/activities/{id}', \App\Livewire\CMS\Songs\SongShow::class)->name('songs.activities.show');
+
+    Route::get('/drawings', \App\Livewire\CMS\Drawings\DrawingManager::class)->name('drawings');
+    Route::get('/drawings/create', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.create');
+    Route::get('/drawings/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.edit');
+    Route::get('/drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
+    Route::get('/drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
