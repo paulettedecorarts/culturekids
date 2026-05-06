@@ -28,7 +28,7 @@
             <div class="sa-stat-delta">All activity types</div>
         </div>
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ \App\Models\Activity::whereIn('type', ['flashcard', 'puzzle', 'song', 'drawing_kit'])->where('is_published', true)->count() }}</div>
+            <div class="sa-stat-val">{{ \App\Models\Activity::whereIn('type', ['flashcard', 'puzzle', 'song', 'drawing_kit', 'vocab_pack'])->where('is_published', true)->count() }}</div>
             <div class="sa-stat-label">Published</div>
             <div class="sa-stat-delta">Visible records</div>
         </div>
@@ -52,6 +52,7 @@
             <option value="puzzle">Puzzle</option>
             <option value="song">Song</option>
             <option value="drawing_kit">Drawing</option>
+            <option value="vocab_pack">Language</option>
         </select>
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>
@@ -88,6 +89,8 @@
                             🧩
                         @elseif($activity->type === 'drawing_kit')
                             🎨
+                        @elseif($activity->type === 'vocab_pack')
+                            🔤
                         @else
                             📝
                         @endif
@@ -119,6 +122,16 @@
                         @endphp
                         @if($drawingId)
                             <a href="{{ route($routePrefix . '.drawings.show', $drawingId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @else
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @endif
+                    @elseif($activity->type === 'vocab_pack')
+                        @php
+                            $metadata = is_string($activity->metadata) ? json_decode($activity->metadata, true) : $activity->metadata;
+                            $langActivityId = $metadata['legacy_language_activity_id'] ?? null;
+                        @endphp
+                        @if($langActivityId)
+                            <a href="{{ route($routePrefix . '.language-activities.show', $langActivityId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @else
                             <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @endif
