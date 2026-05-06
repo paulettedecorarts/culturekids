@@ -6,6 +6,7 @@ use App\Models\Drawing;
 use App\Models\DrawingSubmission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class DrawingPlayer extends Component
@@ -18,8 +19,6 @@ class DrawingPlayer extends Component
     public string $currentTool = 'brush';
     public string $currentColor = '#000000';
     public int $brushSize = 5;
-    public array $drawingHistory = [];
-    public int $historyIndex = -1;
     
     // UI state
     public bool $showColorPicker = false;
@@ -65,17 +64,20 @@ class DrawingPlayer extends Component
     {
         $this->currentTool = $tool;
         $this->showColorPicker = false;
+        $this->dispatch('toolChanged', tool: $tool);
     }
 
     public function selectColor(string $color): void
     {
         $this->currentColor = $color;
         $this->showColorPicker = false;
+        $this->dispatch('colorChanged', color: $color);
     }
 
     public function setBrushSize(int $size): void
     {
         $this->brushSize = max(1, min(20, $size));
+        $this->dispatch('sizeChanged', size: $this->brushSize);
     }
 
     public function toggleColorPicker(): void
@@ -91,36 +93,18 @@ class DrawingPlayer extends Component
     public function clearCanvas(): void
     {
         $this->canvasData = null;
-        $this->drawingHistory = [];
-        $this->historyIndex = -1;
         $this->dispatch('clearCanvas');
     }
 
-    public function undoAction(): void
+    #[On('saveProgress')]
+    public function saveProgress(string $canvasData, int $timeSpent): void
     {
-        if ($this->historyIndex > 0) {
-            $this->historyIndex--;
-            $this->dispatch('restoreFromHistory', $this->drawingHistory[$this->historyIndex]);
-        }
-    }
-
-    public function redoAction(): void
-    {
-        if ($this->historyIndex < count($this->drawingHistory) - 1) {
-            $this->historyIndex++;
-            $this->dispatch('restoreFromHistory', $this->drawingHistory[$this->historyIndex]);
-        }
-    }
-
-    public function saveProgress(string $canvasDataUrl, int $timeSpent): void
-    {
-        $this->canvasData = $canvasDataUrl;
+        $this->canvasData = $canvasData;
         $this->timeSpent = $timeSpent;
-        
-        // Save to database
+
         $this->submission->update([
             'drawing_data' => [
-                'canvas' => $canvasDataUrl,
+                'canvas' => $canvasData,
                 'tools_used' => $this->getToolsUsed(),
                 'colors_used' => $this->getColorsUsed(),
             ],
@@ -128,26 +112,10 @@ class DrawingPlayer extends Component
         ]);
     }
 
-    public function addToHistory(string $canvasDataUrl): void
+    #[On('completeDrawing')]
+    public function completeDrawing(string $canvasData): void
     {
-        // Remove any history after current index
-        $this->drawingHistory = array_slice($this->drawingHistory, 0, $this->historyIndex + 1);
-        
-        // Add new state
-        $this->drawingHistory[] = $canvasDataUrl;
-        $this->historyIndex = count($this->drawingHistory) - 1;
-        
-        // Limit history to 20 states
-        if (count($this->drawingHistory) > 20) {
-            array_shift($this->drawingHistory);
-            $this->historyIndex--;
-        }
-    }
-
-    public function completeDrawing(string $finalCanvasDataUrl): void
-    {
-        // Convert canvas data to image and save
-        $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $finalCanvasDataUrl));
+        $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvasData));
         $filename = 'drawings/submissions/' . $this->submission->id . '_' . time() . '.png';
         
         Storage::disk('public')->put($filename, $imageData);
@@ -170,7 +138,7 @@ class DrawingPlayer extends Component
             'time_spent_seconds' => $this->timeSpent,
             'tools_used' => $this->getToolsUsed(),
             'drawing_data' => [
-                'canvas' => $finalCanvasDataUrl,
+                'canvas' => $canvasData,
                 'tools_used' => $this->getToolsUsed(),
                 'colors_used' => $this->getColorsUsed(),
             ],

@@ -12,7 +12,7 @@
             </div>
             <div class="stat">
                 <span class="stat-icon">⏱️</span>
-                <span class="stat-value">{{ gmdate('i:s', $timeSpent) }}</span>
+                <span class="stat-value" id="timer-display">{{ gmdate('i:s', $timeSpent) }}</span>
             </div>
         </div>
     </div>
@@ -616,9 +616,11 @@
     let canvas, ctx;
     let isDrawing = false;
     let startTime = Date.now();
-    let currentPath = [];
     let drawingHistory = [];
     let historyIndex = -1;
+    let currentTool = @json($currentTool);
+    let currentColor = @json($currentColor);
+    let brushSize = @json($brushSize);
 
     document.addEventListener('DOMContentLoaded', function() {
         initializeCanvas();
@@ -629,66 +631,57 @@
     function initializeCanvas() {
         canvas = document.getElementById('drawingCanvas');
         ctx = canvas.getContext('2d');
-        
-        // Set canvas size
+
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
-        
-        // Set up drawing events
+
+        // Mouse events
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        
-        // Touch events for mobile
-        canvas.addEventListener('touchstart', handleTouch);
-        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); }, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
-        
-        // Hide loading overlay
+
         document.getElementById('loadingOverlay').style.display = 'none';
-        
-        // Save initial state
-        saveToHistory();
+
+        // Save blank initial state
+        pushHistory();
     }
 
     function resizeCanvas() {
         const container = canvas.parentElement;
         const rect = container.getBoundingClientRect();
-        
+        // Preserve existing drawing
+        const imageData = canvas.width > 0 ? canvas.toDataURL() : null;
         canvas.width = rect.width;
         canvas.height = rect.height;
-        
-        // Set drawing properties
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.imageSmoothingEnabled = true;
+        if (imageData) {
+            const img = new Image();
+            img.onload = () => ctx.drawImage(img, 0, 0);
+            img.src = imageData;
+        }
     }
 
     function startDrawing(e) {
         isDrawing = true;
-        const pos = getMousePos(e);
-        currentPath = [pos];
-        
+        const pos = getPos(e);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
     }
 
     function draw(e) {
         if (!isDrawing) return;
-        
-        const pos = getMousePos(e);
-        currentPath.push(pos);
-        
-        // Get current tool settings from Livewire
-        const tool = @json($currentTool);
-        const color = @json($currentColor);
-        const size = @json($brushSize);
-        
-        ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
-        ctx.strokeStyle = color;
-        ctx.lineWidth = size;
-        
+        const pos = getPos(e);
+        ctx.globalCompositeOperation = currentTool === 'eraser' ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = brushSize;
         ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
     }
@@ -696,28 +689,11 @@
     function stopDrawing() {
         if (!isDrawing) return;
         isDrawing = false;
-        
-        // Save to history after each stroke
-        saveToHistory();
-        
-        // Auto-save progress every few strokes
-        if (drawingHistory.length % 5 === 0) {
-            saveDrawing();
-        }
+        ctx.beginPath(); // Reset path so next stroke is independent
+        pushHistory();
     }
 
-    function handleTouch(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
-                                         e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-        });
-        canvas.dispatchEvent(mouseEvent);
-    }
-
-    function getMousePos(e) {
+    function getPos(e) {
         const rect = canvas.getBoundingClientRect();
         return {
             x: (e.clientX - rect.left) * (canvas.width / rect.width),
@@ -725,42 +701,56 @@
         };
     }
 
-    function saveToHistory() {
-        const imageData = canvas.toDataURL();
-        
-        // Remove any history after current index
+    function pushHistory() {
         drawingHistory = drawingHistory.slice(0, historyIndex + 1);
-        
-        // Add new state
-        drawingHistory.push(imageData);
+        drawingHistory.push(canvas.toDataURL());
         historyIndex = drawingHistory.length - 1;
-        
-        // Limit history to 20 states
-        if (drawingHistory.length > 20) {
+        if (drawingHistory.length > 30) {
             drawingHistory.shift();
             historyIndex--;
         }
-        
-        @this.call('addToHistory', imageData);
     }
 
     function undoDrawing() {
-        @this.call('undoAction');
+        if (historyIndex <= 0) return;
+        historyIndex--;
+        restoreHistory(drawingHistory[historyIndex]);
     }
 
     function redoDrawing() {
-        @this.call('redoAction');
+        if (historyIndex >= drawingHistory.length - 1) return;
+        historyIndex++;
+        restoreHistory(drawingHistory[historyIndex]);
     }
 
+    function restoreHistory(dataUrl) {
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = dataUrl;
+    }
+
+    function clearCanvas() {
+        if (!confirm('Clear your drawing? This cannot be undone.')) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawingHistory = [];
+        historyIndex = -1;
+        pushHistory();
+    }
+
+    // Called only when user clicks Save Progress
     function saveDrawing() {
         const canvasData = canvas.toDataURL();
         const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-        @this.call('saveProgress', canvasData, timeSpent);
+        Livewire.dispatch('saveProgress', { canvasData, timeSpent });
     }
 
+    // Called only when user clicks Complete Drawing
     function completeDrawing() {
         const canvasData = canvas.toDataURL();
-        @this.call('completeDrawing', canvasData);
+        Livewire.dispatch('completeDrawing', { canvasData });
     }
 
     function loadExistingDrawing() {
@@ -769,7 +759,7 @@
             const img = new Image();
             img.onload = function() {
                 ctx.drawImage(img, 0, 0);
-                saveToHistory();
+                pushHistory();
             };
             img.src = existingData;
         }
@@ -778,36 +768,27 @@
     function startTimer() {
         const existingTime = @json($timeSpent);
         startTime = Date.now() - (existingTime * 1000);
-        
+
         setInterval(() => {
-            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(timeSpent / 60);
-            const seconds = timeSpent % 60;
-            const timeDisplay = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-            
-            const timeElement = document.querySelector('.stat-value');
-            if (timeElement && timeElement.textContent.includes(':')) {
-                timeElement.textContent = timeDisplay;
-            }
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            const el = document.getElementById('timer-display');
+            if (el) el.textContent = minutes + ':' + seconds;
         }, 1000);
     }
 
-    // Livewire event listeners
-    window.addEventListener('clearCanvas', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawingHistory = [];
-        historyIndex = -1;
-        saveToHistory();
-    });
-
-    window.addEventListener('restoreFromHistory', (e) => {
-        const imageData = e.detail;
-        const img = new Image();
-        img.onload = function() {
+    // Listen for tool/color/size changes from Livewire
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('toolChanged', ({ tool }) => { currentTool = tool; });
+        Livewire.on('colorChanged', ({ color }) => { currentColor = color; });
+        Livewire.on('sizeChanged', ({ size }) => { brushSize = size; });
+        Livewire.on('clearCanvas', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-        };
-        img.src = imageData;
+            drawingHistory = [];
+            historyIndex = -1;
+            pushHistory();
+        });
     });
     </script>
 </div>
