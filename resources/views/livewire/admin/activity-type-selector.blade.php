@@ -38,16 +38,16 @@
             <div class="activity-type-icon">🎨</div>
             <div class="activity-type-title">Drawing</div>
             <div class="activity-type-desc">Coloring pages, design tools, hero posters, and creative activities</div>
-            <div class="activity-type-count">{{ \App\Models\Drawing::count() }} created</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('drawings') ? \App\Models\Drawing::count() : 0 }} created</div>
             <div class="activity-type-status ready">Ready to use</div>
         </div>
         
-        <div class="activity-type-card disabled">
+        <div class="activity-type-card" wire:click="selectType('language')">
             <div class="activity-type-icon">🔤</div>
             <div class="activity-type-title">Language</div>
             <div class="activity-type-desc">Word tracing, audio matching, pronunciation, and proverb games</div>
-            <div class="activity-type-count">Coming soon</div>
-            <div class="activity-type-status coming-soon">In development</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('language_activities') ? \App\Models\LanguageActivity::count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
         </div>
         
         <div class="activity-type-card disabled">

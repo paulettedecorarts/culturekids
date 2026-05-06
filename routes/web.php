@@ -101,6 +101,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('drawings/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.edit');
     Route::get('drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
     Route::get('drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
+
+    Route::get('language-activities', \App\Livewire\CMS\Languages\LanguageActivityManager::class)->name('language-activities');
+    Route::get('language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
+    Route::get('language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
+    Route::get('language-activities/{id}', \App\Livewire\CMS\Languages\LanguageActivityShow::class)->name('language-activities.show');
     
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
@@ -166,6 +171,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/drawings/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('drawings.edit');
     Route::get('/drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
     Route::get('/drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
+
+    Route::get('/language-activities', \App\Livewire\CMS\Languages\LanguageActivityManager::class)->name('language-activities');
+    Route::get('/language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
+    Route::get('/language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
+    Route::get('/language-activities/{id}', \App\Livewire\CMS\Languages\LanguageActivityShow::class)->name('language-activities.show');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
