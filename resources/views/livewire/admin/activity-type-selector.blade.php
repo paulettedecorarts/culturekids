@@ -50,12 +50,12 @@
             <div class="activity-type-status ready">Ready to use</div>
         </div>
         
-        <div class="activity-type-card disabled">
+        <div class="activity-type-card" wire:click="selectType('game')">
             <div class="activity-type-icon">🎯</div>
             <div class="activity-type-title">Game</div>
             <div class="activity-type-desc">Interactive games, quizzes, cultural challenges, and missions</div>
-            <div class="activity-type-count">Coming soon</div>
-            <div class="activity-type-status coming-soon">In development</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('games') ? \App\Models\Game::count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
         </div>
 
         <div class="activity-type-card disabled">

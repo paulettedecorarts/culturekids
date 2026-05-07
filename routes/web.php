@@ -106,6 +106,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
     Route::get('language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
     Route::get('language-activities/{id}', \App\Livewire\CMS\Languages\LanguageActivityShow::class)->name('language-activities.show');
+
+    Route::get('games', \App\Livewire\CMS\Games\GameManager::class)->name('games');
+    Route::get('games/create', \App\Livewire\CMS\Games\GameEditor::class)->name('games.create');
+    Route::get('games/{id}/edit', \App\Livewire\CMS\Games\GameEditor::class)->name('games.edit');
+    Route::get('games/{id}', \App\Livewire\CMS\Games\GameShow::class)->name('games.show');
     
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
@@ -176,6 +181,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
     Route::get('/language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
     Route::get('/language-activities/{id}', \App\Livewire\CMS\Languages\LanguageActivityShow::class)->name('language-activities.show');
+
+    Route::get('/games', \App\Livewire\CMS\Games\GameManager::class)->name('games');
+    Route::get('/games/create', \App\Livewire\CMS\Games\GameEditor::class)->name('games.create');
+    Route::get('/games/{id}/edit', \App\Livewire\CMS\Games\GameEditor::class)->name('games.edit');
+    Route::get('/games/{id}', \App\Livewire\CMS\Games\GameShow::class)->name('games.show');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
