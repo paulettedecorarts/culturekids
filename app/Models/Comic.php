@@ -81,4 +81,66 @@ class Comic extends Model
     {
         return $query->where('status', 'review');
     }
+
+    protected static bool $syncingActivity = false;
+
+    protected static function booted(): void
+    {
+        static::saved(function (Comic $comic): void {
+            if (self::$syncingActivity) return;
+            self::$syncingActivity = true;
+            try { $comic->syncToActivities(); }
+            finally { self::$syncingActivity = false; }
+        });
+
+        static::deleted(function (Comic $comic): void {
+            if (self::$syncingActivity) return;
+            self::$syncingActivity = true;
+            try {
+                \Illuminate\Support\Facades\DB::table('activities')
+                    ->where('type', 'story')
+                    ->where('metadata->comic_id', $comic->id)
+                    ->delete();
+            } finally { self::$syncingActivity = false; }
+        });
+    }
+
+    protected function syncToActivities(): void
+    {
+        $metadata = array_merge($this->metadata ?? [], [
+            'source'   => 'comic_mirror',
+            'comic_id' => $this->id,
+        ]);
+
+        $query = \Illuminate\Support\Facades\DB::table('activities')
+            ->where('type', 'story')
+            ->where(function ($q): void {
+                $q->where('metadata->comic_id', $this->id)
+                  ->orWhere(function ($f): void {
+                      $f->where('tribe_id', $this->tribe_id)
+                        ->where('title', $this->title);
+                  });
+            });
+
+        $payload = [
+            'tribe_id'     => $this->tribe_id,
+            'type'         => 'story',
+            'title'        => $this->title,
+            'description'  => $this->description,
+            'age_range'    => $this->age_range,
+            'star_points'  => $this->star_points,
+            'metadata'     => json_encode($metadata),
+            'is_published' => $this->status === 'published',
+            'updated_at'   => now(),
+        ];
+
+        $existing = $query->orderByDesc('id')->first();
+        if ($existing) {
+            \Illuminate\Support\Facades\DB::table('activities')->where('id', $existing->id)->update($payload);
+            return;
+        }
+
+        $payload['created_at'] = now();
+        \Illuminate\Support\Facades\DB::table('activities')->insert($payload);
+    }
 }

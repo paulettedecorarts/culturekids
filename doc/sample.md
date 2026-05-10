@@ -79,3 +79,35 @@ Rotating Walls: ❌ (unchecked for easy testing)
 Show Ring Hints: ✅ (checked)
 Grid: 11×11, set Start (🟢) on outer edge (row 0, col 5), End (🔴) at centre (row 5, col 5)
 Status: Draft
+
+
+Sample 1 — Toddler Story (Age 2-3)
+Title: The Sacred Blue Beads
+Tribe: Baganda
+Description: Gipir and his brother Labongo share a special bond through their sacred blue beads. A simple story about sharing and family.
+Age Min: 2
+Age Max: 3
+Star Points: 5
+Status: Published
+Cover Image: Upload any image (optional for testing)
+Panels: Upload 3-5 images (any images work for testing)
+📖 Sample 2 — Early Reader (Age 3-5)
+Title: Labongo and the Lost Spear
+Tribe: Acholi
+Description: Labongo's royal spear is swallowed by an elephant. He must journey through the savanna to find it and restore peace between the brothers.
+Age Min: 3
+Age Max: 5
+Star Points: 10
+Status: Published
+Cover Image: Upload any image
+Panels: Upload 5-8 images
+📖 Sample 3 — Advanced Reader (Age 5-6)
+Title: The Old Woman of the Forest
+Tribe: Baganda
+Description: Deep in the Bwaa forest, Gipir meets a mysterious old woman who holds the secret to reuniting the brothers. A story of kindness, wisdom, and cultural heritage.
+Age Min: 5
+Age Max: 6
+Star Points: 15
+Status: Draft
+Cover Image: Upload any image
+Panels: Upload 8-12 images

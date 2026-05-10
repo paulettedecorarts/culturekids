@@ -81,5 +81,9 @@ class DatabaseSeeder extends Seeder
         // $parent->assignRole('parent');
 
         $this->command->info('✅ Test credentials successfully seeded!');
+
+        // Sync existing content to the activities table
+        // These are idempotent — safe to run on every deployment
+        $this->call(SyncComicsToActivitiesSeeder::class);
     }
 }
