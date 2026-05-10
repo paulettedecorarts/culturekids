@@ -31,6 +31,10 @@ class ActivityTypeSelector extends Component
         if ($type === 'game') {
             return $this->redirectRoute($this->portalRouteName('games.create'), navigate: true);
         }
+
+        if ($type === 'maze') {
+            return $this->redirectRoute($this->portalRouteName('mazes.create'), navigate: true);
+        }
         
         if ($type === 'flashcard') {
             return $this->redirectRoute($this->portalRouteName('activities.create'), ['type' => 'flashcard'], navigate: true);

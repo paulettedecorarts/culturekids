@@ -111,6 +111,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('games/create', \App\Livewire\CMS\Games\GameEditor::class)->name('games.create');
     Route::get('games/{id}/edit', \App\Livewire\CMS\Games\GameEditor::class)->name('games.edit');
     Route::get('games/{id}', \App\Livewire\CMS\Games\GameShow::class)->name('games.show');
+
+    Route::get('mazes', \App\Livewire\CMS\Mazes\MazeManager::class)->name('mazes');
+    Route::get('mazes/create', \App\Livewire\CMS\Mazes\MazeEditor::class)->name('mazes.create');
+    Route::get('mazes/{id}/edit', \App\Livewire\CMS\Mazes\MazeEditor::class)->name('mazes.edit');
+    Route::get('mazes/{id}', \App\Livewire\CMS\Mazes\MazeShow::class)->name('mazes.show');
     
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
@@ -186,6 +191,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/games/create', \App\Livewire\CMS\Games\GameEditor::class)->name('games.create');
     Route::get('/games/{id}/edit', \App\Livewire\CMS\Games\GameEditor::class)->name('games.edit');
     Route::get('/games/{id}', \App\Livewire\CMS\Games\GameShow::class)->name('games.show');
+
+    Route::get('/mazes', \App\Livewire\CMS\Mazes\MazeManager::class)->name('mazes');
+    Route::get('/mazes/create', \App\Livewire\CMS\Mazes\MazeEditor::class)->name('mazes.create');
+    Route::get('/mazes/{id}/edit', \App\Livewire\CMS\Mazes\MazeEditor::class)->name('mazes.edit');
+    Route::get('/mazes/{id}', \App\Livewire\CMS\Mazes\MazeShow::class)->name('mazes.show');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
