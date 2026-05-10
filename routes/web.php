@@ -121,6 +121,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('spot-differences/create', \App\Livewire\CMS\SpotDifferences\SpotDifferenceEditor::class)->name('spot-differences.create');
     Route::get('spot-differences/{id}/edit', \App\Livewire\CMS\SpotDifferences\SpotDifferenceEditor::class)->name('spot-differences.edit');
     Route::get('spot-differences/{id}', \App\Livewire\CMS\SpotDifferences\SpotDifferenceShow::class)->name('spot-differences.show');
+
+    Route::get('word-searches', \App\Livewire\CMS\WordSearches\WordSearchManager::class)->name('word-searches');
+    Route::get('word-searches/create', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.create');
+    Route::get('word-searches/{id}/edit', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.edit');
+    Route::get('word-searches/{id}', \App\Livewire\CMS\WordSearches\WordSearchShow::class)->name('word-searches.show');
     
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
@@ -206,6 +211,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/spot-differences/create', \App\Livewire\CMS\SpotDifferences\SpotDifferenceEditor::class)->name('spot-differences.create');
     Route::get('/spot-differences/{id}/edit', \App\Livewire\CMS\SpotDifferences\SpotDifferenceEditor::class)->name('spot-differences.edit');
     Route::get('/spot-differences/{id}', \App\Livewire\CMS\SpotDifferences\SpotDifferenceShow::class)->name('spot-differences.show');
+
+    Route::get('/word-searches', \App\Livewire\CMS\WordSearches\WordSearchManager::class)->name('word-searches');
+    Route::get('/word-searches/create', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.create');
+    Route::get('/word-searches/{id}/edit', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.edit');
+    Route::get('/word-searches/{id}', \App\Livewire\CMS\WordSearches\WordSearchShow::class)->name('word-searches.show');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');

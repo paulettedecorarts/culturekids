@@ -74,12 +74,12 @@
             <div class="activity-type-status ready">Ready to use</div>
         </div>
 
-        <div class="activity-type-card disabled">
+        <div class="activity-type-card" wire:click="selectType('word_search')">
             <div class="activity-type-icon">🔠</div>
             <div class="activity-type-title">Word Search</div>
             <div class="activity-type-desc">Find hidden words including clan names and cultural terms</div>
-            <div class="activity-type-count">Coming soon</div>
-            <div class="activity-type-status coming-soon">In development</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('word_searches') ? \App\Models\WordSearch::count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
         </div>
     </div>
 
