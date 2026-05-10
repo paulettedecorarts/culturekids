@@ -35,6 +35,10 @@ class ActivityTypeSelector extends Component
         if ($type === 'maze') {
             return $this->redirectRoute($this->portalRouteName('mazes.create'), navigate: true);
         }
+
+        if ($type === 'spot_difference') {
+            return $this->redirectRoute($this->portalRouteName('spot-differences.create'), navigate: true);
+        }
         
         if ($type === 'flashcard') {
             return $this->redirectRoute($this->portalRouteName('activities.create'), ['type' => 'flashcard'], navigate: true);

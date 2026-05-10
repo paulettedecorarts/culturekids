@@ -66,12 +66,12 @@
             <div class="activity-type-status ready">Ready to use</div>
         </div>
 
-        <div class="activity-type-card disabled">
+        <div class="activity-type-card" wire:click="selectType('spot_difference')">
             <div class="activity-type-icon">🔍</div>
             <div class="activity-type-title">Spot the Difference</div>
             <div class="activity-type-desc">Visual comparison games with cultural scenes</div>
-            <div class="activity-type-count">Coming soon</div>
-            <div class="activity-type-status coming-soon">In development</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('spot_differences') ? \App\Models\SpotDifference::count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
         </div>
 
         <div class="activity-type-card disabled">
