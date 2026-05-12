@@ -64,6 +64,17 @@ class CultureActivityEditor extends Component
         }
     }
 
+    public function updatedTribeId(): void
+    {
+        // Clear clan fields when tribe changes so stale data isn't carried over
+        $this->clan_name           = '';
+        $this->clan_totem          = '';
+        $this->clan_role           = '';
+        $this->clan_emoji          = '';
+        $this->proverb             = '';
+        $this->proverb_translation = '';
+    }
+
     protected function loadData(): void
     {
         $a = $this->activity;
@@ -92,6 +103,37 @@ class CultureActivityEditor extends Component
     public function tribes()
     {
         return Tribe::orderBy('name')->get();
+    }
+
+    #[Computed]
+    public function clansForTribe()
+    {
+        if (!$this->tribe_id) return collect();
+        return \App\Models\Clan::where('tribe_id', $this->tribe_id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+    }
+
+    public function selectClan(int $clanId): void
+    {
+        $clan = \App\Models\Clan::find($clanId);
+        if (!$clan) return;
+
+        $this->clan_name           = $clan->name;
+        $this->clan_totem          = $clan->totem ?? '';
+        $this->clan_role           = $clan->clan_role ?? $clan->role ?? '';
+        $this->clan_emoji          = $clan->totem_emoji ?? '';
+        $this->proverb             = $clan->proverb ?? '';
+        $this->proverb_translation = $clan->proverb_translation ?? '';
+
+        // Pre-fill description and cultural note if empty
+        if (empty($this->description) && $clan->description) {
+            $this->description = $clan->description;
+        }
+        if (empty($this->cultural_note) && $clan->history) {
+            $this->cultural_note = $clan->history;
+        }
     }
 
     // Content sections
