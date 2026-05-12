@@ -42,6 +42,20 @@ class DrawingEditor extends Component
     public $materialInput = '';
     public $colorInput = '#FF0000';
 
+    // Type-specific metadata fields (flat — Livewire doesn't support nested dot-notation wire:model)
+    public string $meta_scene_description   = '';
+    public string $meta_colour_hint         = '';
+    public string $meta_hero_name           = '';
+    public string $meta_hero_title          = '';
+    public string $meta_hero_instructions   = '';
+    public string $meta_design_prompt       = '';
+    public string $meta_design_stamps       = '';
+    public string $meta_free_draw_prompt    = '';
+    public string $meta_free_draw_checklist = '';
+
+    // Type-specific metadata
+    public array $metadata = [];
+
     public function mount(?int $id = null): void
     {
         if ($id) {
@@ -67,6 +81,19 @@ class DrawingEditor extends Component
         $this->materials = $this->drawing->materials ?? [];
         $this->color_palette = $this->drawing->color_palette ?? $this->drawing->getDefaultColorPaletteAttribute();
         $this->tools_config = $this->drawing->tools_config ?? $this->drawing->getDefaultToolsConfigAttribute();
+
+        // Load type-specific metadata
+        $meta = $this->drawing->metadata ?? [];
+        $this->meta_scene_description   = $meta['coloring']['scene_description'] ?? '';
+        $this->meta_colour_hint         = $meta['coloring']['colour_hint'] ?? '';
+        $this->meta_hero_name           = $meta['hero']['name'] ?? '';
+        $this->meta_hero_title          = $meta['hero']['title'] ?? '';
+        $this->meta_hero_instructions   = $meta['hero']['instructions'] ?? '';
+        $this->meta_design_prompt       = $meta['design']['prompt'] ?? '';
+        $this->meta_design_stamps       = $meta['design']['stamps'] ?? '';
+        $this->meta_free_draw_prompt    = $meta['free_draw']['prompt'] ?? '';
+        $this->meta_free_draw_checklist = $meta['free_draw']['checklist'] ?? '';
+        $this->metadata = $this->drawing->metadata ?? [];
     }
 
     protected function initializeDefaults(): void
@@ -136,7 +163,7 @@ class DrawingEditor extends Component
             'tribe_id' => ['required', 'exists:tribes,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'drawing_type' => ['required', 'in:coloring,hero_drawing,design_tool,free_draw'],
+            'drawing_type' => ['required', 'in:coloring,colour_by_number,hero_drawing,design_tool,free_draw'],
             'difficulty_level' => ['required', 'in:easy,medium,hard'],
             'age_min' => ['required', 'integer', 'min:1', 'max:18'],
             'age_max' => ['required', 'integer', 'min:1', 'max:18', 'gte:age_min'],
@@ -176,6 +203,7 @@ class DrawingEditor extends Component
                 'materials' => $this->materials,
                 'color_palette' => $this->color_palette,
                 'tools_config' => $this->tools_config,
+                'metadata' => $this->metadata ?: null,
             ]);
 
             $drawing->save();

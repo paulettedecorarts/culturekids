@@ -93,10 +93,11 @@ class Drawing extends Model
     public function getDrawingTypeDisplayAttribute(): string
     {
         return match($this->drawing_type) {
-            'coloring' => 'Coloring Page',
-            'hero_drawing' => 'Hero Drawing',
-            'design_tool' => 'Design Tool',
-            'free_draw' => 'Free Drawing',
+            'coloring'          => 'Coloring Page',
+            'colour_by_number'  => 'Colour by Number',
+            'hero_drawing'      => 'Hero Drawing',
+            'design_tool'       => 'Design Tool',
+            'free_draw'         => 'Free Drawing',
             default => ucfirst(str_replace('_', ' ', $this->drawing_type))
         };
     }

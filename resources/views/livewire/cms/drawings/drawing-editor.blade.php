@@ -43,8 +43,9 @@
 
                 <div class="form-group">
                     <label class="form-label">Drawing Type</label>
-                    <select wire:model="drawing_type" class="form-select" required>
+                    <select wire:model.live="drawing_type" class="form-select" required>
                         <option value="coloring">Coloring Page</option>
+                        <option value="colour_by_number">Colour by Number</option>
                         <option value="hero_drawing">Hero Drawing</option>
                         <option value="design_tool">Design Tool</option>
                         <option value="free_draw">Free Drawing</option>
@@ -105,49 +106,192 @@
             <h2 class="section-title">Template & Preview Images</h2>
             
             <div class="upload-grid">
+                {{-- Template Image --}}
                 <div class="upload-group">
                     <label class="form-label">Template Image</label>
                     <p class="upload-description">Upload the base template (coloring page outline, drawing guide, etc.)</p>
                     <div class="file-upload-wrapper">
-                        <input wire:model="template_file" type="file" class="file-input" accept="image/*" id="template-file">
+                        <input wire:model="template_file" type="file" class="file-input" accept="image/*" id="template-file"
+                            onchange="
+                                const file = this.files[0];
+                                if (file) {
+                                    document.getElementById('template-filename').textContent = file.name;
+                                    const reader = new FileReader();
+                                    reader.onload = e => {
+                                        const img = document.getElementById('template-preview');
+                                        img.src = e.target.result;
+                                        img.style.display = 'block';
+                                        document.getElementById('template-preview-caption').style.display = 'block';
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            ">
                         <label for="template-file" class="file-upload-label">
                             <span class="upload-icon">📁</span>
                             <span class="upload-text">Choose File</span>
-                            <span class="file-info">No file selected.</span>
+                            <span class="file-info" id="template-filename">No file selected.</span>
                         </label>
                     </div>
                     @error('template_file') <div class="form-error">{{ $message }}</div> @enderror
-                    
+                    <img id="template-preview" src="" alt="Template preview" style="display:none;margin-top:10px;max-width:100%;max-height:200px;border-radius:8px;border:1px solid rgba(255,255,255,.1)">
+                    <p id="template-preview-caption" style="display:none;font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">New template (not saved yet)</p>
                     @if($drawing && $drawing->template_path)
-                        <div class="current-image">
-                            <img src="{{ asset('storage/' . $drawing->template_path) }}" alt="Current template" class="preview-image">
+                        <div class="current-image" style="margin-top:10px">
+                            <img src="{{ asset('storage/' . $drawing->template_path) }}" alt="Current template" style="max-width:100%;max-height:200px;border-radius:8px;border:1px solid rgba(255,255,255,.1)">
                             <p class="image-caption">Current template</p>
                         </div>
                     @endif
                 </div>
 
+                {{-- Preview Image --}}
                 <div class="upload-group">
                     <label class="form-label">Preview Image</label>
                     <p class="upload-description">Upload a completed example or preview thumbnail</p>
                     <div class="file-upload-wrapper">
-                        <input wire:model="preview_file" type="file" class="file-input" accept="image/*" id="preview-file">
+                        <input wire:model="preview_file" type="file" class="file-input" accept="image/*" id="preview-file"
+                            onchange="
+                                const file = this.files[0];
+                                if (file) {
+                                    document.getElementById('preview-filename').textContent = file.name;
+                                    const reader = new FileReader();
+                                    reader.onload = e => {
+                                        const img = document.getElementById('preview-img');
+                                        img.src = e.target.result;
+                                        img.style.display = 'block';
+                                        document.getElementById('preview-caption').style.display = 'block';
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            ">
                         <label for="preview-file" class="file-upload-label">
                             <span class="upload-icon">📁</span>
                             <span class="upload-text">Choose File</span>
-                            <span class="file-info">No file selected.</span>
+                            <span class="file-info" id="preview-filename">No file selected.</span>
                         </label>
                     </div>
                     @error('preview_file') <div class="form-error">{{ $message }}</div> @enderror
-                    
+                    <img id="preview-img" src="" alt="Preview" style="display:none;margin-top:10px;max-width:100%;max-height:200px;border-radius:8px;border:1px solid rgba(255,255,255,.1)">
+                    <p id="preview-caption" style="display:none;font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">New preview (not saved yet)</p>
                     @if($drawing && $drawing->preview_path)
-                        <div class="current-image">
-                            <img src="{{ asset('storage/' . $drawing->preview_path) }}" alt="Current preview" class="preview-image">
+                        <div class="current-image" style="margin-top:10px">
+                            <img src="{{ asset('storage/' . $drawing->preview_path) }}" alt="Current preview" style="max-width:100%;max-height:200px;border-radius:8px;border:1px solid rgba(255,255,255,.1)">
                             <p class="image-caption">Current preview</p>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
+
+        <!-- Colour by Number Labels (only for colour_by_number type) -->
+        @if($drawing_type === 'colour_by_number')
+        <div class="form-section">
+            <h2 class="section-title">🎨 Colour by Number Labels</h2>
+            <p style="color:rgba(255,255,255,.5);font-size:12px;margin-bottom:16px">
+                Define the 5 colour zones. Upload a template image where each zone is labelled with a number (1–5). Children will tap a colour button then paint the matching numbered zones.
+            </p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                @foreach([1,2,3,4,5] as $num)
+                <div>
+                    <label style="display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">
+                        Zone {{ $num }} Label
+                    </label>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <div style="width:28px;height:28px;border-radius:6px;background:{{ ['#3498DB','#2ECC71','#E74C3C','#F1C40F','#9B59B6'][$num-1] }};flex-shrink:0;border:2px solid rgba(255,255,255,.2)"></div>
+                        <input wire:model="metadata.colour_labels.{{ $num }}"
+                            type="text"
+                            style="flex:1;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;outline:none"
+                            placeholder="{{ ['Bead Blue','Forest Green','Sunset Red','Sacred Gold','Royal Purple'][$num-1] }}">
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- Coloring Page specific -->
+        @if($drawing_type === 'coloring')
+        <div class="form-section">
+            <h2 class="section-title">🖍️ Coloring Page Settings</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div>
+                    <label class="form-label">Scene Description</label>
+                    <textarea wire:model="metadata.coloring.scene_description"
+                        class="form-input" rows="3"
+                        placeholder="Describe what's in the scene — e.g. 'A lush forest with tall trees, exotic birds, and the River Nile in the background'"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Colour Guide Hint <span style="color:rgba(255,255,255,.4);font-size:11px;font-weight:400">optional</span></label>
+                    <textarea wire:model="metadata.coloring.colour_hint"
+                        class="form-input" rows="3"
+                        placeholder="e.g. 'Use deep greens for the trees, light blue for the sky, and brown for the tree trunks'"></textarea>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Hero Drawing specific -->
+        @if($drawing_type === 'hero_drawing')
+        <div class="form-section">
+            <h2 class="section-title">🦸 Hero Drawing Settings</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+                <div>
+                    <label class="form-label">Hero Name</label>
+                    <input wire:model="metadata.hero.name" type="text" class="form-input" placeholder="e.g. Gipir">
+                </div>
+                <div>
+                    <label class="form-label">Hero Title / Role</label>
+                    <input wire:model="metadata.hero.title" type="text" class="form-input" placeholder="e.g. Keeper of the Sacred Beads">
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Step-by-Step Drawing Instructions <span style="color:rgba(255,255,255,.4);font-size:11px;font-weight:400">optional — shown to child</span></label>
+                <textarea wire:model="metadata.hero.instructions"
+                    class="form-input" rows="4"
+                    placeholder="Step 1: Draw a circle for the head&#10;Step 2: Add the body and arms&#10;Step 3: Draw the hero's spear&#10;Step 4: Add traditional clothing patterns"></textarea>
+            </div>
+        </div>
+        @endif
+
+        <!-- Design Tool specific -->
+        @if($drawing_type === 'design_tool')
+        <div class="form-section">
+            <h2 class="section-title">🛠️ Design Tool Settings</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+                <div>
+                    <label class="form-label">Design Prompt</label>
+                    <textarea wire:model="metadata.design.prompt"
+                        class="form-input" rows="3"
+                        placeholder="e.g. 'Design a bead necklace for a hero using your favourite colours. Add patterns and share it with the tribe!'"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Available Stamps / Stickers <span style="color:rgba(255,255,255,.4);font-size:11px;font-weight:400">comma separated emojis</span></label>
+                    <input wire:model="metadata.design.stamps" type="text" class="form-input" placeholder="💎, 🌳, 🏹, ⭐, 🌊, 🥁, 🐊">
+                    <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">These emojis will be available as stamps in the design tool</div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Free Drawing specific -->
+        @if($drawing_type === 'free_draw')
+        <div class="form-section">
+            <h2 class="section-title">✏️ Free Drawing Settings</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div>
+                    <label class="form-label">Drawing Prompt / Inspiration</label>
+                    <textarea wire:model="metadata.free_draw.prompt"
+                        class="form-input" rows="3"
+                        placeholder="e.g. 'Draw what you think Gipir's village looks like. Add the river, trees, and huts!'"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">What to Include <span style="color:rgba(255,255,255,.4);font-size:11px;font-weight:400">optional checklist for child</span></label>
+                    <textarea wire:model="metadata.free_draw.checklist"
+                        class="form-input" rows="3"
+                        placeholder="e.g. 'A river, at least 2 trees, a hut, the hero character'"></textarea>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <!-- Required Materials Section -->
         <div class="form-section">
