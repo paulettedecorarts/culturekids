@@ -58,6 +58,7 @@
             <option value="spot_difference">Spot the Difference</option>
             <option value="word_search">Word Search</option>
             <option value="story">Story</option>
+            <option value="culture">Culture</option>
         </select>
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>
@@ -106,6 +107,8 @@
                             🔠
                         @elseif($activity->type === 'story')
                             📖
+                        @elseif($activity->type === 'culture')
+                            🏛️
                         @else
                             📝
                         @endif
@@ -197,6 +200,16 @@
                         @endphp
                         @if($comicId)
                             <a href="{{ route($routePrefix . '.stories.detail', $comicId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @else
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        @endif
+                    @elseif($activity->type === 'culture')
+                        @php
+                            $metadata = is_string($activity->metadata) ? json_decode($activity->metadata, true) : $activity->metadata;
+                            $cultureId = $metadata['legacy_culture_activity_id'] ?? null;
+                        @endphp
+                        @if($cultureId)
+                            <a href="{{ route($routePrefix . '.culture-activities.show', $cultureId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @else
                             <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @endif

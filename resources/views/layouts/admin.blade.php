@@ -172,6 +172,7 @@
             <a href="{{ route('admin.modules-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.modules-registry') ? 'active' : '' }}">🔧 Modules Registry</a>
             <a href="{{ route('admin.age-categories') }}" class="sa-nav-item {{ request()->routeIs('admin.age-categories') ? 'active' : '' }}">🌱 Age Categories</a>
             <a href="{{ route('admin.tribe-registry') }}" class="sa-nav-item {{ request()->routeIs('admin.tribe-registry*') ? 'active' : '' }}">🌍 Tribe Directory</a>
+            <a href="{{ route('admin.clans') }}" class="sa-nav-item {{ request()->routeIs('admin.clans*') ? 'active' : '' }}">🌳 Clan Registry</a>
             <a href="{{ route('admin.languages') }}" class="sa-nav-item {{ request()->routeIs('admin.languages') ? 'active' : '' }}">🗣 Languages</a>
             
             <div class="sa-nav-section">Logs</div>

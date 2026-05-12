@@ -140,6 +140,7 @@
             @if($isEditor || $isSuper)
                 <div class="cms-nav-section">Content Production</div>
                 <a href="{{ route('cms.editor.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.tribes') ? 'active' : '' }}">🌍 Tribe Directory</a>
+                <a href="{{ route('cms.editor.clans') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.clans*') ? 'active' : '' }}">🌳 Clan Registry</a>
                 <a href="{{ route('cms.editor.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.story-packs') ? 'active' : '' }}">📋 Story Packs</a>
                 <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs') ? 'active' : '' }}">🎵 Songs</a>
                 <a href="{{ route('cms.editor.flashcards') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.flashcards') ? 'active' : '' }}">🃏 Flashcards</a>

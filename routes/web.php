@@ -82,6 +82,9 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('stories/{id}/panels', PanelEditor::class)->name('stories.panels');
     Route::get('stories/{id}', StoryDetail::class)->name('stories.detail');
     Route::get('tribe-registry', TribeManager::class)->name('tribe-registry'); // Now 'Tribe Directory'
+    Route::get('clans', \App\Livewire\Admin\ClansManager::class)->name('clans');
+    Route::get('clans/create', \App\Livewire\Admin\ClanForm::class)->name('clans.create');
+    Route::get('clans/{id}/edit', \App\Livewire\Admin\ClanForm::class)->name('clans.edit');
     Route::get('story-packs', StoryPacksManager::class)->name('story-packs');
     Route::get('assets', AssetsManager::class)->name('assets');
     Route::get('translations', TranslationsManager::class)->name('translations');
@@ -126,6 +129,11 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('word-searches/create', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.create');
     Route::get('word-searches/{id}/edit', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.edit');
     Route::get('word-searches/{id}', \App\Livewire\CMS\WordSearches\WordSearchShow::class)->name('word-searches.show');
+
+    Route::get('culture-activities', \App\Livewire\CMS\Culture\CultureActivityManager::class)->name('culture-activities');
+    Route::get('culture-activities/create', \App\Livewire\CMS\Culture\CultureActivityEditor::class)->name('culture-activities.create');
+    Route::get('culture-activities/{id}/edit', \App\Livewire\CMS\Culture\CultureActivityEditor::class)->name('culture-activities.edit');
+    Route::get('culture-activities/{id}', \App\Livewire\CMS\Culture\CultureActivityShow::class)->name('culture-activities.show');
     
     Route::get('puzzles/create', PuzzleEditor::class)->name('puzzles.create');
     Route::get('puzzles/{id}/edit', PuzzleEditor::class)->name('puzzles.edit');
@@ -150,6 +158,9 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('tribes/create', TribeForm::class)->name('tribes.create');
     Route::get('tribes/{tribe}', TribeDetail::class)->name('tribes.detail');
     Route::get('tribes/{tribe}/edit', TribeForm::class)->name('tribes.edit');
+    Route::get('clans', \App\Livewire\Admin\ClansManager::class)->name('clans');
+    Route::get('clans/create', \App\Livewire\Admin\ClanForm::class)->name('clans.create');
+    Route::get('clans/{id}/edit', \App\Livewire\Admin\ClanForm::class)->name('clans.edit');
     Route::get('analytics', AnalyticsManager::class)->name('analytics');
 
     // Logs section
@@ -170,6 +181,9 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/tribes/create', TribeForm::class)->name('tribes.create');
     Route::get('/tribes/{tribe}', TribeDetail::class)->name('tribes.detail');
     Route::get('/tribes/{tribe}/edit', TribeForm::class)->name('tribes.edit');
+    Route::get('/clans', \App\Livewire\Admin\ClansManager::class)->name('clans');
+    Route::get('/clans/create', \App\Livewire\Admin\ClanForm::class)->name('clans.create');
+    Route::get('/clans/{id}/edit', \App\Livewire\Admin\ClanForm::class)->name('clans.edit');
 
     Route::get('/story-packs', StoriesManager::class)->name('story-packs');
     Route::get('/story-packs/create', StoryForm::class)->name('story-packs.create');
@@ -216,6 +230,11 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/word-searches/create', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.create');
     Route::get('/word-searches/{id}/edit', \App\Livewire\CMS\WordSearches\WordSearchEditor::class)->name('word-searches.edit');
     Route::get('/word-searches/{id}', \App\Livewire\CMS\WordSearches\WordSearchShow::class)->name('word-searches.show');
+
+    Route::get('/culture-activities', \App\Livewire\CMS\Culture\CultureActivityManager::class)->name('culture-activities');
+    Route::get('/culture-activities/create', \App\Livewire\CMS\Culture\CultureActivityEditor::class)->name('culture-activities.create');
+    Route::get('/culture-activities/{id}/edit', \App\Livewire\CMS\Culture\CultureActivityEditor::class)->name('culture-activities.edit');
+    Route::get('/culture-activities/{id}', \App\Livewire\CMS\Culture\CultureActivityShow::class)->name('culture-activities.show');
     Route::get('/songs/activities/{id}/preview', \App\Livewire\CMS\Songs\SongActivityPreview::class)->name('songs.activities.preview');
 
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');

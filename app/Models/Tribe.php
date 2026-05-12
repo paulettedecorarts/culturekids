@@ -27,6 +27,11 @@ class Tribe extends Model
         return $this->hasMany(Activity::class)->where('type', '!=', 'song');
     }
 
+    public function clans(): HasMany
+    {
+        return $this->hasMany(Clan::class)->orderBy('sort_order');
+    }
+
     public function songs(): HasMany
     {
         return $this->hasMany(Song::class);

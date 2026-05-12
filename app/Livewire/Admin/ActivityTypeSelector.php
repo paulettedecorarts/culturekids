@@ -43,6 +43,18 @@ class ActivityTypeSelector extends Component
         if ($type === 'word_search') {
             return $this->redirectRoute($this->portalRouteName('word-searches.create'), navigate: true);
         }
+
+        if ($type === 'culture') {
+            return $this->redirectRoute($this->portalRouteName('culture-activities.create'), navigate: true);
+        }
+
+        if ($type === 'story') {
+            return $this->redirectRoute($this->portalRouteName('stories.create'), navigate: true);
+        }
+
+        if ($type === 'colouring') {
+            return $this->redirectRoute($this->portalRouteName('drawings.create'), navigate: true);
+        }
         
         if ($type === 'flashcard') {
             return $this->redirectRoute($this->portalRouteName('activities.create'), ['type' => 'flashcard'], navigate: true);

@@ -81,6 +81,30 @@
             <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('word_searches') ? \App\Models\WordSearch::count() : 0 }} created</div>
             <div class="activity-type-status ready">Ready to use</div>
         </div>
+
+        <div class="activity-type-card" wire:click="selectType('culture')">
+            <div class="activity-type-icon">🏛️</div>
+            <div class="activity-type-title">Culture</div>
+            <div class="activity-type-desc">Clan stories, clan histories, clan profiles, clan maps, and crest designs</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('culture_activities') ? \App\Models\CultureActivity::count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
+        </div>
+
+        <div class="activity-type-card" wire:click="selectType('story')">
+            <div class="activity-type-icon">📖</div>
+            <div class="activity-type-title">Story</div>
+            <div class="activity-type-desc">Comic-style stories with panels, audio narration, and vocabulary tags</div>
+            <div class="activity-type-count">{{ \App\Models\Comic::count() }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
+        </div>
+
+        <div class="activity-type-card" wire:click="selectType('colouring')">
+            <div class="activity-type-icon">🖍️</div>
+            <div class="activity-type-title">Colouring</div>
+            <div class="activity-type-desc">Colouring scenes and colour-by-number activities with cultural themes</div>
+            <div class="activity-type-count">{{ \Illuminate\Support\Facades\Schema::hasTable('drawings') ? \App\Models\Drawing::where('drawing_type', 'coloring')->count() : 0 }} created</div>
+            <div class="activity-type-status ready">Ready to use</div>
+        </div>
     </div>
 
     <style>
