@@ -10,13 +10,16 @@ php artisan db:seed --force && echo "      ✅ Seeding done." || { echo "      �
 echo "[3/5] Linking storage..."
 php artisan storage:link && echo "      ✅ Storage linked." || echo "      ⚠️  Storage link skipped (already exists)."
 
-echo "[4/5] Caching config..."
+echo "[4/5] Clearing all caches..."
+php artisan config:clear && echo "      ✅ Config cleared."
+php artisan route:clear && echo "      ✅ Routes cleared."
+php artisan view:clear && echo "      ✅ Views cleared."
+php artisan cache:clear && echo "      ✅ Cache cleared."
+php artisan event:clear && echo "      ✅ Events cleared."
+
+echo "[5/5] Rebuilding caches..."
 php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
-
-echo "[5/6] Caching routes..."
 php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped (duplicate route name detected)."
-
-echo "[6/6] Caching views..."
 php artisan view:cache && echo "      ✅ Views cached." || echo "      ⚠️  View cache skipped."
 
 echo "🚀 Starting nginx + php-fpm + queue worker..."
