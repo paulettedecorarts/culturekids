@@ -29,7 +29,7 @@
             @endif
         </div>
 
-        <div style="background:#fff; border-radius:32px; padding:32px; border:1px solid var(--cream-mid); box-shadow:0 8px 32px rgba(0,0,0,.04); overflow:hidden">
+        <div class="th-panel th-table-responsive">
             @if ($children->isEmpty())
                 <div style="text-align:center; padding:40px 24px; color:var(--stone); font-weight:600; font-size:14px">
                     {{ __('No children in this class yet. Your organisation admin can invite children and add them to this class from the Classrooms page.') }}

@@ -25,8 +25,9 @@
             type="button"
             class="th-topbar-icon-btn th-topbar-sidebar-btn"
             @click="toggleSidebar()"
-            :title="sidebarCollapsed ? '{{ __('Expand sidebar') }}' : '{{ __('Collapse sidebar') }}'"
-            :aria-label="sidebarCollapsed ? '{{ __('Expand sidebar') }}' : '{{ __('Collapse sidebar') }}'"
+            :title="isMobile ? (sidebarOpen ? '{{ __('Close menu') }}' : '{{ __('Open menu') }}') : (sidebarCollapsed ? '{{ __('Expand sidebar') }}' : '{{ __('Collapse sidebar') }}')"
+            :aria-label="isMobile ? (sidebarOpen ? '{{ __('Close menu') }}' : '{{ __('Open menu') }}') : (sidebarCollapsed ? '{{ __('Expand sidebar') }}' : '{{ __('Collapse sidebar') }}')"
+            :aria-expanded="(isMobile ? sidebarOpen : !sidebarCollapsed).toString()"
         >
             <svg class="th-topbar-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />

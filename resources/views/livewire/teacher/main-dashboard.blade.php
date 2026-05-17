@@ -9,7 +9,7 @@
                 {{ $className }} · {{ __('Overview') }}
             </div>
         </div>
-        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center">
+        <div class="th-header-actions">
             @if ($organisationName !== '')
                 <span class="status-pill status-published" style="padding:10px 20px; font-size:11px">{{ strtoupper($organisationName) }}</span>
             @endif
@@ -17,9 +17,9 @@
         </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 340px; gap:40px">
+    <div class="th-split-layout">
         <div class="main-panel">
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:40px">
+            <div class="th-metrics-row th-metrics-row--tight" style="margin-bottom:40px">
                 @foreach ($performanceStats as $s)
                     <div style="background:#fff; border-radius:24px; padding:24px; border:1px solid var(--cream-mid); box-shadow:0 4px 16px rgba(0,0,0,.04)">
                         <div style="font-family:var(--font-display); font-size:32px; font-weight:800; color:var(--clay-red)">{{ $s['attainment'] }}</div>

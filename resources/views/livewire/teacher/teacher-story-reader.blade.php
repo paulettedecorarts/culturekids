@@ -6,7 +6,7 @@
                 {{ $comic->tribe?->name ?? __('Tribe') }} · {{ $comic->age_range }} · {{ $comic->panels->count() }} {{ __('panels') }}
             </div>
         </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <div class="th-header-actions">
             <a href="{{ route('teacher.library') }}" wire:navigate class="btn btn-outline btn-sm" style="text-decoration:none">{{ __('← Library') }}</a>
             <button type="button" class="btn btn-primary btn-sm" style="border-radius:12px" onclick="window.print()">{{ __('Print') }}</button>
         </div>

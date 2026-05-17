@@ -4,14 +4,14 @@
             <h1 class="page-title">Progress Reports</h1>
             <div class="breadcrumb">{{ $className }} · {{ $reportPeriod }}</div>
         </div>
-        <div style="display:flex; gap:16px">
+        <div class="th-header-actions">
             <button class="btn btn-outline">Schedule Parent Review</button>
             <button class="btn btn-primary">📁 Download All PDFs</button>
         </div>
     </div>
 
     <!-- Metrics Row -->
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; margin-bottom:40px">
+    <div class="th-metrics-row" style="margin-bottom:40px">
         @foreach($subjectMetrics as $m)
             <div style="background:#fff; border-radius:32px; padding:32px; border:1px solid var(--cream-mid); box-shadow:0 4px 16px rgba(0,0,0,.04)">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end">
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Student Performance Table -->
-    <div style="background:#fff; border-radius:32px; border:1px solid var(--cream-mid); box-shadow:0 8px 32px rgba(26,18,0,.04); overflow:hidden">
+    <div class="th-panel th-table-responsive">
         <div style="padding:24px 32px; border-bottom:1px solid var(--cream-mid); display:flex; justify-content:space-between; align-items:center">
             <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--stone)">Individual Student Mastery</h3>
             <div style="display:flex; gap:8px">

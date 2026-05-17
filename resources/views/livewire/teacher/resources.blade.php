@@ -4,13 +4,13 @@
             <h1 class="page-title">Teaching Materials</h1>
             <div class="breadcrumb">Classroom · Resources Library</div>
         </div>
-        <div style="display:flex; gap:12px">
+        <div class="th-header-actions">
             <button class="btn btn-outline btn-sm">📁 My Downloads</button>
             <button class="btn btn-banana btn-sm">📚 All Story Packs</button>
         </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px">
+    <div class="th-resource-grid">
         @foreach($resources as $r)
             <div style="background:#fff; border-radius:32px; padding:32px; border:1px solid var(--cream-mid); box-shadow:0 8px 32px rgba(0,0,0,.04); transition:transform 0.2s; cursor:pointer" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div style="width:56px; height:56px; border-radius:16px; background:var(--leaf-pale); display:flex; align-items:center; justify-content:center; font-size:28px; margin-bottom:20px; border:1px solid var(--cream-mid)">

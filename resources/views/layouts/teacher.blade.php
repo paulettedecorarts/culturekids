@@ -83,9 +83,19 @@
         x-data="{
             theme: 'light',
             sidebarCollapsed: false,
+            sidebarOpen: false,
+            isMobile: false,
             init() {
                 this.syncTheme();
                 this.syncSidebar();
+                this.updateViewport();
+                window.addEventListener('resize', () => this.updateViewport());
+            },
+            updateViewport() {
+                this.isMobile = window.matchMedia('(max-width: 1023px)').matches;
+                if (!this.isMobile) {
+                    this.sidebarOpen = false;
+                }
             },
             syncTheme() {
                 var theme = null;
@@ -116,6 +126,10 @@
                 try { localStorage.setItem('th-theme', value); } catch (e) {}
             },
             toggleSidebar() {
+                if (this.isMobile) {
+                    this.sidebarOpen = !this.sidebarOpen;
+                    return;
+                }
                 this.sidebarCollapsed = !this.sidebarCollapsed;
                 if (this.sidebarCollapsed) {
                     document.documentElement.setAttribute('data-th-sidebar', 'collapsed');
@@ -125,10 +139,23 @@
                 try {
                     localStorage.setItem('th-sidebar-collapsed', this.sidebarCollapsed ? 'true' : 'false');
                 } catch (e) {}
+            },
+            closeMobileSidebar() {
+                this.sidebarOpen = false;
             }
         }"
+        :class="{ 'th-shell--nav-open': sidebarOpen && isMobile }"
     >
         @include('layouts.partials.teacher-sidebar')
+
+        <div
+            class="th-sidebar-backdrop"
+            x-cloak
+            x-show="sidebarOpen && isMobile"
+            x-transition.opacity
+            @click="closeMobileSidebar()"
+            aria-hidden="true"
+        ></div>
 
         <main class="th-main">
             @include('layouts.partials.teacher-topbar')

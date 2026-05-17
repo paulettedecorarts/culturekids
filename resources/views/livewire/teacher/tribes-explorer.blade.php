@@ -46,7 +46,7 @@
             {{ __('No tribes match these filters.') }}
         </div>
     @else
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:22px;">
+        <div class="th-tribe-grid">
             @foreach ($tribes as $tribe)
                 @php
                     $typeCounts = $countsByTribe[$tribe->id] ?? [];

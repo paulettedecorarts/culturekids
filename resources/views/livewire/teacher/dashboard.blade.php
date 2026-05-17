@@ -10,7 +10,7 @@
                 @endif
             </div>
         </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+        <div class="th-header-actions">
             <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--stone);">
                 <button type="button" wire:click="$set('weekOffset', {{ $weekOffset - 1 }})" class="btn btn-outline btn-sm" style="padding:8px 12px; border-radius:10px">←</button>
                 <span>{{ $weekOffset === 0 ? __('This week') : __('Week offset').' '.$weekOffset }}</span>
@@ -59,14 +59,14 @@
     @else
         <div style="margin-bottom:20px; max-width:420px">
             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:8px">{{ __('Class') }}</label>
-            <select wire:model.live="activeClassroomId" style="width:100%; padding:12px 16px; border-radius:14px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:14px; background:#fff;">
+            <select wire:model.live="activeClassroomId" class="th-select" style="width:100%; padding:12px 16px; border-radius:14px; font-size:14px;">
                 @foreach ($classrooms as $c)
                     <option value="{{ $c->id }}">{{ $c->name }}</option>
                 @endforeach
             </select>
         </div>
 
-        <div style="background:#fff; border-radius:24px; border:1px solid var(--cream-mid); overflow:hidden; box-shadow:0 8px 32px rgba(26,18,8,.04)">
+        <div class="th-panel th-table-responsive">
             @if ($lessonPlans->isEmpty())
                 <div style="padding:40px; text-align:center; color:var(--stone); font-weight:700;">
                     {{ __('No lessons scheduled for this week. Add one with “New lesson”.') }}
@@ -152,15 +152,15 @@
     @endif
 
     @if ($showCreateModal)
-        <div style="position:fixed; inset:0; background:rgba(26,18,8,.45); z-index:1000; display:flex; align-items:center; justify-content:center; padding:24px;" wire:click.self="closeCreateModal">
-            <div style="background:#fff; border-radius:28px; max-width:480px; width:100%; padding:28px; box-shadow:0 24px 64px rgba(0,0,0,.15);" @click.stop>
+        <div class="th-modal-overlay" wire:click.self="closeCreateModal">
+            <div class="th-modal" @click.stop>
                 <h3 style="font-family:var(--font-display); font-size:22px; font-weight:800; margin-bottom:8px">{{ __('Add lesson') }}</h3>
                 <p style="font-size:13px; color:var(--stone); margin-bottom:20px">{{ __('Choose a story or activity your organisation can access, and the day you plan to run it.') }}</p>
 
                 <div style="display:flex; flex-direction:column; gap:16px">
                     <div>
                         <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Content type') }}</label>
-                        <select wire:model.live="content_kind" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                        <select wire:model.live="content_kind" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
                             <option value="comic">{{ __('Story / comic') }}</option>
                             <option value="song">{{ __('Song') }}</option>
                             <option value="activity">{{ __('Activity') }}</option>
@@ -170,7 +170,7 @@
                     @if ($content_kind === 'comic')
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Story') }}</label>
-                            <select wire:model.live="selected_comic_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                            <select wire:model.live="selected_comic_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($comicOptions as $co)
                                     <option value="{{ $co->id }}">{{ $co->title }}</option>
@@ -181,7 +181,7 @@
                     @elseif ($content_kind === 'song')
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Song') }}</label>
-                            <select wire:model.live="selected_song_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                            <select wire:model.live="selected_song_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($songOptions as $so)
                                     <option value="{{ $so->id }}">{{ $so->title }}</option>
@@ -192,7 +192,7 @@
                     @else
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Activity') }}</label>
-                            <select wire:model.live="selected_activity_id" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; border:2px solid var(--cream-mid); font-size:14px;">
+                            <select wire:model.live="selected_activity_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($activityOptions as $ao)
                                     <option value="{{ $ao->id }}">{{ $ao->title }} ({{ $ao->type }})</option>
