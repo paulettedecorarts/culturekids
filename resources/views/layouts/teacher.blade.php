@@ -62,6 +62,7 @@
         }
     </style>
     <style>{!! file_get_contents(resource_path('css/teacher-shell.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/teacher-content.css')) !!}</style>
 </head>
 <body class="th-body">
     @if (session('impersonating'))

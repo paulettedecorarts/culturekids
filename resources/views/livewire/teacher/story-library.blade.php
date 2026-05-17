@@ -9,26 +9,20 @@
         </div>
     </div>
 
-    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:28px">
+    <div class="th-filters">
         <input
             type="search"
             wire:model.live.debounce.300ms="search"
             placeholder="{{ __('Search titles…') }}"
-            style="flex:1; min-width:200px; max-width:320px; padding:10px 16px; border-radius:999px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:13px;"
+            class="th-input th-input--search"
         >
-        <select
-            wire:model.live="tribe"
-            style="padding:10px 16px; border-radius:999px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:12px; background:#fff;"
-        >
+        <select wire:model.live="tribe" class="th-select">
             <option value="">{{ __('All tribes') }}</option>
             @foreach ($tribeOptions as $t)
                 <option value="{{ $t->id }}">{{ $t->name }}</option>
             @endforeach
         </select>
-        <select
-            wire:model.live="age"
-            style="padding:10px 16px; border-radius:999px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:12px; background:#fff;"
-        >
+        <select wire:model.live="age" class="th-select">
             <option value="all">{{ __('All ages') }}</option>
             <option value="2-3">2–3 {{ __('yrs') }}</option>
             <option value="3-5">3–5 {{ __('yrs') }}</option>

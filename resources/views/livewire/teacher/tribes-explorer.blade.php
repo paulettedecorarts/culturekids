@@ -9,12 +9,13 @@
         </div>
     </div>
 
-    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:24px">
+    <div class="th-filters">
         <input
             type="search"
             wire:model.live.debounce.300ms="search"
             placeholder="{{ __('Search tribes, languages, regions…') }}"
-            style="flex:1; min-width:220px; max-width:400px; padding:10px 16px; border-radius:999px; border:2px solid var(--cream-mid); font-family:var(--font-admin); font-size:13px;"
+            class="th-input th-input--search"
+            style="max-width:400px;"
         >
         <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center">
             <button

@@ -10,22 +10,22 @@
     --th-surface: #ffffff;
     --th-surface-raised: #faf6f0;
     --th-surface-hover: #f5ede0;
-    --th-text: var(--ink, #1a1208);
-    --th-text-muted: var(--stone, #9c8875);
-    --th-border: var(--cream-mid, #ede0ce);
+    --th-text: #1a1208;
+    --th-text-muted: #9c8875;
+    --th-border: #ede0ce;
     --th-shadow: 0 4px 20px rgba(26, 18, 8, 0.04);
     color-scheme: light;
 }
 
 [data-th-theme="dark"] {
-    --th-bg: #111827;
-    --th-surface: rgba(255, 255, 255, 0.04);
-    --th-surface-raised: rgba(255, 255, 255, 0.06);
-    --th-surface-hover: rgba(255, 255, 255, 0.08);
-    --th-text: #ffffff;
-    --th-text-muted: rgba(255, 255, 255, 0.45);
+    --th-bg: #0f1419;
+    --th-surface: #161f2e;
+    --th-surface-raised: #1c2838;
+    --th-surface-hover: #243044;
+    --th-text: #f3f4f6;
+    --th-text-muted: rgba(255, 255, 255, 0.52);
     --th-border: rgba(255, 255, 255, 0.1);
-    --th-shadow: none;
+    --th-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
     color-scheme: dark;
 }
 
@@ -365,7 +365,12 @@ body.th-body {
     overflow: hidden;
     background: var(--th-bg);
     color: var(--th-text);
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+html[data-th-theme] body.th-body,
+html[data-th-theme] .th-content {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 .th-topbar {

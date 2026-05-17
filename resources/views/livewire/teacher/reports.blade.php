@@ -32,7 +32,7 @@
         <div style="padding:24px 32px; border-bottom:1px solid var(--cream-mid); display:flex; justify-content:space-between; align-items:center">
             <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--stone)">Individual Student Mastery</h3>
             <div style="display:flex; gap:8px">
-                <input type="text" placeholder="Search child..." style="padding:8px 16px; border-radius:99px; border:1px solid var(--cream-mid); font-size:12px; outline:none">
+                <input type="search" placeholder="{{ __('Search child…') }}" class="th-input" style="padding:8px 16px; border-radius:99px; font-size:12px; max-width:220px;">
             </div>
         </div>
         <table style="width:100%; border-collapse:collapse; text-align:left">

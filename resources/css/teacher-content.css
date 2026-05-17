@@ -1,0 +1,334 @@
+/**
+ * Teacher Hub main content — light/dark theme, forms, cards, tables.
+ * Tokens live on [data-th-theme] (see teacher-shell.css).
+ */
+
+/* Legacy palette aliases inside content */
+.th-content {
+    --ink: var(--th-text);
+    --ink-light: var(--th-text-muted);
+    --stone: var(--th-text-muted);
+    --cream: var(--th-surface-raised);
+    --cream-warm: var(--th-surface-hover);
+    --cream-mid: var(--th-border);
+    --banana-green: var(--th-success, #4a7c59);
+    --sh: var(--th-shadow-md);
+}
+
+[data-th-theme="light"] {
+    --th-card: #ffffff;
+    --th-input-bg: #ffffff;
+    --th-input-border: rgba(26, 18, 8, 0.14);
+    --th-input-text: var(--ink, #1a1208);
+    --th-option-bg: #ffffff;
+    --th-option-text: var(--ink, #1a1208);
+    --th-table-head: #fdfbfa;
+    --th-table-row-hover: rgba(245, 237, 224, 0.5);
+    --th-alert-warn-bg: #fffbeb;
+    --th-alert-warn-border: #fde68a;
+    --th-alert-warn-text: #92400e;
+    --th-alert-info-bg: #eff6ff;
+    --th-alert-info-border: #bfdbfe;
+    --th-alert-info-text: #1e40af;
+    --th-shadow-md: 0 8px 32px rgba(26, 18, 8, 0.06);
+    --th-btn-outline-text: var(--clay-red, #c44b2b);
+    --th-btn-outline-border: var(--clay-red, #c44b2b);
+}
+
+[data-th-theme="dark"] {
+    --th-card: #1a2332;
+    --th-input-bg: #1e2d4a;
+    --th-input-border: rgba(255, 255, 255, 0.14);
+    --th-input-text: #f3f4f6;
+    --th-option-bg: #243352;
+    --th-option-text: #f9fafb;
+    --th-table-head: rgba(255, 255, 255, 0.06);
+    --th-table-row-hover: rgba(255, 255, 255, 0.04);
+    --th-alert-warn-bg: rgba(245, 158, 11, 0.12);
+    --th-alert-warn-border: rgba(251, 191, 36, 0.35);
+    --th-alert-warn-text: #fcd34d;
+    --th-alert-info-bg: rgba(59, 130, 246, 0.12);
+    --th-alert-info-border: rgba(96, 165, 250, 0.35);
+    --th-alert-info-text: #93c5fd;
+    --th-shadow-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --th-btn-outline-text: #f2a84e;
+    --th-btn-outline-border: rgba(242, 168, 78, 0.65);
+}
+
+/* ── Form controls (override inline styles in blades) ── */
+.th-content input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="color"]):not([type="range"]),
+.th-content select,
+.th-content textarea,
+.th-input,
+.th-select,
+.th-textarea {
+    background-color: var(--th-input-bg) !important;
+    color: var(--th-input-text) !important;
+    border: 2px solid var(--th-input-border) !important;
+    font-family: var(--font-admin, 'Bricolage Grotesque', sans-serif);
+    color-scheme: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.th-content select,
+.th-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239C8875' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 14px !important;
+    padding-right: 36px !important;
+    cursor: pointer;
+}
+
+[data-th-theme="dark"] .th-content select,
+[data-th-theme="dark"] .th-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.55)' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+}
+
+.th-content select option,
+.th-content select optgroup,
+.th-select option,
+.th-select optgroup {
+    background-color: var(--th-option-bg) !important;
+    color: var(--th-option-text) !important;
+}
+
+.th-content input::placeholder,
+.th-input::placeholder,
+.th-textarea::placeholder {
+    color: var(--th-text-muted);
+    opacity: 0.85;
+}
+
+.th-content input:focus,
+.th-content select:focus,
+.th-content textarea:focus,
+.th-input:focus,
+.th-select:focus,
+.th-textarea:focus {
+    outline: none;
+    border-color: var(--clay-red, #c44b2b) !important;
+    box-shadow: 0 0 0 3px rgba(196, 75, 43, 0.18);
+}
+
+[data-th-theme="dark"] .th-content input:focus,
+[data-th-theme="dark"] .th-content select:focus,
+[data-th-theme="dark"] .th-content textarea:focus,
+[data-th-theme="dark"] .th-input:focus,
+[data-th-theme="dark"] .th-select:focus,
+[data-th-theme="dark"] .th-textarea:focus {
+    border-color: var(--savanna-gold, #d4a017) !important;
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.22);
+}
+
+/* Filter bar */
+.th-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.th-filters .th-input--search {
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.th-filters .th-input--search[style*="max-width"] {
+    max-width: 400px;
+}
+
+.th-filters .th-select {
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 140px;
+}
+
+/* Cards & panels */
+.th-card {
+    background: var(--th-card);
+    border: 1px solid var(--th-border);
+    border-radius: 24px;
+    box-shadow: var(--th-shadow-md);
+    color: var(--th-text);
+}
+
+.th-card--pad {
+    padding: 24px 28px;
+}
+
+.th-card--flush {
+    overflow: hidden;
+}
+
+/* Inline-styled surfaces (legacy blades) */
+.th-content [style*="background:#fff"],
+.th-content [style*="background: #fff"],
+.th-content [style*="background:#FFF"],
+.th-content [style*="background: #FFF"] {
+    background: var(--th-card) !important;
+    color: var(--th-text);
+}
+
+.th-content [style*="border:1px solid var(--cream-mid)"],
+.th-content [style*="border: 1px solid var(--cream-mid)"] {
+    border-color: var(--th-border) !important;
+}
+
+.th-content [style*="background:#FDFBFA"],
+.th-content [style*="background: #FDFBFA"] {
+    background: var(--th-table-head) !important;
+}
+
+.th-content [style*="color:var(--ink)"],
+.th-content [style*="color: var(--ink)"] {
+    color: var(--th-text) !important;
+}
+
+.th-content [style*="color:var(--ink-light)"],
+.th-content [style*="color: var(--ink-light)"] {
+    color: var(--th-text-muted) !important;
+}
+
+.th-content [style*="color:var(--stone)"],
+.th-content [style*="color: var(--stone)"] {
+    color: var(--th-text-muted) !important;
+}
+
+/* Warning / info alerts */
+.th-content [style*="background:#FFFBEB"],
+.th-content [style*="background: #FFFBEB"],
+.th-alert--warn {
+    background: var(--th-alert-warn-bg) !important;
+    border: 1px solid var(--th-alert-warn-border) !important;
+    color: var(--th-alert-warn-text) !important;
+}
+
+.th-content [style*="color:#92400E"],
+.th-content [style*="color: #92400E"],
+.th-content [style*="color:#92400e"] {
+    color: var(--th-alert-warn-text) !important;
+}
+
+.th-content [style*="border:1px solid #FDE68A"],
+.th-content [style*="border: 1px solid #FDE68A"] {
+    border-color: var(--th-alert-warn-border) !important;
+}
+
+.th-alert {
+    border-radius: 24px;
+    padding: 24px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.th-alert--warn {
+    background: var(--th-alert-warn-bg);
+    border: 1px solid var(--th-alert-warn-border);
+    color: var(--th-alert-warn-text);
+}
+
+/* Tables */
+.th-content table {
+    color: var(--th-text);
+}
+
+.th-content table th {
+    color: var(--th-text-muted) !important;
+}
+
+.th-content table tr {
+    border-color: var(--th-border) !important;
+}
+
+.th-content table tbody tr:hover {
+    background: var(--th-table-row-hover);
+}
+
+/* Buttons */
+.th-content .btn-outline {
+    color: var(--th-btn-outline-text) !important;
+    border-color: var(--th-btn-outline-border) !important;
+}
+
+.th-content .btn-outline:hover {
+    background: var(--th-surface-hover);
+}
+
+[data-th-theme="dark"] .th-content .btn-outline:hover {
+    color: var(--th-text) !important;
+}
+
+/* Status pills */
+.th-content .status-published,
+.th-content .status-pill.status-published {
+    background: rgba(74, 124, 89, 0.2) !important;
+    color: var(--banana-light, #b8d9c6) !important;
+    border: 1px solid rgba(74, 124, 89, 0.35);
+}
+
+[data-th-theme="light"] .th-content .status-published {
+    color: var(--banana-green, #4a7c59) !important;
+}
+
+/* Tribe / library cards */
+.th-content a[style*="background:#fff"],
+.th-content a[style*="background: #fff"] {
+    background: var(--th-card) !important;
+    border-color: var(--th-border) !important;
+}
+
+.th-content [style*="background:var(--cream-warm)"],
+.th-content [style*="background: var(--cream-warm)"] {
+    background: var(--th-surface-hover) !important;
+}
+
+.th-content [style*="background:var(--cream)"],
+.th-content [style*="background: var(--cream)"] {
+    background: var(--th-surface-raised) !important;
+}
+
+/* Sidebar classroom select — always on dark sidebar */
+.th-classroom-switcher__select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.65)' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 14px !important;
+    padding-right: 32px !important;
+    color-scheme: dark;
+}
+
+.th-classroom-switcher__select option,
+.th-classroom-switcher__select optgroup {
+    background-color: #1a2744 !important;
+    color: #f9fafb !important;
+}
+
+.th-classroom-switcher__select:focus {
+    outline: none;
+    border-color: rgba(212, 160, 23, 0.55) !important;
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
+}
+
+/* Topbar dark-mode polish */
+[data-th-theme="dark"] .th-topbar-theme-btn.is-active {
+    background: var(--th-surface-raised);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-th-theme="dark"] .th-topbar {
+    background: var(--th-surface);
+    border-bottom-color: var(--th-border);
+}
