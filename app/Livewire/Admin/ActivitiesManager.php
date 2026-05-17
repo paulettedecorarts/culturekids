@@ -66,10 +66,9 @@ class ActivitiesManager extends Component
         return Tribe::query()->orderBy('name')->get();
     }
 
-    #[Computed]
-    public function activities()
+    public function render()
     {
-        return Activity::query()
+        $activities = Activity::query()
             ->with('tribe')
             ->whereIn('type', ['flashcard', 'puzzle', 'song', 'drawing_kit', 'vocab_pack', 'game', 'maze', 'spot_difference', 'word_search', 'story', 'culture'])
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
@@ -82,11 +81,9 @@ class ActivitiesManager extends Component
             ->when($this->statusFilter !== '', fn ($q) => $q->where('is_published', $this->statusFilter === 'published'))
             ->latest()
             ->paginate(12);
-    }
 
-    public function render()
-    {
         return view('livewire.admin.activities-manager', [
+            'activities' => $activities,
             'routePrefix' => $this->portalRoutePrefix(),
             'comicsRouteBase' => $this->portalComicsRouteBase(),
         ])->layout($this->portalLayout());

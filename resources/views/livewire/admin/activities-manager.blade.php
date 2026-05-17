@@ -23,7 +23,7 @@
 
     <div class="sa-stats-row" style="grid-template-columns: repeat(4, minmax(0,1fr)); gap: var(--sp-3); margin-bottom: var(--sp-4)">
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ $this->activities->total() }}</div>
+            <div class="sa-stat-val">{{ $activities->total() }}</div>
             <div class="sa-stat-label">Total</div>
             <div class="sa-stat-delta">All activity types</div>
         </div>
@@ -83,7 +83,7 @@
             <span>Actions</span>
         </div>
 
-        @forelse($this->activities as $activity)
+        @forelse($activities as $activity)
             <div class="sa-table-row act-table-grid">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0">
                     <div style="font-size:20px;width:32px;text-align:center">
@@ -224,7 +224,7 @@
     </div>
 
     <div style="margin-top:12px">
-        {{ $this->activities->links() }}
+        {{ $activities->links() }}
     </div>
 
     <style>

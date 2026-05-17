@@ -6,11 +6,13 @@ use App\Services\Push\FcmPushGateway;
 use App\Services\Push\LogPushGateway;
 use App\Services\Push\PushGateway;
 use Carbon\CarbonImmutable;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->configureDefaults();
+        $this->configurePagination();
+        $this->configureLivewire();
         $this->ensureLivewireTemporaryUploadDirectoryExists();
     }
 
@@ -57,6 +61,17 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Configure default behaviors for production-ready applications.
      */
+    protected function configurePagination(): void
+    {
+        Paginator::defaultView('vendor.pagination.portal');
+        Paginator::defaultSimpleView('vendor.pagination.portal');
+    }
+
+    protected function configureLivewire(): void
+    {
+        Livewire::componentHook(\App\Livewire\Hooks\AbsolutePaginationPath::class);
+    }
+
     protected function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);

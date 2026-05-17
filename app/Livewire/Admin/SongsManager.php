@@ -47,10 +47,9 @@ class SongsManager extends Component
         return Tribe::query()->orderBy('name')->get();
     }
 
-    #[Computed]
-    public function songs()
+    public function render()
     {
-        return Song::query()
+        $songs = Song::query()
             ->with('tribe')
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('title', 'like', '%'.$this->search.'%')
@@ -61,11 +60,9 @@ class SongsManager extends Component
             ->when($this->tribeFilter !== '', fn ($q) => $q->where('tribe_id', (int) $this->tribeFilter))
             ->latest()
             ->paginate(12);
-    }
 
-    public function render()
-    {
         return view('livewire.admin.songs-manager', [
+            'songs' => $songs,
             'routePrefix' => $this->portalRoutePrefix(),
         ])->layout($this->portalLayout());
     }

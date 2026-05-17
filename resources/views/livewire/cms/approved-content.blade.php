@@ -8,7 +8,7 @@
 
     <div class="cms-stats-row" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));">
         <div class="cms-stat">
-            <div class="cms-stat-val">{{ $approvedItems->count() }}</div>
+            <div class="cms-stat-val">{{ $approvedTotal }}</div>
             <div class="cms-stat-label">Total Approved</div>
         </div>
         @foreach($typeLabels as $typeKey => $typeLabel)
@@ -46,4 +46,10 @@
             </div>
         @endforelse
     </div>
+
+    @if($approvedItems->hasPages())
+        <div style="margin-top:var(--sp-6);">
+            {{ $approvedItems->links(data: ['scrollTo' => false]) }}
+        </div>
+    @endif
 </div>

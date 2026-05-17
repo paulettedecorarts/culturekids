@@ -14,7 +14,7 @@
 
     <div class="cms-stats-row" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));">
         <div class="cms-stat">
-            <div class="cms-stat-val">{{ $pendingItems->count() }}</div>
+            <div class="cms-stat-val">{{ $pendingTotal }}</div>
             <div class="cms-stat-label">Total Pending</div>
         </div>
         @foreach($typeLabels as $typeKey => $typeLabel)
@@ -68,4 +68,8 @@
             </div>
         @endforelse
     </div>
+
+    @if($pendingItems->hasPages())
+        {{ $pendingItems->links(data: ['scrollTo' => false]) }}
+    @endif
 </div>

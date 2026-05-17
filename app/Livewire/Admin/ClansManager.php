@@ -30,10 +30,9 @@ class ClansManager extends Component
         return Tribe::orderBy('name')->get();
     }
 
-    #[Computed]
-    public function clans()
+    public function render()
     {
-        return Clan::query()
+        $clans = Clan::query()
             ->with('tribe')
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {
                 $inner->where('name', 'like', '%'.$this->search.'%')
@@ -44,11 +43,9 @@ class ClansManager extends Component
             ->orderBy('tribe_id')
             ->orderBy('sort_order')
             ->paginate(20);
-    }
 
-    public function render()
-    {
         return view('livewire.admin.clans-manager', [
+            'clans' => $clans,
             'routePrefix' => $this->portalRoutePrefix(),
         ])->layout($this->portalLayout());
     }

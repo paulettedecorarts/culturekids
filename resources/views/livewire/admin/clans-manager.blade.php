@@ -17,7 +17,7 @@
 
     <div class="sa-stats-row" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-3);margin-bottom:var(--sp-4)">
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ $this->clans->total() }}</div>
+            <div class="sa-stat-val">{{ $clans->total() }}</div>
             <div class="sa-stat-label">Total Clans</div>
         </div>
         <div class="sa-stat">
@@ -50,7 +50,7 @@
             <span>Actions</span>
         </div>
 
-        @forelse($this->clans as $clan)
+        @forelse($clans as $clan)
             <div class="sa-table-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;border-bottom:1px solid var(--cms-border-subtle);align-items:center">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0">
                     <div style="width:32px;height:32px;border-radius:8px;background:{{ $clan->color ?? '#C44B2B' }}22;border:1px solid {{ $clan->color ?? '#C44B2B' }}44;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">
@@ -83,5 +83,5 @@
         @endforelse
     </div>
 
-    <div style="margin-top:12px">{{ $this->clans->links() }}</div>
+    <div style="margin-top:12px">{{ $clans->links() }}</div>
 </div>

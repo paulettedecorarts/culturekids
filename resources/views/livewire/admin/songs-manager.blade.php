@@ -17,7 +17,7 @@
 
     <div class="sa-stats-row">
         <div class="sa-stat">
-            <div class="sa-stat-val">{{ $this->songs->total() }}</div>
+            <div class="sa-stat-val">{{ $songs->total() }}</div>
             <div class="sa-stat-label">Songs</div>
         </div>
         <div class="sa-stat">
@@ -60,7 +60,7 @@
             <span>Duration</span>
             <span>Actions</span>
         </div>
-        @forelse($this->songs as $song)
+        @forelse($songs as $song)
             <div class="sa-table-row" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px 160px">
                 <div style="width:38px;height:38px;border-radius:8px;background:rgba(232,135,42,.2);display:flex;align-items:center;justify-content:center;font-size:16px">🎵</div>
                 <div>
@@ -83,6 +83,6 @@
     </div>
 
     <div style="margin-top:12px">
-        {{ $this->songs->links() }}
+        {{ $songs->links() }}
     </div>
 </div>
