@@ -1,7 +1,7 @@
 <div class="drawing-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.drawings' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Drawings' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.drawings')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Drawings') }}</a>
             <div class="sa-page-title">{{ $drawing->title }}</div>
             <div class="sa-breadcrumb">{{ $drawing->drawing_type_display }} • {{ $drawing->tribe->name ?? 'Unknown Tribe' }}</div>
         </div>

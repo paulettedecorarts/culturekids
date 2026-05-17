@@ -1,7 +1,7 @@
 <div class="culture-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.culture-activities' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Culture Activities' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.culture-activities')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Culture Activities') }}</a>
             <div class="sa-page-title">{{ $activity->culture_type_icon }} {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->culture_type_label }} • {{ $activity->tribe->name }} • Ages {{ $activity->age_range }}</div>
         </div>

@@ -1,7 +1,7 @@
 <div class="game-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.games' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Games' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.games')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Games') }}</a>
             <div class="sa-page-title">{{ $game->game_type_icon }} {{ $game->title }}</div>
             <div class="sa-breadcrumb">{{ $game->game_type_label }} • {{ $game->tribe->name }} • Ages {{ $game->age_range }}</div>
         </div>

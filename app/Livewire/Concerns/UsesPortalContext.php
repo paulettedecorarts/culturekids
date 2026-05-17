@@ -20,6 +20,7 @@ trait UsesPortalContext
         }
 
         $this->portalRoutePrefixCache = match (true) {
+            request()->routeIs('teacher.library.*') => 'teacher',
             request()->routeIs('cms.editor.*') => 'cms.editor',
             request()->routeIs('cms.admin.*') => 'cms.admin',
             request()->routeIs('admin.*') => 'admin',
@@ -46,6 +47,10 @@ trait UsesPortalContext
 
     protected function portalLayout(): string
     {
+        if (request()->routeIs('teacher.library.*')) {
+            return 'layouts.teacher';
+        }
+
         return ($this->isEditorPortal() || $this->isOrgAdminPortal()) ? 'layouts.cms' : 'layouts.admin';
     }
 
@@ -70,6 +75,30 @@ trait UsesPortalContext
     /** Org-admin approved library is view-only (no edit/delete on reused show pages). */
     public function portalCanEditContent(): bool
     {
-        return ! request()->routeIs('cms.admin.approved-content.*');
+        return ! request()->routeIs('cms.admin.approved-content.*', 'teacher.library.*');
+    }
+
+    public function portalIsTeacherLibrary(): bool
+    {
+        return request()->routeIs('teacher.library.*');
+    }
+
+    /** Route name for the back link on read-only content show pages. */
+    public function portalContentListRoute(string $manageRouteName): string
+    {
+        if ($this->portalIsTeacherLibrary()) {
+            return 'teacher.library';
+        }
+
+        return $this->portalCanEditContent() ? $manageRouteName : 'cms.admin.approved-content';
+    }
+
+    public function portalContentListLabel(string $manageLabel): string
+    {
+        if ($this->portalIsTeacherLibrary()) {
+            return 'Library';
+        }
+
+        return $this->portalCanEditContent() ? $manageLabel : 'Approved Content';
     }
 }

@@ -7,7 +7,7 @@
             </div>
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-            <a href="{{ route('teacher.library') }}" wire:navigate class="btn btn-outline btn-sm" style="text-decoration:none">{{ __('← Story Library') }}</a>
+            <a href="{{ route('teacher.library') }}" wire:navigate class="btn btn-outline btn-sm" style="text-decoration:none">{{ __('← Library') }}</a>
             <button type="button" class="btn btn-primary btn-sm" style="border-radius:12px" onclick="window.print()">{{ __('Print') }}</button>
         </div>
     </div>

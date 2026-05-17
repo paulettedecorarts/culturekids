@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureTeacherLibraryAccess;
 use App\Http\Middleware\LogLivewireUploadDiagnostics;
 use App\Http\Middleware\LogSuperAdminActions;
 use App\Http\Middleware\EnsurePortalRoleIsolation;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'log.admin' => LogSuperAdminActions::class,
             'log.livewire.upload' => LogLivewireUploadDiagnostics::class,
             'portal.role' => EnsurePortalRoleIsolation::class,
+            'teacher.library' => EnsureTeacherLibraryAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

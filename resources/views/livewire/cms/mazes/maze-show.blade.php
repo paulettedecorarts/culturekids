@@ -1,7 +1,7 @@
 <div class="maze-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.mazes' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Mazes' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.mazes')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Mazes') }}</a>
             <div class="sa-page-title">{{ $maze->maze_type_icon }} {{ $maze->title }}</div>
             <div class="sa-breadcrumb">{{ $maze->maze_type_label }} • {{ $maze->difficulty_label }} • {{ $maze->tribe->name }}</div>
         </div>

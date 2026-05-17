@@ -8,6 +8,7 @@ use App\Models\OrganisationSongDecision;
 use App\Models\Song;
 use App\Models\Tribe;
 use App\Models\User;
+use App\Services\TeacherApprovedCatalogService;
 use Illuminate\Database\Eloquent\Builder;
 
 class TeacherCatalogScope
@@ -41,31 +42,7 @@ class TeacherCatalogScope
      */
     public static function tribesQueryFor(User $user): Builder
     {
-        $org = $user->organisation;
-        if (! $org) {
-            return Tribe::query()->whereRaw('0 = 1');
-        }
-
-        $approvedIds = $org->approvedComicIds();
-
-        $tribeIds = Comic::query()
-            ->published()
-            ->where(function ($q) use ($approvedIds, $org) {
-                if ($approvedIds !== []) {
-                    $q->whereIn('id', $approvedIds);
-                }
-                $q->orWhere('org_id', $org->id);
-            })
-            ->distinct()
-            ->pluck('tribe_id');
-
-        if ($tribeIds->isEmpty()) {
-            return Tribe::query()->whereRaw('0 = 1');
-        }
-
-        return Tribe::query()
-            ->whereIn('id', $tribeIds)
-            ->orderBy('name');
+        return app(TeacherApprovedCatalogService::class)->tribesQueryFor($user);
     }
 
     /**

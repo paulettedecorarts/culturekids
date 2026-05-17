@@ -97,7 +97,7 @@
 <div class="puzzle-show-page">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.puzzles' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Puzzles' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.puzzles')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Puzzles') }}</a>
             <div class="sa-page-title">{{ $activity->title }}</div>
             <div class="sa-breadcrumb">Puzzle · {{ $activity->tribe->name }}</div>
         </div>

@@ -7,7 +7,7 @@
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.word-searches' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Word Searches' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.word-searches')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Word Searches') }}</a>
             <div class="sa-page-title">🔠 {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->tribe->name }} • {{ ucfirst($activity->difficulty_level) }} • {{ $activity->grid_size }}×{{ $activity->grid_size }} grid • Ages {{ $activity->age_range }}</div>
         </div>

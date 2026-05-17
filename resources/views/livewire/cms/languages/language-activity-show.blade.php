@@ -1,7 +1,7 @@
 <div class="lang-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.language-activities' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Language Activities' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.language-activities')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Language Activities') }}</a>
             <div class="sa-page-title">{{ $activity->activity_type_icon }} {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->activity_type_label }} • {{ strtoupper($activity->language_code) }} • {{ $activity->tribe->name }}</div>
         </div>

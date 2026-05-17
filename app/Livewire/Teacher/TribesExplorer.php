@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Teacher;
 
+use App\Models\OrganisationContentDecision;
+use App\Services\TeacherApprovedCatalogService;
 use App\Support\TeacherCatalogScope;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
@@ -19,12 +21,20 @@ class TribesExplorer extends Component
     #[Url]
     public string $region = '';
 
+    #[Url]
+    public string $type = '';
+
     public function updatingSearch(): void
     {
         $this->resetPage();
     }
 
     public function updatingRegion(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingType(): void
     {
         $this->resetPage();
     }
@@ -38,23 +48,23 @@ class TribesExplorer extends Component
     public function render()
     {
         $user = auth()->user();
-        $approvedComicIds = TeacherCatalogScope::approvedComicIdsFor($user);
-        $orgId = $user->organisation?->id;
+        $catalog = app(TeacherApprovedCatalogService::class);
+        $countsByTribe = $catalog->countsByTribe($user);
 
-        $query = TeacherCatalogScope::tribesQueryFor($user)
-            ->withCount([
-                'comics as published_comics_count' => function ($q) use ($approvedComicIds, $orgId) {
-                    $q->where('status', 'published')
-                        ->where(function ($inner) use ($approvedComicIds, $orgId) {
-                            if ($approvedComicIds !== []) {
-                                $inner->whereIn('id', $approvedComicIds);
-                            }
-                            if ($orgId) {
-                                $inner->orWhere('org_id', $orgId);
-                            }
-                        });
-                },
-            ]);
+        $query = TeacherCatalogScope::tribesQueryFor($user);
+
+        if ($this->type !== '' && in_array($this->type, OrganisationContentDecision::ALL_TYPES, true)) {
+            $tribeIds = [];
+            foreach ($countsByTribe as $tribeId => $rows) {
+                foreach ($rows as $row) {
+                    if ($row['type'] === $this->type) {
+                        $tribeIds[] = $tribeId;
+                        break;
+                    }
+                }
+            }
+            $query->whereIn('id', $tribeIds !== [] ? $tribeIds : [0]);
+        }
 
         if ($this->search !== '') {
             $s = '%'.addcslashes($this->search, '%_\\').'%';
@@ -81,9 +91,16 @@ class TribesExplorer extends Component
             ->orderBy('region')
             ->pluck('region');
 
+        $typeOptions = collect(OrganisationContentDecision::ALL_TYPES)
+            ->filter(fn (string $t) => in_array($t, $catalog->contentTypesPresent($user), true))
+            ->mapWithKeys(fn (string $t) => [$t => OrganisationContentDecision::labelFor($t)])
+            ->all();
+
         return view('livewire.teacher.tribes-explorer', [
             'tribes' => $tribes,
             'regions' => $regions,
+            'countsByTribe' => $countsByTribe,
+            'typeOptions' => $typeOptions,
         ]);
     }
 }

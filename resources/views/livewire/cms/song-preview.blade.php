@@ -4,7 +4,7 @@
             <h1 class="cms-page-title">{{ $song->title }}</h1>
             <div class="cms-breadcrumb">Song Details · {{ $song->tribe?->name ?? 'No Tribe' }} · {{ $song->age_range }}</div>
         </div>
-        <a class="btn btn-ghost btn-sm" href="{{ route('cms.admin.approved-content') }}" style="text-decoration:none;">← Back to Approved Content</a>
+        <a class="btn btn-ghost btn-sm" href="{{ route(request()->routeIs('teacher.library.*') ? 'teacher.library' : 'cms.admin.approved-content') }}" wire:navigate style="text-decoration:none;">← {{ request()->routeIs('teacher.library.*') ? __('Library') : __('Approved Content') }}</a>
     </div>
 
     <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:var(--r-xl); padding:var(--sp-6);">

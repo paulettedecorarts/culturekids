@@ -296,6 +296,17 @@ Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->
 
     // Content Modules
     Route::get('/library', StoryLibrary::class)->name('library');
+    Route::get('/library/songs/{id}', SongPreview::class)->middleware('teacher.library:song')->name('library.songs.show');
+    Route::get('/library/flashcards/{id}', ActivityDetailPage::class)->middleware('teacher.library:flashcard')->name('library.flashcards.show');
+    Route::get('/library/puzzles/{id}', PuzzleShow::class)->middleware('teacher.library:puzzle')->name('library.puzzles.show');
+    Route::get('/library/drawings/{id}', DrawingShow::class)->middleware('teacher.library:drawing')->name('library.drawings.show');
+    Route::get('/library/colouring/{id}', DrawingShow::class)->middleware('teacher.library:colouring')->name('library.colouring.show');
+    Route::get('/library/language-activities/{id}', LanguageActivityShow::class)->middleware('teacher.library:language')->name('library.language-activities.show');
+    Route::get('/library/games/{id}', GameShow::class)->middleware('teacher.library:game')->name('library.games.show');
+    Route::get('/library/mazes/{id}', MazeShow::class)->middleware('teacher.library:maze')->name('library.mazes.show');
+    Route::get('/library/spot-differences/{id}', SpotDifferenceShow::class)->middleware('teacher.library:spot_difference')->name('library.spot-differences.show');
+    Route::get('/library/word-searches/{id}', WordSearchShow::class)->middleware('teacher.library:word_search')->name('library.word-searches.show');
+    Route::get('/library/culture-activities/{id}', CultureActivityShow::class)->middleware('teacher.library:culture')->name('library.culture-activities.show');
     Route::get('/stories/{id}', TeacherStoryReader::class)->name('stories.show');
     Route::get('/tribes', TribesExplorer::class)->name('tribes');
     Route::get('/print-center', PrintCenter::class)->name('print-center');

@@ -1,7 +1,7 @@
 <div class="sd-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.spot-differences' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Spot the Difference' : 'Approved Content' }}</a>
+            <a href="{{ route($this->portalContentListRoute($routePrefix . '.spot-differences')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Spot the Difference') }}</a>
             <div class="sa-page-title">🔍 {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->scene_name ?: 'Spot the Difference' }} • {{ $activity->tribe->name }} • Ages {{ $activity->age_range }}</div>
         </div>

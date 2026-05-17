@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Teacher;
 
+use App\Models\OrganisationContentDecision;
+use App\Services\TeacherApprovedCatalogService;
 use App\Support\TeacherCatalogScope;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -23,6 +26,9 @@ class StoryLibrary extends Component
     #[Url]
     public string $age = 'all';
 
+    #[Url]
+    public string $type = '';
+
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -38,40 +44,73 @@ class StoryLibrary extends Component
         $this->resetPage();
     }
 
+    public function updatingType(): void
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $user = auth()->user();
+        $catalog = app(TeacherApprovedCatalogService::class);
 
         $tribeOptions = TeacherCatalogScope::tribesQueryFor($user)->get(['id', 'name']);
 
-        $query = TeacherCatalogScope::comicsQueryFor($user)->withCount('panels');
+        $items = $catalog->itemsFor($user);
 
-        if ($this->search !== '') {
-            $s = '%'.str_replace(['%', '_'], ['\\%', '\\_'], $this->search).'%';
-            $query->where(function ($q) use ($s) {
-                $q->where('title', 'like', $s)
-                    ->orWhere('description', 'like', $s);
-            });
+        if ($this->type !== '' && in_array($this->type, OrganisationContentDecision::ALL_TYPES, true)) {
+            $items = $items->where('content_type', $this->type)->values();
         }
 
         if ($this->tribe !== '' && ctype_digit($this->tribe)) {
-            $query->where('tribe_id', (int) $this->tribe);
+            $items = $items->where('tribe_id', (int) $this->tribe)->values();
+        }
+
+        if ($this->search !== '') {
+            $needle = mb_strtolower($this->search);
+            $items = $items->filter(function (array $item) use ($needle) {
+                return str_contains(mb_strtolower($item['title']), $needle)
+                    || str_contains(mb_strtolower($item['type_label']), $needle)
+                    || str_contains(mb_strtolower($item['tribe_name'] ?? ''), $needle);
+            })->values();
         }
 
         if ($this->age !== 'all') {
-            match ($this->age) {
-                '2-3' => $query->whereRaw('age_min <= ? AND age_max >= ?', [3, 2]),
-                '3-5' => $query->whereRaw('age_min <= ? AND age_max >= ?', [5, 3]),
-                '5-6' => $query->whereRaw('age_min <= ? AND age_max >= ?', [6, 5]),
-                default => null,
-            };
+            $items = $items->filter(function (array $item) {
+                if ($item['age_min'] === null || $item['age_max'] === null) {
+                    return true;
+                }
+
+                return match ($this->age) {
+                    '2-3' => $item['age_min'] <= 3 && $item['age_max'] >= 2,
+                    '3-5' => $item['age_min'] <= 5 && $item['age_max'] >= 3,
+                    '5-6' => $item['age_min'] <= 6 && $item['age_max'] >= 5,
+                    default => true,
+                };
+            })->values();
         }
 
-        $comics = $query->paginate(12);
+        $perPage = 12;
+        $page = max(1, (int) $this->getPage());
+        $total = $items->count();
+        $slice = $items->slice(($page - 1) * $perPage, $perPage)->values();
+
+        $catalogPage = new LengthAwarePaginator(
+            $slice,
+            $total,
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $typeOptions = collect(OrganisationContentDecision::ALL_TYPES)
+            ->mapWithKeys(fn (string $t) => [$t => OrganisationContentDecision::labelFor($t)])
+            ->all();
 
         return view('livewire.teacher.story-library', [
             'tribeOptions' => $tribeOptions,
-            'comics' => $comics,
+            'catalogItems' => $catalogPage,
+            'typeOptions' => $typeOptions,
         ]);
     }
 }

@@ -3,10 +3,8 @@
 namespace App\Livewire\CMS;
 
 use App\Models\Song;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.cms')]
 class SongPreview extends Component
 {
     public Song $song;
@@ -20,6 +18,8 @@ class SongPreview extends Component
 
     public function render()
     {
-        return view('livewire.cms.song-preview');
+        $layout = request()->routeIs('teacher.library.*') ? 'layouts.teacher' : 'layouts.cms';
+
+        return view('livewire.cms.song-preview')->layout($layout);
     }
 }
