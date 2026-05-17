@@ -141,4 +141,84 @@ class OrgAdminReviewQueueScopeTest extends TestCase
         $comicB->refresh();
         $this->assertSame('review', $comicB->status);
     }
+
+    public function test_review_queue_filters_by_search_type_and_tribe(): void
+    {
+        $this->seed(RoleSeeder::class);
+
+        $tribeA = Tribe::create([
+            'name' => 'Ashanti',
+            'hero_name' => 'Hero A',
+            'region' => 'West',
+        ]);
+        $tribeB = Tribe::create([
+            'name' => 'Zulu',
+            'hero_name' => 'Hero B',
+            'region' => 'South',
+        ]);
+
+        $org = Organisation::create([
+            'name' => 'Filter Org',
+            'code' => 'f-'.uniqid(),
+            'plan' => 'school',
+            'status' => 'active',
+        ]);
+
+        Comic::create([
+            'org_id' => null,
+            'tribe_id' => $tribeA->id,
+            'title' => 'Ashanti Story Alpha',
+            'description' => null,
+            'age_min' => 2,
+            'age_max' => 4,
+            'status' => 'review',
+        ]);
+
+        Comic::create([
+            'org_id' => null,
+            'tribe_id' => $tribeB->id,
+            'title' => 'Zulu Story Beta',
+            'description' => null,
+            'age_min' => 2,
+            'age_max' => 4,
+            'status' => 'review',
+        ]);
+
+        Song::create([
+            'org_id' => null,
+            'tribe_id' => $tribeA->id,
+            'title' => 'Ashanti Song',
+            'description' => null,
+            'language' => 'en',
+            'song_type' => 'heritage',
+            'lyrics' => null,
+            'audio_path' => null,
+            'cover_image_path' => null,
+            'duration_seconds' => null,
+            'age_min' => 2,
+            'age_max' => 4,
+            'star_points' => 10,
+            'status' => 'review',
+            'metadata' => null,
+        ]);
+
+        $admin = User::factory()->create(['organisation_id' => $org->id]);
+        $admin->assignRole('org_admin');
+
+        $this->actingAs($admin);
+
+        Livewire::test(ReviewQueue::class)
+            ->set('search', 'Ashanti')
+            ->assertViewHas('filteredTotal', 2)
+            ->set('search', '')
+            ->set('typeFilter', 'story')
+            ->assertViewHas('filteredTotal', 2)
+            ->set('typeFilter', 'song')
+            ->assertViewHas('filteredTotal', 1)
+            ->set('typeFilter', '')
+            ->set('tribeFilter', (string) $tribeB->id)
+            ->assertViewHas('filteredTotal', 1)
+            ->assertSee('Zulu Story Beta')
+            ->assertDontSee('Ashanti Story Alpha');
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Livewire\CMS;
 
+use App\Livewire\Concerns\FiltersOrganisationReviewQueue;
 use App\Livewire\Concerns\PaginatesCollections;
 use App\Models\OrganisationContentDecision;
+use App\Models\Tribe;
 use App\Services\OrganisationContentReviewService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -11,6 +13,7 @@ use Livewire\Component;
 #[Layout('layouts.cms')]
 class ReviewQueue extends Component
 {
+    use FiltersOrganisationReviewQueue;
     use PaginatesCollections;
 
     public function approve(string $contentType, int $contentId): void
@@ -63,18 +66,30 @@ class ReviewQueue extends Component
             ? app(OrganisationContentReviewService::class)->pendingForOrganisation($orgId)
             : collect();
 
-        $pendingByType = $pendingAll->groupBy('content_type');
+        $pendingFiltered = $this->applyReviewQueueFilters($pendingAll);
+
         $countsByType = [];
         foreach (OrganisationContentDecision::ALL_TYPES as $type) {
-            $countsByType[$type] = $pendingByType->get($type, collect())->count();
+            $countsByType[$type] = $pendingAll->where('content_type', $type)->count();
         }
+
+        $statusOptions = $pendingAll
+            ->pluck('status')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
 
         return view('livewire.cms.review-queue', [
             'organization' => $organization,
-            'pendingItems' => $this->paginateCollection($pendingAll, 20),
+            'pendingItems' => $this->paginateCollection($pendingFiltered, 20),
             'pendingTotal' => $pendingAll->count(),
+            'filteredTotal' => $pendingFiltered->count(),
             'countsByType' => $countsByType,
             'typeLabels' => OrganisationContentDecision::TYPE_LABELS,
+            'tribes' => Tribe::query()->orderBy('name')->get(['id', 'name']),
+            'statusOptions' => $statusOptions,
         ]);
     }
 }

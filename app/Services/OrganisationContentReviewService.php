@@ -76,7 +76,60 @@ class OrganisationContentReviewService
             $items->push($this->row($row, OrganisationContentDecision::TYPE_CULTURE, $row->status));
         }
 
-        return $items->sortByDesc(fn (array $item) => $item['updated_at'])->values();
+        return $this->sortPendingItems($items, 'updated_desc');
+    }
+
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @param  array{search?: string, type?: string, tribe_id?: string|int, status?: string, sort?: string}  $filters
+     * @return Collection<int, array<string, mixed>>
+     */
+    public function filterPendingItems(Collection $items, array $filters): Collection
+    {
+        $search = mb_strtolower(trim((string) ($filters['search'] ?? '')));
+        $type = (string) ($filters['type'] ?? '');
+        $tribeId = (string) ($filters['tribe_id'] ?? '');
+        $status = (string) ($filters['status'] ?? '');
+        $sort = (string) ($filters['sort'] ?? 'updated_desc');
+
+        $filtered = $items
+            ->when($search !== '', function (Collection $collection) use ($search) {
+                return $collection->filter(function (array $item) use ($search) {
+                    $haystack = mb_strtolower(implode(' ', array_filter([
+                        $item['title'] ?? '',
+                        $item['type_label'] ?? '',
+                        $item['tribe_name'] ?? '',
+                        $item['content_type'] ?? '',
+                        $item['status'] ?? '',
+                    ])));
+
+                    return str_contains($haystack, $search);
+                });
+            })
+            ->when($type !== '', fn (Collection $collection) => $collection->where('content_type', $type))
+            ->when($tribeId !== '', fn (Collection $collection) => $collection->where('tribe_id', (int) $tribeId))
+            ->when($status !== '', function (Collection $collection) use ($status) {
+                return $collection->filter(fn (array $item) => $this->displayStatus($item) === $status);
+            });
+
+        return $this->sortPendingItems($filtered, $sort)->values();
+    }
+
+    /** @param  Collection<int, array<string, mixed>>  $items */
+    private function sortPendingItems(Collection $items, string $sort): Collection
+    {
+        return match ($sort) {
+            'updated_asc' => $items->sortBy(fn (array $item) => $item['updated_at']),
+            'title_asc' => $items->sortBy(fn (array $item) => mb_strtolower((string) ($item['title'] ?? ''))),
+            'title_desc' => $items->sortByDesc(fn (array $item) => mb_strtolower((string) ($item['title'] ?? ''))),
+            default => $items->sortByDesc(fn (array $item) => $item['updated_at']),
+        };
+    }
+
+    /** @param  array<string, mixed>  $item */
+    private function displayStatus(array $item): string
+    {
+        return (string) ($item['status'] ?? 'published');
     }
 
     /** @return Collection<int, array{content_type: string, type_label: string, id: int, title: string, tribe: ?string, approved_by: string, approved_at: mixed, view_url: ?string}> */
@@ -150,9 +203,10 @@ class OrganisationContentReviewService
                         ->whereNotIn('id', $this->decidedIds($orgId, OrganisationContentDecision::TYPE_STORY));
                 });
             })
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at', 'status', 'org_id']);
+            ->get(['id', 'title', 'updated_at', 'status', 'org_id', 'tribe_id']);
     }
 
     /** @return Collection<int, object> */
@@ -178,9 +232,10 @@ class OrganisationContentReviewService
                         ->whereNotIn('id', $this->decidedIds($orgId, OrganisationContentDecision::TYPE_SONG));
                 });
             })
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at', 'status', 'org_id']);
+            ->get(['id', 'title', 'updated_at', 'status', 'org_id', 'tribe_id']);
     }
 
     /** @return Collection<int, Activity> */
@@ -192,9 +247,10 @@ class OrganisationContentReviewService
             ->where('type', $activityType)
             ->where('is_published', true)
             ->when($exclude !== [], fn ($q) => $q->whereNotIn('id', $exclude))
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at']);
+            ->get(['id', 'title', 'updated_at', 'tribe_id']);
     }
 
     /** @return Collection<int, Drawing> */
@@ -216,9 +272,10 @@ class OrganisationContentReviewService
                 })
             )
             ->when($exclude !== [], fn ($q) => $q->whereNotIn('id', $exclude))
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at', 'status']);
+            ->get(['id', 'title', 'updated_at', 'status', 'tribe_id']);
     }
 
     /** @return Collection<int, LanguageActivity> */
@@ -229,9 +286,10 @@ class OrganisationContentReviewService
         return LanguageActivity::query()
             ->where('status', 'published')
             ->when($exclude !== [], fn ($q) => $q->whereNotIn('id', $exclude))
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at', 'status']);
+            ->get(['id', 'title', 'updated_at', 'status', 'tribe_id']);
     }
 
     /**
@@ -245,9 +303,10 @@ class OrganisationContentReviewService
         return $modelClass::query()
             ->where('status', 'published')
             ->when($exclude !== [], fn ($q) => $q->whereNotIn('id', $exclude))
+            ->with('tribe:id,name')
             ->latest()
             ->limit(50)
-            ->get(['id', 'title', 'updated_at', 'status']);
+            ->get(['id', 'title', 'updated_at', 'status', 'tribe_id']);
     }
 
     /** @return list<int> */
@@ -261,16 +320,24 @@ class OrganisationContentReviewService
             ->all();
     }
 
-  /** @param  object  $model */
+    /** @param  object  $model */
     private function row(object $model, string $contentType, ?string $status = null): array
     {
+        $tribeId = isset($model->tribe_id) && $model->tribe_id ? (int) $model->tribe_id : null;
+        $tribeName = null;
+        if ($model->relationLoaded('tribe') && $model->tribe) {
+            $tribeName = (string) $model->tribe->name;
+        }
+
         return [
             'content_type' => $contentType,
             'type_label' => OrganisationContentDecision::labelFor($contentType),
             'id' => (int) $model->id,
             'title' => (string) $model->title,
+            'tribe_id' => $tribeId,
+            'tribe_name' => $tribeName,
             'updated_at' => $model->updated_at,
-            'status' => $status,
+            'status' => $status ?? 'published',
         ];
     }
 
