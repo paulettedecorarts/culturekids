@@ -16,7 +16,7 @@
     <!-- Modules List -->
     <div style="display:flex;flex-direction:column;gap:var(--sp-3)">
         @forelse($modules as $module)
-            <div style="background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);padding:var(--sp-5)">
+            <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-xl);padding:var(--sp-5)">
                 <div style="display:flex;align-items:center;gap:var(--sp-4)">
                     <div style="width:48px; height:48px; border-radius:14px; background:var(--cms-surface-raised); border: 1px solid var(--cms-border); display:flex; align-items:center; justify-content:center; font-size:24px">
                         {{ $module->icon ?? '🧩' }}
@@ -48,7 +48,7 @@
                 </div>
                 
                 @if($module->description)
-                    <div style="margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid rgba(255,255,255,.05);font-size:13px;color:var(--cms-text-muted)">
+                    <div style="margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--cms-border-subtle);font-size:13px;color:var(--cms-text-muted)">
                         {{ $module->description }}
                     </div>
                 @endif
@@ -69,8 +69,8 @@
 
     <!-- Create/Edit Modal -->
     @if($showModal)
-        <div style="position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px">
-            <div style="background:var(--indigo-night); width:100%; max-width:600px; border:1px solid rgba(255,255,255,0.15); border-radius:32px; box-shadow:0 40px 100px rgba(0,0,0,0.5); overflow:hidden" onclick="event.stopPropagation()">
+        <div class="sa-modal-backdrop" style="position:fixed; inset:0; backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px">
+            <div class="sa-modal-panel" style="max-width:600px; border-radius:32px" onclick="event.stopPropagation()">
                 <div style="padding:32px; border-bottom:1px solid var(--cms-border); display:flex; align-items:center; justify-content:space-between">
                     <div>
                         <h2 style="font-family:var(--font-display); font-size:24px; color:var(--cms-text)">{{ $editing ? 'Edit Module' : 'New Module' }}</h2>
@@ -82,14 +82,14 @@
                 <form wire:submit.prevent="save" style="padding:32px; display:grid; gap:20px">
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Module Name</label>
-                        <input wire:model.live="name" type="text" placeholder="Tribe Directory" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model.live="name" type="text" placeholder="Tribe Directory" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('name') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
                         <div>
                             <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Module Key (Auto-generated)</label>
-                            <input wire:model="key" type="text" readonly style="width:100%; background:var(--cms-surface); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:14px; color:var(--cms-text-muted); font-family:var(--font-admin); cursor:not-allowed">
+                            <input wire:model="key" type="text" readonly style="width:100%; background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:12px; padding:14px; color:var(--cms-text-muted); font-family:var(--font-admin); cursor:not-allowed">
                             @error('key') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                         </div>
 
@@ -104,13 +104,13 @@
                                 </div>
                                 
                                 @if($showIconPicker)
-                                    <div style="position:absolute; top:100%; left:0; right:0; margin-top:8px; background:var(--indigo-night); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:16px; max-height:300px; overflow-y:auto; z-index:10; box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+                                    <div style="position:absolute; top:100%; left:0; right:0; margin-top:8px; background:var(--cms-surface); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:16px; max-height:300px; overflow-y:auto; z-index:10; box-shadow:0 8px 32px rgba(0,0,0,0.5)">
                                         <div style="display:grid; grid-template-columns:repeat(8, 1fr); gap:8px">
                                             @foreach($availableIcons as $availableIcon)
                                                 <button 
                                                     type="button"
                                                     wire:click="selectIcon('{{ $availableIcon }}')"
-                                                    style="background: var(--cms-surface-raised); border:1px solid {{ $icon === $availableIcon ? 'var(--savanna-gold)' : 'rgba(255,255,255,0.1)' }}; border-radius:8px; padding:8px; font-size:24px; cursor:pointer; transition:all 0.2s"
+                                                    style="background:var(--cms-input-bg); border:1px solid {{ $icon === $availableIcon ? 'var(--savanna-gold)' : 'rgba(255,255,255,0.1)' }}; border-radius:8px; padding:8px; font-size:24px; cursor:pointer; transition:all 0.2s"
                                                     onmouseover="this.style.background='rgba(255,255,255,0.1)'"
                                                     onmouseout="this.style.background='rgba(255,255,255,0.05)'"
                                                 >
@@ -127,14 +127,14 @@
 
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Description</label>
-                        <textarea wire:model="description" rows="3" placeholder="Brief description of this module..." style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin); resize:vertical"></textarea>
+                        <textarea wire:model="description" rows="3" placeholder="Brief description of this module..." style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin); resize:vertical"></textarea>
                         @error('description') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
                         <div>
                             <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Sort Order</label>
-                            <input wire:model="sort_order" type="number" min="0" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
+                            <input wire:model="sort_order" type="number" min="0" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
                             @error('sort_order') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                         </div>
 

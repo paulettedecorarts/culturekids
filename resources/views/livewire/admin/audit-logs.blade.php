@@ -15,12 +15,12 @@
             type="text" 
             wire:model.live.debounce.300ms="search" 
             placeholder="Search by action, resource, or user email..."
-            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
         
         <select 
             wire:model.live="actionFilter"
-            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         >
             <option value="">All Actions</option>
             @foreach($actions as $action)
@@ -31,7 +31,7 @@
         <input 
             type="date" 
             wire:model.live="dateFilter"
-            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
     </div>
 

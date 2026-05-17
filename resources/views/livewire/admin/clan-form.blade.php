@@ -3,7 +3,7 @@
     .clan-form-page .cf-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
     .clan-form-page .cf-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
     .clan-form-page .cf-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .clan-form-page .cf-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .clan-form-page .cf-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s;color-scheme:inherit; }
     .clan-form-page .cf-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .clan-form-page .cf-input::placeholder { color:var(--cms-text-muted); }
     .clan-form-page select.cf-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }

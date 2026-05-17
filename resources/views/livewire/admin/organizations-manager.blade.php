@@ -19,14 +19,14 @@
             type="text"
             wire:model.live.debounce.300ms="search"
             placeholder="Search by organization name or code..."
-            style="background:var(--cms-surface-raised); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-md); padding:var(--sp-3) var(--sp-4); color:var(--cms-text); flex:1; font-family:var(--font-admin); font-size:12px; outline:none;"
+            style="background:var(--cms-input-bg); border:1px solid var(--cms-input-border); border-radius:var(--r-md); padding:var(--sp-3) var(--sp-4); color:var(--cms-text); flex:1; font-family:var(--font-admin); font-size:12px; outline:none;"
         >
     </div>
 
     <!-- Organizations List -->
     <div style="display:flex;flex-direction:column;gap:var(--sp-3)">
         @forelse($organizations as $org)
-            <div style="background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);padding:var(--sp-5)">
+            <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-xl);padding:var(--sp-5)">
                 <div style="display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-4);flex-wrap:wrap">
                     <div style="width:48px; height:48px; border-radius:14px; background:{{ $org->logo_url ? 'transparent' : 'rgba(255,255,255,0.04)' }}; border: 1px solid var(--cms-border); display:flex; align-items:center; justify-content:center; overflow:hidden">
                         @if($org->logo_url)
@@ -70,8 +70,8 @@
 
     <!-- Edit modal -->
     @if($showModal)
-        <div style="position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px">
-            <div style="background:var(--indigo-night); width:100%; max-width:600px; border:1px solid rgba(255,255,255,0.15); border-radius:32px; box-shadow:0 40px 100px rgba(0,0,0,0.5); overflow:hidden" onclick="event.stopPropagation()">
+        <div class="sa-modal-backdrop" style="position:fixed; inset:0; backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px">
+            <div class="sa-modal-panel" style="max-width:600px; border-radius:32px" onclick="event.stopPropagation()">
                 <div style="padding:32px; border-bottom:1px solid var(--cms-border); display:flex; align-items:center; justify-content:space-between">
                     <div>
                         <h2 style="font-family:var(--font-display); font-size:24px; color:var(--cms-text)">Configure entity</h2>
@@ -100,19 +100,19 @@
 
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">School Name</label>
-                        <input wire:model="name" type="text" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="name" type="text" style="width:100%; background: var(--cms-input-bg); border: 1px solid var(--cms-input-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('name') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">System Code</label>
-                        <input wire:model="code" type="text" placeholder="e.g. kisu-ug" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="code" type="text" placeholder="e.g. kisu-ug" style="width:100%; background: var(--cms-input-bg); border: 1px solid var(--cms-input-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('code') <div style="color:var(--clay-red); font-size:10px; margin-top:4px">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Access Status</label>
-                        <select wire:model="status" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text)">
+                        <select wire:model="status" style="width:100%; background: var(--cms-input-bg); border: 1px solid var(--cms-input-border); border-radius:12px; padding:14px; color:var(--cms-text)">
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
@@ -120,7 +120,7 @@
 
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Plan tier</label>
-                        <select wire:model="plan" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text)">
+                        <select wire:model="plan" style="width:100%; background: var(--cms-input-bg); border: 1px solid var(--cms-input-border); border-radius:12px; padding:14px; color:var(--cms-text)">
                             <option value="free">Free</option>
                             <option value="school">School</option>
                             <option value="enterprise">Enterprise</option>
@@ -130,7 +130,7 @@
 
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; margin-bottom:8px">Physical Address</label>
-                        <input wire:model="address" type="text" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="address" type="text" style="width:100%; background: var(--cms-input-bg); border: 1px solid var(--cms-input-border); border-radius:12px; padding:14px; color:var(--cms-text); font-family:var(--font-admin)">
                     </div>
 
                     <div style="grid-column: span 2; margin-top:12px">

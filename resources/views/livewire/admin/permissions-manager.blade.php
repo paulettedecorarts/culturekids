@@ -26,7 +26,7 @@
             </thead>
             <tbody>
                 @foreach($permissions as $permission)
-                <tr style="border-bottom:1px solid rgba(255,255,255,.05)">
+                <tr style="border-bottom:1px solid var(--cms-border-subtle)">
                     <td style="padding:var(--sp-2) var(--sp-4);color:var(--cms-text-muted)">{{ Str::ucfirst(str_replace('_', ' ', $permission->name)) }}</td>
                     @foreach($roles as $role)
                         @if($role->name === 'super_admin')

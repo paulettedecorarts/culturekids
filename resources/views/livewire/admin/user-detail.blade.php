@@ -32,11 +32,11 @@
                 <p style="font-size:12px; color:var(--cms-text-muted); font-weight:700; margin-bottom:24px">{{ $user->email }}</p>
 
                 <div style="display:flex; flex-direction:column; gap:12px">
-                    <div style="background:var(--cms-surface); padding:16px; border-radius:20px; border:1px solid rgba(255,255,255,0.04); text-align:left">
+                    <div style="background:var(--cms-surface); padding:16px; border-radius:20px; border:1px solid var(--cms-border-subtle); text-align:left">
                         <div style="font-size:10px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; margin-bottom:4px">Registration Authority</div>
                         <div style="color:var(--cms-text); font-weight:800; font-size:13px">{{ $user->organisation ? $user->organisation->name : 'Global Platform' }}</div>
                     </div>
-                    <div style="background:var(--cms-surface); padding:16px; border-radius:20px; border:1px solid rgba(255,255,255,0.04); text-align:left">
+                    <div style="background:var(--cms-surface); padding:16px; border-radius:20px; border:1px solid var(--cms-border-subtle); text-align:left">
                         <div style="font-size:10px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; margin-bottom:4px">Joined Lifecycle</div>
                         <div style="color:var(--cms-text); font-weight:800; font-size:13px">{{ $user->created_at->format('M d, Y') }}</div>
                     </div>
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Stats Panel -->
-            <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,0.05); border-radius:32px; padding:32px">
+            <div style="background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:32px; padding:32px">
                 <h4 style="font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px">Platform Engagement</h4>
                 <div style="display:flex; flex-direction:column; gap:16px">
                     <div style="display:flex; align-items:center; justify-content:space-between">
@@ -80,7 +80,7 @@
                 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
                     @forelse($user->childProfiles as $child)
-                        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,0.05); border-radius:24px; padding:24px; display:flex; align-items:center; gap:20px">
+                        <div style="background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:24px; padding:24px; display:flex; align-items:center; gap:20px">
                             <div style="width:56px; height:56px; border-radius:16px; background:var(--savanna-gold); display:flex; align-items:center; justify-content:center; color:var(--cms-text); font-size:24px">👦</div>
                             <div>
                                 <div style="font-weight:800; color:var(--cms-text); font-size:16px; margin-bottom:2px">{{ $child->name }}</div>

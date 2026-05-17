@@ -37,18 +37,18 @@
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:16px">
-                    <div style="background:var(--cms-surface); padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,0.04)">
+                    <div style="background:var(--cms-surface); padding:16px; border-radius:16px; border:1px solid var(--cms-border-subtle)">
                         <div style="font-size:10px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; margin-bottom:4px">Registration Date</div>
                         <div style="color:var(--cms-text); font-weight:800; font-size:13px">{{ $organization->created_at->format('M d, Y') }}</div>
                     </div>
-                    <div style="background:var(--cms-surface); padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,0.04)">
+                    <div style="background:var(--cms-surface); padding:16px; border-radius:16px; border:1px solid var(--cms-border-subtle)">
                         <div style="font-size:10px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; margin-bottom:4px">Platform Plan</div>
                         <div style="color:var(--cms-text); font-weight:800; font-size:13px">{{ Str::title($organization->plan ?? 'free') }}</div>
                     </div>
                 </div>
             </div>
 
-            <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,0.05); border-radius:32px; padding:32px">
+            <div style="background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:32px; padding:32px">
                 <h4 style="font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:24px">Entity Stats</h4>
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
                     <span style="font-size:12px; font-weight:700; color:var(--cms-text-muted)">Total Users</span>
@@ -64,7 +64,7 @@
 
                 <div style="display:flex; flex-direction:column; gap:10px; max-height:420px; overflow-y:auto; padding-right:4px">
                     @forelse($orgUsers as $user)
-                        <a href="{{ route('admin.users.detail', $user) }}" style="text-decoration:none; background:var(--cms-surface); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:10px">
+                        <a href="{{ route('admin.users.detail', $user) }}" style="text-decoration:none; background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:10px">
                             <div style="display:flex; align-items:center; gap:12px">
                                 <div style="width:40px; height:40px; border-radius:12px; background:var(--clay-red); display:flex; align-items:center; justify-content:center; color:var(--cms-text); font-weight:800; font-family:var(--font-display); font-size:15px; flex-shrink:0">
                                     {{ Str::substr($user->name, 0, 1) }}
@@ -115,7 +115,7 @@
                                 wire:click="toggleOrgModule({{ $module->id }})"
                                 wire:loading.attr="disabled"
                                 @if(!$module->is_enabled) disabled @endif
-                                style="flex-shrink:0; padding:8px 16px; border-radius:999px; font-size:11px; font-weight:800; border:1px solid {{ $on ? 'rgba(74,124,89,0.4)' : 'rgba(255,255,255,0.12)' }}; background:{{ $on ? 'rgba(74,124,89,0.2)' : 'rgba(255,255,255,0.05)' }}; color:{{ $on ? 'var(--banana-light)' : 'rgba(255,255,255,0.45)' }}; cursor:{{ $module->is_enabled ? 'pointer' : 'not-allowed' }}; opacity:{{ $module->is_enabled ? 1 : 0.5 }}"
+                                style="flex-shrink:0; padding:8px 16px; border-radius:999px; font-size:11px; font-weight:800; border:1px solid {{ $on ? 'rgba(74,124,89,0.4)' : 'var(--cms-border)' }}; background:{{ $on ? 'rgba(74,124,89,0.2)' : 'var(--cms-surface-raised)' }}; color:{{ $on ? 'var(--banana-green)' : 'var(--cms-text-muted)' }}; cursor:{{ $module->is_enabled ? 'pointer' : 'not-allowed' }}; opacity:{{ $module->is_enabled ? 1 : 0.5 }}"
                             >{{ $on ? 'On' : 'Off' }}</button>
                         </div>
                     @endforeach
@@ -142,7 +142,7 @@
                 <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end">
                     <div style="flex:1; min-width:220px">
                         <label style="display:block; font-size:10px; font-weight:800; color: var(--cms-text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px">Plan tier</label>
-                        <select wire:model="plan" style="width:100%; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:14px; padding:14px 16px; color:var(--cms-text); font-family:var(--font-admin); font-size:14px; outline:none">
+                        <select wire:model="plan" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:14px; padding:14px 16px; color:var(--cms-text); font-family:var(--font-admin); font-size:14px; outline:none">
                             <option value="free">Free</option>
                             <option value="school">School</option>
                             <option value="enterprise">Enterprise</option>

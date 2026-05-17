@@ -1,0 +1,243 @@
+/**
+ * Super Admin main content — follows data-sa-theme (sidebar stays dark).
+ * Aliases --cms-* to --sa-* for shared admin Livewire blades.
+ */
+
+.sa-content {
+    color: var(--sa-text);
+    --cms-bg: var(--sa-bg);
+    --cms-surface: var(--sa-surface);
+    --cms-surface-raised: var(--sa-surface-raised);
+    --cms-surface-hover: var(--sa-surface-hover);
+    --cms-text: var(--sa-text);
+    --cms-text-muted: var(--sa-text-muted);
+    --cms-border: var(--sa-border);
+    --cms-border-subtle: var(--sa-border-subtle);
+    --cms-input-bg: var(--sa-input-bg);
+    --cms-input-border: var(--sa-input-border);
+    --cms-row-hover: var(--sa-row-hover);
+}
+
+/* ── Page chrome ── */
+.sa-content .sa-page-title { color: var(--sa-text) !important; }
+.sa-content .sa-breadcrumb { color: var(--sa-text-muted) !important; }
+
+.sa-content .sa-stat {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+.sa-content .sa-stat-val { color: var(--sa-text) !important; }
+.sa-content .sa-stat-label { color: var(--sa-text-muted) !important; }
+
+.sa-content .sa-table-wrap {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+.sa-content .sa-table-head {
+    background: var(--sa-table-head) !important;
+    color: var(--sa-text-muted) !important;
+    border-bottom-color: var(--sa-border) !important;
+}
+.sa-content .sa-table-row {
+    border-bottom-color: var(--sa-border-subtle) !important;
+    color: var(--sa-text);
+}
+.sa-content .sa-table-row:hover { background: var(--sa-row-hover) !important; }
+
+.sa-content .module-toggle {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+.sa-content .toggle-name { color: var(--sa-text) !important; }
+.sa-content .toggle-desc { color: var(--sa-text-muted) !important; }
+
+.sa-content .btn-ghost {
+    color: var(--sa-ghost-text) !important;
+    border-color: var(--sa-ghost-border) !important;
+}
+.sa-content .btn-ghost:hover {
+    background: var(--sa-row-hover) !important;
+    color: var(--sa-text) !important;
+}
+
+/* ── All form controls (both themes) ── */
+.sa-content input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="color"]):not([type="range"]),
+.sa-content select,
+.sa-content textarea {
+    background: var(--sa-input-bg) !important;
+    color: var(--sa-text) !important;
+    border-color: var(--sa-input-border) !important;
+    color-scheme: inherit;
+}
+
+.sa-content select option,
+.sa-content select optgroup {
+    background: var(--sa-input-bg);
+    color: var(--sa-text);
+}
+
+[data-sa-theme="light"] .sa-content select option {
+    background: #ffffff !important;
+    color: var(--ink, #1a1208) !important;
+}
+
+/* ── Organization create / edit forms ── */
+.sa-content .org-create-root .org-create-shell,
+.sa-content .org-create-root .org-field input,
+.sa-content .org-create-root .org-field select,
+.sa-content .org-create-root .org-field textarea {
+    background: var(--sa-input-bg);
+    color: var(--sa-text);
+    border-color: var(--sa-input-border);
+}
+
+.sa-content .org-create-root .org-create-shell {
+    background: var(--sa-surface) !important;
+    border: 1px solid var(--sa-border) !important;
+}
+
+.sa-content .org-create-root .org-create-panel-title {
+    border-bottom-color: var(--sa-border) !important;
+}
+
+.sa-content .org-create-root .org-create-actions {
+    border-top-color: var(--sa-border) !important;
+}
+
+.sa-content .org-create-root .org-field label {
+    color: var(--sa-text-muted) !important;
+}
+
+/* ── Modals ── */
+.sa-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+}
+
+[data-sa-theme="light"] .sa-modal-backdrop {
+    background: rgba(26, 18, 8, 0.45);
+}
+
+[data-sa-theme="dark"] .sa-modal-backdrop {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.sa-modal-panel {
+    background: var(--sa-surface) !important;
+    border: 1px solid var(--sa-border) !important;
+    color: var(--sa-text);
+    width: 100%;
+    overflow: hidden;
+}
+
+[data-sa-theme="light"] .sa-modal-panel {
+    box-shadow: 0 24px 80px rgba(26, 18, 8, 0.18) !important;
+}
+
+[data-sa-theme="dark"] .sa-modal-panel {
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Legacy modals without classes */
+.sa-content [style*="background:var(--indigo-night)"],
+.sa-content [style*="background: var(--indigo-night)"],
+.sa-content [style*="background:#111827"],
+.sa-content [style*="background: #111827"] {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text);
+}
+
+/* Cards / panels with dark-only borders */
+.sa-content [style*="rgba(255,255,255,.07)"],
+.sa-content [style*="rgba(255,255,255,0.07)"],
+.sa-content [style*="rgba(255, 255, 255, 0.07)"] {
+    border-color: var(--sa-border) !important;
+}
+
+.sa-content [style*="rgba(255,255,255,.05)"],
+.sa-content [style*="rgba(255,255,255,0.05)"],
+.sa-content [style*="rgba(255, 255, 255, 0.05)"],
+.sa-content [style*="rgba(255, 255, 255, 0.06)"],
+.sa-content [style*="rgba(255,255,255,.08)"],
+.sa-content [style*="rgba(255, 255, 255, 0.08)"] {
+    border-color: var(--sa-border-subtle) !important;
+}
+
+/* Search / filter bars using surface-raised */
+.sa-content input[style*="surface-raised"],
+.sa-content select[style*="surface-raised"] {
+    background: var(--sa-input-bg) !important;
+    border-color: var(--sa-input-border) !important;
+}
+
+/* Dropdown popovers locked to indigo */
+.sa-content [style*="indigo-night"] {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+
+[data-sa-theme="light"] .sa-content [style*="rgba(0,0,0"],
+[data-sa-theme="light"] .sa-content [style*="background: rgba(0, 0, 0"] {
+    background: var(--sa-surface) !important;
+}
+
+/* sa-tribe-form / sa-user-form large cards */
+.sa-content .sa-tribe-form-view input[type="text"],
+.sa-content .sa-tribe-form-view input[type="number"],
+.sa-content .sa-tribe-form-view select,
+.sa-content .sa-tribe-form-view textarea,
+.sa-content .sa-user-form-view input,
+.sa-content .sa-user-form-view select {
+    background: var(--sa-input-bg) !important;
+    color: var(--sa-text) !important;
+    border-color: var(--sa-input-border) !important;
+}
+
+.sa-content .sa-tribe-form-view [style*="background:var(--cms-surface-raised)"],
+.sa-content .sa-user-form-view [style*="background:var(--cms-surface-raised)"] {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+
+/* Story form */
+.sa-content .story-form-input {
+    background: var(--sa-input-bg) !important;
+    color: var(--sa-text) !important;
+    border-color: var(--sa-border) !important;
+}
+
+.sa-content .story-form-select option {
+    background: var(--sa-input-bg) !important;
+    color: var(--sa-text) !important;
+}
+
+/* Panel editor / story detail dark panels */
+.sa-content .panel-editor-root,
+.sa-content .story-detail-page {
+    color: var(--sa-text);
+}
+
+/* Entity / org detail cards */
+.sa-content .sa-org-detail [style*="background:var(--cms-surface-raised)"] {
+    background: var(--sa-surface) !important;
+    border-color: var(--sa-border) !important;
+}
+
+/* List card placeholders (logo box) */
+[data-sa-theme="light"] .sa-content [style*="rgba(255,255,255,0.04)"] {
+    background: var(--sa-surface-raised) !important;
+}
+
+/* Age categories action buttons */
+.sa-content .age-categories-page .age-actions .btn {
+    background: var(--sa-surface-raised) !important;
+    border-color: var(--sa-border) !important;
+    color: var(--sa-text) !important;
+}

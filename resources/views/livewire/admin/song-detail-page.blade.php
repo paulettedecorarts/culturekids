@@ -38,7 +38,7 @@
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Title</label>
-                    <input wire:model="title" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                    <input wire:model="title" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                     @error('title') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
                 </div>
                 <div>
@@ -53,7 +53,7 @@
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Language</label>
-                    <input wire:model="language" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                    <input wire:model="language" type="text" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Song type</label>
@@ -69,7 +69,7 @@
             <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:10px;margin-top:10px">
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Song upload (audio or video)</label>
-                    <input wire:model="media_file" type="file" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                    <input wire:model="media_file" type="file" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                     <div wire:loading wire:target="media_file" style="font-size:10px;color:var(--savanna-gold);margin-top:4px">
                         ⏳ Uploading file...
                     </div>
@@ -90,7 +90,7 @@
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Cover image</label>
-                    <input wire:model="cover_image" type="file" accept="image/*" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                    <input wire:model="cover_image" type="file" accept="image/*" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                     <div wire:loading wire:target="cover_image" style="font-size:10px;color:var(--savanna-gold);margin-top:4px">
                         ⏳ Uploading...
                     </div>
@@ -98,13 +98,13 @@
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Duration (sec)</label>
-                    <input wire:model="duration_seconds" type="number" min="0" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                    <input wire:model="duration_seconds" type="number" min="0" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Age min / max</label>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                        <input wire:model="age_min" type="number" min="1" max="18" placeholder="min" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
-                        <input wire:model="age_max" type="number" min="1" max="18" placeholder="max" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)">
+                        <input wire:model="age_min" type="number" min="1" max="18" placeholder="min" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
+                        <input wire:model="age_max" type="number" min="1" max="18" placeholder="max" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                     </div>
                     @error('age_max') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
                 </div>
@@ -120,18 +120,18 @@
 
             <div style="margin-top:10px">
                 <label style="font-size:11px;color:var(--cms-text-muted)">Description</label>
-                <textarea wire:model="description" rows="2" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)"></textarea>
+                <textarea wire:model="description" rows="2" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)"></textarea>
             </div>
             <div style="margin-top:10px">
                 <label style="font-size:11px;color:var(--cms-text-muted)">Lyrics</label>
-                <textarea wire:model="lyrics" rows="5" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text)"></textarea>
+                <textarea wire:model="lyrics" rows="5" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)"></textarea>
             </div>
         </div>
     @else
         <div class="sa-table-wrap" style="padding:20px">
             <div style="display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:20px;align-items:start">
                 <aside style="display:flex;flex-direction:column;gap:14px">
-                    <div style="border-radius:14px;overflow:hidden;background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.09);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center">
+                    <div style="border-radius:14px;overflow:hidden;background:var(--cms-surface-raised);border:1px solid var(--cms-border);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center">
                         @if($song?->cover_image_path)
                             <img src="{{ asset('storage/' . $song->cover_image_path) }}" alt="" style="width:100%;height:100%;object-fit:cover">
                         @else

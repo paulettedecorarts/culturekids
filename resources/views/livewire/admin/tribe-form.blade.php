@@ -73,7 +73,7 @@
                             <!-- Manual Fallback -->
                             <div style="width:100%; margin-top:16px; padding-top:16px; border-top:1px solid var(--cms-border); display:flex; align-items:center; gap:12px">
                                 <span style="font-size:11px; font-weight:800; color: var(--cms-text-muted); text-transform:uppercase">Custom:</span>
-                                <input wire:model.live="hero_emoji" type="text" maxlength="2" style="width:60px; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:10px; padding:8px; text-align:center; color:var(--cms-text); font-size:18px">
+                                <input wire:model.live="hero_emoji" type="text" maxlength="2" style="width:60px; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:10px; padding:8px; text-align:center; color:var(--cms-text); font-size:18px">
                             </div>
                         </div>
                         @error('hero_emoji') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror

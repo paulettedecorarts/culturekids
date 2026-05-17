@@ -65,11 +65,11 @@
             type="text"
             wire:model.live.debounce.300ms="search"
             placeholder="Search assets..."
-            style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:250px;"
+            style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:250px;"
         >
         <select
             wire:model.live="typeFilter"
-            style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;"
+            style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;"
         >
             <option value="">All Types</option>
             <option value="image">Images</option>

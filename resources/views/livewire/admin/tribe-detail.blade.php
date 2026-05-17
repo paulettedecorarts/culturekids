@@ -42,7 +42,7 @@
 
             <div style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:32px; padding:32px">
                 <h3 style="font-family:var(--font-display); font-size:18px; color:var(--cms-text); margin-bottom:24px">Guardian Hero Details</h3>
-                <div style="display:flex; align-items:center; gap:16px; background:var(--cms-surface); padding:20px; border-radius:20px; border:1px solid rgba(255,255,255,0.04)">
+                <div style="display:flex; align-items:center; gap:16px; background:var(--cms-surface); padding:20px; border-radius:20px; border:1px solid var(--cms-border-subtle)">
                     <div style="width:48px; height:48px; background:{{ $tribe->color }}; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:20px">🛡️</div>
                     <div>
                         <div style="font-weight:800; color:var(--cms-text); font-size:15px; margin-bottom:2px">{{ $tribe->hero_name }}</div>
@@ -66,7 +66,7 @@
 
                 <div style="display:flex; flex-direction:column; gap:12px">
                     @forelse($tribe->heritageActivities as $activity)
-                        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,0.04); border-radius:24px; padding:24px; display:flex; align-items:center; justify-content:space-between; transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                        <div style="background:var(--cms-surface); border:1px solid var(--cms-border-subtle); border-radius:24px; padding:24px; display:flex; align-items:center; justify-content:space-between; transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
                             <div style="display:flex; align-items:center; gap:20px">
                                 <div style="width:52px; height:52px; background:{{ $tribe->color }}; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'20' }}">🏺</div>
                                 <div>
@@ -96,7 +96,7 @@
             <div style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:40px; padding:48px">
                 <h2 style="font-family:var(--font-display); font-size:24px; color:var(--cms-text); margin-bottom:24px">Cultural Engagement Intelligence</h2>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
-                    <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,0.04); padding:32px; border-radius:24px; text-align:center">
+                    <div style="background:var(--cms-surface); border:1px solid var(--cms-border-subtle); padding:32px; border-radius:24px; text-align:center">
                         <div style="font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; margin-bottom:8px">Total Star Points Archive</div>
                         <div style="font-size:32px; font-weight:800; color:var(--savanna-gold); font-family:var(--font-display)">{{ $tribe->heritageActivities->sum('star_points') + $tribe->songs->sum('star_points') }} ★</div>
                     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-cms-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -773,11 +773,33 @@
         class="cms-shell"
         style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}"
         x-data="{
-            theme: document.documentElement.getAttribute('data-cms-theme') || 'light',
-            sidebarCollapsed: document.documentElement.getAttribute('data-cms-sidebar') === 'collapsed',
+            theme: 'light',
+            sidebarCollapsed: false,
             init() {
-                this.theme = document.documentElement.getAttribute('data-cms-theme') || 'light';
-                this.sidebarCollapsed = document.documentElement.getAttribute('data-cms-sidebar') === 'collapsed';
+                this.syncTheme();
+                this.syncSidebar();
+            },
+            syncTheme() {
+                var theme = null;
+                try { theme = localStorage.getItem('cms-editor-theme'); } catch (e) {}
+                if (theme !== 'light' && theme !== 'dark') {
+                    theme = document.documentElement.getAttribute('data-cms-theme');
+                }
+                if (theme !== 'light' && theme !== 'dark') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                this.theme = theme;
+                document.documentElement.setAttribute('data-cms-theme', theme);
+            },
+            syncSidebar() {
+                var collapsed = false;
+                try { collapsed = localStorage.getItem('cms-sidebar-collapsed') === 'true'; } catch (e) {}
+                this.sidebarCollapsed = collapsed;
+                if (collapsed) {
+                    document.documentElement.setAttribute('data-cms-sidebar', 'collapsed');
+                } else {
+                    document.documentElement.removeAttribute('data-cms-sidebar');
+                }
             },
             setTheme(value) {
                 if (value !== 'light' && value !== 'dark') return;
@@ -817,5 +839,30 @@
 
     @livewireScripts
     @stack('scripts')
+    <script>
+        (function () {
+            function reapplyCmsPrefs() {
+                try {
+                    var theme = localStorage.getItem('cms-editor-theme');
+                    if (theme === 'light' || theme === 'dark') {
+                        document.documentElement.setAttribute('data-cms-theme', theme);
+                    }
+                    if (localStorage.getItem('cms-sidebar-collapsed') === 'true') {
+                        document.documentElement.setAttribute('data-cms-sidebar', 'collapsed');
+                    } else {
+                        document.documentElement.removeAttribute('data-cms-sidebar');
+                    }
+                } catch (e) {}
+                var shell = document.querySelector('.cms-shell');
+                if (shell && typeof Alpine !== 'undefined') {
+                    var data = Alpine.$data(shell);
+                    if (data && typeof data.syncTheme === 'function') data.syncTheme();
+                    if (data && typeof data.syncSidebar === 'function') data.syncSidebar();
+                }
+            }
+            document.addEventListener('livewire:navigating', reapplyCmsPrefs);
+            document.addEventListener('livewire:navigated', reapplyCmsPrefs);
+        })();
+    </script>
 </body>
 </html>

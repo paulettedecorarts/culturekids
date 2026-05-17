@@ -4,7 +4,6 @@
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
-            --oc-stone: #9c8875;
         }
         .org-create-head {
             display: flex;
@@ -17,8 +16,8 @@
         .org-create-shell {
             width: 100%;
             max-width: 100%;
-            background: var(--cms-surface-raised);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: var(--cms-surface);
+            border: 1px solid var(--cms-border);
             border-radius: var(--r-xl);
             padding: clamp(var(--sp-5), 2vw, var(--sp-8));
             box-sizing: border-box;
@@ -49,13 +48,13 @@
             letter-spacing: 0.08em;
             margin: 0 0 4px;
             padding-bottom: var(--sp-3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--cms-border);
         }
         .org-field label {
             display: block;
             font-size: 11px;
             font-weight: 800;
-            color: var(--oc-stone);
+            color: var(--cms-text-muted);
             text-transform: uppercase;
             margin-bottom: 8px;
         }
@@ -63,8 +62,8 @@
         .org-field select,
         .org-field textarea {
             width: 100%;
-            background: var(--cms-surface-raised);
-            border: 1px solid var(--cms-border);
+            background: var(--cms-input-bg);
+            border: 1px solid var(--cms-input-border);
             border-radius: 12px;
             padding: 14px;
             color: var(--cms-text);
@@ -72,6 +71,11 @@
             font-size: 14px;
             outline: none;
             box-sizing: border-box;
+            color-scheme: inherit;
+        }
+        .org-field select option {
+            background: var(--cms-input-bg);
+            color: var(--cms-text);
         }
         .org-field-row {
             display: grid;
@@ -84,7 +88,7 @@
         .org-create-actions {
             margin-top: var(--sp-6);
             padding-top: var(--sp-6);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid var(--cms-border);
             display: flex;
             flex-wrap: wrap;
             gap: var(--sp-4);

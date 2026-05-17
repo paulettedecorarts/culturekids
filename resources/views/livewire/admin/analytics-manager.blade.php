@@ -39,7 +39,7 @@
     <!-- Analytics Grid (Chart Placeholders) -->
     <div style="display:grid; grid-template-columns: 2fr 1fr; gap:var(--sp-6); margin-top:var(--sp-6);">
         <!-- Timeline Chart -->
-        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
+        <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:var(--r-2xl); padding:var(--sp-6);">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-8)">
                 <h3 style="font-size:16px; font-weight:800; color:var(--cms-text); font-family:var(--font-display);">Learning Engagement (Last 7 Days)</h3>
             </div>
@@ -56,7 +56,7 @@
                     </div>
                 @endforeach
             </div>
-            <div style="display:flex; justify-content:space-between; margin-top:10px; border-top:1px solid rgba(255,255,255,.05); padding-top:10px">
+            <div style="display:flex; justify-content:space-between; margin-top:10px; border-top:1px solid var(--cms-border-subtle); padding-top:10px">
                 @foreach($weeklyEngagement as $index => $day)
                     @php
                         $date = \Carbon\Carbon::parse($day['day']);
@@ -70,7 +70,7 @@
         </div>
 
         <!-- Top Content -->
-        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
+        <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:var(--r-2xl); padding:var(--sp-6);">
             <h3 style="font-size:16px; font-weight:800; color:var(--cms-text); margin-bottom:var(--sp-6); font-family:var(--font-display);">Top Performer Stories</h3>
             <div style="display:grid; gap:var(--sp-4);">
                 @forelse($topContent as $index => $content)

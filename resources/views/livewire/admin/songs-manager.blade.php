@@ -35,7 +35,7 @@
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:var(--sp-4)">
-        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search songs..." style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);min-width:220px;flex:1">
+        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search songs..." style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);min-width:220px;flex:1">
         <select wire:model.live="tribeFilter" style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
             <option value="">All tribes</option>
             @foreach($this->tribes as $tribe)

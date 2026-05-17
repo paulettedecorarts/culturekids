@@ -3,7 +3,7 @@
         <!-- Organization Selector -->
         <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:20px;padding:20px 32px;margin-bottom:var(--sp-5);display:flex;align-items:center;gap:24px">
             <div style="font-size:12px;font-weight:700;color:var(--savanna-gold);text-transform:uppercase">Configuring For:</div>
-            <select wire:model.live="selectedOrgId" style="background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:var(--r-full);padding:var(--sp-2) var(--sp-4);color:var(--cms-text);font-size:14px;outline:none;font-weight:700;flex:1;cursor:pointer">
+            <select wire:model.live="selectedOrgId" style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:var(--r-full);padding:var(--sp-2) var(--sp-4);color:var(--cms-text);font-size:14px;outline:none;font-weight:700;flex:1;cursor:pointer">
                 <option value="" style="background:var(--cms-input-bg);color:var(--cms-text)">All Organizations</option>
                 <option value="global" style="background:var(--cms-input-bg);color:var(--cms-text)">Global (Platform-wide)</option>
                 @foreach($organisations as $org)
@@ -120,7 +120,7 @@
     <!-- Create/Edit Modal -->
     @if($showModal)
         <div style="position:fixed;inset:0;background:rgba(26,18,8,0.45);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto">
-            <div style="background:var(--cms-input-bg);width:100%;max-width:1200px;border:1px solid rgba(255,255,255,0.15);border-radius:32px;box-shadow:0 40px 100px rgba(0,0,0,0.5);overflow:hidden;max-height:90vh;display:flex;flex-direction:column">
+            <div style="background:var(--cms-input-bg);width:100%;max-width:1200px;border:1px solid var(--cms-border);border-radius:32px;box-shadow:0 40px 100px rgba(0,0,0,0.5);overflow:hidden;max-height:90vh;display:flex;flex-direction:column">
                 <!-- Header -->
                 <div style="padding:32px;border-bottom:1px solid var(--cms-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
                     <div>
@@ -149,7 +149,7 @@
                                         >
                                         <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Themes are locked to your organization.</div>
                                     @else
-                                        <select wire:model="org_id" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px;cursor:pointer">
+                                        <select wire:model="org_id" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px;cursor:pointer">
                                             <option value="" style="background:var(--cms-input-bg);color:var(--cms-text)">Global (Platform-wide)</option>
                                             @foreach($organisations as $org)
                                                 <option value="{{ $org->id }}" style="background:var(--cms-input-bg);color:var(--cms-text)">{{ $org->name }}</option>
@@ -161,7 +161,7 @@
 
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Theme Name</label>
-                                    <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px">
+                                    <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px">
                                     @error('name') <div style="color:var(--clay-red);font-size:10px;margin-top:4px">{{ $message }}</div> @enderror
                                 </div>
 
@@ -172,7 +172,7 @@
 
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Description</label>
-                                    <textarea wire:model="description" rows="2" placeholder="A warm, earthy theme inspired by African savannas..." style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"></textarea>
+                                    <textarea wire:model="description" rows="2" placeholder="A warm, earthy theme inspired by African savannas..." style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                                         <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid var(--cms-border);border-radius:12px;cursor:pointer;background:transparent">
-                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
+                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
                                         </div>
                                     </div>
                                 @endforeach
@@ -227,7 +227,7 @@
                                         <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid var(--cms-border);border-radius:12px;cursor:pointer;background:transparent">
-                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
+                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
                                         </div>
                                     </div>
                                 @endforeach

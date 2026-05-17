@@ -130,7 +130,7 @@
                         wire:model.blur="caption"
                         rows="3" 
                         placeholder="Add a caption or description for this panel..."
-                        style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"
+                        style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"
                     ></textarea>
                     <div style="font-size:10px;color:var(--cms-text-muted);margin-top:8px">Caption is automatically saved when you move to another panel</div>
                 </div>
@@ -160,7 +160,7 @@
                             <input
                                 wire:model="audio_file"
                                 type="file"
-                                style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:10px;color:var(--cms-text);font-size:11px;margin-bottom:8px"
+                                style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:10px;color:var(--cms-text);font-size:11px;margin-bottom:8px"
                             >
                             <p wire:loading wire:target="audio_file" style="font-size:11px;color:var(--banana-mid);margin:0 0 8px">
                                 Uploading file to server…
@@ -190,7 +190,7 @@
                 <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:24px;padding:24px">
                     <h3 style="font-size:14px;font-weight:800;color:var(--savanna-gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Replace Panel</h3>
                     <div wire:key="replace-panel-{{ $currentPanel->id }}">
-                        <input wire:model="replacement_image" type="file" accept="image/*,.pdf" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:10px;color:var(--cms-text);font-size:11px;margin-bottom:8px">
+                        <input wire:model="replacement_image" type="file" accept="image/*,.pdf" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:10px;color:var(--cms-text);font-size:11px;margin-bottom:8px">
                         @error('replacement_image')
                             <div style="font-size:11px;color:var(--clay-red-light);margin:0 0 8px;font-weight:600">{{ $message }}</div>
                         @enderror
@@ -223,7 +223,7 @@
                     @if(count($vocabTags) > 0)
                         <div style="display:flex;flex-direction:column;gap:8px">
                             @foreach($vocabTags as $tag)
-                                <div style="background:var(--cms-surface);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:12px">
+                                <div style="background:var(--cms-surface);border:1px solid var(--cms-border-subtle);border-radius:8px;padding:12px">
                                     <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:4px">
                                         <div style="font-size:13px;font-weight:700;color:var(--cms-text)">{{ $tag['word'] }}</div>
                                         <button 
@@ -264,8 +264,8 @@
 
     <!-- Vocab Tag Modal -->
     @if($showVocabModal)
-        <div style="position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px">
-            <div style="background:var(--indigo-night);width:100%;max-width:600px;border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:32px">
+        <div class="sa-modal-backdrop" style="position:fixed;inset:0;backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px">
+            <div class="sa-modal-panel" style="max-width:600px;border-radius:24px;padding:32px">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
                     <h2 style="font-size:20px;font-weight:800;color:var(--cms-text)">Add Vocabulary Tag</h2>
                     <button wire:click="$set('showVocabModal', false)" style="background: var(--cms-surface-raised);border: 1px solid var(--cms-border);color:var(--cms-text);width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer">×</button>
@@ -275,28 +275,28 @@
                     <div style="display:grid;gap:16px">
                         <div>
                             <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Word (English)</label>
-                            <input wire:model="vocab_word" type="text" placeholder="hare" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
+                            <input wire:model="vocab_word" type="text" placeholder="hare" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
                             @error('vocab_word') <div style="color:var(--clay-red);font-size:10px;margin-top:4px">{{ $message }}</div> @enderror
                         </div>
 
                         <div>
                             <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Translation ({{ $comic->tribe->name }})</label>
-                            <input wire:model="vocab_translation" type="text" placeholder="akamyu" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
+                            <input wire:model="vocab_translation" type="text" placeholder="akamyu" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
                         </div>
 
                         <div>
                             <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Phonetic</label>
-                            <input wire:model="vocab_phonetic" type="text" placeholder="ah-kah-myoo" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
+                            <input wire:model="vocab_phonetic" type="text" placeholder="ah-kah-myoo" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
                         </div>
 
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                             <div>
                                 <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">X Position</label>
-                                <input wire:model="vocab_x" type="number" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
+                                <input wire:model="vocab_x" type="number" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
                             </div>
                             <div>
                                 <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Y Position</label>
-                                <input wire:model="vocab_y" type="number" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
+                                <input wire:model="vocab_y" type="number" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:8px;padding:12px;color:var(--cms-text)">
                             </div>
                         </div>
 

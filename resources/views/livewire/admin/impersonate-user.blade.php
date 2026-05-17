@@ -27,12 +27,12 @@
             type="text" 
             wire:model.live.debounce.300ms="search" 
             placeholder="Search by name or email..."
-            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
         
         <select 
             wire:model.live="roleFilter"
-            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         >
             <option value="">All Roles</option>
             @foreach($roles as $role)

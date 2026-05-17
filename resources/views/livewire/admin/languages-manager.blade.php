@@ -21,7 +21,7 @@
     </div>
 
     <div style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4); flex-wrap:wrap;">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search name, native name or code..." style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:250px;">
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search name, native name or code..." style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:250px;">
         <select wire:model.live="statusFilter" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;">
             <option value="all">All status</option>
             <option value="verified">Verified</option>

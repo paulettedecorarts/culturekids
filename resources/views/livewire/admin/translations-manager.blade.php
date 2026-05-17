@@ -39,8 +39,8 @@
     </div>
 
     <div style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4);">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search word, translation, comic, tribe..." style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:300px;">
-        <select wire:model.live="statusFilter" style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;">
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search word, translation, comic, tribe..." style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:300px;">
+        <select wire:model.live="statusFilter" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;">
             <option value="">All</option>
             <option value="translated">Translated</option>
             <option value="missing">Missing</option>
@@ -85,8 +85,8 @@
     </div>
 
     @if($showModal)
-        <div style="position:fixed;inset:0;background:rgba(26,18,8,0.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px">
-            <div style="background:#111827;border:1px solid var(--cms-input-border);border-radius:20px;width:min(760px,100%);padding:20px">
+        <div class="sa-modal-backdrop" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px">
+            <div class="sa-modal-panel" style="border-radius:20px;width:min(760px,100%);padding:20px">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
                     <div style="font-size:16px;font-weight:800;color:var(--cms-text)">{{ $editing ? 'Edit Translation' : 'Add Translation' }}</div>
                     <button wire:click="closeModal" class="btn btn-ghost btn-sm">Close</button>
@@ -98,7 +98,7 @@
                         <select wire:model.live="comic_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:inherit">
                             <option value="">Select story</option>
                             @foreach($storyOptions as $story)
-                                <option value="{{ $story->id }}" style="background:#111827;color:var(--cms-text)">
+                                <option value="{{ $story->id }}" style="background:var(--cms-input-bg);color:var(--cms-text)">
                                     {{ $story->title }} · {{ $story->tribe?->name ?? 'Unknown tribe' }}
                                 </option>
                             @endforeach
@@ -110,7 +110,7 @@
                         <select wire:model="panel_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:inherit">
                             <option value="">Select panel</option>
                             @foreach($panelOptions as $panel)
-                                <option value="{{ $panel->id }}" style="background:#111827;color:var(--cms-text)">
+                                <option value="{{ $panel->id }}" style="background:var(--cms-input-bg);color:var(--cms-text)">
                                     {{ $panel->comic?->title ?? 'Unknown comic' }} · {{ $panel->comic?->tribe?->name ?? 'Unknown tribe' }} · Panel {{ (int) $panel->order_index + 1 }}
                                 </option>
                             @endforeach
