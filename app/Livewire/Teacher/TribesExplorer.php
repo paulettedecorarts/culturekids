@@ -73,8 +73,10 @@ class TribesExplorer extends Component
         $tribes = $query->paginate(24);
 
         $regions = TeacherCatalogScope::tribesQueryFor($user)
+            ->reorder()
             ->whereNotNull('region')
             ->where('region', '!=', '')
+            ->select('region')
             ->distinct()
             ->orderBy('region')
             ->pluck('region');
