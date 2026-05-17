@@ -6,48 +6,44 @@
         </div>
     </div>
 
-    <div class="cms-stats-row">
-        <div class="cms-stat"><div class="cms-stat-val">{{ $approvedComics->count() }}</div><div class="cms-stat-label">Approved Stories</div></div>
-        <div class="cms-stat"><div class="cms-stat-val">{{ $approvedSongs->count() }}</div><div class="cms-stat-label">Approved Songs</div></div>
-        <div class="cms-stat"><div class="cms-stat-val">{{ $approvedComics->count() + $approvedSongs->count() }}</div><div class="cms-stat-label">Total Approved</div></div>
-        <div class="cms-stat"><div class="cms-stat-val">Live</div><div class="cms-stat-label">Playback Ready</div></div>
+    <div class="cms-stats-row" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));">
+        <div class="cms-stat">
+            <div class="cms-stat-val">{{ $approvedItems->count() }}</div>
+            <div class="cms-stat-label">Total Approved</div>
+        </div>
+        @foreach($typeLabels as $typeKey => $typeLabel)
+            <div class="cms-stat">
+                <div class="cms-stat-val">{{ $countsByType[$typeKey] ?? 0 }}</div>
+                <div class="cms-stat-label">{{ $typeLabel }}</div>
+            </div>
+        @endforeach
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-6);">
-        <div class="cms-asset-table">
-            <div class="cms-table-header" style="grid-template-columns:2fr 1fr 120px;">
-                <span>Stories</span><span>Approved</span><span>Action</span>
-            </div>
-            @forelse($approvedComics as $item)
-                <div class="cms-table-row" style="grid-template-columns:2fr 1fr 120px;">
-                    <span>
-                        <div style="font-weight:700">{{ $item['title'] }}</div>
-                        <div style="font-size:11px; color:var(--cms-text-muted)">Tribe: {{ $item['tribe'] ?? '—' }} · By {{ $item['approved_by'] }}</div>
-                    </span>
-                    <span style="font-size:12px; color:var(--cms-text-muted)">{{ $item['approved_at']?->diffForHumans() }}</span>
-                    <a class="btn btn-primary btn-sm" href="{{ route('cms.admin.approved-content.stories.show', ['id' => $item['id']]) }}" style="text-decoration:none; justify-content:center;">View</a>
-                </div>
-            @empty
-                <div style="padding:16px; color:var(--cms-text-muted); font-weight:700;">No approved stories yet.</div>
-            @endforelse
+    <div class="cms-asset-table">
+        <div class="cms-table-header" style="grid-template-columns:120px 2fr 1fr 120px;">
+            <span>Type</span>
+            <span>Title</span>
+            <span>Approved</span>
+            <span>Action</span>
         </div>
-
-        <div class="cms-asset-table">
-            <div class="cms-table-header" style="grid-template-columns:2fr 1fr 120px;">
-                <span>Songs</span><span>Approved</span><span>Action</span>
+        @forelse($approvedItems as $item)
+            <div class="cms-table-row" style="grid-template-columns:120px 2fr 1fr 120px; cursor:default;">
+                <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--cms-text-muted);">{{ $item['type_label'] }}</span>
+                <span>
+                    <div style="font-weight:700">{{ $item['title'] }}</div>
+                    <div style="font-size:11px; color:var(--cms-text-muted)">Tribe: {{ $item['tribe'] ?? '—' }} · By {{ $item['approved_by'] }}</div>
+                </span>
+                <span style="font-size:12px; color:var(--cms-text-muted)">{{ $item['approved_at']?->diffForHumans() }}</span>
+                @if($item['view_url'])
+                    <a class="btn btn-primary btn-sm" href="{{ $item['view_url'] }}" style="text-decoration:none; justify-content:center;">View</a>
+                @else
+                    <span style="font-size:11px; color:var(--cms-text-muted); font-weight:600;">—</span>
+                @endif
             </div>
-            @forelse($approvedSongs as $item)
-                <div class="cms-table-row" style="grid-template-columns:2fr 1fr 120px;">
-                    <span>
-                        <div style="font-weight:700">{{ $item['title'] }}</div>
-                        <div style="font-size:11px; color:var(--cms-text-muted)">Tribe: {{ $item['tribe'] ?? '—' }} · By {{ $item['approved_by'] }}</div>
-                    </span>
-                    <span style="font-size:12px; color:var(--cms-text-muted)">{{ $item['approved_at']?->diffForHumans() }}</span>
-                    <a class="btn btn-primary btn-sm" href="{{ route('cms.admin.approved-content.songs.show', ['id' => $item['id']]) }}" style="text-decoration:none; justify-content:center;">View</a>
-                </div>
-            @empty
-                <div style="padding:16px; color:var(--cms-text-muted); font-weight:700;">No approved songs yet.</div>
-            @endforelse
-        </div>
+        @empty
+            <div style="padding:24px; color:var(--cms-text-muted); font-weight:700; text-align:center;">
+                No approved content yet across any activity type.
+            </div>
+        @endforelse
     </div>
 </div>

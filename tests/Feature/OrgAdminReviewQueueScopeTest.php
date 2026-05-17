@@ -89,8 +89,16 @@ class OrgAdminReviewQueueScopeTest extends TestCase
         $this->actingAs($adminA);
 
         Livewire::test(ReviewQueue::class)
-            ->assertViewHas('reviewComics', fn ($c) => $c->count() === 1 && (int) $c->first()->id === (int) $shared->id)
-            ->assertViewHas('reviewSongs', fn ($s) => $s->count() === 1 && (int) $s->first()->id === (int) $songShared->id);
+            ->assertViewHas('pendingItems', function ($items) use ($shared, $songShared) {
+                $story = $items->firstWhere('content_type', 'story');
+                $song = $items->firstWhere('content_type', 'song');
+
+                return $items->count() === 2
+                    && $story
+                    && (int) $story['id'] === (int) $shared->id
+                    && $song
+                    && (int) $song['id'] === (int) $songShared->id;
+            });
     }
 
     public function test_org_admin_cannot_approve_comic_pending_for_another_org_only(): void
@@ -128,7 +136,7 @@ class OrgAdminReviewQueueScopeTest extends TestCase
         $this->actingAs($adminA);
 
         Livewire::test(ReviewQueue::class)
-            ->call('approveComic', $comicB->id);
+            ->call('approve', 'story', $comicB->id);
 
         $comicB->refresh();
         $this->assertSame('review', $comicB->status);
