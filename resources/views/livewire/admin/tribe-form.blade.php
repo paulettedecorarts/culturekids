@@ -21,13 +21,13 @@
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px">
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Official Tribe Name</label>
-                        <input wire:model="name" type="text" placeholder="e.g. Baganda, Acholi, Banyankole" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="name" type="text" placeholder="e.g. Baganda, Acholi, Banyankole" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('name') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Ancestral Region</label>
-                        <select wire:model="region" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <select wire:model="region" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                             <option value="">Select Region</option>
                             <option value="Central">Central</option>
                             <option value="Western">Western</option>
@@ -40,7 +40,7 @@
 
                     <div>
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Tribal Hello (Greeting)</label>
-                        <input wire:model="greeting" type="text" placeholder="e.g. Oliotya?, Agandi?" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="greeting" type="text" placeholder="e.g. Oliotya?, Agandi?" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('greeting') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
                 </div>
@@ -53,13 +53,13 @@
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px">
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Hero Identity Name</label>
-                        <input wire:model="hero_name" type="text" placeholder="e.g. Prince Kato, Chief Okumu" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                        <input wire:model="hero_name" type="text" placeholder="e.g. Prince Kato, Chief Okumu" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('hero_name') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
 
                     <div style="grid-column: span 2">
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Guardian Icon (Emoji)</label>
-                        <div style="display:flex; flex-wrap:wrap; gap:10px; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:24px; padding:24px; max-height:220px; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--cms-text-muted) transparent;">
+                        <div style="display:flex; flex-wrap:wrap; gap:10px; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:24px; padding:24px; max-height:220px; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--cms-text-muted) transparent;">
                             @foreach(['🦁', '🐘', '🦒', '🦓', '🐆', '🦍', '🐊', '🦅', '🦉', '🛡️', '🏺', '🥁', '🎭', '🛖', '🌍', '🏔️', '🌳', '🌊', '☀️', '🌙', '🐄', '🐂', '🐐', '🐓', '🌾', '🌽', '🎋', '🏹', '🗡️', '🛶', '🗿'] as $emoji)
                                 <button 
                                     type="button"
@@ -71,7 +71,7 @@
                                 </button>
                             @endforeach
                             <!-- Manual Fallback -->
-                            <div style="width:100%; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:12px">
+                            <div style="width:100%; margin-top:16px; padding-top:16px; border-top:1px solid var(--cms-border); display:flex; align-items:center; gap:12px">
                                 <span style="font-size:11px; font-weight:800; color: var(--cms-text-muted); text-transform:uppercase">Custom:</span>
                                 <input wire:model.live="hero_emoji" type="text" maxlength="2" style="width:60px; background: var(--cms-surface-raised); border: 1px solid var(--cms-border); border-radius:10px; padding:8px; text-align:center; color:var(--cms-text); font-size:18px">
                             </div>
@@ -83,7 +83,7 @@
                         <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Brand Color</label>
                         <div style="display:flex; gap:12px; align-items:center">
                             <input wire:model="color" type="color" style="width:60px; height:58px; background:none; border: 1px solid var(--cms-border); border-radius:16px; cursor:pointer">
-                            <input wire:model="color" type="text" style="flex:1; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                            <input wire:model="color" type="text" style="flex:1; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                         </div>
                         @error('color') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
@@ -99,14 +99,14 @@
                 <div style="background:{{ $color ?? '#7C3AED' }}; border-radius:32px; padding:40px; box-shadow:0 32px 64px {{ ($color ?? '#7C3AED').'40' }}; position:relative; overflow:hidden">
                     <div style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.2), transparent); pointer-events:none"></div>
                     
-                    <div style="width:100px; height:100px; background: var(--cms-surface-raised); border:1px solid rgba(255,255,255,0.3); backdrop-filter:blur(10px); border-radius:32px; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:48px">
+                    <div style="width:100px; height:100px; background: var(--cms-surface-raised); border:1px solid var(--cms-border); backdrop-filter:blur(10px); border-radius:32px; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:48px">
                         {{ $hero_emoji ?: '🗺️' }}
                     </div>
                     
                     <h4 style="font-family:var(--font-display); font-size:28px; color:var(--cms-text); margin-bottom:8px">{{ $name ?: 'New Tribe' }}</h4>
                     <div style="font-size:13px; font-weight:800; color: var(--cms-text-muted); letter-spacing:1px; text-transform:uppercase">{{ $region ?: 'Region Unset' }}</div>
                     
-                    <div style="margin-top:32px; padding-top:32px; border-top:1px solid rgba(255,255,255,0.1)">
+                    <div style="margin-top:32px; padding-top:32px; border-top:1px solid var(--cms-border)">
                         <div style="font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; margin-bottom:4px">Cultural Hero</div>
                         <div style="font-size:16px; font-weight:800; color:var(--cms-text)">{{ $hero_name ?: 'Waiting for Identity…' }}</div>
                     </div>

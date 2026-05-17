@@ -1,7 +1,7 @@
 <div class="ws-show-page">
     <style>
     .ws-show-grid { display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px; }
-    .ws-show-cell { width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;border-radius:4px;background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);color:var(--cms-text); }
+    .ws-show-cell { width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;border-radius:4px;background:var(--cms-surface-raised);border:1px solid var(--cms-border);color:var(--cms-text); }
     .ws-show-cell.placed { background:rgba(212,160,23,.2);border-color:rgba(212,160,23,.4);color:#F2CB5A; }
     </style>
 

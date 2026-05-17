@@ -6,7 +6,7 @@
     .clan-form-page .cf-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
     .clan-form-page .cf-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .clan-form-page .cf-input::placeholder { color:var(--cms-text-muted); }
-    .clan-form-page select.cf-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .clan-form-page select.cf-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }
     .clan-form-page select.cf-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .clan-form-page textarea.cf-input { resize:vertical;min-height:80px;line-height:1.5; }
     .clan-form-page .cf-error { font-size:10px;color:#ff8c8c;margin-top:4px; }

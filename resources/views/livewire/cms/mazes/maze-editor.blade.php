@@ -3,10 +3,10 @@
     .maze-editor-page .me-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
     .maze-editor-page .me-section-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
     .maze-editor-page .me-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .maze-editor-page .me-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .maze-editor-page .me-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
     .maze-editor-page .me-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .maze-editor-page .me-input::placeholder { color:var(--cms-text-muted); }
-    .maze-editor-page select.me-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .maze-editor-page select.me-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }
     .maze-editor-page select.me-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .maze-editor-page textarea.me-input { resize:vertical;min-height:72px;line-height:1.5; }
     .maze-editor-page .me-error { font-size:10px;color:#ff8c8c;margin-top:4px; }

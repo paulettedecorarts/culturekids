@@ -125,7 +125,7 @@
             </div>
 
             <!-- Interactive Features -->
-            <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--cms-border)">
                 <div class="song-label" style="margin-bottom:12px;font-size:13px;color: var(--cms-text)">Interactive Features</div>
                 
                 <div style="display:flex;flex-direction:column;gap:12px">
@@ -143,7 +143,7 @@
 
             <!-- Lyric Segments (shown when karaoke timing is enabled) -->
             @if($has_karaoke_timing)
-            <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--cms-border)">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
                     <div class="song-label" style="margin-bottom:0;font-size:13px;color: var(--cms-text)">Karaoke Segments</div>
                     <button type="button" wire:click="addLyricSegment" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:6px 12px;font-size:11px">
@@ -207,7 +207,7 @@
             @endif
 
             <!-- File Uploads -->
-            <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--cms-border)">
                 <div class="song-label" style="margin-bottom:12px;font-size:13px;color: var(--cms-text)">Media Files</div>
                 
                 <div class="media-upload-grid">
@@ -283,7 +283,7 @@
         .song-input {
             width: 100%;
             background: var(--cms-input-bg);
-            border: 1px solid rgba(255,255,255,.12);
+            border: 1px solid var(--cms-input-border);
             border-radius: 6px;
             padding: 8px 12px;
             font-size: 13px;
@@ -304,7 +304,7 @@
         .song-file-input {
             width: 100%;
             background: var(--cms-surface-raised);
-            border: 1px solid rgba(255,255,255,.12);
+            border: 1px solid var(--cms-input-border);
             border-radius: 6px;
             padding: 8px;
             font-size: 11px;

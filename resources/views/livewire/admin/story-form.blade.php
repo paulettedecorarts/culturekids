@@ -252,7 +252,7 @@
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
-            background: var(--cms-surface-raised);
+            background: var(--cms-input-bg);
             border: 1px solid var(--cms-border);
             border-radius: 12px;
             padding: 14px;
@@ -298,7 +298,7 @@
             max-height: 220px;
             object-fit: cover;
             border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid var(--cms-border);
         }
         .story-form-cover-pdf {
             width: 100%;
@@ -306,8 +306,8 @@
             aspect-ratio: 5 / 3;
             max-height: 220px;
             border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--cms-border);
+            background: var(--cms-surface-raised);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -328,14 +328,14 @@
             height: 100px;
             object-fit: cover;
             border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid var(--cms-border);
         }
         .story-form-panel-pdf {
             width: 100px;
             height: 100px;
             border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.3);
+            border: 2px solid var(--cms-border);
+            background: var(--cms-surface-raised);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -350,7 +350,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border: 2px solid var(--indigo-night);
+            border: 2px solid var(--cms-border);
             font-size: 12px;
             cursor: pointer;
             line-height: 1;
@@ -359,7 +359,7 @@
             position: absolute;
             bottom: 4px;
             left: 4px;
-            background: rgba(0,0,0,0.8);
+            background: var(--cms-surface-raised);
             color: var(--cms-text);
             padding: 2px 6px;
             border-radius: 4px;
@@ -372,7 +372,7 @@
             gap: var(--sp-3);
             margin-top: var(--sp-8);
             padding-top: var(--sp-6);
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid var(--cms-border);
         }
         .story-form-btn-secondary {
             background: var(--cms-surface-raised);
@@ -408,6 +408,6 @@
             cursor: not-allowed;
         }
         /* Select options: dark menu on Windows/WebKit */
-        .story-form-select option { background: var(--indigo-night); color: var(--cms-text); }
+        .story-form-select option { background: var(--cms-input-bg); color: var(--cms-text); }
     </style>
 </div>

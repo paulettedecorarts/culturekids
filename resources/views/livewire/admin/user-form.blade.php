@@ -1,14 +1,14 @@
-<div class="sa-user-form-view">
+<div class="sa-user-form-view user-form-page">
     <!-- Toast Notifications -->
     @if (session()->has('message'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" style="position:fixed; top:24px; right:24px; z-index:9999; background:#10B981; color:var(--cms-text); padding:16px 24px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; font-size:14px; display:flex; align-items:center; gap:12px">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" style="position:fixed; top:24px; right:24px; z-index:9999; background:#10B981; color:#fff; padding:16px 24px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; font-size:14px; display:flex; align-items:center; gap:12px">
             <span>✓</span>
             <span>{{ session('message') }}</span>
         </div>
     @endif
 
     @if (session()->has('error'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" style="position:fixed; top:24px; right:24px; z-index:9999; background:#EF4444; color:var(--cms-text); padding:16px 24px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; font-size:14px; display:flex; align-items:center; gap:12px">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" style="position:fixed; top:24px; right:24px; z-index:9999; background:#EF4444; color:#fff; padding:16px 24px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.2); font-weight:700; font-size:14px; display:flex; align-items:center; gap:12px">
             <span>✕</span>
             <span>{{ session('error') }}</span>
         </div>
@@ -51,13 +51,13 @@
             <div style="display:grid; grid-template-columns:1fr 1fr 400px; gap:32px">
                 <div style="grid-column: span 2">
                     <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Official Full Name</label>
-                    <input wire:model="name" type="text" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                    <input wire:model="name" type="text" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                     @error('name') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                 </div>
 
                 <div style="grid-row: span 2">
                     <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Host Organization</label>
-                    <select wire:model="organisation_id" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); cursor:pointer; font-family:var(--font-admin)">
+                    <select wire:model="organisation_id" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); cursor:pointer; font-family:var(--font-admin)">
                         <option value="">Global / Platform Level</option>
                         @foreach($organisations as $org)
                             <option value="{{ $org->id }}">{{ $org->name }}</option>
@@ -68,7 +68,7 @@
 
                 <div style="grid-column: span 2">
                     <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">System ID (Email Address)</label>
-                    <input wire:model="email" type="email" style="width:100%; background:rgba(0,0,0,0.2); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
+                    <input wire:model="email" type="email" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                     @error('email') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     @if(!$editing)
                         <p style="margin-top:12px; font-size:11px; color:var(--cms-text-muted); font-weight:700">User will receive an email to set their own password.</p>
@@ -77,7 +77,7 @@
             </div>
 
             @if($editing)
-                <div style="margin-top:40px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.06); color:var(--cms-text-muted); font-size:12px">
+                <div style="margin-top:40px; padding-top:40px; border-top:1px solid var(--cms-border); color:var(--cms-text-muted); font-size:12px">
                     👤 Account established on <b>{{ $user->created_at->format('M d, Y @ H:i') }}</b>. 
                     Last profile synchronization detected <b>{{ $user->updated_at->diffForHumans() }}</b>.
                 </div>
@@ -89,7 +89,7 @@
             <h3 style="font-family:var(--font-display); font-size:20px; color:var(--cms-text); margin-bottom:24px">Select Role</h3>
             <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px">
                 @foreach($roles as $role)
-                    <label style="display:flex; align-items:center; gap:16px; padding:20px; background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:20px; cursor:pointer; transition:all 0.2s" onmouseover="this.style.border='1px solid rgba(255,255,255,0.12)'" onmouseout="this.style.border='1px solid rgba(255,255,255,0.06)'">
+                    <label style="display:flex; align-items:center; gap:16px; padding:20px; background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:20px; cursor:pointer; transition:all 0.2s" onmouseover="this.style.borderColor='var(--savanna-gold)'" onmouseout="this.style.borderColor='var(--cms-border)'">
                         <input type="radio" wire:model="selectedRole" value="{{ $role->name }}" style="width:20px; height:20px; accent-color:var(--clay-red)">
                         <div>
                             <div style="font-size:14px; font-weight:800; color:var(--cms-text)">{{ Str::title(str_replace('_', ' ', $role->name)) }}</div>

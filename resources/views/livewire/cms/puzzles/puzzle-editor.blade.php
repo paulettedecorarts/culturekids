@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--cms-border)">
                 <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Jigsaw image</div>
                 <p style="font-size:11px;color: var(--cms-text-muted);margin:0 0 12px;line-height:1.45">Upload artwork. On save, the server cuts it into a rectangular grid. The preview shows how those cut lines will line up.</p>
                 @if($hasPuzzleSource && $activity)
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--cms-border)">
                 <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Difficulty &amp; grid</div>
                 <div class="puzzle-form-grid">
                     <div>
@@ -102,7 +102,7 @@
                 <textarea wire:model="description" rows="3" class="pz-textarea"></textarea>
             </div>
 
-            <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--cms-border)">
                 <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Extras</div>
                 <div class="puzzle-form-grid">
                     <div>
@@ -186,10 +186,10 @@
         }
         .puzzle-form-grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
         .pz-label { display:block; font-size:11px; color:var(--cms-text-muted); margin-bottom:5px; }
-        .pz-input, .pz-textarea { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); font-family:var(--font-admin); }
+        .pz-input, .pz-textarea { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-input-bg); color:var(--cms-text); font-family:var(--font-admin); color-scheme:inherit; }
         .pz-textarea { min-height:80px; }
         .pz-error { font-size:10px; color:#ff8c8c; margin-top:4px; }
-        .puzzle-editor-page select.pz-input { background:var(--cms-input-bg); color:var(--cms-text); color-scheme:dark; }
+        .puzzle-editor-page select.pz-input { background:var(--cms-input-bg); color:var(--cms-text); color-scheme:inherit; }
         .puzzle-editor-page select.pz-input option { background:var(--cms-input-bg); color:var(--cms-text); }
         .pz-live-preview-card {
             position:sticky;
@@ -208,7 +208,7 @@
             position:relative;
             border-radius:12px;
             overflow:hidden;
-            background:rgba(0,0,0,.35);
+            background:var(--cms-surface-raised);
             border:1px solid var(--cms-input-border);
             aspect-ratio:4/3;
             max-height:280px;

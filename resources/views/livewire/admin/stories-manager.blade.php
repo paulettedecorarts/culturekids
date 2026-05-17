@@ -134,7 +134,7 @@
                                 @endif
                             </button>
                         @else
-                            <span class="btn btn-sm" style="flex:1;min-width:72px;opacity:.5;font-size:10px;padding:8px;text-align:center;border:1px dashed rgba(255,255,255,.2);border-radius:8px">Published</span>
+                            <span class="btn btn-sm" style="flex:1;min-width:72px;opacity:.5;font-size:10px;padding:8px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">Published</span>
                         @endif
                         <a
                             href="{{ route($storyRouteBase . '.edit', $story->id) }}"

@@ -345,15 +345,15 @@
 
     <style>
 .drawing-editor-container {
-    min-height: 100vh;
-    background: #2c3e50;
-    color: #ecf0f1;
+    min-height: auto;
+    background: transparent;
+    color: var(--cms-text);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .editor-header {
-    background: #34495e;
-    border-bottom: 1px solid #4a5f7a;
+    background: var(--cms-surface);
+    border-bottom: 1px solid var(--cms-border);
     padding: 2rem;
 }
 
@@ -363,7 +363,7 @@
 }
 
 .back-link {
-    color: #bdc3c7;
+    color: var(--cms-text-muted);
     text-decoration: none;
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
@@ -372,18 +372,18 @@
 }
 
 .back-link:hover {
-    color: #ecf0f1;
+    color: var(--cms-text);
 }
 
 .page-title {
     font-size: 1.75rem;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
-    color: #ecf0f1;
+    color: var(--cms-text);
 }
 
 .page-subtitle {
-    color: #95a5a6;
+    color: var(--cms-text-muted);
     margin: 0;
     font-size: 0.875rem;
 }
@@ -407,8 +407,8 @@
 }
 
 .form-section {
-    background: #34495e;
-    border: 1px solid #4a5f7a;
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -418,7 +418,7 @@
     font-size: 1.125rem;
     font-weight: 600;
     margin: 0 0 1.5rem 0;
-    color: #ecf0f1;
+    color: var(--cms-text);
 }
 
 .section-header {
@@ -453,16 +453,16 @@
 .form-label {
     font-size: 0.875rem;
     font-weight: 500;
-    color: #ecf0f1;
+    color: var(--cms-text);
     margin-bottom: 0.5rem;
 }
 
 .form-input, .form-select, .form-textarea {
-    background: #2c3e50;
-    border: 1px solid #4a5f7a;
+    background: var(--cms-input-bg);
+    border: 1px solid var(--cms-border);
     border-radius: 6px;
     padding: 0.75rem;
-    color: #ecf0f1;
+    color: var(--cms-text);
     font-size: 0.875rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -496,7 +496,7 @@
 }
 
 .upload-description {
-    color: #95a5a6;
+    color: var(--cms-text-muted);
     font-size: 0.75rem;
     margin: 0 0 1rem 0;
 }
@@ -518,8 +518,8 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem;
-    background: #2c3e50;
-    border: 2px dashed #4a5f7a;
+    background: var(--cms-input-bg);
+    border: 2px dashed var(--cms-border);
     border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
@@ -536,11 +536,11 @@
 
 .upload-text {
     font-weight: 500;
-    color: #ecf0f1;
+    color: var(--cms-text);
 }
 
 .file-info {
-    color: #95a5a6;
+    color: var(--cms-text-muted);
     font-size: 0.75rem;
 }
 
@@ -552,11 +552,11 @@
     max-width: 200px;
     height: auto;
     border-radius: 8px;
-    border: 1px solid #4a5f7a;
+    border: 1px solid var(--cms-border);
 }
 
 .image-caption {
-    color: #95a5a6;
+    color: var(--cms-text-muted);
     font-size: 0.75rem;
     margin: 0.5rem 0 0 0;
 }
@@ -625,13 +625,13 @@
 }
 
 .material-name {
-    color: #ecf0f1;
+    color: var(--cms-text);
 }
 
 .remove-button {
     background: none;
     border: none;
-    color: #95a5a6;
+    color: var(--cms-text-muted);
     cursor: pointer;
     font-size: 1.125rem;
     padding: 0;
@@ -659,7 +659,7 @@
 .color-picker {
     width: 50px;
     height: 40px;
-    border: 1px solid #4a5f7a;
+    border: 1px solid var(--cms-border);
     border-radius: 6px;
     cursor: pointer;
     background: none;
@@ -720,13 +720,13 @@
     justify-content: flex-end;
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px solid #4a5f7a;
+    border-top: 1px solid var(--cms-border);
 }
 
 .cancel-button {
     background: transparent;
-    color: #95a5a6;
-    border: 1px solid #4a5f7a;
+    color: var(--cms-text-muted);
+    border: 1px solid var(--cms-border);
     border-radius: 6px;
     padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
@@ -740,8 +740,8 @@
 
 .cancel-button:hover {
     background: rgba(149, 165, 166, 0.1);
-    border-color: #95a5a6;
-    color: #bdc3c7;
+    border-color: var(--cms-text-muted);
+    color: var(--cms-text-muted);
 }
 
 .create-button {

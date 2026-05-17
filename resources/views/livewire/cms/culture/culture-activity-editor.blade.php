@@ -3,10 +3,10 @@
     .culture-editor-page .ce-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
     .culture-editor-page .ce-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
     .culture-editor-page .ce-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .culture-editor-page .ce-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .culture-editor-page .ce-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
     .culture-editor-page .ce-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .culture-editor-page .ce-input::placeholder { color:var(--cms-text-muted); }
-    .culture-editor-page select.ce-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .culture-editor-page select.ce-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }
     .culture-editor-page select.ce-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .culture-editor-page textarea.ce-input { resize:vertical;min-height:80px;line-height:1.5; }
     .culture-editor-page .ce-error { font-size:10px;color:#ff8c8c;margin-top:4px; }

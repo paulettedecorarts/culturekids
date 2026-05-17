@@ -71,7 +71,7 @@
     @if($showModal)
         <div style="position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px">
             <div style="background:var(--indigo-night); width:100%; max-width:600px; border:1px solid rgba(255,255,255,0.15); border-radius:32px; box-shadow:0 40px 100px rgba(0,0,0,0.5); overflow:hidden" onclick="event.stopPropagation()">
-                <div style="padding:32px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:space-between">
+                <div style="padding:32px; border-bottom:1px solid var(--cms-border); display:flex; align-items:center; justify-content:space-between">
                     <div>
                         <h2 style="font-family:var(--font-display); font-size:24px; color:var(--cms-text)">{{ $editing ? 'Edit Module' : 'New Module' }}</h2>
                         <div style="font-size:11px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; letter-spacing:1px">{{ $editing ? 'Update module configuration' : 'Register new platform feature' }}</div>

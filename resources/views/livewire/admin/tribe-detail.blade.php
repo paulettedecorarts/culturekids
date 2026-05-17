@@ -32,7 +32,7 @@
                 <h2 style="font-family:var(--font-display); font-size:36px; color:var(--cms-text); margin-bottom:8px">{{ $tribe->name }}</h2>
                 <div style="font-size:14px; font-weight:800; color:var(--cms-text); letter-spacing:1px; text-transform:uppercase">{{ $tribe->region }} Region</div>
 
-                <div style="margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.1); display:grid; grid-template-columns:1fr; gap:12px">
+                <div style="margin-top:48px; padding-top:40px; border-top:1px solid var(--cms-border); display:grid; grid-template-columns:1fr; gap:12px">
                     <div style="text-align:left">
                         <div style="font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; margin-bottom:4px">Ancestral Greeting</div>
                         <div style="font-size:18px; font-weight:800; color:var(--cms-text); font-family:var(--font-display)">{{ $tribe->greeting }}</div>

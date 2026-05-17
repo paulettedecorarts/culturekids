@@ -138,7 +138,7 @@
                     @error('flashcardSlides') <div class="act-error" style="margin-bottom:8px">{{ $message }}</div> @enderror
                     <div style="display:flex;flex-direction:column;gap:10px">
                         @foreach($flashcardSlides as $idx => $card)
-                            <div wire:key="fc-{{ $card['slide_uid'] ?? $idx }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid var(--cms-border)">
+                            <div wire:key="fc-{{ $card['slide_uid'] ?? $idx }}" class="fc-slide-row" style="padding:14px;border-radius:12px;background:var(--cms-surface);border:1px solid var(--cms-border)">
                                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
                                     <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--cms-text-muted)">CARD {{ $idx + 1 }}</span>
                                     <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -251,7 +251,7 @@
                 <textarea wire:model="description" rows="3" class="act-textarea"></textarea>
             </div>
 
-            <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--cms-border)">
                 <div class="act-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Extras (optional)</div>
                 <div class="act-grid">
                     <div>
@@ -383,7 +383,7 @@
             @if($orphanMeta->isNotEmpty())
                 <details style="margin-top:8px">
                     <summary style="cursor:pointer;font-size:12px;color: var(--cms-text-muted);margin-bottom:8px">Other saved fields (technical)</summary>
-                    <pre style="margin:0;padding:12px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid var(--cms-border);color: var(--cms-text);overflow:auto;font-size:11px">{{ json_encode($orphanMeta->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                    <pre style="margin:0;padding:12px;border-radius:10px;background:var(--cms-surface-raised);border:1px solid var(--cms-border);color: var(--cms-text);overflow:auto;font-size:11px">{{ json_encode($orphanMeta->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
                 </details>
             @endif
         </div>
@@ -392,8 +392,8 @@
     <style>
         .act-grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
         .act-label { display:block; font-size:11px; color:var(--cms-text-muted); margin-bottom:5px; }
-        .act-input { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); }
-        .act-textarea { width:100%; padding:10px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); }
+        .act-input { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-input-bg); color:var(--cms-text); color-scheme:inherit; }
+        .act-textarea { width:100%; padding:10px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-input-bg); color:var(--cms-text); }
         .act-error { font-size:10px; color:#ff8c8c; margin-top:4px; }
         .act-stat { padding:10px; border-radius:10px; background:var(--cms-surface); border:1px solid var(--cms-border); }
         .act-stat span { display:block; font-size:10px; color: var(--cms-text-muted); text-transform:uppercase; margin-bottom:4px; }
@@ -417,14 +417,14 @@
             font-size:28px;
             line-height:1;
             border-radius:10px;
-            background:rgba(0,0,0,.25);
+            background:var(--cms-surface-raised);
             border:1px solid var(--cms-input-border);
         }
         .fc-emoji-panel {
             margin-top:12px;
             padding:12px;
             border-radius:12px;
-            background:rgba(0,0,0,.28);
+            background:var(--cms-surface);
             border:1px solid var(--cms-border);
         }
         .fc-emoji-grid {
@@ -456,7 +456,7 @@
             width:88px;
             height:88px;
             border-radius:10px;
-            background:rgba(0,0,0,.25);
+            background:var(--cms-surface-raised);
             border:1px solid var(--cms-border);
             display:flex;
             align-items:center;
@@ -608,7 +608,7 @@
             color: var(--cms-text-muted);
             line-height:1.55;
             font-size:12px;
-            border-top:1px solid rgba(255,255,255,.08);
+            border-top:1px solid var(--cms-border);
             padding-top:12px;
         }
         .act-fc-outline li { margin-bottom:6px; }

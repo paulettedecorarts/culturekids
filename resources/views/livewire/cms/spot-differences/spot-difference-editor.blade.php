@@ -3,10 +3,10 @@
     .sd-editor-page .sd-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
     .sd-editor-page .sd-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
     .sd-editor-page .sd-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .sd-editor-page .sd-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .sd-editor-page .sd-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
     .sd-editor-page .sd-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .sd-editor-page .sd-input::placeholder { color:var(--cms-text-muted); }
-    .sd-editor-page select.sd-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .sd-editor-page select.sd-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }
     .sd-editor-page select.sd-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .sd-editor-page textarea.sd-input { resize:vertical;min-height:72px;line-height:1.5; }
     .sd-editor-page .sd-error { font-size:10px;color:#ff8c8c;margin-top:4px; }

@@ -30,8 +30,8 @@
         box-sizing: border-box;
         padding: 9px 12px;
         border-radius: 8px;
-        border: 1px solid rgba(255,255,255,.12);
-        background: var(--cms-surface-raised);
+        border: 1px solid var(--cms-input-border);
+        background: var(--cms-input-bg);
         color: var(--cms-text);
         font-size: 13px;
         font-family: var(--font-admin, inherit);
@@ -231,7 +231,7 @@
                                 <div style="display:flex;gap:6px">
                                     <input wire:model="questions.{{ $index }}.question_text" type="text" class="ge-input" placeholder="e.g. 💧 Water" style="flex:1">
                                     <button type="button" wire:click="openEmojiPicker('q_{{ $index }}_question')"
-                                        style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:16px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_question' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
+                                        style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:16px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_question' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
                                         {{ filled($questions[$index]['question_emoji'] ?? null) ? $questions[$index]['question_emoji'] : '＋' }}
                                     </button>
                                 </div>
@@ -249,7 +249,7 @@
                                 <div style="display:flex;gap:6px">
                                     <input wire:model="questions.{{ $index }}.match_text" type="text" class="ge-input" placeholder="e.g. Pii" style="flex:1">
                                     <button type="button" wire:click="openEmojiPicker('q_{{ $index }}_match')"
-                                        style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:16px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_match' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
+                                        style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:16px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_match' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
                                         {{ filled($questions[$index]['match_emoji'] ?? null) ? $questions[$index]['match_emoji'] : '＋' }}
                                     </button>
                                 </div>
@@ -261,11 +261,11 @@
                             {{-- Controls --}}
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -282,11 +282,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -295,7 +295,7 @@
                         </div>
 
                         {{-- Options --}}
-                        <div style="padding-left:16px;border-left:2px solid rgba(255,255,255,.08)">
+                        <div style="padding-left:16px;border-left:2px solid var(--cms-border)">
                             @foreach($question['options'] ?? [] as $oIndex => $option)
                                 <div style="display:grid;grid-template-columns:24px 1fr 80px 38px;gap:8px;align-items:center;margin-bottom:8px">
                                     <div style="font-size:11px;color:var(--cms-text-muted);text-align:center">{{ chr(65 + $oIndex) }}</div>
@@ -325,11 +325,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -354,7 +354,7 @@
                                     </button>
                                 @endforeach
                                 <button type="button" wire:click="addBeat({{ $index }})"
-                                    style="width:36px;height:36px;border-radius:8px;border:1px dashed rgba(255,255,255,.2);background:var(--cms-surface);color:var(--cms-text-muted);cursor:pointer;font-size:18px">+</button>
+                                    style="width:36px;height:36px;border-radius:8px;border:1px dashed var(--cms-border);background:var(--cms-surface);color:var(--cms-text-muted);cursor:pointer;font-size:18px">+</button>
                                 @if(count($questions[$index]['beat_pattern'] ?? []) > 0)
                                     <button type="button" wire:click="removeBeat({{ $index }})"
                                         style="width:36px;height:36px;border-radius:8px;border:1px dashed rgba(196,75,43,.3);background:rgba(196,75,43,.1);color:#E06444;cursor:pointer;font-size:14px">−</button>
@@ -371,11 +371,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -412,11 +412,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -430,7 +430,7 @@
                             <div class="ge-field" style="position:relative">
                                 <label class="ge-label" style="font-size:10px">Emoji</label>
                                 <button type="button" wire:click="openEmojiPicker('q_{{ $index }}_question')"
-                                    style="width:100%;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:18px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_question' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
+                                    style="width:100%;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:18px;cursor:pointer;{{ $emojiPickerTarget === 'q_'.$index.'_question' ? 'border-color:rgba(212,160,23,.6)' : '' }}">
                                     {{ filled($questions[$index]['question_emoji'] ?? null) ? $questions[$index]['question_emoji'] : '＋' }}
                                 </button>
                                 @if($emojiPickerTarget === 'q_'.$index.'_question')
@@ -451,11 +451,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
@@ -475,11 +475,11 @@
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                <button type="button" wire:click="moveQuestionUp({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>
-                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                <button type="button" wire:click="moveQuestionDown({{ $index }})" style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($questions)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                             </div>
                             <div class="ge-field">
                                 <label class="ge-label" style="font-size:10px;visibility:hidden">_</label>

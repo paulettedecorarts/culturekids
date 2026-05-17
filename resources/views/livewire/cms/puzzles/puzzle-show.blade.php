@@ -30,7 +30,7 @@
         .pz-preview-title { font-size:13px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color: var(--cms-text-muted); margin-bottom:4px; }
         .pz-preview-sub { font-size:11px; color: var(--cms-text-muted); margin:0 0 14px; line-height:1.45; }
         .pz-preview-surface { background:linear-gradient(165deg, rgba(30,45,74,.9), rgba(17,24,39,.95)); border-radius:14px; border:1px solid var(--cms-border); padding:16px; }
-        .pz-preview-hero { border-radius:10px; overflow:hidden; margin-bottom:12px; border:1px solid var(--cms-border); background:rgba(0,0,0,.25); max-height:220px; display:flex; align-items:center; justify-content:center; }
+        .pz-preview-hero { border-radius:10px; overflow:hidden; margin-bottom:12px; border:1px solid var(--cms-border); background:var(--cms-surface-raised); max-height:220px; display:flex; align-items:center; justify-content:center; }
         .pz-preview-hero img { max-width:100%; max-height:220px; object-fit:contain; }
         .pz-thumb-strip-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--cms-text-muted); margin-bottom:8px; }
         .pz-thumb-strip { display:grid; grid-template-columns:repeat(auto-fill, minmax(44px, 1fr)); gap:6px; max-height:200px; overflow-y:auto; }
@@ -58,9 +58,9 @@
             display: grid;
             gap: 4px;
             padding: 10px;
-            background: rgba(0,0,0,.35);
+            background:var(--cms-surface-raised);
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,.12);
+            border:1px solid var(--cms-border);
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
@@ -69,7 +69,7 @@
         .pz-play-slot {
             min-height: 0;
             border-radius: 6px;
-            border: 1px dashed rgba(255,255,255,.18);
+            border: 1px dashed var(--cms-border);
             background: var(--cms-surface-raised);
             display: flex;
             align-items: stretch;
@@ -89,7 +89,7 @@
             border-radius: 12px;
             border: 1px solid var(--cms-border);
         }
-        .pz-play-bank-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); }
+        .pz-play-bank-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border:1px solid var(--cms-border); }
         .pz-play-bank-item .pz-play-piece { width: 100%; height: 100%; object-fit: cover; display: block; cursor: grab; }
     </style>
 @endpush

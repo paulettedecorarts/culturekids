@@ -85,7 +85,7 @@
     </div>
 
     @if($showModal)
-        <div style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px">
+        <div style="position:fixed;inset:0;background:rgba(26,18,8,0.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px">
             <div style="background:#111827;border:1px solid var(--cms-input-border);border-radius:20px;width:min(760px,100%);padding:20px">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
                     <div style="font-size:16px;font-weight:800;color:var(--cms-text)">{{ $editing ? 'Edit Translation' : 'Add Translation' }}</div>
@@ -95,7 +95,7 @@
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                     <div style="grid-column:1/-1">
                         <label style="display:block;font-size:11px;color: var(--cms-text-muted);margin-bottom:4px">Story</label>
-                        <select wire:model.live="comic_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:dark">
+                        <select wire:model.live="comic_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:inherit">
                             <option value="">Select story</option>
                             @foreach($storyOptions as $story)
                                 <option value="{{ $story->id }}" style="background:#111827;color:var(--cms-text)">
@@ -107,7 +107,7 @@
 
                     <div style="grid-column:1/-1">
                         <label style="display:block;font-size:11px;color: var(--cms-text-muted);margin-bottom:4px">Panel</label>
-                        <select wire:model="panel_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:dark">
+                        <select wire:model="panel_id" style="width:100%;background:var(--cms-input-bg);border:1px solid var(--cms-input-border);border-radius:10px;padding:10px;color:var(--cms-text);color-scheme:inherit">
                             <option value="">Select panel</option>
                             @foreach($panelOptions as $panel)
                                 <option value="{{ $panel->id }}" style="background:#111827;color:var(--cms-text)">

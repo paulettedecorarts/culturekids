@@ -33,7 +33,7 @@
         box-sizing: border-box;
         padding: 9px 12px;
         border-radius: 8px;
-        border: 1px solid rgba(255,255,255,.12);
+        border: 1px solid var(--cms-input-border);
         background: var(--cms-surface-raised);
         color: var(--cms-text);
         font-size: 13px;
@@ -360,7 +360,7 @@
 
                     {{-- Checkboxes (only when needed) --}}
                     @if($activity_type === 'audio_match' || in_array($activity_type, ['proverb_jumble','sentence_builder']))
-                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:20px">
+                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--cms-border);display:flex;gap:20px">
                         @if($activity_type === 'audio_match')
                             <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted);cursor:pointer">
                                 <input wire:model="words.{{ $index }}.is_correct_answer" type="checkbox" style="width:14px;height:14px;cursor:pointer">

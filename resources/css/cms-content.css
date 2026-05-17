@@ -267,6 +267,514 @@
 [data-cms-theme="light"] .cms-content .sd-label,
 [data-cms-theme="light"] .cms-content .we-label,
 [data-cms-theme="light"] .cms-content .ce-label,
-[data-cms-theme="light"] .cms-content .ge-label {
+[data-cms-theme="light"] .cms-content .ge-label,
+[data-cms-theme="light"] .cms-content .pz-label,
+[data-cms-theme="light"] .cms-content .le-label,
+[data-cms-theme="light"] .cms-content .song-label,
+[data-cms-theme="light"] .cms-content .form-label {
     color: var(--cms-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Activity & CMS forms — unified controls (all editor pages)
+   ═══════════════════════════════════════════════════════════════ */
+
+.cms-content .drawing-editor-container,
+.cms-content .puzzle-editor-page,
+.cms-content .culture-editor-page,
+.cms-content .maze-editor-page,
+.cms-content .sd-editor-page,
+.cms-content .ws-editor-page,
+.cms-content .game-editor-page,
+.cms-content .lang-editor-page,
+.cms-content .song-editor-page,
+.cms-content .activity-detail-page,
+.cms-content .activity-type-selector-page,
+.cms-content .clan-form-page {
+    color: var(--cms-text);
+}
+
+/* Labels */
+.cms-content .act-label,
+.cms-content .pz-label,
+.cms-content .ce-label,
+.cms-content .me-label,
+.cms-content .sd-label,
+.cms-content .we-label,
+.cms-content .ge-label,
+.cms-content .le-label,
+.cms-content .cf-label,
+.cms-content .song-label,
+.cms-content .form-label,
+.cms-content [class$="-label"] {
+    color: var(--cms-text-muted);
+}
+
+/* Text inputs & textareas — solid readable surface */
+.cms-content .act-input,
+.cms-content .act-textarea,
+.cms-content .pz-input,
+.cms-content .pz-textarea,
+.cms-content .ce-input,
+.cms-content .me-input,
+.cms-content .sd-input,
+.cms-content .we-input,
+.cms-content .ge-input,
+.cms-content .le-input,
+.cms-content .cf-input,
+.cms-content .song-input,
+.cms-content .form-input,
+.cms-content .form-textarea,
+.cms-content input.form-input,
+.cms-content textarea.form-textarea {
+    background: var(--cms-input-bg);
+    color: var(--cms-text);
+    border: 1px solid var(--cms-input-border);
+    color-scheme: inherit;
+}
+
+.cms-content .act-input:focus,
+.cms-content .pz-input:focus,
+.cms-content .ce-input:focus,
+.cms-content .me-input:focus,
+.cms-content .sd-input:focus,
+.cms-content .we-input:focus,
+.cms-content .ge-input:focus,
+.cms-content .le-input:focus,
+.cms-content .cf-input:focus,
+.cms-content .song-input:focus,
+.cms-content .form-input:focus,
+.cms-content .form-select:focus,
+.cms-content .form-textarea:focus {
+    outline: none;
+    border-color: rgba(212, 160, 23, 0.55);
+    background: var(--cms-input-bg);
+    box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.12);
+}
+
+.cms-content .act-input::placeholder,
+.cms-content .pz-input::placeholder,
+.cms-content .ce-input::placeholder,
+.cms-content .me-input::placeholder,
+.cms-content .song-input::placeholder,
+.cms-content .form-input::placeholder {
+    color: var(--cms-text-muted);
+}
+
+/* Selects — always opaque (fixes transparent dropdown on Windows) */
+.cms-content select,
+.cms-content select.act-input,
+.cms-content select.pz-input,
+.cms-content select.ce-input,
+.cms-content select.me-input,
+.cms-content select.sd-input,
+.cms-content select.we-input,
+.cms-content select.ge-input,
+.cms-content select.le-input,
+.cms-content select.cf-input,
+.cms-content select.song-input,
+.cms-content select.form-select,
+.cms-content .form-select {
+    appearance: auto;
+    -webkit-appearance: menulist;
+    background-color: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border: 1px solid var(--cms-input-border) !important;
+    color-scheme: inherit !important;
+}
+
+.cms-content select option,
+.cms-content select optgroup {
+    background-color: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+}
+
+[data-cms-theme="light"] .cms-content select,
+[data-cms-theme="light"] .cms-content select option {
+    background-color: #ffffff !important;
+    color: var(--ink) !important;
+}
+
+[data-cms-theme="dark"] .cms-content select,
+[data-cms-theme="dark"] .cms-content select option {
+    background-color: var(--cms-input-bg) !important;
+    color: #ffffff !important;
+}
+
+/* File inputs */
+.cms-content .song-file-input,
+.cms-content .form-input[type="file"],
+.cms-content input[type="file"] {
+    background: var(--cms-surface-raised) !important;
+    color: var(--cms-text) !important;
+    border: 1px solid var(--cms-input-border) !important;
+}
+
+.cms-content .song-file-input::file-selector-button {
+    background: rgba(212, 160, 23, 0.15);
+    color: var(--savanna-gold);
+    border: 1px solid rgba(212, 160, 23, 0.35);
+}
+
+/* Form cards / sections */
+.cms-content .ce-card,
+.cms-content .le-card,
+.cms-content .form-section,
+.cms-content .puzzle-editor-main,
+.cms-content .act-stat {
+    background: var(--cms-surface);
+    border-color: var(--cms-border);
+    color: var(--cms-text);
+}
+
+.cms-content .editor-header {
+    background: var(--cms-surface);
+    border-bottom: 1px solid var(--cms-border);
+}
+
+.cms-content .drawing-editor-container {
+    min-height: auto;
+    background: transparent;
+    color: var(--cms-text);
+}
+
+.cms-content .back-link {
+    color: var(--cms-text-muted);
+}
+
+.cms-content .back-link:hover {
+    color: var(--cms-text);
+}
+
+.cms-content .page-title,
+.cms-content .section-title,
+.cms-content .upload-text,
+.cms-content .material-name {
+    color: var(--cms-text);
+}
+
+.cms-content .page-subtitle,
+.cms-content .upload-description,
+.cms-content .file-info,
+.cms-content .image-caption,
+.cms-content .remove-button {
+    color: var(--cms-text-muted);
+}
+
+.cms-content .file-upload-label {
+    background: var(--cms-input-bg);
+    border: 2px dashed var(--cms-border);
+    color: var(--cms-text);
+}
+
+.cms-content .file-upload-label:hover {
+    border-color: rgba(212, 160, 23, 0.45);
+    background: var(--cms-surface-hover);
+}
+
+.cms-content .material-tag {
+    background: var(--cms-surface-raised);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .cancel-button {
+    background: transparent;
+    color: var(--cms-text-muted);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .cancel-button:hover {
+    background: var(--cms-row-hover);
+    color: var(--cms-text);
+    border-color: var(--cms-input-border);
+}
+
+.cms-content .create-button {
+    background: var(--clay-red);
+    color: #fff;
+    border: 1px solid var(--clay-red-dark);
+}
+
+/* Activity detail — emoji panel & metadata */
+.cms-content .fc-emoji-preview,
+.cms-content .fc-cover-preview-box {
+    background: var(--cms-surface-raised);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .fc-emoji-panel {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .fc-emoji-tile {
+    background: var(--cms-input-bg);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+}
+
+.cms-content .activity-detail-page pre,
+.cms-content details pre {
+    background: var(--cms-surface-raised) !important;
+    border: 1px solid var(--cms-border) !important;
+    color: var(--cms-text) !important;
+}
+
+/* Puzzle live preview frame */
+.cms-content .pz-live-preview-card,
+.cms-content .pz-lp-frame {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+}
+
+/* Hardcoded hex text overrides in editor style blocks */
+[data-cms-theme="light"] .cms-content .drawing-editor-container .form-label,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .form-input,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .form-select,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .form-textarea,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .section-title,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .upload-text,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .material-name {
+    color: var(--cms-text) !important;
+    background-color: var(--cms-input-bg) !important;
+    border-color: var(--cms-input-border) !important;
+}
+
+[data-cms-theme="light"] .cms-content .drawing-editor-container .form-section,
+[data-cms-theme="light"] .cms-content .drawing-editor-container .editor-header {
+    background: var(--cms-surface) !important;
+    border-color: var(--cms-border) !important;
+}
+
+[data-cms-theme="light"] .cms-content .drawing-editor-container {
+    background: transparent !important;
+    color: var(--cms-text) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Edit forms & detail pages (create + edit share same editors)
+   ═══════════════════════════════════════════════════════════════ */
+
+.cms-content .sa-content-card,
+.cms-content .culture-show-page .sa-content-card,
+.cms-content [class$="-show-page"] .sa-content-card {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    border-radius: var(--r-lg);
+    padding: var(--sp-6);
+    margin-bottom: var(--sp-4);
+    color: var(--cms-text);
+}
+
+/* Detail / edit pages with inline forms */
+.cms-content .activity-detail-page,
+.cms-content .language-detail-page,
+.cms-content .age-profile-detail-page,
+.cms-content .story-form-root,
+.cms-content .sa-tribe-form-view,
+.cms-content .organization-create-page,
+.cms-content .user-form-page {
+    color: var(--cms-text);
+}
+
+.cms-content .language-detail-page input,
+.cms-content .language-detail-page select,
+.cms-content .language-detail-page textarea,
+.cms-content .age-profile-detail-page input,
+.cms-content .age-profile-detail-page select,
+.cms-content .age-profile-detail-page textarea {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border: 1px solid var(--cms-input-border) !important;
+}
+
+/* Story pack create/edit form */
+.cms-content .story-form-input {
+    background: var(--cms-input-bg);
+    color: var(--cms-text);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .story-form-label {
+    color: var(--cms-text-muted);
+}
+
+.cms-content .story-form-select,
+.cms-content select.story-form-input {
+    background-color: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    color-scheme: inherit !important;
+}
+
+.cms-content .story-form-select option,
+.cms-content select.story-form-input option {
+    background-color: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+}
+
+[data-cms-theme="light"] .cms-content .story-form-select option {
+    background-color: #ffffff !important;
+    color: var(--ink) !important;
+}
+
+.cms-content .story-form-card,
+.cms-content .story-form-header {
+    background: var(--cms-surface);
+    border-color: var(--cms-border);
+}
+
+.cms-content .story-form-cover-pdf {
+    background: var(--cms-surface-raised);
+    color: var(--cms-text-muted);
+    border-color: var(--cms-border);
+}
+
+/* Tribe create/edit — inline styled fields */
+.cms-content .sa-tribe-form-view input[type="text"],
+.cms-content .sa-tribe-form-view input[type="number"],
+.cms-content .sa-tribe-form-view input[type="color"],
+.cms-content .sa-tribe-form-view select,
+.cms-content .sa-tribe-form-view textarea {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border: 1px solid var(--cms-input-border) !important;
+}
+
+.cms-content .sa-tribe-form-view select option {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+}
+
+/* Flashcard edit rows (activity detail) */
+.cms-content .fc-slide-row,
+.cms-content .activity-detail-page [wire\\:key^="fc-"] {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+    color: var(--cms-text);
+}
+
+/* Language activity edit — word list rows & emoji popover */
+.cms-content .lang-word-row,
+.cms-content .language-activity-editor [wire\\:key^="word-"] {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .cms-emoji-popover {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+    box-shadow: 0 12px 40px rgba(26, 18, 8, 0.12) !important;
+}
+
+[data-cms-theme="dark"] .cms-content .cms-emoji-popover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Game editor — question / option blocks */
+.cms-content .game-question-block,
+.cms-content .ge-question-card {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+}
+
+/* Puzzle edit preview pane */
+.cms-content .pz-preview-hero,
+.cms-content .pz-lp-frame {
+    background: var(--cms-surface-raised) !important;
+    border-color: var(--cms-border) !important;
+}
+
+/* Word search grid cells on show/edit */
+.cms-content .ws-show-cell {
+    background: var(--cms-input-bg);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+}
+
+/* Modals (translations, org edit, themes) */
+[data-cms-theme="light"] .cms-content [style*="position:fixed"][style*="inset:0"] > div:not([style*="inset:0"]) {
+    background: var(--cms-surface) !important;
+    color: var(--cms-text) !important;
+    border-color: var(--cms-border) !important;
+}
+
+.cms-content .cms-modal-panel {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+}
+
+/* Inline inputs in editors (materials, colors, etc.) */
+.cms-content input[style*="flex:1"],
+.cms-content .drawing-editor-container input,
+.cms-content .drawing-editor-container select,
+.cms-content .drawing-editor-container textarea {
+    background-color: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border-color: var(--cms-input-border) !important;
+}
+
+/* Light: kill dark translucent inputs */
+[data-cms-theme="light"] .cms-content input[style*="rgba(0,0,0"],
+[data-cms-theme="light"] .cms-content select[style*="rgba(0,0,0"],
+[data-cms-theme="light"] .cms-content textarea[style*="rgba(0,0,0"] {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="background:rgba(0,0,0"],
+[data-cms-theme="light"] .cms-content [style*="background: rgba(0, 0, 0"] {
+    background: var(--cms-surface) !important;
+}
+
+/* Maze / word-search preview grids */
+.cms-content .maze-grid,
+.cms-content .ws-preview-grid,
+.cms-content .ws-preview-cell {
+    background: var(--cms-surface-raised);
+    border-color: var(--cms-border);
+    color: var(--cms-text);
+}
+
+.cms-content .maze-cell.path {
+    background: var(--cms-row-hover);
+}
+
+/* Segment / nested edit panels in song editor */
+.cms-content .song-segment-panel {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+}
+
+/* Light: replace hardcoded white hairline borders in inline styles */
+[data-cms-theme="light"] .cms-content .cms-modal-panel {
+    background: var(--cms-surface) !important;
+    box-shadow: 0 24px 80px rgba(26, 18, 8, 0.15) !important;
+}
+
+[data-cms-theme="light"] .cms-content .fc-emoji-panel {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+}
+
+.cms-content .fc-emoji-panel {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+/* Editor style blocks: inputs use opaque fill */
+.cms-content .activity-detail-page .act-input,
+.cms-content .activity-detail-page select.act-input,
+.cms-content .activity-detail-page textarea.act-input {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+}
+
+.cms-content .drawing-editor-container input[style*="surface-raised"] {
+    background: var(--cms-input-bg) !important;
 }

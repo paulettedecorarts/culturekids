@@ -3,10 +3,10 @@
     .ws-editor-page .we-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
     .ws-editor-page .we-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
     .ws-editor-page .we-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .ws-editor-page .we-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .ws-editor-page .we-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
     .ws-editor-page .we-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
     .ws-editor-page .we-input::placeholder { color:var(--cms-text-muted); }
-    .ws-editor-page select.we-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .ws-editor-page select.we-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:inherit; }
     .ws-editor-page select.we-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .ws-editor-page textarea.we-input { resize:vertical;min-height:72px;line-height:1.5; }
     .ws-editor-page .we-error { font-size:10px;color:#ff8c8c;margin-top:4px; }
@@ -16,7 +16,7 @@
     .ws-editor-page .we-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
     /* Grid preview */
     .ws-preview-grid { display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px; }
-    .ws-preview-cell { width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;border-radius:4px;background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);color:var(--cms-text); }
+    .ws-preview-cell { width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;border-radius:4px;background:var(--cms-input-bg);border:1px solid var(--cms-border);color:var(--cms-text); }
     .ws-preview-cell.placed { background:rgba(212,160,23,.2);border-color:rgba(212,160,23,.4);color:#F2CB5A; }
     @media (max-width:900px) {
         .ws-editor-page .we-grid-4 { grid-template-columns:1fr 1fr; }
