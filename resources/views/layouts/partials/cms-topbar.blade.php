@@ -20,6 +20,17 @@
 
 <header class="cms-topbar">
     <div class="cms-topbar-welcome">
+        <button
+            type="button"
+            class="cms-topbar-icon-btn cms-topbar-sidebar-btn"
+            @click="toggleSidebar()"
+            :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        >
+            <svg class="cms-topbar-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
         <div class="cms-topbar-avatar" aria-hidden="true">{{ $cmsInitials }}</div>
         <div class="cms-topbar-greeting">
             <p class="cms-topbar-hello">{{ $cmsGreeting }}, <strong>{{ $cmsFirstName }}</strong></p>

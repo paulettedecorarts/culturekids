@@ -15,6 +15,13 @@
             }
             document.documentElement.setAttribute('data-cms-theme', theme);
         })();
+        (function () {
+            try {
+                if (localStorage.getItem('cms-sidebar-collapsed') === 'true') {
+                    document.documentElement.setAttribute('data-cms-sidebar', 'collapsed');
+                }
+            } catch (e) {}
+        })();
     </script>
 
     <!-- Google Fonts -->
@@ -105,24 +112,70 @@
 
         .cms-shell { display: flex; width: 100%; height: 100%; }
 
-        /* Sidebar — always dark */
+        /* Sidebar — always dark, foldable */
+        :root {
+            --cms-sidebar-width: 240px;
+            --cms-sidebar-width-collapsed: 72px;
+        }
         .cms-sidebar {
-            width: 240px;
+            width: var(--cms-sidebar-width);
             background: var(--indigo-night);
             display: flex;
             flex-direction: column;
-            padding: var(--sp-6) var(--sp-4);
+            padding: var(--sp-4) var(--sp-3);
             flex-shrink: 0;
+            transition: width 0.22s ease, padding 0.22s ease;
+            overflow: hidden;
+            z-index: 30;
         }
-        .cms-sidebar-logo {
+        .cms-sidebar.is-collapsed,
+        [data-cms-sidebar="collapsed"] .cms-sidebar {
+            width: var(--cms-sidebar-width-collapsed);
+        }
+        .cms-sidebar-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: var(--sp-2);
+            margin-bottom: var(--sp-6);
+            padding: 0 4px;
+            min-height: 44px;
+        }
+        .cms-sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            text-decoration: none;
+            color: #fff;
+            flex: 1;
+        }
+        .cms-sidebar-mark {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--clay-red), var(--sunfire));
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-family: var(--font-display);
             font-size: 20px;
             font-weight: 800;
             color: #fff;
-            margin-bottom: 32px;
-            padding: 0 12px;
         }
-        .cms-sidebar-logo span {
+        .cms-sidebar-brand-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.15;
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 1;
+            max-width: 160px;
+            transition: opacity 0.15s ease, max-width 0.22s ease;
+        }
+        .cms-sidebar-brand-text span {
             display: block;
             font-size: 9px;
             font-weight: 700;
@@ -132,31 +185,154 @@
             margin-top: 2px;
             font-family: var(--font-admin);
         }
+        .cms-sidebar.is-collapsed .cms-sidebar-brand-text,
+        [data-cms-sidebar="collapsed"] .cms-sidebar-brand-text {
+            opacity: 0;
+            max-width: 0;
+            pointer-events: none;
+        }
+        .cms-sidebar-toggle {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            background: rgba(255,255,255,.06);
+            color: rgba(255,255,255,.7);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s, transform 0.22s;
+        }
+        .cms-sidebar-toggle:hover {
+            background: rgba(255,255,255,.1);
+            color: #fff;
+        }
+        .cms-sidebar-toggle-icon {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.22s ease;
+        }
+        .cms-sidebar.is-collapsed .cms-sidebar-toggle-icon,
+        [data-cms-sidebar="collapsed"] .cms-sidebar-toggle-icon {
+            transform: rotate(180deg);
+        }
+        .cms-sidebar.is-collapsed .cms-sidebar-head,
+        [data-cms-sidebar="collapsed"] .cms-sidebar-head {
+            flex-direction: column;
+            align-items: center;
+            gap: var(--sp-3);
+        }
+        .cms-sidebar.is-collapsed .cms-sidebar-brand,
+        [data-cms-sidebar="collapsed"] .cms-sidebar-brand {
+            justify-content: center;
+        }
+        .cms-sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin: 0 -4px;
+            padding: 0 4px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.15) transparent;
+        }
+        .cms-sidebar-foot {
+            margin-top: var(--sp-4);
+            padding-top: var(--sp-3);
+            border-top: 1px solid rgba(255,255,255,.08);
+        }
         .cms-nav-section {
+            margin: 20px 8px 10px;
+            overflow: hidden;
+        }
+        .cms-nav-section-text {
+            display: block;
             color: rgba(212,160,23,.35);
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin: 24px 12px 12px;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.15s ease;
+        }
+        .cms-sidebar.is-collapsed .cms-nav-section,
+        [data-cms-sidebar="collapsed"] .cms-nav-section {
+            margin: 12px 0;
+            height: 1px;
+            background: rgba(255,255,255,.08);
+        }
+        .cms-sidebar.is-collapsed .cms-nav-section-text,
+        [data-cms-sidebar="collapsed"] .cms-nav-section-text {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
         }
         .cms-nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 16px;
+            padding: 10px 12px;
             border-radius: var(--r-sm);
             color: rgba(255,255,255,.5);
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.15s, color 0.15s, padding 0.22s;
             border: none;
             font-family: var(--font-admin);
+            width: 100%;
+            text-align: left;
+            background: transparent;
+        }
+        .cms-nav-icon {
+            flex-shrink: 0;
+            width: 24px;
+            font-size: 18px;
+            line-height: 1;
+            text-align: center;
+        }
+        .cms-nav-label {
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.12s ease, max-width 0.22s ease;
+            max-width: 200px;
+        }
+        .cms-sidebar.is-collapsed .cms-nav-item,
+        [data-cms-sidebar="collapsed"] .cms-nav-item {
+            justify-content: center;
+            padding: 10px 8px;
+            gap: 0;
+        }
+        .cms-sidebar.is-collapsed .cms-nav-label,
+        [data-cms-sidebar="collapsed"] .cms-nav-label {
+            opacity: 0;
+            max-width: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
         .cms-nav-item:hover { color: #fff; background: rgba(255,255,255,.05); }
         .cms-nav-item.active { background: rgba(212,160,23,.1); color: var(--savanna-gold); }
+        .cms-nav-item--logout { margin-top: 0; }
+        .cms-topbar-sidebar-btn { margin-right: 2px; }
+        .cms-topbar-sidebar-icon { width: 20px; height: 20px; }
+        @media (max-width: 900px) {
+            .cms-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                box-shadow: 4px 0 24px rgba(0,0,0,.25);
+            }
+            .cms-sidebar.is-collapsed,
+            [data-cms-sidebar="collapsed"] .cms-sidebar {
+                transform: translateX(0);
+            }
+            .cms-topbar-sidebar-btn { display: inline-flex; }
+        }
 
         /* Main content — follows theme */
         .cms-main {
@@ -598,14 +774,27 @@
         style="{{ session('impersonating') ? 'margin-top:44px;height:calc(100vh - 44px)' : '' }}"
         x-data="{
             theme: document.documentElement.getAttribute('data-cms-theme') || 'light',
+            sidebarCollapsed: document.documentElement.getAttribute('data-cms-sidebar') === 'collapsed',
             init() {
                 this.theme = document.documentElement.getAttribute('data-cms-theme') || 'light';
+                this.sidebarCollapsed = document.documentElement.getAttribute('data-cms-sidebar') === 'collapsed';
             },
             setTheme(value) {
                 if (value !== 'light' && value !== 'dark') return;
                 this.theme = value;
                 document.documentElement.setAttribute('data-cms-theme', value);
                 try { localStorage.setItem('cms-editor-theme', value); } catch (e) {}
+            },
+            toggleSidebar() {
+                this.sidebarCollapsed = !this.sidebarCollapsed;
+                if (this.sidebarCollapsed) {
+                    document.documentElement.setAttribute('data-cms-sidebar', 'collapsed');
+                } else {
+                    document.documentElement.removeAttribute('data-cms-sidebar');
+                }
+                try {
+                    localStorage.setItem('cms-sidebar-collapsed', this.sidebarCollapsed ? 'true' : 'false');
+                } catch (e) {}
             }
         }"
     >
@@ -615,51 +804,7 @@
             $isSuper = auth()->user()->hasRole('super_admin');
         @endphp
 
-        <div class="cms-sidebar">
-            <div class="cms-sidebar-logo">Paulette CMS<span>Content Studio</span></div>
-
-            @if($isEditor || $isSuper)
-                <a href="{{ route('cms.editor.dashboard') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.dashboard') ? 'active' : '' }}">📊 Dashboard</a>
-            @elseif($isAdmin)
-                <a href="{{ route('cms.admin.dashboard') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.dashboard') ? 'active' : '' }}">📊 Admin Hub</a>
-            @endif
-
-            @if($isEditor || $isSuper)
-                <div class="cms-nav-section">Content Production</div>
-                <a href="{{ route('cms.editor.tribes') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.tribes*') ? 'active' : '' }}">🌍 Tribe Directory</a>
-                <a href="{{ route('cms.editor.clans') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.clans*') ? 'active' : '' }}">🌳 Clan Registry</a>
-                <a href="{{ route('cms.editor.story-packs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.story-packs*') ? 'active' : '' }}">📋 Story Packs</a>
-                <a href="{{ route('cms.editor.songs') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.songs*') ? 'active' : '' }}">🎵 Songs</a>
-                <a href="{{ route('cms.editor.flashcards') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.flashcards*') ? 'active' : '' }}">🃏 Flashcards</a>
-                <a href="{{ route('cms.editor.puzzles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.puzzles*') ? 'active' : '' }}">🧩 Puzzles</a>
-                <a href="{{ route('cms.editor.translations') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.translations') ? 'active' : '' }}">🌐 Language Packs</a>
-                <a href="{{ route('cms.editor.assets') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.assets') ? 'active' : '' }}">🖼 Assets</a>
-                <a href="{{ route('cms.editor.offline-bundles') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.offline-bundles') ? 'active' : '' }}">📦 Offline Bundles</a>
-
-                <div class="cms-nav-section">Activities</div>
-                <a href="{{ route('cms.editor.activities') }}" class="cms-nav-item {{ request()->routeIs('cms.editor.activities*') ? 'active' : '' }}">🧩 All activities</a>
-            @endif
-
-            @if($isAdmin || $isSuper)
-                <div class="cms-nav-section">Management</div>
-                <a href="{{ route('cms.admin.review') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.review') ? 'active' : '' }}">✅ Review Queue</a>
-                <a href="{{ route('cms.admin.approved-content') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.approved-content*') ? 'active' : '' }}">📚 Approved Content</a>
-                <a href="{{ route('cms.admin.themes') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.themes') ? 'active' : '' }}">🎨 Themes</a>
-                <a href="{{ route('cms.admin.organizations') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.organizations') ? 'active' : '' }}">🏫 Organizations</a>
-                <a href="{{ route('cms.admin.people') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.people') ? 'active' : '' }}">👥 Teachers &amp; children</a>
-                <a href="{{ route('cms.admin.classrooms') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.classrooms') ? 'active' : '' }}">🎓 Classrooms</a>
-                <a href="{{ route('cms.admin.analytics') }}" class="cms-nav-item {{ request()->routeIs('cms.admin.analytics') ? 'active' : '' }}">📈 Analytics</a>
-            @endif
-
-            <div style="margin-top:auto">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="cms-nav-item" style="background:none; border:none; width:100%; text-align:left">
-                        🚪 Logout
-                    </button>
-                </form>
-            </div>
-        </div>
+        @include('layouts.partials.cms-sidebar', compact('isEditor', 'isAdmin', 'isSuper'))
 
         <main class="cms-main">
             @include('layouts.partials.cms-topbar', compact('isEditor', 'isAdmin', 'isSuper'))
