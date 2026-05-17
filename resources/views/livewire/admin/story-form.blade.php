@@ -168,8 +168,8 @@
         }
         .story-form-back {
             flex-shrink: 0;
-            background: rgba(255,255,255,0.05);
-            color: #fff;
+            background: var(--cms-surface-raised);
+            color: var(--cms-text);
             width: 44px;
             height: 44px;
             border-radius: 14px;
@@ -177,7 +177,7 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--cms-border);
         }
         .story-form-flash {
             background: rgba(74,124,89,0.1);
@@ -192,8 +192,8 @@
         .story-form-card {
             width: 100%;
             max-width: 100%;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--cms-surface);
+            border: 1px solid var(--cms-border);
             border-radius: var(--r-xl);
             padding: clamp(var(--sp-4), 2vw, var(--sp-8));
             box-sizing: border-box;
@@ -252,11 +252,11 @@
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--cms-surface-raised);
+            border: 1px solid var(--cms-border);
             border-radius: 12px;
             padding: 14px;
-            color: #fff;
+            color: var(--cms-text);
             font-family: var(--font-admin);
             font-size: 15px;
         }
@@ -273,7 +273,7 @@
         .story-form-file { font-size: 13px; padding: 12px 14px; }
         .story-form-hint {
             font-size: 10px;
-            color: rgba(255,255,255,0.3);
+            color: var(--cms-text-muted);
             margin-top: 6px;
         }
         .story-form-error {
@@ -346,7 +346,7 @@
             top: -8px;
             right: -8px;
             background: var(--clay-red);
-            color: #fff;
+            color: var(--cms-text);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -360,7 +360,7 @@
             bottom: 4px;
             left: 4px;
             background: rgba(0,0,0,0.8);
-            color: #fff;
+            color: var(--cms-text);
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 10px;
@@ -375,9 +375,9 @@
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .story-form-btn-secondary {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--cms-surface-raised);
+            color: var(--cms-text);
+            border: 1px solid var(--cms-border);
             padding: 14px 24px;
             border-radius: 14px;
             font-weight: 800;
@@ -408,6 +408,6 @@
             cursor: not-allowed;
         }
         /* Select options: dark menu on Windows/WebKit */
-        .story-form-select option { background: var(--indigo-night); color: #fff; }
+        .story-form-select option { background: var(--indigo-night); color: var(--cms-text); }
     </style>
 </div>

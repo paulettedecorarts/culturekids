@@ -1,13 +1,13 @@
 <div class="maze-editor-page">
     <style>
-    .maze-editor-page .me-card { background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px;margin-bottom:20px; }
-    .maze-editor-page .me-section-title { font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
-    .maze-editor-page .me-label { display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .maze-editor-page .me-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
-    .maze-editor-page .me-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:rgba(255,255,255,.07); }
-    .maze-editor-page .me-input::placeholder { color:rgba(255,255,255,.3); }
-    .maze-editor-page select.me-input { background:#1a2744;color:#fff;color-scheme:dark; }
-    .maze-editor-page select.me-input option { background:#1a2744;color:#fff; }
+    .maze-editor-page .me-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
+    .maze-editor-page .me-section-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
+    .maze-editor-page .me-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
+    .maze-editor-page .me-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .maze-editor-page .me-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
+    .maze-editor-page .me-input::placeholder { color:var(--cms-text-muted); }
+    .maze-editor-page select.me-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .maze-editor-page select.me-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .maze-editor-page textarea.me-input { resize:vertical;min-height:72px;line-height:1.5; }
     .maze-editor-page .me-error { font-size:10px;color:#ff8c8c;margin-top:4px; }
     .maze-editor-page .me-field { display:flex;flex-direction:column;min-width:0; }
@@ -15,10 +15,10 @@
     .maze-editor-page .me-grid-5 { display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:16px; }
     .maze-editor-page .me-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
     /* Maze grid */
-    .maze-grid { display:inline-grid;gap:2px;background:rgba(255,255,255,.05);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.1); }
-    .maze-cell { width:28px;height:28px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .1s;border:1px solid rgba(255,255,255,.05); }
-    .maze-cell.wall { background:#1a2744;border-color:rgba(255,255,255,.15); }
-    .maze-cell.path { background:rgba(255,255,255,.08); }
+    .maze-grid { display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px;border:1px solid var(--cms-border); }
+    .maze-cell { width:28px;height:28px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .1s;border:1px solid var(--cms-border-subtle); }
+    .maze-cell.wall { background:var(--cms-input-bg);border-color:var(--cms-border); }
+    .maze-cell.path { background:var(--cms-surface-hover); }
     .maze-cell.start { background:rgba(74,124,89,.6);border-color:#4A7C59; }
     .maze-cell.end { background:rgba(196,75,43,.6);border-color:#C44B2B; }
     .maze-cell.collectible { background:rgba(212,160,23,.4);border-color:#F2CB5A; }
@@ -120,7 +120,7 @@
                     <textarea wire:model="description" class="me-input" rows="3" placeholder="Describe the maze story..."></textarea>
                 </div>
                 <div class="me-field">
-                    <label class="me-label">Cultural Note <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
+                    <label class="me-label">Cultural Note <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
                     <textarea wire:model="cultural_note" class="me-input" rows="3" placeholder="Cultural context..."></textarea>
                 </div>
             </div>
@@ -134,12 +134,12 @@
                 <div class="me-field">
                     <label class="me-label">Time Limit (seconds) <span style="color:#ff8c8c">*</span></label>
                     <input wire:model="time_limit_seconds" type="number" class="me-input" min="10" placeholder="e.g. 60">
-                    <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">Child must complete the maze within this time</div>
+                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Child must complete the maze within this time</div>
                 </div>
                 <div class="me-field">
                     <label class="me-label">Bonus Threshold (seconds)</label>
                     <input wire:model="metadata.timed.bonus_threshold" type="number" class="me-input" min="5" placeholder="e.g. 30">
-                    <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">Complete under this time to earn bonus stars</div>
+                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Complete under this time to earn bonus stars</div>
                 </div>
             </div>
         </div>
@@ -152,13 +152,13 @@
                 <div class="me-field">
                     <label class="me-label">Visibility Radius (cells)</label>
                     <input wire:model="visibility_radius" type="number" class="me-input" min="1" max="10" placeholder="3">
-                    <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px">How many cells around the player are lit up</div>
+                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">How many cells around the player are lit up</div>
                 </div>
                 <div class="me-field">
                     <label class="me-label">Torch Fades Over Time?</label>
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:10px">
                         <input wire:model="metadata.visibility.torch_fades" type="checkbox" style="width:14px;height:14px">
-                        <span style="font-size:12px;color:rgba(255,255,255,.7)">Radius shrinks as time passes</span>
+                        <span style="font-size:12px;color:var(--cms-text-muted)">Radius shrinks as time passes</span>
                     </label>
                 </div>
             </div>
@@ -170,7 +170,7 @@
             <div class="me-section-title">↩️ Reverse Maze Settings</div>
             <div style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#F2CB5A;font-weight:600;margin-bottom:4px">How Reverse Maze Works</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.5">
+                <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
                     The child starts at the <strong>End (🔴)</strong> position and must navigate to the <strong>Start (🟢)</strong> — the reverse of the normal direction. Set Start as the goal and End as the starting point in the grid builder.
                 </div>
             </div>
@@ -192,7 +192,7 @@
             <div class="me-section-title">🎯 Circular Maze Settings</div>
             <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#60A5FA;font-weight:600;margin-bottom:4px">How Circular Maze Works</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.5">
+                <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
                     The child navigates from the outer edge spiralling inward to reach the centre. Place <strong>Start (🟢)</strong> on the outer edge and <strong>End (🔴)</strong> at the centre cell in the grid builder.
                 </div>
             </div>
@@ -205,14 +205,14 @@
                     <label class="me-label">Rotating Walls?</label>
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:10px">
                         <input wire:model="metadata.circular.rotating" type="checkbox" style="width:14px;height:14px">
-                        <span style="font-size:12px;color:rgba(255,255,255,.7)">Walls rotate as player moves</span>
+                        <span style="font-size:12px;color:var(--cms-text-muted)">Walls rotate as player moves</span>
                     </label>
                 </div>
                 <div class="me-field">
                     <label class="me-label">Show Ring Hints?</label>
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:10px">
                         <input wire:model="metadata.circular.show_rings" type="checkbox" style="width:14px;height:14px">
-                        <span style="font-size:12px;color:rgba(255,255,255,.7)">Display ring count as hint</span>
+                        <span style="font-size:12px;color:var(--cms-text-muted)">Display ring count as hint</span>
                     </label>
                 </div>
             </div>
@@ -239,32 +239,32 @@
                     <label class="me-label">Cols</label>
                     <input wire:model="grid_cols" type="number" class="me-input" min="5" max="20" x-on:change="reinit(rows, $event.target.value)">
                 </div>
-                <button type="button" x-on:click="fillWalls()" style="padding:9px 16px;border-radius:8px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:12px">Fill All Walls</button>
-                <button type="button" x-on:click="clearWalls()" style="padding:9px 16px;border-radius:8px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:12px">Clear All Walls</button>
+                <button type="button" x-on:click="fillWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Fill All Walls</button>
+                <button type="button" x-on:click="clearWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Clear All Walls</button>
             </div>
 
             {{-- Legend --}}
             <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.6)"><div style="width:16px;height:16px;border-radius:3px;background:#1a2744;border:1px solid rgba(255,255,255,.15)"></div> Wall</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.6)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15)"></div> Path</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.6)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(74,124,89,.6)"></div> 🟢 Start</div>
-                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.6)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(196,75,43,.6)"></div> 🔴 End</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:var(--cms-input-bg);border:1px solid var(--cms-border)"></div> Wall</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:var(--cms-surface-hover);border:1px solid var(--cms-border)"></div> Path</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(74,124,89,.6)"></div> 🟢 Start</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(196,75,43,.6)"></div> 🔴 End</div>
             </div>
 
             {{-- Mode buttons --}}
             <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
                 <button type="button" x-on:click="mode='toggle'"
-                    :style="mode==='toggle' ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)'"
+                    :style="mode==='toggle' ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
                     ✏️ Draw/Erase Walls
                 </button>
                 <button type="button" x-on:click="mode='start'"
-                    :style="mode==='start' ? 'background:rgba(74,124,89,.4);color:#6FA882;border-color:rgba(74,124,89,.6)' : 'background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)'"
+                    :style="mode==='start' ? 'background:rgba(74,124,89,.4);color:#6FA882;border-color:rgba(74,124,89,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
                     🟢 Set Start
                 </button>
                 <button type="button" x-on:click="mode='end'"
-                    :style="mode==='end' ? 'background:rgba(196,75,43,.4);color:#E06444;border-color:rgba(196,75,43,.6)' : 'background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)'"
+                    :style="mode==='end' ? 'background:rgba(196,75,43,.4);color:#E06444;border-color:rgba(196,75,43,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
                     🔴 Set End
                 </button>
@@ -279,7 +279,7 @@
                 </canvas>
             </div>
 
-            <div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.4)">
+            <div style="margin-top:12px;font-size:11px;color:var(--cms-text-muted)">
                 Grid: <span x-text="rows + '×' + cols"></span> •
                 Start: (<span x-text="startPos.row"></span>, <span x-text="startPos.col"></span>) •
                 End: (<span x-text="endPos.row"></span>, <span x-text="endPos.col"></span>) •
@@ -471,7 +471,7 @@
                     <label class="me-label" style="font-size:10px">Required to exit?</label>
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:10px">
                         <input wire:model="collectibleRequired" type="checkbox" style="width:14px;height:14px">
-                        <span style="font-size:11px;color:rgba(255,255,255,.7)">Required</span>
+                        <span style="font-size:11px;color:var(--cms-text-muted)">Required</span>
                     </label>
                 </div>
                 <div class="me-field">
@@ -481,17 +481,17 @@
             </div>
 
             @forelse($collectibles as $i => $col)
-                <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                     <span style="font-size:20px">{{ $col['emoji'] }}</span>
-                    <span style="color:#fff;font-size:12px;font-weight:600">{{ $col['label'] ?: 'Item' }}</span>
-                    <span style="color:rgba(255,255,255,.5);font-size:11px">Row {{ $col['row'] }}, Col {{ $col['col'] }}</span>
+                    <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $col['label'] ?: 'Item' }}</span>
+                    <span style="color:var(--cms-text-muted);font-size:11px">Row {{ $col['row'] }}, Col {{ $col['col'] }}</span>
                     @if($col['required'])
                         <span style="background:rgba(196,75,43,.2);color:#E06444;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700">Required</span>
                     @endif
-                    <button type="button" wire:click="removeCollectible({{ $i }})" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:16px">×</button>
+                    <button type="button" wire:click="removeCollectible({{ $i }})" style="margin-left:auto;background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:16px">×</button>
                 </div>
             @empty
-                <div style="font-size:11px;color:rgba(255,255,255,.35);padding:12px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:8px">
+                <div style="font-size:11px;color:var(--cms-text-muted);padding:12px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">
                     No collectibles added yet
                 </div>
             @endforelse
@@ -503,19 +503,19 @@
             <div class="me-section-title">Images</div>
             <div class="me-grid-2">
                 <div class="me-field">
-                    <label class="me-label">Cover Image <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">max 5MB</span></label>
+                    <label class="me-label">Cover Image <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 5MB</span></label>
                     <input wire:model="cover_image_file" type="file" class="me-input" accept="image/*">
                     @error('cover_image_file') <div class="me-error">{{ $message }}</div> @enderror
                     @if($maze && $maze->cover_image_path)
-                        <img src="{{ asset('storage/' . $maze->cover_image_path) }}" style="margin-top:8px;max-width:120px;border-radius:6px;border:1px solid rgba(255,255,255,.1)">
+                        <img src="{{ asset('storage/' . $maze->cover_image_path) }}" style="margin-top:8px;max-width:120px;border-radius:6px;border:1px solid var(--cms-border)">
                     @endif
                 </div>
                 <div class="me-field">
-                    <label class="me-label">Background Image <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
+                    <label class="me-label">Background Image <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
                     <input wire:model="background_image_file" type="file" class="me-input" accept="image/*">
                     @error('background_image_file') <div class="me-error">{{ $message }}</div> @enderror
                     @if($maze && $maze->background_image_path)
-                        <img src="{{ asset('storage/' . $maze->background_image_path) }}" style="margin-top:8px;max-width:120px;border-radius:6px;border:1px solid rgba(255,255,255,.1)">
+                        <img src="{{ asset('storage/' . $maze->background_image_path) }}" style="margin-top:8px;max-width:120px;border-radius:6px;border:1px solid var(--cms-border)">
                     @endif
                 </div>
             </div>

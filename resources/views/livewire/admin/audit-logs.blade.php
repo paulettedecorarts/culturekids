@@ -15,12 +15,12 @@
             type="text" 
             wire:model.live.debounce.300ms="search" 
             placeholder="Search by action, resource, or user email..."
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:#fff;font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
         
         <select 
             wire:model.live="actionFilter"
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:#fff;font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         >
             <option value="">All Actions</option>
             @foreach($actions as $action)
@@ -31,7 +31,7 @@
         <input 
             type="date" 
             wire:model.live="dateFilter"
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:#fff;font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
     </div>
 
@@ -53,7 +53,7 @@
         
         @forelse($logs as $log)
             <div class="sa-table-row" style="grid-template-columns:130px 1fr 1fr 1fr 100px">
-                <span style="font-size:10px;color:rgba(255,255,255,.35)">
+                <span style="font-size:10px;color:var(--cms-text-muted)">
                     {{ $log->created_at->format('Y-m-d H:i') }}
                 </span>
                 
@@ -62,17 +62,17 @@
                 </span>
                 
                 <div>
-                    <div style="color:rgba(255,255,255,.7);font-size:12px">
+                    <div style="color:var(--cms-text-muted);font-size:12px">
                         {{ $log->user?->email ?? 'System' }}
                     </div>
                     @if($log->impersonator_id)
-                        <div style="font-size:10px;color:rgba(255,255,255,.3)">
+                        <div style="font-size:10px;color:var(--cms-text-muted)">
                             🎭 via {{ $log->impersonator?->email }}
                         </div>
                     @endif
                 </div>
                 
-                <span style="color:rgba(255,255,255,.4);font-size:11px;font-family:monospace">
+                <span style="color:var(--cms-text-muted);font-size:11px;font-family:monospace">
                     {{ $log->resource ?? '—' }}
                 </span>
                 
@@ -82,7 +82,7 @@
             </div>
         @empty
             <div class="sa-table-row" style="grid-template-columns:1fr">
-                <div style="text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-4)">
+                <div style="text-align:center;color:var(--cms-text-muted);padding:var(--sp-4)">
                     No audit logs found.
                 </div>
             </div>

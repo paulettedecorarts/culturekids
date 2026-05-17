@@ -1,13 +1,13 @@
 <div>
     @if(! $isOrgAdminOnly)
         <!-- Organization Selector -->
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:20px 32px;margin-bottom:var(--sp-5);display:flex;align-items:center;gap:24px">
+        <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:20px;padding:20px 32px;margin-bottom:var(--sp-5);display:flex;align-items:center;gap:24px">
             <div style="font-size:12px;font-weight:700;color:var(--savanna-gold);text-transform:uppercase">Configuring For:</div>
-            <select wire:model.live="selectedOrgId" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-full);padding:var(--sp-2) var(--sp-4);color:#fff;font-size:14px;outline:none;font-weight:700;flex:1;cursor:pointer">
-                <option value="" style="background:var(--indigo-night);color:#fff">All Organizations</option>
-                <option value="global" style="background:var(--indigo-night);color:#fff">Global (Platform-wide)</option>
+            <select wire:model.live="selectedOrgId" style="background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:var(--r-full);padding:var(--sp-2) var(--sp-4);color:var(--cms-text);font-size:14px;outline:none;font-weight:700;flex:1;cursor:pointer">
+                <option value="" style="background:var(--indigo-night);color:var(--cms-text)">All Organizations</option>
+                <option value="global" style="background:var(--indigo-night);color:var(--cms-text)">Global (Platform-wide)</option>
                 @foreach($organisations as $org)
-                    <option value="{{ $org->id }}" style="background:var(--indigo-night);color:#fff">{{ $org->name }}</option>
+                    <option value="{{ $org->id }}" style="background:var(--indigo-night);color:var(--cms-text)">{{ $org->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -36,7 +36,7 @@
     <!-- Themes Grid -->
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-4)">
         @forelse($themes as $theme)
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);overflow:hidden;transition:all 0.3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+            <div style="background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);overflow:hidden;transition:all 0.3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
                 <!-- Color Preview -->
                 <div style="height:120px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px;background:rgba(0,0,0,0.2)">
                     <div style="background:{{ $theme->colors['primary'] }};border-radius:8px"></div>
@@ -49,13 +49,13 @@
                 <div style="padding:var(--sp-4)">
                     <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:var(--sp-2)">
                         <div style="flex:1">
-                            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">
+                            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--cms-text);margin-bottom:4px">
                                 {{ $theme->name }}
                                 @if($theme->is_default)
                                     <span style="background:rgba(212,160,23,.2);color:var(--savanna-gold);padding:2px 8px;border-radius:6px;font-size:10px;font-weight:800;margin-left:8px">DEFAULT</span>
                                 @endif
                             </div>
-                            <div style="font-size:11px;color:rgba(255,255,255,.4);font-family:monospace">
+                            <div style="font-size:11px;color:var(--cms-text-muted);font-family:monospace">
                                 {{ $theme->slug }}
                                 @if($theme->org_id)
                                     · {{ $theme->organisation->name }}
@@ -67,7 +67,7 @@
                     </div>
 
                     @if($theme->description)
-                        <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:var(--sp-3);line-height:1.5">
+                        <p style="font-size:12px;color:var(--cms-text-muted);margin-bottom:var(--sp-3);line-height:1.5">
                             {{ $theme->description }}
                         </p>
                     @endif
@@ -86,7 +86,7 @@
                         <button 
                             wire:click="edit({{ $theme->id }})"
                             class="btn btn-sm" 
-                            style="flex:1;background:rgba(255,255,255,.05);color:#fff;border:1px solid rgba(255,255,255,.1);font-size:10px;padding:8px"
+                            style="flex:1;background:var(--cms-surface-raised);color:var(--cms-text);border:1px solid var(--cms-border);font-size:10px;padding:8px"
                         >
                             Edit
                         </button>
@@ -104,7 +104,7 @@
                 </div>
             </div>
         @empty
-            <div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-12)">
+            <div style="grid-column:1/-1;text-align:center;color:var(--cms-text-muted);padding:var(--sp-12)">
                 <div style="font-size:64px;margin-bottom:var(--sp-4)">🎨</div>
                 <div style="font-size:16px;font-weight:700;margin-bottom:var(--sp-2)">No themes created</div>
                 <div style="font-size:13px">Create your first theme to customize the platform appearance.</div>
@@ -124,10 +124,10 @@
                 <!-- Header -->
                 <div style="padding:32px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
                     <div>
-                        <h2 style="font-family:var(--font-display);font-size:28px;color:#fff;margin-bottom:4px">{{ $editing ? '🎨 Edit Theme' : '✨ Create New Theme' }}</h2>
-                        <div style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:700">Design your platform's visual identity</div>
+                        <h2 style="font-family:var(--font-display);font-size:28px;color:var(--cms-text);margin-bottom:4px">{{ $editing ? '🎨 Edit Theme' : '✨ Create New Theme' }}</h2>
+                        <div style="font-size:12px;color:var(--cms-text-muted);font-weight:700">Design your platform's visual identity</div>
                     </div>
-                    <button wire:click="$set('showModal', false)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                    <button wire:click="$set('showModal', false)" style="background: var(--cms-surface-raised);border: 1px solid var(--cms-border);color:var(--cms-text);width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 400px;flex:1;overflow:hidden">
@@ -145,34 +145,34 @@
                                             type="text"
                                             value="{{ $organisations->first()?->name ?? 'My Organization' }}"
                                             readonly
-                                            style="width:100%;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;color:rgba(255,255,255,0.75);font-family:var(--font-admin);font-size:15px;cursor:not-allowed"
+                                            style="width:100%;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:14px;color: var(--cms-text);font-family:var(--font-admin);font-size:15px;cursor:not-allowed"
                                         >
-                                        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px">Themes are locked to your organization.</div>
+                                        <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Themes are locked to your organization.</div>
                                     @else
-                                        <select wire:model="org_id" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;color:#fff;font-family:var(--font-admin);font-size:15px;cursor:pointer">
-                                            <option value="" style="background:var(--indigo-night);color:#fff">Global (Platform-wide)</option>
+                                        <select wire:model="org_id" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px;cursor:pointer">
+                                            <option value="" style="background:var(--indigo-night);color:var(--cms-text)">Global (Platform-wide)</option>
                                             @foreach($organisations as $org)
-                                                <option value="{{ $org->id }}" style="background:var(--indigo-night);color:#fff">{{ $org->name }}</option>
+                                                <option value="{{ $org->id }}" style="background:var(--indigo-night);color:var(--cms-text)">{{ $org->name }}</option>
                                             @endforeach
                                         </select>
-                                        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px">Leave as Global for platform-wide theme, or select an organization for custom branding</div>
+                                        <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Leave as Global for platform-wide theme, or select an organization for custom branding</div>
                                     @endif
                                 </div>
 
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Theme Name</label>
-                                    <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;color:#fff;font-family:var(--font-admin);font-size:15px">
+                                    <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px">
                                     @error('name') <div style="color:var(--clay-red);font-size:10px;margin-top:4px">{{ $message }}</div> @enderror
                                 </div>
 
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Slug (Auto-generated)</label>
-                                    <input wire:model="slug" type="text" readonly style="width:100%;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;color:rgba(255,255,255,0.5);font-family:monospace;cursor:not-allowed">
+                                    <input wire:model="slug" type="text" readonly style="width:100%;background:var(--cms-surface);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;color:var(--cms-text-muted);font-family:monospace;cursor:not-allowed">
                                 </div>
 
                                 <div>
                                     <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Description</label>
-                                    <textarea wire:model="description" rows="2" placeholder="A warm, earthy theme inspired by African savannas..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;color:#fff;font-family:var(--font-admin);resize:vertical"></textarea>
+                                    <textarea wire:model="description" rows="2" placeholder="A warm, earthy theme inspired by African savannas..." style="width:100%;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +185,7 @@
                                     <button 
                                         type="button"
                                         wire:click="applyPreset('{{ $key }}')"
-                                        style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;text-align:left;cursor:pointer;transition:all 0.2s"
+                                        style="background:var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;text-align:left;cursor:pointer;transition:all 0.2s"
                                         onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='var(--savanna-gold)'"
                                         onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.1)'"
                                     >
@@ -194,7 +194,7 @@
                                             <div style="width:20px;height:20px;border-radius:6px;background:{{ $preset['colors']['secondary'] }}"></div>
                                             <div style="width:20px;height:20px;border-radius:6px;background:{{ $preset['colors']['accent'] }}"></div>
                                         </div>
-                                        <div style="font-size:13px;font-weight:700;color:#fff">{{ $preset['name'] }}</div>
+                                        <div style="font-size:13px;font-weight:700;color:var(--cms-text)">{{ $preset['name'] }}</div>
                                     </button>
                                 @endforeach
                             </div>
@@ -210,7 +210,7 @@
                                         <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;background:transparent">
-                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;color:#fff;font-family:monospace;font-size:13px">
+                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
                                         </div>
                                     </div>
                                 @endforeach
@@ -227,7 +227,7 @@
                                         <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;background:transparent">
-                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;color:#fff;font-family:monospace;font-size:13px">
+                                            <input wire:model.live="{{ $key }}" type="text" style="flex:1;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
                                         </div>
                                     </div>
                                 @endforeach
@@ -250,8 +250,8 @@
                             <p style="font-size:13px;color:{{ $text_secondary }};margin-bottom:16px;line-height:1.6">This is how your content will look with the selected theme colors.</p>
                             
                             <div style="display:flex;gap:8px;flex-wrap:wrap">
-                                <button style="background:{{ $primary }};color:#fff;padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:12px">Primary</button>
-                                <button style="background:{{ $secondary }};color:#fff;padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:12px">Secondary</button>
+                                <button style="background:{{ $primary }};color:var(--cms-text);padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:12px">Primary</button>
+                                <button style="background:{{ $secondary }};color:var(--cms-text);padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:12px">Secondary</button>
                                 <button style="background:{{ $accent }};color:{{ $text_primary }};padding:8px 16px;border-radius:8px;border:none;font-weight:700;font-size:12px">Accent</button>
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                         <div style="display:flex;flex-direction:column;gap:12px">
                             <div style="background:{{ $surface }};border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between">
                                 <span style="font-size:13px;color:{{ $text_secondary }};font-weight:600">Success State</span>
-                                <span style="background:{{ $success }};color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800">ACTIVE</span>
+                                <span style="background:{{ $success }};color:var(--cms-text);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800">ACTIVE</span>
                             </div>
                             <div style="background:{{ $surface }};border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between">
                                 <span style="font-size:13px;color:{{ $text_secondary }};font-weight:600">Warning State</span>
@@ -268,7 +268,7 @@
                             </div>
                             <div style="background:{{ $surface }};border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between">
                                 <span style="font-size:13px;color:{{ $text_secondary }};font-weight:600">Danger State</span>
-                                <span style="background:{{ $danger }};color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800">ERROR</span>
+                                <span style="background:{{ $danger }};color:var(--cms-text);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800">ERROR</span>
                             </div>
                         </div>
 

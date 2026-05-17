@@ -4,8 +4,8 @@
         width: 100%;
     }
     .lang-editor-page .le-card {
-        background: rgba(255,255,255,.03);
-        border: 1px solid rgba(255,255,255,.08);
+        background: var(--cms-surface);
+        border: 1px solid var(--cms-border);
         border-radius: 12px;
         padding: 24px;
         margin-bottom: 20px;
@@ -13,7 +13,7 @@
     .lang-editor-page .le-section-title {
         font-size: 11px;
         font-weight: 700;
-        color: rgba(255,255,255,.5);
+        color: var(--cms-text-muted);
         text-transform: uppercase;
         letter-spacing: .6px;
         margin-bottom: 18px;
@@ -22,7 +22,7 @@
         display: block;
         font-size: 11px;
         font-weight: 600;
-        color: rgba(255,255,255,.6);
+        color: var(--cms-text-muted);
         text-transform: uppercase;
         letter-spacing: .4px;
         margin-bottom: 6px;
@@ -34,8 +34,8 @@
         padding: 9px 12px;
         border-radius: 8px;
         border: 1px solid rgba(255,255,255,.12);
-        background: rgba(255,255,255,.05);
-        color: #fff;
+        background: var(--cms-surface-raised);
+        color: var(--cms-text);
         font-size: 13px;
         font-family: var(--font-admin, inherit);
         transition: border-color .2s, background .2s;
@@ -43,20 +43,20 @@
     .lang-editor-page .le-input:focus {
         outline: none;
         border-color: rgba(212,160,23,.6);
-        background: rgba(255,255,255,.07);
+        background: var(--cms-surface-hover);
     }
     .lang-editor-page .le-input::placeholder {
-        color: rgba(255,255,255,.3);
+        color: var(--cms-text-muted);
     }
     .lang-editor-page select.le-input {
-        background: #1a2744;
-        color: #fff;
-        color-scheme: dark;
+        background: var(--cms-input-bg);
+        color: var(--cms-text);
+        color-scheme: inherit;
         cursor: pointer;
     }
     .lang-editor-page select.le-input option {
-        background: #1a2744;
-        color: #fff;
+        background: var(--cms-input-bg);
+        color: var(--cms-text);
     }
     .lang-editor-page textarea.le-input {
         resize: vertical;
@@ -212,7 +212,7 @@
                     <textarea wire:model="description" class="le-input" rows="3" placeholder="Describe what children will do in this activity..."></textarea>
                 </div>
                 <div class="le-field">
-                    <label class="le-label">Cultural Note <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">optional</span></label>
+                    <label class="le-label">Cultural Note <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">optional</span></label>
                     <textarea wire:model="cultural_note" class="le-input" rows="3" placeholder="e.g. The Nile River is sacred to the Alur people..."></textarea>
                 </div>
             </div>
@@ -241,7 +241,7 @@
         <div class="le-card">
             <div class="le-section-title">Audio File</div>
             <div class="le-field" style="max-width:400px">
-                <label class="le-label">Audio Clip <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">mp3 / wav / ogg — max 20MB</span></label>
+                <label class="le-label">Audio Clip <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">mp3 / wav / ogg — max 20MB</span></label>
                 <input wire:model="audio_file" type="file" class="le-input" accept=".mp3,.wav,.ogg">
                 @error('audio_file') <div class="le-error">{{ $message }}</div> @enderror
             </div>
@@ -269,16 +269,16 @@
                         @endif
                     </div>
                     @if($activity_type === 'audio_match')
-                        <div style="font-size:11px;color:rgba(255,255,255,.4)">Mark the correct answer with the checkbox</div>
+                        <div style="font-size:11px;color:var(--cms-text-muted)">Mark the correct answer with the checkbox</div>
                     @elseif(in_array($activity_type, ['proverb_jumble','sentence_builder']))
-                        <div style="font-size:11px;color:rgba(255,255,255,.4)">Add words in order. Mark pre-placed words as Fixed.</div>
+                        <div style="font-size:11px;color:var(--cms-text-muted)">Add words in order. Mark pre-placed words as Fixed.</div>
                     @endif
                 </div>
                 <button type="button" wire:click="addWord" class="btn btn-sm" style="background:rgba(74,124,89,.2);color:#6FA882;border:1px solid rgba(74,124,89,.35);white-space:nowrap;padding:10px 20px;border-radius:10px;font-size:12px;font-weight:700">+ Add Word</button>
             </div>
 
             @forelse($words as $index => $word)
-                <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;margin-bottom:8px;position:relative">
+                <div style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:10px;padding:12px 16px;margin-bottom:8px;position:relative">
                     {{-- Single row: all fields + controls --}}
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 120px 38px 38px 38px 70px;gap:8px;align-items:end">
                         <div class="le-field">
@@ -298,17 +298,17 @@
                         <div class="le-field" style="position:relative">
                             <label class="le-label" style="font-size:10px">Emoji</label>
                             <button type="button" wire:click="openEmojiPicker({{ $index }})"
-                                style="width:100%;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;{{ $emojiPickerWordIndex === $index ? 'border-color:rgba(212,160,23,.6)' : '' }}">
+                                style="width:100%;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;{{ $emojiPickerWordIndex === $index ? 'border-color:rgba(212,160,23,.6)' : '' }}">
                                 {{ filled($words[$index]['emoji'] ?? null) ? $words[$index]['emoji'] : '＋' }}
                             </button>
                             {{-- Emoji Picker --}}
                             @if($emojiPickerWordIndex === $index)
-                            <div style="position:absolute;z-index:200;bottom:calc(100% + 8px);left:0;background:#1a2744;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px;width:300px;box-shadow:0 12px 40px rgba(0,0,0,.6)">
+                            <div style="position:absolute;z-index:200;bottom:calc(100% + 8px);left:0;background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:12px;padding:14px;width:300px;box-shadow:0 12px 40px rgba(0,0,0,.6)">
                                 <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;max-height:54px;overflow-y:auto">
                                     @foreach(array_keys($emojiCategories) as $cat)
                                         <button type="button" wire:click="$set('emojiPickerCategory', @js($cat))"
                                             style="padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;border:1px solid;cursor:pointer;white-space:nowrap;
-                                                {{ $emojiPickerCategory === $cat ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)' }}">
+                                                {{ $emojiPickerCategory === $cat ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                                             {{ $cat }}
                                         </button>
                                     @endforeach
@@ -316,12 +316,12 @@
                                 <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:3px;max-height:180px;overflow-y:auto">
                                     @foreach($emojiCategories[$emojiPickerCategory] ?? [] as $emoji)
                                         <button type="button" wire:click="selectEmoji({{ $index }}, @js($emoji))" wire:key="ep-{{ $index }}-{{ $loop->index }}"
-                                            style="width:30px;height:30px;border:1px solid rgba(255,255,255,.08);border-radius:6px;background:rgba(255,255,255,.04);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center"
+                                            style="width:30px;height:30px;border:1px solid var(--cms-border);border-radius:6px;background:var(--cms-surface-raised);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center"
                                             onmouseover="this.style.background='rgba(212,160,23,.2)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">{{ $emoji }}</button>
                                     @endforeach
                                 </div>
                                 <div style="margin-top:8px;text-align:right">
-                                    <button type="button" wire:click="$set('emojiPickerWordIndex', null)" style="font-size:11px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer">Close</button>
+                                    <button type="button" wire:click="$set('emojiPickerWordIndex', null)" style="font-size:11px;color:var(--cms-text-muted);background:none;border:none;cursor:pointer">Close</button>
                                 </div>
                             </div>
                             @endif
@@ -331,21 +331,21 @@
                         <div class="le-field">
                             <label class="le-label" style="font-size:10px;visibility:hidden">_</label>
                             <button type="button" wire:click="moveWordUp({{ $index }})"
-                                style="width:38px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
+                                style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === 0 ? 'opacity:.3;pointer-events:none' : '' }}">↑</button>
                         </div>
 
                         {{-- ↓ button --}}
                         <div class="le-field">
                             <label class="le-label" style="font-size:10px;visibility:hidden">_</label>
                             <button type="button" wire:click="moveWordDown({{ $index }})"
-                                style="width:38px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;cursor:pointer;font-size:14px;{{ $index === count($words)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
+                                style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);cursor:pointer;font-size:14px;{{ $index === count($words)-1 ? 'opacity:.3;pointer-events:none' : '' }}">↓</button>
                         </div>
 
                         {{-- Clear emoji --}}
                         <div class="le-field">
                             <label class="le-label" style="font-size:10px;visibility:hidden">_</label>
                             <button type="button" wire:click="clearEmoji({{ $index }})"
-                                style="width:38px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);cursor:pointer;font-size:12px;{{ !filled($words[$index]['emoji'] ?? null) ? 'opacity:.3;pointer-events:none' : '' }}">✕</button>
+                                style="width:38px;height:36px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text-muted);cursor:pointer;font-size:12px;{{ !filled($words[$index]['emoji'] ?? null) ? 'opacity:.3;pointer-events:none' : '' }}">✕</button>
                         </div>
 
                         {{-- Remove --}}
@@ -362,13 +362,13 @@
                     @if($activity_type === 'audio_match' || in_array($activity_type, ['proverb_jumble','sentence_builder']))
                     <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:20px">
                         @if($activity_type === 'audio_match')
-                            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.7);cursor:pointer">
+                            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted);cursor:pointer">
                                 <input wire:model="words.{{ $index }}.is_correct_answer" type="checkbox" style="width:14px;height:14px;cursor:pointer">
                                 Correct Answer
                             </label>
                         @endif
                         @if(in_array($activity_type, ['proverb_jumble','sentence_builder']))
-                            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.7);cursor:pointer">
+                            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted);cursor:pointer">
                                 <input wire:model="words.{{ $index }}.is_fixed" type="checkbox" style="width:14px;height:14px;cursor:pointer">
                                 Pre-placed (fixed)
                             </label>
@@ -377,7 +377,7 @@
                     @endif
                 </div>
             @empty
-                <div style="padding:32px;text-align:center;color:rgba(255,255,255,.35);font-size:12px;border:1px dashed rgba(255,255,255,.1);border-radius:8px">
+                <div style="padding:32px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
                     No words added yet. Click "+ Add Word" to start.
                 </div>
             @endforelse

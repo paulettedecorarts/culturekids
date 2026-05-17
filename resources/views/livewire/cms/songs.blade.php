@@ -37,7 +37,7 @@
         @forelse($songs as $song)
             <div class="cms-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
                 <div style="display:flex; align-items:center; gap:16px;">
-                    <div class="cms-asset-thumb" style="background:var(--sunfire); color:#fff; font-size:18px;">🎵</div>
+                    <div class="cms-asset-thumb" style="background:var(--sunfire); color:var(--cms-text); font-size:18px;">🎵</div>
                     <div>
                         <div class="cms-asset-name">{{ $song->title }}</div>
                         <div class="cms-asset-sub">{{ str_replace('_', ' ', $song->song_type) }} · {{ $song->audio_path ? 'Audio available' : 'No audio' }}</div>

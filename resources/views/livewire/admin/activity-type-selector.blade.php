@@ -116,8 +116,8 @@
         }
 
         .activity-type-card {
-            background: rgba(255,255,255,.04);
-            border: 1px solid rgba(255,255,255,.08);
+            background: var(--cms-surface-raised);
+            border: 1px solid var(--cms-border);
             border-radius: var(--r-lg);
             padding: var(--sp-5);
             cursor: pointer;
@@ -162,7 +162,7 @@
             font-family: var(--font-display);
             font-size: 1.4rem;
             font-weight: 900;
-            color: #fff;
+            color: var(--cms-text);
             margin-bottom: var(--sp-2);
             position: relative;
             z-index: 1;
@@ -179,7 +179,7 @@
 
         .activity-type-count {
             font-size: 0.8rem;
-            color: rgba(255,255,255,.6);
+            color: var(--cms-text-muted);
             font-weight: 700;
             margin-bottom: var(--sp-2);
             position: relative;

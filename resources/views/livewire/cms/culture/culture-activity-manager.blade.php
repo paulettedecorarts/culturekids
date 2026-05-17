@@ -39,20 +39,20 @@
     </div>
 
     <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap">
-        <input wire:model.live.debounce.300ms="search" placeholder="Search by title or clan name..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
-        <select wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <input wire:model.live.debounce.300ms="search" placeholder="Search by title or clan name..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
+        <select wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Types</option>
             @foreach($cultureTypes as $key => $label)
                 <option value="{{ $key }}">{{ $label }}</option>
             @endforeach
         </select>
-        <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
         </select>
-        <select wire:model.live="statusFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="statusFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Status</option>
             <option value="published">Published</option>
             <option value="draft">Draft</option>
@@ -61,7 +61,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;background:rgba(255,255,255,.04);border-radius:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px">
+        <div class="sa-table-head" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;background:var(--cms-surface-raised);border-radius:8px;font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.5px">
             <span>Activity</span>
             <span>Type</span>
             <span>Tribe</span>
@@ -71,17 +71,17 @@
         </div>
 
         @forelse($this->activities as $activity)
-            <div class="sa-table-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);align-items:center">
+            <div class="sa-table-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;border-bottom:1px solid var(--cms-border-subtle);align-items:center">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0">
                     <div style="font-size:20px;width:32px;text-align:center">{{ $activity->culture_type_icon }}</div>
                     <div style="min-width:0">
-                        <div style="font-weight:700;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->title }}</div>
-                        <div style="font-size:11px;color:rgba(255,255,255,.4)">Ages {{ $activity->age_range }} • {{ $activity->star_points }} pts</div>
+                        <div style="font-weight:700;color:var(--cms-text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->title }}</div>
+                        <div style="font-size:11px;color:var(--cms-text-muted)">Ages {{ $activity->age_range }} • {{ $activity->star_points }} pts</div>
                     </div>
                 </div>
                 <span style="background:rgba(74,124,89,.2);color:#6FA882;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:uppercase">{{ $activity->culture_type_label }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $activity->tribe->name }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $activity->tribe->name }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">
                     {{ $activity->clan_emoji }} {{ $activity->clan_name ?: '—' }}
                 </span>
                 <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
@@ -94,7 +94,7 @@
                 </div>
             </div>
         @empty
-            <div style="padding:40px;text-align:center;color:rgba(255,255,255,.5)">
+            <div style="padding:40px;text-align:center;color:var(--cms-text-muted)">
                 <div style="font-size:48px;margin-bottom:16px">🏛️</div>
                 <div style="font-size:16px;font-weight:600;margin-bottom:8px">No culture activities yet</div>
                 <a href="{{ route($routePrefix . '.culture-activities.create') }}" class="btn btn-primary" style="text-decoration:none">Create First Activity</a>

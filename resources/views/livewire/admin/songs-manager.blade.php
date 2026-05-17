@@ -35,14 +35,14 @@
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:var(--sp-4)">
-        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search songs..." style="padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;min-width:220px;flex:1">
-        <select wire:model.live="tribeFilter" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff">
+        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search songs..." style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);min-width:220px;flex:1">
+        <select wire:model.live="tribeFilter" style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
             <option value="">All tribes</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
         </select>
-        <select wire:model.live="statusFilter" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff">
+        <select wire:model.live="statusFilter" style="padding:10px 14px;border-radius:10px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
             <option value="">All status</option>
             <option value="draft">Draft</option>
             <option value="review">Review</option>
@@ -64,21 +64,21 @@
             <div class="sa-table-row" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px 160px">
                 <div style="width:38px;height:38px;border-radius:8px;background:rgba(232,135,42,.2);display:flex;align-items:center;justify-content:center;font-size:16px">🎵</div>
                 <div>
-                    <div style="font-weight:700;color:#fff;font-size:13px">{{ $song->title }}</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,.4)">
+                    <div style="font-weight:700;color:var(--cms-text);font-size:13px">{{ $song->title }}</div>
+                    <div style="font-size:11px;color:var(--cms-text-muted)">
                         {{ $song->status }} · Ages {{ $song->age_range }} · {{ $song->audio_path ? 'audio ready' : 'no audio' }}
                     </div>
                 </div>
-                <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ $song->tribe->name }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ $song->language ?: '—' }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ str_replace('_', ' ', $song->song_type) }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.7)">{{ $song->duration_label }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $song->tribe->name }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $song->language ?: '—' }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ str_replace('_', ' ', $song->song_type) }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $song->duration_label }}</span>
                 <div style="display:flex;gap:6px">
                     <a href="{{ route($routePrefix . '.songs.detail', $song->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px;text-decoration:none">Details</a>
                 </div>
             </div>
         @empty
-            <div style="padding:22px;color:rgba(255,255,255,.5)">No songs found. Click <strong>New Song</strong> to create one.</div>
+            <div style="padding:22px;color:var(--cms-text-muted)">No songs found. Click <strong>New Song</strong> to create one.</div>
         @endforelse
     </div>
 

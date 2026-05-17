@@ -73,23 +73,23 @@
     .age-categories-page .age-flash{background:rgba(74,124,89,.22);border:1px solid rgba(74,124,89,.45);color:#8ed3a8}
     .age-categories-page .age-error{background:rgba(196,75,43,.2);border:1px solid rgba(196,75,43,.45);color:#ffb8a6}
     .age-categories-page .age-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;align-content:start}
-    .age-categories-page .age-card{border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);overflow:hidden;display:flex;flex-direction:column}
+    .age-categories-page .age-card{border:1px solid var(--cms-border);border-radius:14px;background:var(--cms-surface);overflow:hidden;display:flex;flex-direction:column}
     .age-categories-page .age-card-top{padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;min-height:86px}
     .age-categories-page .age-card-title{display:flex;gap:10px;align-items:flex-start}
     .age-categories-page .age-card-title span{font-size:24px;line-height:1}
-    .age-categories-page .age-card-title h3{margin:0;color:#fff;font-size:16px;font-weight:700}
-    .age-categories-page .age-card-title p{margin:2px 0 0;color:rgba(255,255,255,.78);font-size:12px}
+    .age-categories-page .age-card-title h3{margin:0;color:var(--cms-text);font-size:16px;font-weight:700}
+    .age-categories-page .age-card-title p{margin:2px 0 0;color: var(--cms-text);font-size:12px}
     .age-categories-page .age-status{font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px}
     .age-categories-page .age-status.on{background:rgba(74,124,89,.3);color:#9fe8b9}
-    .age-categories-page .age-status.off{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+    .age-categories-page .age-status.off{background: var(--cms-surface-raised);color:var(--cms-text-muted)}
     .age-categories-page .age-card-body{padding:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-    .age-categories-page .age-kv{background:rgba(255,255,255,.03);padding:9px;border-radius:8px}
-    .age-categories-page .age-kv span{display:block;font-size:10px;color:rgba(255,255,255,.55);margin-bottom:2px}
-    .age-categories-page .age-kv strong{font-size:12px;color:#fff;text-transform:capitalize}
+    .age-categories-page .age-kv{background:var(--cms-surface);padding:9px;border-radius:8px}
+    .age-categories-page .age-kv span{display:block;font-size:10px;color: var(--cms-text-muted);margin-bottom:2px}
+    .age-categories-page .age-kv strong{font-size:12px;color:var(--cms-text);text-transform:capitalize}
     .age-categories-page .age-tags{padding:0 12px 10px;display:flex;flex-wrap:wrap;gap:6px}
-    .age-categories-page .age-tags span{font-size:10px;background:rgba(255,255,255,.06);padding:4px 7px;border-radius:999px;color:rgba(255,255,255,.75)}
+    .age-categories-page .age-tags span{font-size:10px;background:var(--cms-input-bg);padding:4px 7px;border-radius:999px;color: var(--cms-text)}
     .age-categories-page .age-actions{padding:0 12px 12px;display:flex;gap:8px;margin-top:auto}
-    .age-categories-page .age-actions .btn{padding:7px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#fff;font-size:12px;font-weight:700}
+    .age-categories-page .age-actions .btn{padding:7px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:var(--cms-surface-raised);color:var(--cms-text);font-size:12px;font-weight:700}
     .age-categories-page .age-actions .btn-danger{background:rgba(196,75,43,.2);border-color:rgba(196,75,43,.42);color:#ffd3c7}
     @media (max-width: 640px){.age-categories-page .age-list{grid-template-columns:1fr}}
 </style>

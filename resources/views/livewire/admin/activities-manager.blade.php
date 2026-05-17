@@ -219,7 +219,7 @@
                 </div>
             </div>
         @empty
-            <div style="padding:22px;color:rgba(255,255,255,.5)">No activities found.</div>
+            <div style="padding:22px;color:var(--cms-text-muted)">No activities found.</div>
         @endforelse
     </div>
 

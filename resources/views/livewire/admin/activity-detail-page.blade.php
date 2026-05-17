@@ -13,7 +13,7 @@
             @endif
             @if($isEditing)
                 <button type="button" class="btn btn-sm" wire:click="saveActivity" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">Save</button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Cancel</button>
+                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">Cancel</button>
             @endif
             @if($activity)
                 <button type="button" class="btn btn-sm" wire:click="deleteActivity" wire:confirm="Delete this activity?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
@@ -81,8 +81,8 @@
                 </div>
             </div>
 
-            <div wire:key="activity-type-config-{{ $type }}" style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08)">
-                <div class="act-label" style="font-size:12px;color:rgba(255,255,255,.75);margin-bottom:8px">Type-specific configuration</div>
+            <div wire:key="activity-type-config-{{ $type }}" style="margin-top:12px;padding:12px;border-radius:10px;background:var(--cms-surface);border:1px solid var(--cms-border)">
+                <div class="act-label" style="font-size:12px;color: var(--cms-text);margin-bottom:8px">Type-specific configuration</div>
 
                 @if($type === 'vocab_pack')
                     <div class="act-grid">
@@ -130,17 +130,17 @@
                 @elseif($type === 'flashcard')
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap">
                         <div>
-                            <div class="act-label" style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:4px">Cards in this deck</div>
-                            <p style="font-size:11px;color:rgba(255,255,255,.45);margin:0;max-width:520px;line-height:1.45">Each row is one flashcard (like pages in a comic). Front is what the child sees first; back is the reveal — e.g. English then Luganda. You can illustrate the front with an <strong style="color:rgba(255,255,255,.65)">uploaded image</strong>, an <strong style="color:rgba(255,255,255,.65)">emoji</strong>, both, or neither.</p>
+                            <div class="act-label" style="font-size:12px;color: var(--cms-text);margin-bottom:4px">Cards in this deck</div>
+                            <p style="font-size:11px;color: var(--cms-text-muted);margin:0;max-width:520px;line-height:1.45">Each row is one flashcard (like pages in a comic). Front is what the child sees first; back is the reveal — e.g. English then Luganda. You can illustrate the front with an <strong style="color: var(--cms-text-muted)">uploaded image</strong>, an <strong style="color: var(--cms-text-muted)">emoji</strong>, both, or neither.</p>
                         </div>
                         <button type="button" wire:click="addFlashcardSlide" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:8px 14px;border-radius:var(--r-full);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-admin)">+ Add card</button>
                     </div>
                     @error('flashcardSlides') <div class="act-error" style="margin-bottom:8px">{{ $message }}</div> @enderror
                     <div style="display:flex;flex-direction:column;gap:10px">
                         @foreach($flashcardSlides as $idx => $card)
-                            <div wire:key="fc-{{ $card['slide_uid'] ?? $idx }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1)">
+                            <div wire:key="fc-{{ $card['slide_uid'] ?? $idx }}" style="padding:14px;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid var(--cms-border)">
                                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-                                    <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.5)">CARD {{ $idx + 1 }}</span>
+                                    <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--cms-text-muted)">CARD {{ $idx + 1 }}</span>
                                     <div style="display:flex;gap:6px;flex-wrap:wrap">
                                         <button type="button" wire:click="moveFlashcardSlideUp({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === 0 ? 'opacity:0.35;pointer-events:none' : '' }}">↑</button>
                                         <button type="button" wire:click="moveFlashcardSlideDown({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === count($flashcardSlides) - 1 ? 'opacity:0.35;pointer-events:none' : '' }}">↓</button>
@@ -150,7 +150,7 @@
                                 <div class="act-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
                                     <div style="grid-column:1/-1">
                                         <label class="act-label">Cover image (optional)</label>
-                                        <p style="font-size:10px;color:rgba(255,255,255,.38);margin:0 0 8px;line-height:1.4">PNG or JPEG, up to 5&nbsp;MB. Shown on the front of the card instead of (or next to) the emoji.</p>
+                                        <p style="font-size:10px;color: var(--cms-text-muted);margin:0 0 8px;line-height:1.4">PNG or JPEG, up to 5&nbsp;MB. Shown on the front of the card instead of (or next to) the emoji.</p>
                                         <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
                                             <div class="fc-cover-preview-box">
                                                 @if(! empty($flashcardSlideImageUploads[$card['slide_uid']] ?? null))
@@ -165,7 +165,7 @@
                                                 <input type="file" accept="image/*" wire:model="flashcardSlideImageUploads.{{ $card['slide_uid'] }}" class="act-input" style="padding:8px;font-size:11px">
                                                 <div wire:loading wire:target="flashcardSlideImageUploads.{{ $card['slide_uid'] }}" style="font-size:10px;color:rgba(212,160,23,.85)">Uploading…</div>
                                                 @if(filled($card['image_path'] ?? null) || ! empty($flashcardSlideImageUploads[$card['slide_uid']] ?? null))
-                                                    <button type="button" wire:click="removeFlashcardSlideImage({{ $idx }})" class="btn btn-sm" style="align-self:flex-start;padding:6px 12px;font-size:11px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15)">Remove image</button>
+                                                    <button type="button" wire:click="removeFlashcardSlideImage({{ $idx }})" class="btn btn-sm" style="align-self:flex-start;padding:6px 12px;font-size:11px;background:var(--cms-input-bg);color: var(--cms-text);border:1px solid var(--cms-border)">Remove image</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -178,7 +178,7 @@
                                             <input type="text" wire:model.live="flashcardSlides.{{ $idx }}.emoji" class="act-input" placeholder="Type, paste, or browse" maxlength="32" style="flex:1;min-width:140px;max-width:280px">
                                             <button type="button" wire:click="openFlashcardEmojiPicker({{ $idx }})" class="btn btn-sm" style="padding:8px 14px;font-size:12px;font-weight:700;white-space:nowrap;background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)">{{ $flashcardEmojiPickerSlide === $idx ? 'Hide library' : 'Browse library' }}</button>
                                             @if(filled($card['emoji'] ?? null))
-                                                <button type="button" wire:click="clearFlashcardEmoji({{ $idx }})" class="btn btn-sm" style="padding:8px 12px;font-size:11px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15)">Clear</button>
+                                                <button type="button" wire:click="clearFlashcardEmoji({{ $idx }})" class="btn btn-sm" style="padding:8px 12px;font-size:11px;background:var(--cms-input-bg);color: var(--cms-text);border:1px solid var(--cms-border)">Clear</button>
                                             @endif
                                         </div>
                                         @if($flashcardEmojiPickerSlide === $idx)
@@ -188,7 +188,7 @@
                                                     <button type="button" wire:click="closeFlashcardEmojiPicker" class="btn btn-sm" style="padding:6px 12px;font-size:11px">Done</button>
                                                 </div>
                                                 @if(count($this->flashcardEmojiCategories) === 0)
-                                                    <p style="font-size:11px;color:rgba(255,255,255,.5);margin:0">No bundled emoji list found. Use the field above to type or paste any emoji.</p>
+                                                    <p style="font-size:11px;color:var(--cms-text-muted);margin:0">No bundled emoji list found. Use the field above to type or paste any emoji.</p>
                                                 @else
                                                     <select wire:model.live="flashcardEmojiCategory" class="act-input" style="width:100%;max-width:420px;margin-bottom:10px">
                                                         @foreach(array_keys($this->flashcardEmojiCategories) as $catName)
@@ -252,13 +252,13 @@
             </div>
 
             <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="act-label" style="margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.75)">Extras (optional)</div>
+                <div class="act-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Extras (optional)</div>
                 <div class="act-grid">
                     <div>
                         <label class="act-label">Topic tag</label>
                         <input wire:model="content_tag" type="text" class="act-input" placeholder="e.g. animals, family, counting">
                         @error('content_tag') <div class="act-error">{{ $message }}</div> @enderror
-                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin-top:6px;line-height:1.45">Helps group or search for this activity in the app. One short phrase is enough.</p>
+                        <p style="font-size:10px;color: var(--cms-text-muted);margin-top:6px;line-height:1.45">Helps group or search for this activity in the app. One short phrase is enough.</p>
                     </div>
                     <div>
                         <label class="act-label">Challenge level</label>
@@ -272,7 +272,7 @@
                             <option value="hard">Hard — more challenge</option>
                         </select>
                         @error('learning_difficulty') <div class="act-error">{{ $message }}</div> @enderror
-                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin-top:6px;line-height:1.45">Rough guide for parents and teachers (not the same as puzzle difficulty).</p>
+                        <p style="font-size:10px;color: var(--cms-text-muted);margin-top:6px;line-height:1.45">Rough guide for parents and teachers (not the same as puzzle difficulty).</p>
                     </div>
                 </div>
             </div>
@@ -311,13 +311,13 @@
             </div>
             <div style="margin-bottom:14px">
                 <div class="act-label">Description</div>
-                <div style="color:rgba(255,255,255,.85);line-height:1.6">{{ $activity->description ?: '—' }}</div>
+                <div style="color: var(--cms-text);line-height:1.6">{{ $activity->description ?: '—' }}</div>
             </div>
             @if($activity->type === 'flashcard')
                 <div style="margin-bottom:14px">
                     <div class="act-label" style="margin-bottom:6px">Flashcard deck</div>
                     @if($activity->flashcardSlides->isNotEmpty())
-                        <p style="font-size:11px;color:rgba(255,255,255,.42);margin:0 0 12px;line-height:1.45">Preview how cards look in the app. Click a card to flip between the prompt and the answer.</p>
+                        <p style="font-size:11px;color: var(--cms-text-muted);margin:0 0 12px;line-height:1.45">Preview how cards look in the app. Click a card to flip between the prompt and the answer.</p>
                         <div class="act-fc-preview-grid">
                             @foreach($activity->flashcardSlides as $slide)
                                 @php
@@ -376,14 +376,14 @@
                             @endforeach
                         </ol>
                     @else
-                        <p style="margin:6px 0 0;font-size:12px;color:rgba(255,255,255,.4)">No cards saved yet.</p>
+                        <p style="margin:6px 0 0;font-size:12px;color:var(--cms-text-muted)">No cards saved yet.</p>
                     @endif
                 </div>
             @endif
             @if($orphanMeta->isNotEmpty())
                 <details style="margin-top:8px">
-                    <summary style="cursor:pointer;font-size:12px;color:rgba(255,255,255,.45);margin-bottom:8px">Other saved fields (technical)</summary>
-                    <pre style="margin:0;padding:12px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.75);overflow:auto;font-size:11px">{{ json_encode($orphanMeta->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                    <summary style="cursor:pointer;font-size:12px;color: var(--cms-text-muted);margin-bottom:8px">Other saved fields (technical)</summary>
+                    <pre style="margin:0;padding:12px;border-radius:10px;background:rgba(0,0,0,.28);border:1px solid var(--cms-border);color: var(--cms-text);overflow:auto;font-size:11px">{{ json_encode($orphanMeta->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
                 </details>
             @endif
         </div>
@@ -391,22 +391,22 @@
 
     <style>
         .act-grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
-        .act-label { display:block; font-size:11px; color:rgba(255,255,255,.6); margin-bottom:5px; }
-        .act-input { width:100%; padding:9px; border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#fff; }
-        .act-textarea { width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#fff; }
+        .act-label { display:block; font-size:11px; color:var(--cms-text-muted); margin-bottom:5px; }
+        .act-input { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); }
+        .act-textarea { width:100%; padding:10px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); }
         .act-error { font-size:10px; color:#ff8c8c; margin-top:4px; }
-        .act-stat { padding:10px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
-        .act-stat span { display:block; font-size:10px; color:rgba(255,255,255,.45); text-transform:uppercase; margin-bottom:4px; }
-        .act-stat strong { color:#fff; font-size:14px; }
+        .act-stat { padding:10px; border-radius:10px; background:var(--cms-surface); border:1px solid var(--cms-border); }
+        .act-stat span { display:block; font-size:10px; color: var(--cms-text-muted); text-transform:uppercase; margin-bottom:4px; }
+        .act-stat strong { color:var(--cms-text); font-size:14px; }
         .activity-detail-page select.act-input {
-            background:#1a2744;
-            color:#fff;
-            color-scheme: dark;
+            background:var(--cms-input-bg);
+            color:var(--cms-text);
+            color-scheme: inherit;
         }
         .activity-detail-page select.act-input option,
         .activity-detail-page select.act-input optgroup {
-            background:#1a2744;
-            color:#fff;
+            background:var(--cms-input-bg);
+            color:var(--cms-text);
         }
         .fc-emoji-preview {
             display:inline-flex;
@@ -418,14 +418,14 @@
             line-height:1;
             border-radius:10px;
             background:rgba(0,0,0,.25);
-            border:1px solid rgba(255,255,255,.12);
+            border:1px solid var(--cms-input-border);
         }
         .fc-emoji-panel {
             margin-top:12px;
             padding:12px;
             border-radius:12px;
             background:rgba(0,0,0,.28);
-            border:1px solid rgba(255,255,255,.1);
+            border:1px solid var(--cms-border);
         }
         .fc-emoji-grid {
             display:grid;
@@ -441,8 +441,8 @@
             line-height:1;
             padding:8px 4px;
             border-radius:8px;
-            border:1px solid rgba(255,255,255,.08);
-            background:rgba(255,255,255,.04);
+            border:1px solid var(--cms-border);
+            background:var(--cms-surface-raised);
             color:inherit;
             cursor:pointer;
             transition:background .12s ease, transform .12s ease;
@@ -457,7 +457,7 @@
             height:88px;
             border-radius:10px;
             background:rgba(0,0,0,.25);
-            border:1px solid rgba(255,255,255,.1);
+            border:1px solid var(--cms-border);
             display:flex;
             align-items:center;
             justify-content:center;
@@ -471,7 +471,7 @@
         }
         .fc-cover-preview-placeholder {
             font-size:10px;
-            color:rgba(255,255,255,.35);
+            color:var(--cms-text-muted);
             text-align:center;
             padding:8px;
         }
@@ -525,7 +525,7 @@
             backface-visibility:hidden;
             -webkit-backface-visibility:hidden;
             box-sizing:border-box;
-            border:1px solid rgba(255,255,255,.12);
+            border:1px solid var(--cms-input-border);
             text-align:center;
         }
         .act-fc-front {
@@ -535,7 +535,7 @@
         }
         .act-fc-back {
             transform:rotateY(180deg);
-            color:#fff;
+            color:var(--cms-text);
             box-shadow:0 10px 28px rgba(0,0,0,.35);
         }
         .act-fc-back.act-fc-back-a { background:linear-gradient(145deg, #3d6b4f 0%, #1e3a2c 100%); }
@@ -550,7 +550,7 @@
             font-weight:800;
             letter-spacing:0.6px;
             text-transform:uppercase;
-            color:rgba(255,255,255,.45);
+            color: var(--cms-text-muted);
         }
         .act-fc-front-img {
             max-width:100%;
@@ -584,7 +584,7 @@
             font-weight:700;
             letter-spacing:0.4px;
             text-transform:uppercase;
-            color:rgba(255,255,255,.35);
+            color:var(--cms-text-muted);
         }
         .act-fc-back-text {
             font-size:15px;
@@ -599,13 +599,13 @@
         .act-fc-phonetic {
             font-size:11px;
             font-style:italic;
-            color:rgba(255,255,255,.65);
+            color: var(--cms-text-muted);
             margin-top:4px;
         }
         .act-fc-outline {
             margin:0;
             padding-left:18px;
-            color:rgba(255,255,255,.72);
+            color: var(--cms-text-muted);
             line-height:1.55;
             font-size:12px;
             border-top:1px solid rgba(255,255,255,.08);
@@ -614,6 +614,6 @@
         .act-fc-outline li { margin-bottom:6px; }
         .act-fc-outline-emoji { font-size:16px; margin-right:6px; vertical-align:middle; }
         .act-fc-outline-thumb { object-fit:cover; border-radius:4px; margin-right:8px; vertical-align:middle; }
-        .act-fc-outline-sep { color:rgba(255,255,255,.35); margin:0 5px; }
+        .act-fc-outline-sep { color:var(--cms-text-muted); margin:0 5px; }
     </style>
 </div>

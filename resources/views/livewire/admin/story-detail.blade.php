@@ -274,9 +274,9 @@
         .sd-root {
             --sd-accent: var(--savanna-gold);
             --sd-accent-dim: rgba(212, 160, 23, 0.14);
-            --sd-line: rgba(255, 255, 255, 0.09);
-            --sd-surface: rgba(255, 255, 255, 0.04);
-            --sd-surface2: rgba(15, 23, 42, 0.65);
+            --sd-line: var(--cms-border);
+            --sd-surface: var(--cms-surface);
+            --sd-surface2: var(--cms-surface-raised);
             width: 100%;
             max-width: min(1680px, 100%);
             margin-inline: auto;
@@ -321,7 +321,7 @@
         .sd-banner__glow {
             position: absolute;
             inset: 0;
-            background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            background: linear-gradient(110deg, transparent 30%, var(--cms-surface-hover) 50%, transparent 70%);
             animation: sd-shimmer 2.8s ease-in-out infinite;
             pointer-events: none;
         }
@@ -380,19 +380,19 @@
             margin: 0 0 12px;
             font-size: 13px;
             line-height: 1.55;
-            color: rgba(255, 255, 255, 0.68);
+            color: var(--cms-text-muted);
         }
         .sd-banner__text--tight { margin-bottom: 8px; }
         .sd-banner__mono {
             font-family: ui-monospace, monospace;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--cms-text);
             word-break: break-all;
         }
         .sd-banner__hint {
             margin: 0;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.42);
+            color: var(--cms-text-muted);
         }
         .sd-link {
             color: var(--savanna-gold);
@@ -418,7 +418,7 @@
             flex-wrap: wrap;
             gap: 12px 18px;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.48);
+            color: var(--cms-text-muted);
         }
         .sd-banner__warn { color: #fecaca; font-weight: 700; }
         .sd-banner__meta-end { margin-left: auto; }
@@ -429,7 +429,7 @@
             padding: clamp(18px, 2.5vw, 28px);
             margin-bottom: clamp(20px, 3vw, 32px);
             border: 1px solid var(--sd-line);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            background: linear-gradient(135deg, var(--cms-surface-raised), var(--cms-surface));
             overflow: hidden;
         }
         .sd-hero__mesh {
@@ -463,13 +463,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.85);
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--cms-text);
+            background: var(--cms-surface-raised);
+            border: 1px solid var(--cms-border);
             transition: background 0.15s, transform 0.15s;
         }
         .sd-back:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--cms-surface-hover);
             transform: translateX(-2px);
         }
         .sd-eyebrow {
@@ -478,7 +478,7 @@
             font-weight: 700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.38);
+            color: var(--cms-text-muted);
         }
         .sd-eyebrow__sep { opacity: 0.5; }
         .sd-title {
@@ -488,7 +488,7 @@
             font-weight: 800;
             line-height: 1.12;
             letter-spacing: -0.02em;
-            color: #fff;
+            color: var(--cms-text);
             word-break: break-word;
         }
         .sd-chips {
@@ -502,14 +502,14 @@
             font-weight: 600;
             padding: 5px 11px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.72);
+            background: var(--cms-surface-raised);
+            border: 1px solid var(--cms-border);
+            color: var(--cms-text-muted);
         }
         .sd-chip--tribe {
             border-color: color-mix(in srgb, var(--sd-tribe) 45%, transparent);
             background: color-mix(in srgb, var(--sd-tribe) 18%, transparent);
-            color: #fff;
+            color: var(--cms-text);
         }
         .sd-pill {
             font-size: 11px;
@@ -521,7 +521,7 @@
         }
         .sd-pill--live { background: rgba(74, 124, 89, 0.25); color: var(--banana-light); border: 1px solid rgba(74, 124, 89, 0.45); }
         .sd-pill--review { background: rgba(232, 135, 42, 0.18); color: #FBD38D; border: 1px solid rgba(232, 135, 42, 0.4); }
-        .sd-pill--draft { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.55); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .sd-pill--draft { background: var(--cms-surface-raised); color: var(--cms-text-muted); border: 1px solid var(--cms-border); }
 
         .sd-hero__actions {
             display: flex;
@@ -548,15 +548,15 @@
         .sd-btn--primary {
             background: linear-gradient(145deg, rgba(212, 160, 23, 0.22), rgba(196, 75, 43, 0.15));
             border-color: rgba(212, 160, 23, 0.45);
-            color: #fff;
+            color: var(--cms-text);
         }
         .sd-btn--primary:hover { transform: translateY(-1px); background: linear-gradient(145deg, rgba(212, 160, 23, 0.32), rgba(196, 75, 43, 0.22)); }
         .sd-btn--ghost {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 0.88);
+            background: var(--cms-surface-raised);
+            border-color: var(--cms-border);
+            color: var(--cms-text);
         }
-        .sd-btn--ghost:hover { background: rgba(255, 255, 255, 0.08); }
+        .sd-btn--ghost:hover { background: var(--cms-surface-hover); }
         .sd-btn--sm { padding: 8px 14px; font-size: 12px; border-radius: 12px; }
 
         .sd-workspace {
@@ -587,8 +587,8 @@
 
         .sd-empty {
             border-radius: 24px;
-            border: 1px dashed rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--cms-border);
+            background: var(--cms-surface);
             min-height: clamp(280px, 42vh, 480px);
             display: flex;
             align-items: center;
@@ -602,27 +602,27 @@
         .sd-empty__icon {
             margin: 0 auto 16px;
             opacity: 0.35;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--cms-text-muted);
         }
         .sd-empty__title {
             margin: 0 0 10px;
             font-family: var(--font-display);
             font-size: 22px;
             font-weight: 800;
-            color: #fff;
+            color: var(--cms-text);
         }
         .sd-empty__text {
             margin: 0 0 22px;
             font-size: 14px;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.48);
+            color: var(--cms-text-muted);
         }
         .sd-empty__row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 
         .sd-theatre {
             border-radius: 24px;
             border: 1px solid var(--sd-line);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+            background: linear-gradient(180deg, var(--cms-surface-raised), var(--cms-surface));
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
             overflow: hidden;
         }
@@ -639,13 +639,13 @@
             font-weight: 800;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.38);
+            color: var(--cms-text-muted);
         }
         .sd-theatre__counter {
             font-variant-numeric: tabular-nums;
             font-size: 12px;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.55);
+            color: var(--cms-text-muted);
         }
         .sd-theatre__viewport {
             position: relative;
@@ -671,7 +671,7 @@
         }
         .sd-theatre__pdf {
             text-align: center;
-            color: rgba(255, 255, 255, 0.65);
+            color: var(--cms-text-muted);
             max-width: 320px;
         }
         .sd-theatre__pdf p { margin: 10px 0 16px; font-size: 14px; }
@@ -680,7 +680,7 @@
             padding: 14px 20px 6px;
             font-size: 14px;
             line-height: 1.55;
-            color: rgba(255, 255, 255, 0.72);
+            color: var(--cms-text-muted);
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
             background: rgba(0, 0, 0, 0.15);
@@ -699,15 +699,15 @@
             height: 44px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
+            background: var(--cms-surface-raised);
+            color: var(--cms-text);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: background 0.15s, opacity 0.15s;
         }
-        .sd-nav-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+        .sd-nav-btn:hover:not(:disabled) { background: var(--cms-surface-hover); }
         .sd-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .sd-theatre__dots {
             display: flex;
@@ -720,7 +720,7 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.18);
+            background: var(--cms-surface-raised);
             transition: transform 0.15s, background 0.15s;
         }
         .sd-dot.is-on {
@@ -732,7 +732,7 @@
             width: min(280px, 40vw);
             height: 4px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.12);
+            background: var(--cms-surface-raised);
             overflow: hidden;
         }
         .sd-theatre__track-fill {
@@ -751,7 +751,7 @@
             font-weight: 800;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.32);
+            color: var(--cms-text-muted);
         }
         .sd-filmstrip {
             display: flex;
@@ -812,7 +812,7 @@
             font-size: 10px;
             font-weight: 800;
             letter-spacing: 0.08em;
-            color: rgba(255, 255, 255, 0.45);
+            color: var(--cms-text-muted);
         }
         .sd-thumb__idx {
             display: block;
@@ -820,7 +820,7 @@
             text-align: center;
             font-size: 10px;
             font-weight: 800;
-            color: rgba(255, 255, 255, 0.35);
+            color: var(--cms-text-muted);
         }
         .sd-thumb.is-active .sd-thumb__idx { color: var(--savanna-light); }
 
@@ -848,7 +848,7 @@
             font-weight: 800;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.35);
+            color: var(--cms-text-muted);
         }
         .sd-cover {
             border-radius: 16px;
@@ -866,7 +866,7 @@
             align-items: center;
             gap: 8px;
             padding: 24px;
-            color: rgba(255, 255, 255, 0.45);
+            color: var(--cms-text-muted);
             font-size: 12px;
             font-weight: 700;
         }
@@ -881,10 +881,10 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--cms-border);
         }
-        .sd-tribe__name { font-weight: 800; font-size: 16px; color: #fff; }
-        .sd-tribe__meta { font-size: 12px; color: rgba(255, 255, 255, 0.42); margin-top: 2px; }
+        .sd-tribe__name { font-weight: 800; font-size: 16px; color: var(--cms-text); }
+        .sd-tribe__meta { font-size: 12px; color: var(--cms-text-muted); margin-top: 2px; }
 
         .sd-metrics {
             display: grid;
@@ -903,18 +903,18 @@
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.32);
+            color: var(--cms-text-muted);
             margin-bottom: 6px;
         }
         .sd-metric__val {
             font-size: 15px;
             font-weight: 700;
-            color: #fff;
+            color: var(--cms-text);
         }
         .sd-card--prose .sd-prose {
             font-size: 14px;
             line-height: 1.65;
-            color: rgba(255, 255, 255, 0.72);
+            color: var(--cms-text-muted);
         }
     </style>
 </div>

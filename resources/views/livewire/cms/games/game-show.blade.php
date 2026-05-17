@@ -34,12 +34,12 @@
                         ['Shuffle', $game->shuffle_questions ? 'Yes' : 'No'],
                     ] as [$label, $value])
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">{{ $label }}</span>
-                        <span style="color:#fff;font-size:12px;font-weight:600">{{ $value }}</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">{{ $label }}</span>
+                        <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $value }}</span>
                     </div>
                     @endforeach
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">Status</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">Status</span>
                         <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                             {{ $game->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' }}">
                             {{ ucfirst($game->status) }}
@@ -57,9 +57,9 @@
                         [$game->attempts->where('completed', true)->count(), 'Completed', '#F2CB5A'],
                         [$game->attempts->avg('score') ? round($game->attempts->avg('score')) : '—', 'Avg Score', '#9C88FF'],
                     ] as [$val, $label, $color])
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:{{ $color }}">{{ $val }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">{{ $label }}</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">{{ $label }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -69,14 +69,14 @@
         @if($game->description)
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Description</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $game->description }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $game->description }}</p>
         </div>
         @endif
 
         @if($game->cultural_note)
         <div style="margin-bottom:var(--sp-4);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#F2CB5A">🌍 Cultural Note</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $game->cultural_note }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $game->cultural_note }}</p>
         </div>
         @endif
 
@@ -85,15 +85,15 @@
             <div class="act-label" style="margin-bottom:var(--sp-3)">Questions / Items ({{ $game->questions->count() }})</div>
             <div style="display:flex;flex-direction:column;gap:8px">
                 @foreach($game->questions as $q)
-                <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px">
-                    <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.3);min-width:24px">#{{ $loop->index + 1 }}</span>
+                <div style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+                    <span style="font-size:11px;font-weight:700;color:var(--cms-text-muted);min-width:24px">#{{ $loop->index + 1 }}</span>
                     @if($q->question_emoji)
                         <span style="font-size:20px">{{ $q->question_emoji }}</span>
                     @endif
                     <div style="flex:1;min-width:0">
-                        <div style="color:#fff;font-size:13px;font-weight:600">{{ $q->question_text ?: '—' }}</div>
+                        <div style="color:var(--cms-text);font-size:13px;font-weight:600">{{ $q->question_text ?: '—' }}</div>
                         @if($q->match_text || $q->match_emoji)
-                            <div style="color:rgba(255,255,255,.5);font-size:11px;margin-top:2px">
+                            <div style="color:var(--cms-text-muted);font-size:11px;margin-top:2px">
                                 ↔ {{ $q->match_emoji }} {{ $q->match_text }}
                             </div>
                         @endif
@@ -102,7 +102,7 @@
                         @endif
                     </div>
                     @if($q->hint)
-                        <span style="font-size:10px;color:rgba(255,255,255,.4);font-style:italic">💡 {{ $q->hint }}</span>
+                        <span style="font-size:10px;color:var(--cms-text-muted);font-style:italic">💡 {{ $q->hint }}</span>
                     @endif
                 </div>
                 @endforeach

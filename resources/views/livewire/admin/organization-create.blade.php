@@ -17,7 +17,7 @@
         .org-create-shell {
             width: 100%;
             max-width: 100%;
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--cms-surface-raised);
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: var(--r-xl);
             padding: clamp(var(--sp-5), 2vw, var(--sp-8));
@@ -63,11 +63,11 @@
         .org-field select,
         .org-field textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--cms-surface-raised);
+            border: 1px solid var(--cms-border);
             border-radius: 12px;
             padding: 14px;
-            color: #fff;
+            color: var(--cms-text);
             font-family: var(--font-admin);
             font-size: 14px;
             outline: none;
@@ -92,7 +92,7 @@
         }
         .org-admin-lead {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.45);
+            color: var(--cms-text-muted);
             line-height: 1.55;
             margin: 0;
         }
@@ -103,11 +103,11 @@
             <div class="sa-page-title">New organization</div>
             <div class="sa-breadcrumb">
                 <a href="{{ route('admin.organizations') }}" wire:navigate style="color:rgba(212,160,23,.8);text-decoration:none;font-weight:600">Organizations</a>
-                <span style="color:rgba(255,255,255,.25)"> / </span>
+                <span style="color: var(--cms-text-muted)"> / </span>
                 <span>Create</span>
             </div>
         </div>
-        <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.75);text-decoration:none">Cancel</a>
+        <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid var(--cms-input-border);color: var(--cms-text);text-decoration:none">Cancel</a>
     </div>
 
     <div class="org-create-shell">
@@ -119,14 +119,14 @@
                     <div class="org-field">
                         <label>Branding (logo)</label>
                         <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-                            <div style="width:72px;height:72px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                            <div style="width:72px;height:72px;border-radius:14px;background: var(--cms-surface-raised);border: 1px solid var(--cms-border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
                                 @if($logo)
                                     <img src="{{ $logo->temporaryUrl() }}" alt="" style="width:100%;height:100%;object-fit:cover">
                                 @else
-                                    <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.25);text-transform:uppercase">Logo</span>
+                                    <span style="font-size:12px;font-weight:700;color: var(--cms-text-muted);text-transform:uppercase">Logo</span>
                                 @endif
                             </div>
-                            <input type="file" wire:model="logo" accept="image/*" style="font-size:12px;color:rgba(255,255,255,0.45);max-width:100%">
+                            <input type="file" wire:model="logo" accept="image/*" style="font-size:12px;color: var(--cms-text-muted);max-width:100%">
                         </div>
                         @error('logo') <div style="color:var(--clay-red);font-size:11px;margin-top:8px;font-weight:600">{{ $message }}</div> @enderror
                     </div>
@@ -178,7 +178,7 @@
 
                 <section class="org-create-panel" aria-labelledby="org-create-admin-heading">
                     <h2 id="org-create-admin-heading" class="org-create-panel-title">Organisation administrator</h2>
-                    <p class="org-admin-lead">This person receives an email with a link to choose a password. The <strong style="color:rgba(255,255,255,0.65)">org_admin</strong> role is assigned automatically.</p>
+                    <p class="org-admin-lead">This person receives an email with a link to choose a password. The <strong style="color: var(--cms-text-muted)">org_admin</strong> role is assigned automatically.</p>
 
                     <div class="org-field">
                         <label for="admin-name">Admin full name</label>
@@ -196,7 +196,7 @@
 
             <div class="org-create-actions">
                 <button type="submit" class="btn btn-primary" style="padding:14px 28px;border-radius:14px;font-weight:700">Create organization</button>
-                <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.75);text-decoration:none;padding:12px 20px">Back to list</a>
+                <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid var(--cms-input-border);color: var(--cms-text);text-decoration:none;padding:12px 20px">Back to list</a>
             </div>
         </form>
     </div>

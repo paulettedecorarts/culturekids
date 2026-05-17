@@ -1,7 +1,7 @@
 <div class="ws-show-page">
     <style>
-    .ws-show-grid { display:inline-grid;gap:2px;background:rgba(255,255,255,.04);padding:8px;border-radius:8px; }
-    .ws-show-cell { width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.8); }
+    .ws-show-grid { display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px; }
+    .ws-show-cell { width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;border-radius:4px;background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);color:var(--cms-text); }
     .ws-show-cell.placed { background:rgba(212,160,23,.2);border-color:rgba(212,160,23,.4);color:#F2CB5A; }
     </style>
 
@@ -39,12 +39,12 @@
                         ['Reverse', $activity->allow_reverse ? 'Yes' : 'No'],
                     ] as [$label, $value])
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">{{ $label }}</span>
-                        <span style="color:#fff;font-size:12px;font-weight:600">{{ $value }}</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">{{ $label }}</span>
+                        <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $value }}</span>
                     </div>
                     @endforeach
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">Status</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">Status</span>
                         <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                             {{ $activity->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' }}">
                             {{ ucfirst($activity->status) }}
@@ -62,9 +62,9 @@
                         [$activity->attempts->avg('words_found') ? round($activity->attempts->avg('words_found'), 1) : '—', 'Avg Found', '#F2CB5A'],
                         [$activity->attempts->avg('stars_earned') ? round($activity->attempts->avg('stars_earned'), 1) : '—', 'Avg Stars', '#9C88FF'],
                     ] as [$val, $label, $color])
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:{{ $color }}">{{ $val }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">{{ $label }}</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">{{ $label }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -74,7 +74,7 @@
         @if($activity->cultural_note)
         <div style="margin-bottom:var(--sp-4);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#F2CB5A">🌍 Cultural Note</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
         </div>
         @endif
 
@@ -87,7 +87,7 @@
                 <div style="background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:6px 14px">
                     <div style="color:#F2CB5A;font-size:13px;font-weight:700;font-family:monospace;letter-spacing:1px">{{ $word['word'] }}</div>
                     @if($word['translation'] ?? null)
-                        <div style="color:rgba(255,255,255,.5);font-size:10px">{{ $word['translation'] }}</div>
+                        <div style="color:var(--cms-text-muted);font-size:10px">{{ $word['translation'] }}</div>
                     @endif
                 </div>
                 @endforeach

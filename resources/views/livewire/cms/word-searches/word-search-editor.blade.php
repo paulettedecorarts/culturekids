@@ -1,13 +1,13 @@
 <div class="ws-editor-page">
     <style>
-    .ws-editor-page .we-card { background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px;margin-bottom:20px; }
-    .ws-editor-page .we-title { font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
-    .ws-editor-page .we-label { display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .ws-editor-page .we-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
-    .ws-editor-page .we-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:rgba(255,255,255,.07); }
-    .ws-editor-page .we-input::placeholder { color:rgba(255,255,255,.3); }
-    .ws-editor-page select.we-input { background:#1a2744;color:#fff;color-scheme:dark; }
-    .ws-editor-page select.we-input option { background:#1a2744;color:#fff; }
+    .ws-editor-page .we-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
+    .ws-editor-page .we-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
+    .ws-editor-page .we-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
+    .ws-editor-page .we-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .ws-editor-page .we-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
+    .ws-editor-page .we-input::placeholder { color:var(--cms-text-muted); }
+    .ws-editor-page select.we-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .ws-editor-page select.we-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .ws-editor-page textarea.we-input { resize:vertical;min-height:72px;line-height:1.5; }
     .ws-editor-page .we-error { font-size:10px;color:#ff8c8c;margin-top:4px; }
     .ws-editor-page .we-field { display:flex;flex-direction:column;min-width:0; }
@@ -15,8 +15,8 @@
     .ws-editor-page .we-grid-5 { display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:16px; }
     .ws-editor-page .we-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
     /* Grid preview */
-    .ws-preview-grid { display:inline-grid;gap:2px;background:rgba(255,255,255,.04);padding:8px;border-radius:8px; }
-    .ws-preview-cell { width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.8); }
+    .ws-preview-grid { display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px; }
+    .ws-preview-cell { width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;border-radius:4px;background:var(--cms-surface-raised);border:1px solid rgba(255,255,255,.07);color:var(--cms-text); }
     .ws-preview-cell.placed { background:rgba(212,160,23,.2);border-color:rgba(212,160,23,.4);color:#F2CB5A; }
     @media (max-width:900px) {
         .ws-editor-page .we-grid-4 { grid-template-columns:1fr 1fr; }
@@ -119,7 +119,7 @@
                     <textarea wire:model="description" class="we-input" rows="3" placeholder="Find the hero's name and sacred words in the grid!"></textarea>
                 </div>
                 <div class="we-field">
-                    <label class="we-label">Cultural Note <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
+                    <label class="we-label">Cultural Note <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
                     <textarea wire:model="cultural_note" class="we-input" rows="3" placeholder="Cultural context..."></textarea>
                 </div>
             </div>
@@ -128,11 +128,11 @@
             <div style="display:flex;gap:24px;flex-wrap:wrap">
                 <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                     <input wire:model="allow_diagonal" type="checkbox" style="width:14px;height:14px;cursor:pointer">
-                    <span style="font-size:12px;color:rgba(255,255,255,.7)">Allow diagonal words</span>
+                    <span style="font-size:12px;color:var(--cms-text-muted)">Allow diagonal words</span>
                 </label>
                 <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                     <input wire:model="allow_reverse" type="checkbox" style="width:14px;height:14px;cursor:pointer">
-                    <span style="font-size:12px;color:rgba(255,255,255,.7)">Allow reverse words (backwards)</span>
+                    <span style="font-size:12px;color:var(--cms-text-muted)">Allow reverse words (backwards)</span>
                 </label>
             </div>
         </div>
@@ -142,7 +142,7 @@
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
                 <div>
                     <div class="we-title" style="margin-bottom:4px">Words to Find ({{ count($words) }})</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,.4)">Words are automatically converted to uppercase. Max length = grid size ({{ $grid_size }}).</div>
+                    <div style="font-size:11px;color:var(--cms-text-muted)">Words are automatically converted to uppercase. Max length = grid size ({{ $grid_size }}).</div>
                 </div>
             </div>
 
@@ -173,15 +173,15 @@
 
             {{-- Words list --}}
             @forelse($words as $i => $word)
-            <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr auto;gap:10px;align-items:center;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+            <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr auto;gap:10px;align-items:center;padding:8px 12px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                 <div style="width:28px;height:28px;border-radius:6px;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#F2CB5A">{{ $i + 1 }}</div>
-                <div style="color:#fff;font-size:13px;font-weight:700;font-family:monospace;letter-spacing:1px">{{ $word['word'] }}</div>
-                <div style="color:rgba(255,255,255,.5);font-size:11px">{{ $word['translation'] ?: '—' }}</div>
-                <div style="color:rgba(255,255,255,.4);font-size:11px;font-style:italic">{{ $word['hint'] ?: '—' }}</div>
-                <button type="button" wire:click="removeWord({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;padding:0 4px">×</button>
+                <div style="color:var(--cms-text);font-size:13px;font-weight:700;font-family:monospace;letter-spacing:1px">{{ $word['word'] }}</div>
+                <div style="color:var(--cms-text-muted);font-size:11px">{{ $word['translation'] ?: '—' }}</div>
+                <div style="color:var(--cms-text-muted);font-size:11px;font-style:italic">{{ $word['hint'] ?: '—' }}</div>
+                <button type="button" wire:click="removeWord({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px;padding:0 4px">×</button>
             </div>
             @empty
-            <div style="padding:24px;text-align:center;color:rgba(255,255,255,.35);font-size:12px;border:1px dashed rgba(255,255,255,.1);border-radius:8px">
+            <div style="padding:24px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
                 No words added yet. Use the form above to add words.
             </div>
             @endforelse
@@ -192,7 +192,7 @@
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
                 <div>
                     <div class="we-title" style="margin-bottom:4px">Grid Preview</div>
-                    <div style="font-size:11px;color:rgba(255,255,255,.4)">
+                    <div style="font-size:11px;color:var(--cms-text-muted)">
                         {{ $gridGenerated ? 'Grid generated — highlighted cells contain your words' : 'Click "Generate Grid" to create the letter grid' }}
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                     @endif
                 </div>
             @else
-                <div style="padding:32px;text-align:center;color:rgba(255,255,255,.35);font-size:12px;border:1px dashed rgba(255,255,255,.1);border-radius:8px">
+                <div style="padding:32px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
                     Add words above then click "Generate Grid" to preview
                 </div>
             @endif

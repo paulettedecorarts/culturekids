@@ -32,12 +32,12 @@
                         ['Star Points', $activity->star_points],
                     ] as [$label, $value])
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">{{ $label }}</span>
-                        <span style="color:#fff;font-size:12px;font-weight:600">{{ $value }}</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">{{ $label }}</span>
+                        <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $value }}</span>
                     </div>
                     @endforeach
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">Status</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">Status</span>
                         <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                             {{ $activity->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' }}">
                             {{ ucfirst($activity->status) }}
@@ -49,21 +49,21 @@
             <div>
                 <div class="act-label" style="margin-bottom:var(--sp-3)">Statistics</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)">
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:#60A5FA">{{ $activity->words->count() }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">Words</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">Words</div>
                     </div>
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:#4A7C59">{{ $activity->attempts->count() }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">Attempts</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">Attempts</div>
                     </div>
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:#F2CB5A">{{ $activity->attempts->where('completed', true)->count() }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">Completed</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">Completed</div>
                     </div>
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:#9C88FF">{{ $activity->attempts->avg('stars_earned') ? round($activity->attempts->avg('stars_earned'), 1) : '—' }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">Avg Stars</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">Avg Stars</div>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
         @if($activity->description)
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Description</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $activity->description }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $activity->description }}</p>
         </div>
         @endif
 
@@ -81,7 +81,7 @@
         @if($activity->cultural_note)
         <div style="margin-bottom:var(--sp-4);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#F2CB5A">🌍 Cultural Note</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
         </div>
         @endif
 
@@ -89,10 +89,10 @@
         @if($activity->full_sentence)
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Full Sentence</div>
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:var(--sp-3)">
-                <div style="color:#fff;font-size:15px;font-weight:600;margin-bottom:4px">{{ $activity->full_sentence }}</div>
+            <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-3)">
+                <div style="color:var(--cms-text);font-size:15px;font-weight:600;margin-bottom:4px">{{ $activity->full_sentence }}</div>
                 @if($activity->sentence_translation)
-                    <div style="color:rgba(255,255,255,.5);font-size:12px;font-style:italic">{{ $activity->sentence_translation }}</div>
+                    <div style="color:var(--cms-text-muted);font-size:12px;font-style:italic">{{ $activity->sentence_translation }}</div>
                 @endif
             </div>
         </div>
@@ -114,14 +114,14 @@
             <div class="act-label" style="margin-bottom:var(--sp-3)">Words ({{ $activity->words->count() }})</div>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-2)">
                 @foreach($activity->words as $word)
-                <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2)">
+                <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2)">
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
                         @if($word->emoji)
                             <span style="font-size:20px">{{ $word->emoji }}</span>
                         @endif
                         <div>
-                            <div style="color:#fff;font-size:14px;font-weight:700">{{ $word->word }}</div>
-                            <div style="color:rgba(255,255,255,.5);font-size:11px">{{ $word->translation }}</div>
+                            <div style="color:var(--cms-text);font-size:14px;font-weight:700">{{ $word->word }}</div>
+                            <div style="color:var(--cms-text-muted);font-size:11px">{{ $word->translation }}</div>
                         </div>
                         @if($word->is_correct_answer)
                             <span style="margin-left:auto;background:rgba(74,124,89,.2);color:#4A7C59;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:700">✓ Correct</span>
@@ -131,7 +131,7 @@
                         @endif
                     </div>
                     @if($word->phonetic)
-                        <div style="color:rgba(255,255,255,.4);font-size:10px;font-style:italic">/ {{ $word->phonetic }} /</div>
+                        <div style="color:var(--cms-text-muted);font-size:10px;font-style:italic">/ {{ $word->phonetic }} /</div>
                     @endif
                 </div>
                 @endforeach

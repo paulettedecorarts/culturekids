@@ -39,9 +39,9 @@
     </div>
 
     <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap">
-        <input wire:model.live.debounce.300ms="search" placeholder="Search drawings..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
+        <input wire:model.live.debounce.300ms="search" placeholder="Search drawings..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
         
-        <select wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Types</option>
             <option value="coloring">Coloring Page</option>
             <option value="hero_drawing">Hero Drawing</option>
@@ -49,14 +49,14 @@
             <option value="free_draw">Free Drawing</option>
         </select>
         
-        <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Tribes</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
         </select>
         
-        <select wire:model.live="statusFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="statusFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
             <option value="">All Status</option>
             <option value="published">Published</option>
             <option value="draft">Draft</option>
@@ -65,7 +65,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;background:rgba(255,255,255,.04);border-radius:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px">
+        <div class="sa-table-head" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;background:var(--cms-surface-raised);border-radius:8px;font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.5px">
             <span>Drawing</span>
             <span>Type</span>
             <span>Tribe</span>
@@ -75,7 +75,7 @@
         </div>
 
         @forelse($this->drawings as $drawing)
-            <div class="sa-table-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);align-items:center">
+            <div class="sa-table-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;border-bottom:1px solid var(--cms-border-subtle);align-items:center">
                 <div style="display:flex;align-items:center;gap:12px;min-width:0">
                     <div style="font-size:20px;width:32px;text-align:center">
                         @if($drawing->drawing_type === 'coloring')
@@ -89,22 +89,22 @@
                         @endif
                     </div>
                     <div style="min-width:0">
-                        <div style="font-weight:700;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $drawing->title }}</div>
-                        <div style="font-size:11px;color:rgba(255,255,255,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $drawing->description ?: 'No description' }}</div>
+                        <div style="font-weight:700;color:var(--cms-text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $drawing->title }}</div>
+                        <div style="font-size:11px;color:var(--cms-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $drawing->description ?: 'No description' }}</div>
                     </div>
                 </div>
                 
                 <span style="background:rgba(74,124,89,.2);color:#6FA882;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:capitalize">{{ $drawing->drawing_type_display }}</span>
                 
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $drawing->tribe->name }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $drawing->tribe->name }}</span>
                 
                 <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                     {{ $drawing->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 
-                       ($drawing->status === 'draft' ? 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' : 'background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2)') }}">
+                       ($drawing->status === 'draft' ? 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border:1px solid var(--cms-border)') }}">
                     {{ ucfirst($drawing->status) }}
                 </span>
                 
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $drawing->age_range }}</span>
+                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $drawing->age_range }}</span>
                 
                 <div style="display:flex;gap:6px">
                     <a href="{{ route($routePrefix . '.drawings.play', $drawing->id) }}" target="_blank" class="btn btn-sm" style="background:rgba(74,124,89,.18);color:#6FA882;border:1px solid rgba(74,124,89,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Play</a>
@@ -113,7 +113,7 @@
                 </div>
             </div>
         @empty
-            <div style="padding:40px;text-align:center;color:rgba(255,255,255,.5)">
+            <div style="padding:40px;text-align:center;color:var(--cms-text-muted)">
                 <div style="font-size:48px;margin-bottom:16px">🎨</div>
                 <div style="font-size:16px;font-weight:600;margin-bottom:8px">No drawing activities found</div>
                 <div style="font-size:12px;margin-bottom:20px">Create your first drawing activity to get started</div>

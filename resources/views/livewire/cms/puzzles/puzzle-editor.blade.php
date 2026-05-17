@@ -59,12 +59,12 @@
             </div>
 
             <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.75)">Jigsaw image</div>
-                <p style="font-size:11px;color:rgba(255,255,255,.42);margin:0 0 12px;line-height:1.45">Upload artwork. On save, the server cuts it into a rectangular grid. The preview shows how those cut lines will line up.</p>
+                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Jigsaw image</div>
+                <p style="font-size:11px;color: var(--cms-text-muted);margin:0 0 12px;line-height:1.45">Upload artwork. On save, the server cuts it into a rectangular grid. The preview shows how those cut lines will line up.</p>
                 @if($hasPuzzleSource && $activity)
                     <div style="margin-bottom:12px">
                         <button type="button" wire:click="removePuzzleImage" wire:confirm="Remove the image and all generated pieces? You must upload again before saving." class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35);padding:8px 12px">Remove image &amp; pieces</button>
-                        <p style="font-size:10px;color:rgba(255,255,255,.35);margin:8px 0 0;max-width:420px">Upload a new file below to replace, or change piece count — the live preview updates. Save to regenerate tiles on the server.</p>
+                        <p style="font-size:10px;color:var(--cms-text-muted);margin:8px 0 0;max-width:420px">Upload a new file below to replace, or change piece count — the live preview updates. Save to regenerate tiles on the server.</p>
                     </div>
                 @endif
                 <div style="margin-bottom:12px">
@@ -76,7 +76,7 @@
             </div>
 
             <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.75)">Difficulty &amp; grid</div>
+                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Difficulty &amp; grid</div>
                 <div class="puzzle-form-grid">
                     <div>
                         <label class="pz-label">Level (difficulty)</label>
@@ -91,7 +91,7 @@
                     <div>
                         <label class="pz-label">Number of pieces <span style="color:#ff8c8c">*</span></label>
                         <input wire:model.live.debounce.300ms="puzzle_pieces" type="number" min="4" max="400" class="pz-input" placeholder="e.g. 12">
-                        <p style="font-size:10px;color:rgba(255,255,255,.35);margin:6px 0 0">Between 4 and 400. Preview grid updates as you type.</p>
+                        <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Between 4 and 400. Preview grid updates as you type.</p>
                         @error('puzzle_pieces') <div class="pz-error">{{ $message }}</div> @enderror
                     </div>
                 </div>
@@ -103,7 +103,7 @@
             </div>
 
             <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.75)">Extras</div>
+                <div class="pz-label" style="margin-bottom:10px;font-size:12px;color: var(--cms-text)">Extras</div>
                 <div class="puzzle-form-grid">
                     <div>
                         <label class="pz-label">Topic tag</label>
@@ -128,7 +128,7 @@
 
             <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
                 <button type="button" wire:click="save" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:10px 18px;font-weight:700">Save puzzle</button>
-                <a href="{{ $isEdit ? route($routePrefix . '.puzzles.show', $activity->id) : route($routePrefix . '.puzzles') }}" class="btn btn-sm" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 18px;text-decoration:none">Cancel</a>
+                <a href="{{ $isEdit ? route($routePrefix . '.puzzles.show', $activity->id) : route($routePrefix . '.puzzles') }}" class="btn btn-sm" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border);padding:10px 18px;text-decoration:none">Cancel</a>
             </div>
         </div>
 
@@ -141,7 +141,7 @@
                     @if($tribe_id)
                         {{ $this->tribes->firstWhere('id', $tribe_id)?->name ?? '—' }}
                     @else
-                        <span style="color:rgba(255,255,255,.35)">Select a tribe</span>
+                        <span style="color:var(--cms-text-muted)">Select a tribe</span>
                     @endif
                 </span>
             </div>
@@ -185,31 +185,31 @@
             align-items:start;
         }
         .puzzle-form-grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
-        .pz-label { display:block; font-size:11px; color:rgba(255,255,255,.6); margin-bottom:5px; }
-        .pz-input, .pz-textarea { width:100%; padding:9px; border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#fff; font-family:var(--font-admin); }
+        .pz-label { display:block; font-size:11px; color:var(--cms-text-muted); margin-bottom:5px; }
+        .pz-input, .pz-textarea { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-surface-raised); color:var(--cms-text); font-family:var(--font-admin); }
         .pz-textarea { min-height:80px; }
         .pz-error { font-size:10px; color:#ff8c8c; margin-top:4px; }
-        .puzzle-editor-page select.pz-input { background:#1a2744; color:#fff; color-scheme:dark; }
-        .puzzle-editor-page select.pz-input option { background:#1a2744; color:#fff; }
+        .puzzle-editor-page select.pz-input { background:var(--cms-input-bg); color:var(--cms-text); color-scheme:dark; }
+        .puzzle-editor-page select.pz-input option { background:var(--cms-input-bg); color:var(--cms-text); }
         .pz-live-preview-card {
             position:sticky;
             top:var(--sp-4);
-            background:rgba(255,255,255,.04);
-            border:1px solid rgba(255,255,255,.1);
+            background:var(--cms-surface-raised);
+            border:1px solid var(--cms-border);
             border-radius:16px;
             padding:18px;
         }
-        .pz-lp-title { font-size:12px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:4px; }
-        .pz-lp-sub { font-size:11px; color:rgba(255,255,255,.38); margin:0 0 12px; line-height:1.45; }
+        .pz-lp-title { font-size:12px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color: var(--cms-text-muted); margin-bottom:4px; }
+        .pz-lp-sub { font-size:11px; color: var(--cms-text-muted); margin:0 0 12px; line-height:1.45; }
         .pz-lp-meta { margin-bottom:12px; }
-        .pz-lp-meta strong { display:block; color:#fff; font-size:15px; font-weight:800; margin-bottom:4px; line-height:1.3; }
-        .pz-lp-meta span { font-size:12px; color:rgba(255,255,255,.55); }
+        .pz-lp-meta strong { display:block; color:var(--cms-text); font-size:15px; font-weight:800; margin-bottom:4px; line-height:1.3; }
+        .pz-lp-meta span { font-size:12px; color: var(--cms-text-muted); }
         .pz-lp-frame {
             position:relative;
             border-radius:12px;
             overflow:hidden;
             background:rgba(0,0,0,.35);
-            border:1px solid rgba(255,255,255,.12);
+            border:1px solid var(--cms-input-border);
             aspect-ratio:4/3;
             max-height:280px;
         }
@@ -223,7 +223,7 @@
             padding:16px;
             text-align:center;
             font-size:12px;
-            color:rgba(255,255,255,.4);
+            color:var(--cms-text-muted);
         }
         .pz-lp-overlay-lines {
             position:absolute;
@@ -248,7 +248,7 @@
             color:#F2CB5A;
             border:1px solid rgba(212,160,23,.3);
         }
-        .pz-lp-badge-muted { color:rgba(255,255,255,.45); border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.04); }
+        .pz-lp-badge-muted { color: var(--cms-text-muted); border-color: var(--cms-text-muted); background:var(--cms-surface-raised); }
         @media (max-width: 1100px) {
             .puzzle-editor-layout { grid-template-columns:1fr; }
             .pz-live-preview-card { position:relative; top:auto; }

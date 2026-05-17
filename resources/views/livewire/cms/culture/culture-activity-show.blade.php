@@ -30,12 +30,12 @@
                         ['Star Points', $activity->star_points],
                     ] as [$label, $value])
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">{{ $label }}</span>
-                        <span style="color:#fff;font-size:12px;font-weight:600">{{ $value }}</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">{{ $label }}</span>
+                        <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $value }}</span>
                     </div>
                     @endforeach
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">Status</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">Status</span>
                         <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                             {{ $activity->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' }}">
                             {{ ucfirst($activity->status) }}
@@ -52,10 +52,10 @@
                     <div style="font-size:32px;margin-bottom:8px">{{ $activity->clan_emoji }}</div>
                     <div style="color:#F2CB5A;font-size:16px;font-weight:700;margin-bottom:4px">{{ $activity->clan_name }}</div>
                     @if($activity->clan_totem)
-                        <div style="color:rgba(255,255,255,.7);font-size:12px;margin-bottom:2px">🐾 Totem: {{ $activity->clan_totem }}</div>
+                        <div style="color:var(--cms-text-muted);font-size:12px;margin-bottom:2px">🐾 Totem: {{ $activity->clan_totem }}</div>
                     @endif
                     @if($activity->clan_role)
-                        <div style="color:rgba(255,255,255,.7);font-size:12px">⚔️ Role: {{ $activity->clan_role }}</div>
+                        <div style="color:var(--cms-text-muted);font-size:12px">⚔️ Role: {{ $activity->clan_role }}</div>
                     @endif
                 </div>
             </div>
@@ -71,9 +71,9 @@
                         [$activity->attempts->avg('score') ? round($activity->attempts->avg('score')) : '—', 'Avg Score', '#F2CB5A'],
                         [$activity->attempts->avg('stars_earned') ? round($activity->attempts->avg('stars_earned'), 1) : '—', 'Avg Stars', '#9C88FF'],
                     ] as [$val, $label, $color])
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:{{ $color }}">{{ $val }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">{{ $label }}</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">{{ $label }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -83,9 +83,9 @@
         @if($activity->proverb)
         <div style="margin-bottom:var(--sp-4);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#F2CB5A">📜 Clan Proverb</div>
-            <div style="color:#fff;font-size:14px;font-style:italic;margin-bottom:4px">"{{ $activity->proverb }}"</div>
+            <div style="color:var(--cms-text);font-size:14px;font-style:italic;margin-bottom:4px">"{{ $activity->proverb }}"</div>
             @if($activity->proverb_translation)
-                <div style="color:rgba(255,255,255,.6);font-size:12px">{{ $activity->proverb_translation }}</div>
+                <div style="color:var(--cms-text-muted);font-size:12px">{{ $activity->proverb_translation }}</div>
             @endif
         </div>
         @endif
@@ -93,14 +93,14 @@
         @if($activity->cultural_note)
         <div style="margin-bottom:var(--sp-4);background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#60A5FA">🌍 Cultural Note</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $activity->cultural_note }}</p>
         </div>
         @endif
 
         @if($activity->content)
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Main Content</div>
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-3);color:rgba(255,255,255,.8);font-size:13px;line-height:1.7">
+            <div style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-3);color:var(--cms-text);font-size:13px;line-height:1.7">
                 {!! nl2br(e($activity->content)) !!}
             </div>
         </div>
@@ -110,11 +110,11 @@
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Content Sections</div>
             @foreach($activity->content_sections as $section)
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-3);margin-bottom:8px">
+            <div style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-3);margin-bottom:8px">
                 @if($section['title'])
                     <div style="color:#F2CB5A;font-size:13px;font-weight:700;margin-bottom:6px">{{ $section['title'] }}</div>
                 @endif
-                <div style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.6">{{ $section['text'] }}</div>
+                <div style="color:var(--cms-text);font-size:13px;line-height:1.6">{{ $section['text'] }}</div>
             </div>
             @endforeach
         </div>
@@ -124,10 +124,10 @@
         <div>
             <div class="act-label" style="margin-bottom:var(--sp-2)">Quiz Questions ({{ count($activity->quiz_questions) }})</div>
             @foreach($activity->quiz_questions as $i => $q)
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start">
+            <div style="background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start">
                 <div style="width:24px;height:24px;border-radius:50%;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#F2CB5A;flex-shrink:0">{{ $i + 1 }}</div>
                 <div>
-                    <div style="color:#fff;font-size:12px;font-weight:600">{{ $q['question'] }}</div>
+                    <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $q['question'] }}</div>
                     <div style="color:rgba(74,124,89,.8);font-size:11px;margin-top:2px">✓ {{ $q['answer'] }}</div>
                 </div>
             </div>

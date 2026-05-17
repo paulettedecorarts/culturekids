@@ -22,38 +22,38 @@
 
 @push('styles')
     <style>
-        .pz-stat { padding:10px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
-        .pz-stat span { display:block; font-size:10px; color:rgba(255,255,255,.45); text-transform:uppercase; margin-bottom:4px; }
-        .pz-stat strong { color:#fff; font-size:14px; }
-        .pz-label { font-size:11px; color:rgba(255,255,255,.6); }
-        .pz-preview-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px; }
-        .pz-preview-title { font-size:13px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:4px; }
-        .pz-preview-sub { font-size:11px; color:rgba(255,255,255,.38); margin:0 0 14px; line-height:1.45; }
-        .pz-preview-surface { background:linear-gradient(165deg, rgba(30,45,74,.9), rgba(17,24,39,.95)); border-radius:14px; border:1px solid rgba(255,255,255,.1); padding:16px; }
-        .pz-preview-hero { border-radius:10px; overflow:hidden; margin-bottom:12px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.25); max-height:220px; display:flex; align-items:center; justify-content:center; }
+        .pz-stat { padding:10px; border-radius:10px; background:var(--cms-surface); border:1px solid var(--cms-border); }
+        .pz-stat span { display:block; font-size:10px; color: var(--cms-text-muted); text-transform:uppercase; margin-bottom:4px; }
+        .pz-stat strong { color:var(--cms-text); font-size:14px; }
+        .pz-label { font-size:11px; color:var(--cms-text-muted); }
+        .pz-preview-card { background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:16px; padding:18px; }
+        .pz-preview-title { font-size:13px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color: var(--cms-text-muted); margin-bottom:4px; }
+        .pz-preview-sub { font-size:11px; color: var(--cms-text-muted); margin:0 0 14px; line-height:1.45; }
+        .pz-preview-surface { background:linear-gradient(165deg, rgba(30,45,74,.9), rgba(17,24,39,.95)); border-radius:14px; border:1px solid var(--cms-border); padding:16px; }
+        .pz-preview-hero { border-radius:10px; overflow:hidden; margin-bottom:12px; border:1px solid var(--cms-border); background:rgba(0,0,0,.25); max-height:220px; display:flex; align-items:center; justify-content:center; }
         .pz-preview-hero img { max-width:100%; max-height:220px; object-fit:contain; }
-        .pz-thumb-strip-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:rgba(255,255,255,.4); margin-bottom:8px; }
+        .pz-thumb-strip-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--cms-text-muted); margin-bottom:8px; }
         .pz-thumb-strip { display:grid; grid-template-columns:repeat(auto-fill, minmax(44px, 1fr)); gap:6px; max-height:200px; overflow-y:auto; }
-        .pz-thumb-strip img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,.12); }
-        .pz-preview-empty { font-size:11px; color:rgba(255,255,255,.4); margin:8px 0 12px; }
+        .pz-thumb-strip img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:6px; border:1px solid var(--cms-input-border); }
+        .pz-preview-empty { font-size:11px; color:var(--cms-text-muted); margin:8px 0 12px; }
         .pz-preview-badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
         .pz-badge { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; padding:4px 10px; border-radius:999px; background:rgba(212,160,23,.15); color:#F2CB5A; border:1px solid rgba(212,160,23,.35); }
         @media (max-width: 960px) {
             .puzzle-show-page > div[style*="grid-template-columns"] { grid-template-columns: 1fr; }
         }
 
-        .pz-play-section { margin-top: var(--sp-5); padding: 20px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; }
+        .pz-play-section { margin-top: var(--sp-5); padding: 20px; background: var(--cms-surface); border: 1px solid var(--cms-border); border-radius: 16px; }
         .pz-play-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
-        .pz-play-title { font-size: 13px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 6px; }
-        .pz-play-sub { font-size: 12px; color: rgba(255,255,255,.45); margin: 0; line-height: 1.5; max-width: 640px; }
+        .pz-play-title { font-size: 13px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--cms-text-muted); margin-bottom: 6px; }
+        .pz-play-sub { font-size: 12px; color: var(--cms-text-muted); margin: 0; line-height: 1.5; max-width: 640px; }
         .pz-play-actions { display: flex; gap: 8px; flex-shrink: 0; }
         .pz-play-btn { font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 10px; cursor: pointer; border: 1px solid rgba(212,160,23,.45); background: rgba(212,160,23,.18); color: #F2CB5A; }
-        .pz-play-btn-secondary { border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.06); color: rgba(255,255,255,.75); }
+        .pz-play-btn-secondary { border-color: var(--cms-text-muted); background: var(--cms-surface-raised); color: var(--cms-text); }
         .pz-play-win { background: rgba(74,124,89,.2); border: 1px solid rgba(74,124,89,.45); color: #a8d4b0; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
-        .pz-play-hint { font-size: 11px; color: rgba(255,255,255,.4); margin: 0 0 12px; }
+        .pz-play-hint { font-size: 11px; color: var(--cms-text-muted); margin: 0 0 12px; }
         .pz-play-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 340px); gap: var(--sp-4); align-items: start; }
         @media (max-width: 900px) { .pz-play-body { grid-template-columns: 1fr; } }
-        .pz-play-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: rgba(255,255,255,.38); margin-bottom: 8px; }
+        .pz-play-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--cms-text-muted); margin-bottom: 8px; }
         .pz-play-grid {
             display: grid;
             gap: 4px;
@@ -70,7 +70,7 @@
             min-height: 0;
             border-radius: 6px;
             border: 1px dashed rgba(255,255,255,.18);
-            background: rgba(255,255,255,.04);
+            background: var(--cms-surface-raised);
             display: flex;
             align-items: stretch;
             justify-content: stretch;
@@ -87,7 +87,7 @@
             padding: 10px;
             background: rgba(17,24,39,.6);
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,.1);
+            border: 1px solid var(--cms-border);
         }
         .pz-play-bank-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); }
         .pz-play-bank-item .pz-play-piece { width: 100%; height: 100%; object-fit: cover; display: block; cursor: grab; }
@@ -136,7 +136,7 @@
                 @endif
             </div>
             <div class="pz-label" style="margin-bottom:6px">Description</div>
-            <div style="color:rgba(255,255,255,.85);line-height:1.6;font-size:14px">{{ $activity->description ?: '—' }}</div>
+            <div style="color: var(--cms-text);line-height:1.6;font-size:14px">{{ $activity->description ?: '—' }}</div>
         </div>
 
         <div class="pz-preview-card">

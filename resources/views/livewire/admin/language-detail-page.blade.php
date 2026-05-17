@@ -15,7 +15,7 @@
                 <button type="button" class="btn btn-sm" wire:click="saveLanguage" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">
                     {{ $language ? 'Save Changes' : 'Create Language' }}
                 </button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">
+                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
                     {{ $language ? 'Cancel' : 'Back' }}
                 </button>
             @endif
@@ -66,15 +66,15 @@
     @endif
 
     <style>
-        .language-detail-page label{font-size:11px;color:rgba(255,255,255,.65);display:block;margin-bottom:4px}
-        .language-detail-page input:not([type="checkbox"]),.language-detail-page select,.language-detail-page textarea{width:100%;padding:9px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff}
-        .language-detail-page select option{background:#1a2744;color:#fff}
-        .language-detail-page .check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:#fff}
+        .language-detail-page label{font-size:11px;color: var(--cms-text-muted);display:block;margin-bottom:4px}
+        .language-detail-page input:not([type="checkbox"]),.language-detail-page select,.language-detail-page textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)}
+        .language-detail-page select option{background:var(--cms-input-bg);color:var(--cms-text)}
+        .language-detail-page .check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cms-text)}
         .language-detail-page .check-row input[type="checkbox"]{width:16px;height:16px;accent-color:#D4A017}
         .language-detail-page .error{font-size:10px;color:#ff8c8c}
-        .language-detail-page .item{padding:10px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
-        .language-detail-page .item span{display:block;font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:4px}
-        .language-detail-page .item strong{font-size:14px;color:#fff}
+        .language-detail-page .item{padding:10px;border-radius:10px;background:var(--cms-surface);border:1px solid var(--cms-border)}
+        .language-detail-page .item span{display:block;font-size:10px;color: var(--cms-text-muted);text-transform:uppercase;margin-bottom:4px}
+        .language-detail-page .item strong{font-size:14px;color:var(--cms-text)}
         @media (max-width: 900px){.language-detail-page .sa-table-wrap > div{grid-template-columns:1fr !important}}
     </style>
 </div>

@@ -26,6 +26,8 @@
     @livewireStyles
     @stack('styles')
 
+    <style>{!! file_get_contents(resource_path('css/cms-content.css')) !!}</style>
+
     <style>
         :root {
             --clay-red:#C44B2B; --clay-red-light:#E06444; --clay-red-dark:#9A3218;
@@ -51,6 +53,7 @@
 
         /* Main content theme tokens (sidebar stays dark — option A) */
         [data-cms-theme="light"] {
+            --muted: var(--stone);
             --cms-bg:#F8F5F2;
             --cms-surface:#FFFFFF;
             --cms-surface-raised:#FAF6F0;
@@ -70,6 +73,7 @@
         }
 
         [data-cms-theme="dark"] {
+            --muted: rgba(255,255,255,.45);
             --cms-bg:#111827;
             --cms-surface:rgba(255,255,255,.04);
             --cms-surface-raised:rgba(255,255,255,.06);

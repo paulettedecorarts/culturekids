@@ -14,7 +14,7 @@
         <span style="font-size:24px">⚠️</span>
         <div>
             <div style="font-weight:700;font-size:14px;margin-bottom:4px">Impersonation Mode</div>
-            <div style="font-size:13px;color:rgba(255,255,255,.6)">
+            <div style="font-size:13px;color:var(--cms-text-muted)">
                 You can temporarily log in as any user to debug issues. All actions during impersonation are logged with your admin ID. 
                 You cannot impersonate other super administrators.
             </div>
@@ -27,12 +27,12 @@
             type="text" 
             wire:model.live.debounce.300ms="search" 
             placeholder="Search by name or email..."
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:#fff;font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         />
         
         <select 
             wire:model.live="roleFilter"
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:#fff;font-size:14px;font-family:var(--font-admin)"
+            style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-sm);padding:var(--sp-2) var(--sp-3);color:var(--cms-text);font-size:14px;font-family:var(--font-admin)"
         >
             <option value="">All Roles</option>
             @foreach($roles as $role)
@@ -66,8 +66,8 @@
         @forelse($users as $user)
             <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 120px">
                 <div>
-                    <div style="font-weight:600;color:#fff;font-size:12px">{{ $user->email }}</div>
-                    <div style="font-size:10px;color:rgba(255,255,255,.3)">{{ $user->name }}</div>
+                    <div style="font-weight:600;color:var(--cms-text);font-size:12px">{{ $user->email }}</div>
+                    <div style="font-size:10px;color:var(--cms-text-muted)">{{ $user->name }}</div>
                 </div>
                 
                 @php
@@ -84,18 +84,18 @@
                     {{ $role ? ucwords(str_replace('_', ' ', $role->name)) : 'No Role' }}
                 </span>
                 
-                <span style="font-size:11px;color:rgba(255,255,255,.5)">
+                <span style="font-size:11px;color:var(--cms-text-muted)">
                     {{ $user->organisation?->name ?? 'Global' }}
                 </span>
                 
-                <span style="font-size:11px;color:rgba(255,255,255,.35)">
+                <span style="font-size:11px;color:var(--cms-text-muted)">
                     {{ $user->updated_at->diffForHumans() }}
                 </span>
                 
                 @if($user->hasRole('super_admin'))
                     <button 
                         class="btn btn-sm" 
-                        style="background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);padding:3px 7px;font-size:9px;cursor:not-allowed"
+                        style="background:var(--cms-surface-raised);color:var(--cms-text-muted);padding:3px 7px;font-size:9px;cursor:not-allowed"
                         disabled
                     >
                         Cannot Impersonate
@@ -113,7 +113,7 @@
             </div>
         @empty
             <div class="sa-table-row" style="grid-template-columns:1fr">
-                <div style="text-align:center;color:rgba(255,255,255,.3);padding:var(--sp-4)">
+                <div style="text-align:center;color:var(--cms-text-muted);padding:var(--sp-4)">
                     No users found.
                 </div>
             </div>

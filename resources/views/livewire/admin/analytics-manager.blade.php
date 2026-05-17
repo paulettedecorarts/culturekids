@@ -39,9 +39,9 @@
     <!-- Analytics Grid (Chart Placeholders) -->
     <div style="display:grid; grid-template-columns: 2fr 1fr; gap:var(--sp-6); margin-top:var(--sp-6);">
         <!-- Timeline Chart -->
-        <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
+        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-8)">
-                <h3 style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-display);">Learning Engagement (Last 7 Days)</h3>
+                <h3 style="font-size:16px; font-weight:800; color:var(--cms-text); font-family:var(--font-display);">Learning Engagement (Last 7 Days)</h3>
             </div>
             <!-- CSS Chart Simulation -->
             <div style="height:250px; display:flex; align-items:flex-end; gap:var(--sp-4); padding-bottom:var(--sp-2);">
@@ -70,8 +70,8 @@
         </div>
 
         <!-- Top Content -->
-        <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
-            <h3 style="font-size:16px; font-weight:800; color:#fff; margin-bottom:var(--sp-6); font-family:var(--font-display);">Top Performer Stories</h3>
+        <div style="background:var(--cms-surface); border:1px solid rgba(255,255,255,.07); border-radius:var(--r-2xl); padding:var(--sp-6);">
+            <h3 style="font-size:16px; font-weight:800; color:var(--cms-text); margin-bottom:var(--sp-6); font-family:var(--font-display);">Top Performer Stories</h3>
             <div style="display:grid; gap:var(--sp-4);">
                 @forelse($topContent as $index => $content)
                     @php
@@ -83,12 +83,12 @@
                             {{ $icons[$index % count($icons)] }}
                         </div>
                         <div style="flex:1">
-                            <div style="font-size:13px; font-weight:700; color:#fff">{{ $content->title }}</div>
-                            <div style="font-size:11px; color:rgba(255,255,255,.4)">{{ number_format($content->usage_count) }} uses this week</div>
+                            <div style="font-size:13px; font-weight:700; color:var(--cms-text)">{{ $content->title }}</div>
+                            <div style="font-size:11px; color:var(--cms-text-muted)">{{ number_format($content->usage_count) }} uses this week</div>
                         </div>
                     </div>
                 @empty
-                    <div style="text-align:center; padding:var(--sp-6); color:rgba(255,255,255,.4)">
+                    <div style="text-align:center; padding:var(--sp-6); color:var(--cms-text-muted)">
                         <div style="font-size:32px; margin-bottom:var(--sp-2)">📊</div>
                         <div style="font-size:13px">No activity data yet</div>
                     </div>

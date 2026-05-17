@@ -126,17 +126,17 @@
 
             <!-- Interactive Features -->
             <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="song-label" style="margin-bottom:12px;font-size:13px;color:rgba(255,255,255,.75)">Interactive Features</div>
+                <div class="song-label" style="margin-bottom:12px;font-size:13px;color: var(--cms-text)">Interactive Features</div>
                 
                 <div style="display:flex;flex-direction:column;gap:12px">
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                         <input wire:model="has_karaoke_timing" type="checkbox" style="width:16px;height:16px">
-                        <span style="font-size:12px;color:rgba(255,255,255,.85)">Enable Karaoke Timing (allows timed lyric segments)</span>
+                        <span style="font-size:12px;color: var(--cms-text)">Enable Karaoke Timing (allows timed lyric segments)</span>
                     </label>
 
                     <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                         <input wire:model="has_fill_blanks" type="checkbox" style="width:16px;height:16px">
-                        <span style="font-size:12px;color:rgba(255,255,255,.85)">Enable Fill-the-Blanks Game</span>
+                        <span style="font-size:12px;color: var(--cms-text)">Enable Fill-the-Blanks Game</span>
                     </label>
                 </div>
             </div>
@@ -145,7 +145,7 @@
             @if($has_karaoke_timing)
             <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-                    <div class="song-label" style="margin-bottom:0;font-size:13px;color:rgba(255,255,255,.75)">Karaoke Segments</div>
+                    <div class="song-label" style="margin-bottom:0;font-size:13px;color: var(--cms-text)">Karaoke Segments</div>
                     <button type="button" wire:click="addLyricSegment" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:6px 12px;font-size:11px">
                         + Add Segment
                     </button>
@@ -153,9 +153,9 @@
 
                 <div style="display:flex;flex-direction:column;gap:16px">
                     @foreach($lyric_segments as $index => $segment)
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:16px">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:16px">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-                            <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase">Segment {{ $index + 1 }}</span>
+                            <span style="font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase">Segment {{ $index + 1 }}</span>
                             <button type="button" wire:click="removeLyricSegment({{ $index }})" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35);padding:4px 8px;border-radius:4px;font-size:10px">
                                 Remove
                             </button>
@@ -192,7 +192,7 @@
                             <div>
                                 <label style="display:flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer">
                                     <input wire:model="lyric_segments.{{ $index }}.is_fill_blank" type="checkbox" style="width:14px;height:14px">
-                                    <span style="font-size:11px;color:rgba(255,255,255,.75)">Fill-the-blank segment</span>
+                                    <span style="font-size:11px;color: var(--cms-text)">Fill-the-blank segment</span>
                                 </label>
                                 @if($segment['is_fill_blank'])
                                 <input wire:model="lyric_segments.{{ $index }}.blank_answer" type="text" placeholder="Answer word" class="song-input">
@@ -208,26 +208,26 @@
 
             <!-- File Uploads -->
             <div style="margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)">
-                <div class="song-label" style="margin-bottom:12px;font-size:13px;color:rgba(255,255,255,.75)">Media Files</div>
+                <div class="song-label" style="margin-bottom:12px;font-size:13px;color: var(--cms-text)">Media Files</div>
                 
                 <div class="media-upload-grid">
                     <div>
                         <label class="song-label" style="font-size:11px">Audio File</label>
-                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin:0 0 8px;line-height:1.4">MP3, WAV, or OGG format, up to 50 MB</p>
+                        <p style="font-size:10px;color: var(--cms-text-muted);margin:0 0 8px;line-height:1.4">MP3, WAV, or OGG format, up to 50 MB</p>
                         <input wire:model="audio_file" type="file" accept="audio/*" class="song-file-input">
                         @error('audio_file') <div class="song-error">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label class="song-label" style="font-size:11px">Video File</label>
-                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin:0 0 8px;line-height:1.4">MP4, WebM, or OGG format, up to 100 MB</p>
+                        <p style="font-size:10px;color: var(--cms-text-muted);margin:0 0 8px;line-height:1.4">MP4, WebM, or OGG format, up to 100 MB</p>
                         <input wire:model="video_file" type="file" accept="video/*" class="song-file-input">
                         @error('video_file') <div class="song-error">{{ $message }}</div> @enderror
                     </div>
 
                     <div>
                         <label class="song-label" style="font-size:11px">Cover Image</label>
-                        <p style="font-size:10px;color:rgba(255,255,255,.42);margin:0 0 8px;line-height:1.4">PNG or JPEG format, up to 10 MB</p>
+                        <p style="font-size:10px;color: var(--cms-text-muted);margin:0 0 8px;line-height:1.4">PNG or JPEG format, up to 10 MB</p>
                         <input wire:model="cover_image" type="file" accept="image/*" class="song-file-input">
                         @error('cover_image') <div class="song-error">{{ $message }}</div> @enderror
                     </div>
@@ -239,7 +239,7 @@
                 <button type="submit" class="btn btn-sm" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4);padding:10px 18px;font-weight:700">
                     {{ $isEdit ? 'Update Song Activity' : 'Create Song Activity' }}
                 </button>
-                <a href="{{ route($routePrefix . '.activities') }}" class="btn btn-sm" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 18px;text-decoration:none">
+                <a href="{{ route($routePrefix . '.activities') }}" class="btn btn-sm" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border);padding:10px 18px;text-decoration:none">
                     Cancel
                 </a>
             </div>
@@ -274,7 +274,7 @@
             display: block;
             font-size: 12px;
             font-weight: 800;
-            color: rgba(255,255,255,.75);
+            color: var(--cms-text);
             text-transform: uppercase;
             letter-spacing: .5px;
             margin-bottom: 6px;
@@ -282,12 +282,12 @@
 
         .song-input {
             width: 100%;
-            background: #1a2744;
+            background: var(--cms-input-bg);
             border: 1px solid rgba(255,255,255,.12);
             border-radius: 6px;
             padding: 8px 12px;
             font-size: 13px;
-            color: #fff;
+            color: var(--cms-text);
             transition: border-color 0.2s;
             box-sizing: border-box;
         }
@@ -298,17 +298,17 @@
         }
 
         .song-input::placeholder {
-            color: rgba(255,255,255,.4);
+            color: var(--cms-text-muted);
         }
 
         .song-file-input {
             width: 100%;
-            background: rgba(255,255,255,.04);
+            background: var(--cms-surface-raised);
             border: 1px solid rgba(255,255,255,.12);
             border-radius: 6px;
             padding: 8px;
             font-size: 11px;
-            color: rgba(255,255,255,.75);
+            color: var(--cms-text);
             box-sizing: border-box;
         }
 
@@ -332,14 +332,14 @@
         }
 
         select.song-input {
-            background: #1a2744;
-            color: #fff;
-            color-scheme: dark;
+            background: var(--cms-input-bg);
+            color: var(--cms-text);
+            color-scheme: inherit;
         }
 
         select.song-input option {
-            background: #1a2744;
-            color: #fff;
+            background: var(--cms-input-bg);
+            color: var(--cms-text);
         }
 
         textarea.song-input {
@@ -520,7 +520,7 @@
             }
 
             /* Compact segment styling */
-            div[style*="background:rgba(255,255,255,.04)"] {
+            div[style*="background:var(--cms-surface-raised)"] {
                 padding: 12px !important;
             }
 
@@ -582,9 +582,9 @@
         }
 
         /* Dark mode support for system preferences */
-        @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: inherit) {
             .song-input::placeholder {
-                color: rgba(255,255,255,.3);
+                color: var(--cms-text-muted);
             }
         }
 

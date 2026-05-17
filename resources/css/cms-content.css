@@ -1,0 +1,272 @@
+/**
+ * Shared CMS main-content styles (editor + org-admin portals).
+ * Uses --cms-* tokens from layouts/cms.blade.php.
+ */
+
+[data-cms-theme="light"],
+[data-cms-theme="dark"] {
+    --muted: var(--cms-text-muted);
+    --sh: 0 8px 32px rgba(26, 18, 8, 0.08);
+}
+
+[data-cms-theme="dark"] {
+    --sh: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Force readable form controls even when blades use inline dark styles */
+.cms-content input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="color"]):not([type="range"]),
+.cms-content select,
+.cms-content textarea {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border-color: var(--cms-input-border) !important;
+    color-scheme: inherit;
+}
+
+.cms-content select option,
+.cms-content select optgroup {
+    background: var(--cms-input-bg);
+    color: var(--cms-text);
+}
+
+/* Filters bar (managers) */
+.cms-filters {
+    display: flex;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-4);
+    flex-wrap: wrap;
+}
+
+.cms-filter-input {
+    padding: 8px 14px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--cms-input-border);
+    background: var(--cms-input-bg);
+    color: var(--cms-text);
+    font-family: var(--font-admin);
+    font-size: 12px;
+    outline: none;
+}
+
+.cms-filters .cms-filter-input:first-child {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* Panels / cards */
+.cms-panel {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    border-radius: var(--r-lg);
+    padding: var(--sp-6);
+    margin-bottom: var(--sp-6);
+}
+
+.cms-panel--rounded {
+    border-radius: 32px;
+}
+
+.cms-panel--flush {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Table / list text */
+.cms-row-title {
+    font-weight: 700;
+    color: var(--cms-text);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cms-row-sub,
+.cms-cell-muted {
+    font-size: 12px;
+    color: var(--cms-text-muted);
+}
+
+.cms-row-sub {
+    font-size: 11px;
+}
+
+.cms-empty-state {
+    padding: 40px 22px;
+    text-align: center;
+    color: var(--cms-text-muted);
+}
+
+.cms-empty-state p,
+.cms-empty-state .cms-empty-title {
+    color: var(--cms-text);
+}
+
+/* Interactive rows (replaces onmouseover inline handlers) */
+.cms-hover-row {
+    transition: background var(--dur-fast, 150ms);
+}
+
+.cms-hover-row:hover {
+    background: var(--cms-row-hover);
+}
+
+/* Grid table header inside sa-table-wrap */
+.cms-grid-head {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cms-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--cms-table-head);
+    border-bottom: 1px solid var(--cms-border-subtle);
+}
+
+.cms-grid-row {
+    border-bottom: 1px solid var(--cms-border-subtle);
+    align-items: center;
+}
+
+/* Flash / alert in CMS content */
+.cms-flash-success {
+    background: rgba(74, 124, 89, 0.12);
+    border: 1px solid rgba(74, 124, 89, 0.35);
+    color: var(--banana-green);
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: var(--sp-4);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+[data-cms-theme="dark"] .cms-flash-success {
+    color: var(--banana-light);
+}
+
+/* Activity type selector cards */
+.cms-content .activity-type-card {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+}
+
+.cms-content .activity-type-title {
+    color: var(--cms-text);
+}
+
+.cms-content .activity-type-desc,
+.cms-content .activity-type-count {
+    color: var(--cms-text-muted);
+}
+
+/* Pagination */
+.cms-content nav[role="navigation"] {
+    color: var(--cms-text);
+}
+
+.cms-content nav[role="navigation"] a,
+.cms-content nav[role="navigation"] span {
+    color: var(--cms-text-muted);
+}
+
+.cms-content nav[role="navigation"] a:hover {
+    color: var(--cms-text);
+}
+
+/* Tribe / heritage manager search panel */
+.cms-content .sa-tribe-manager-view input[type="text"] {
+    border-radius: 16px !important;
+    padding: 16px 16px 16px 52px !important;
+}
+
+/* Editor page scoped inputs — override hardcoded #1a2744 in <style> blocks */
+.cms-content [class$="-editor-page"] select,
+.cms-content [class$="-editor-page"] input[type="text"],
+.cms-content [class$="-editor-page"] input[type="number"],
+.cms-content [class$="-editor-page"] textarea,
+.cms-content [class$="-manager-page"] select,
+.cms-content [class$="-form-page"] select,
+.cms-content [class$="-form-page"] input,
+.cms-content .culture-editor-page select,
+.cms-content .culture-editor-page input,
+.cms-content .culture-editor-page textarea,
+.cms-content .game-editor-page select,
+.cms-content .game-editor-page input,
+.cms-content .game-editor-page textarea,
+.cms-content .maze-editor-page select,
+.cms-content .maze-editor-page input,
+.cms-content .ws-editor-page select,
+.cms-content .ws-editor-page input,
+.cms-content .sd-editor-page select,
+.cms-content .sd-editor-page input,
+.cms-content .language-activity-editor select,
+.cms-content .clan-form-page select,
+.cms-content .clan-form-page input,
+.cms-content .act-input {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border-color: var(--cms-input-border) !important;
+}
+
+.cms-content .act-label,
+.cms-content [class$="-editor-page"] label,
+.cms-content .culture-editor-page label {
+    color: var(--cms-text-muted);
+}
+
+.cms-content .act-error {
+    color: var(--clay-red);
+}
+
+/* Light mode: lift white-on-white inline text via attribute — last resort for legacy inline */
+[data-cms-theme="light"] .cms-content [style*="color:#fff"],
+[data-cms-theme="light"] .cms-content [style*="color: #fff"],
+[data-cms-theme="light"] .cms-content [style*="color:#FFF"] {
+    color: var(--cms-text) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="color:rgba(255,255,255"],
+[data-cms-theme="light"] .cms-content [style*="color: rgba(255, 255, 255"] {
+    color: var(--cms-text-muted) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="background:rgba(255,255,255,0.0"],
+[data-cms-theme="light"] .cms-content [style*="background: rgba(255, 255, 255, 0.0"],
+[data-cms-theme="light"] .cms-content [style*="background:rgba(255,255,255,.0"],
+[data-cms-theme="light"] .cms-content [style*="background: rgba(255, 255, 255, .0"] {
+    background: var(--cms-surface) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="background:#1a2744"],
+[data-cms-theme="light"] .cms-content [style*="background: #1a2744"] {
+    background: var(--cms-input-bg) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="color:rgba(255,255,255,.8)"],
+[data-cms-theme="light"] .cms-content [style*="color: rgba(255,255,255,.8)"] {
+    color: var(--cms-text) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="color:rgba(255,255,255,.7)"],
+[data-cms-theme="light"] .cms-content [style*="color:rgba(255,255,255,.35)"] {
+    color: var(--cms-text-muted) !important;
+}
+
+[data-cms-theme="light"] .cms-content [style*="background:rgba(255,255,255,.05)"],
+[data-cms-theme="light"] .cms-content [style*="background:rgba(255,255,255,.07)"] {
+    background: var(--cms-surface-raised) !important;
+}
+
+/* Story / panel editor dark panels */
+.cms-content .sd-cover,
+.cms-content .panel-editor,
+.cms-content [class*="editor-canvas"] {
+    color: var(--cms-text);
+}
+
+[data-cms-theme="light"] .cms-content .me-label,
+[data-cms-theme="light"] .cms-content .sd-label,
+[data-cms-theme="light"] .cms-content .we-label,
+[data-cms-theme="light"] .cms-content .ce-label,
+[data-cms-theme="light"] .cms-content .ge-label {
+    color: var(--cms-text-muted);
+}

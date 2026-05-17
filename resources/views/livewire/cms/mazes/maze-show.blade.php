@@ -34,12 +34,12 @@
                         ['Collectibles', count($maze->collectibles ?? [])],
                     ] as [$label, $value])
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">{{ $label }}</span>
-                        <span style="color:#fff;font-size:12px;font-weight:600">{{ $value }}</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">{{ $label }}</span>
+                        <span style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $value }}</span>
                     </div>
                     @endforeach
                     <div style="display:flex;justify-content:space-between">
-                        <span style="color:rgba(255,255,255,.6);font-size:12px">Status</span>
+                        <span style="color:var(--cms-text-muted);font-size:12px">Status</span>
                         <span style="padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;
                             {{ $maze->status === 'published' ? 'background:rgba(74,124,89,.2);color:#4A7C59;border:1px solid rgba(74,124,89,.35)' : 'background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.45)' }}">
                             {{ ucfirst($maze->status) }}
@@ -57,9 +57,9 @@
                         [$maze->attempts->avg('time_spent_seconds') ? gmdate('i:s', $maze->attempts->avg('time_spent_seconds')) : '—', 'Avg Time', '#F2CB5A'],
                         [$maze->attempts->avg('stars_earned') ? round($maze->attempts->avg('stars_earned'), 1) : '—', 'Avg Stars', '#9C88FF'],
                     ] as [$val, $label, $color])
-                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:var(--sp-2);text-align:center">
+                    <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:{{ $color }}">{{ $val }}</div>
-                        <div style="font-size:10px;color:rgba(255,255,255,.5)">{{ $label }}</div>
+                        <div style="font-size:10px;color:var(--cms-text-muted)">{{ $label }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -69,14 +69,14 @@
         @if($maze->description)
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Description</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $maze->description }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $maze->description }}</p>
         </div>
         @endif
 
         @if($maze->cultural_note)
         <div style="margin-bottom:var(--sp-4);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:var(--sp-3)">
             <div class="act-label" style="margin-bottom:var(--sp-2);color:#F2CB5A">🌍 Cultural Note</div>
-            <p style="color:rgba(255,255,255,.8);font-size:13px;line-height:1.5;margin:0">{{ $maze->cultural_note }}</p>
+            <p style="color:var(--cms-text);font-size:13px;line-height:1.5;margin:0">{{ $maze->cultural_note }}</p>
         </div>
         @endif
 
@@ -85,7 +85,7 @@
         <div style="margin-bottom:var(--sp-4)">
             <div class="act-label" style="margin-bottom:var(--sp-2)">Maze Preview</div>
             <div style="overflow-x:auto">
-                <div style="display:inline-grid;gap:2px;background:rgba(255,255,255,.05);padding:8px;border-radius:8px;grid-template-columns:repeat({{ $maze->grid_cols }}, 20px)">
+                <div style="display:inline-grid;gap:2px;background:var(--cms-surface-raised);padding:8px;border-radius:8px;grid-template-columns:repeat({{ $maze->grid_cols }}, 20px)">
                     @foreach($maze->grid as $r => $row)
                         @foreach($row as $c => $cell)
                             @php
@@ -94,7 +94,7 @@
                                 $collectibleHere = collect($maze->collectibles ?? [])->first(fn($col) => $col['row'] === $r && $col['col'] === $c);
                             @endphp
                             <div style="width:20px;height:20px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:10px;
-                                {{ $isStart ? 'background:rgba(74,124,89,.6)' : ($isEnd ? 'background:rgba(196,75,43,.6)' : ($collectibleHere ? 'background:rgba(212,160,23,.4)' : ($cell ? 'background:#1a2744' : 'background:rgba(255,255,255,.08)'))) }}">
+                                {{ $isStart ? 'background:rgba(74,124,89,.6)' : ($isEnd ? 'background:rgba(196,75,43,.6)' : ($collectibleHere ? 'background:rgba(212,160,23,.4)' : ($cell ? 'background:var(--cms-input-bg)' : 'background:var(--cms-surface-hover)'))) }}">
                                 @if($isStart) 🟢
                                 @elseif($isEnd) 🔴
                                 @elseif($collectibleHere) {{ $collectibleHere['emoji'] ?? '💎' }}
@@ -116,8 +116,8 @@
                     <div style="background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:8px">
                         <span style="font-size:18px">{{ $col['emoji'] }}</span>
                         <div>
-                            <div style="color:#fff;font-size:12px;font-weight:600">{{ $col['label'] ?: 'Item' }}</div>
-                            <div style="color:rgba(255,255,255,.5);font-size:10px">Row {{ $col['row'] }}, Col {{ $col['col'] }} {{ $col['required'] ? '• Required' : '' }}</div>
+                            <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $col['label'] ?: 'Item' }}</div>
+                            <div style="color:var(--cms-text-muted);font-size:10px">Row {{ $col['row'] }}, Col {{ $col['col'] }} {{ $col['required'] ? '• Required' : '' }}</div>
                         </div>
                     </div>
                 @endforeach

@@ -14,21 +14,21 @@
     @endif
 
     <!-- Filters Bar -->
-    <div style="background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,0.06); border-radius:32px; padding:32px; margin-bottom:40px">
+    <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:32px; padding:32px; margin-bottom:40px">
         <div style="position:relative">
             <span style="position:absolute; left:20px; top:50%; transform:translateY(-50%); opacity:0.3">🔍</span>
             <input 
                 type="text" 
                 wire:model.live.debounce.300ms="search" 
                 placeholder="Search tribes by name or region..." 
-                style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 16px 16px 52px; color:#fff; font-family:var(--font-admin); font-size:13px; outline:none;"
+                style="width:100%; background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:16px; padding:16px 16px 16px 52px; color:var(--cms-text); font-family:var(--font-admin); font-size:13px; outline:none;"
             >
         </div>
     </div>
 
     <!-- Tribes Grid/Table -->
-    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:32px; overflow:hidden">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px; font-weight:800; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:1px">
+    <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:32px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
             <span>Tribe Identity</span>
             <span>Ancestral Region</span>
             <span>Guardian Hero</span>
@@ -37,22 +37,22 @@
         </div>
 
         @forelse($tribes as $tribe)
-            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.03); transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid var(--cms-border-subtle); transition:all 0.2s" class="cms-hover-row">
                 <a href="{{ route($routePrefix . '.tribes.detail', $tribe->id) }}" style="display:flex; align-items:center; gap:20px; text-decoration:none">
-                    <div style="width:52px; height:52px; border-radius:16px; background:{{ $tribe->color }}; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'30' }}">
+                    <div style="width:52px; height:52px; border-radius:16px; background:{{ $tribe->color }}; border: 1px solid var(--cms-border); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'30' }}">
                         {{ $tribe->hero_emoji ?: '🗺️' }}
                     </div>
                     <div>
-                        <div style="font-weight:800; color:#fff; font-size:16px; margin-bottom:2px">{{ $tribe->name }}</div>
-                        <div style="font-size:12px; color:rgba(255,255,255,0.4); text-transform:uppercase; font-weight:800; letter-spacing:1px">{{ $tribe->activities_count ?? $tribe->activities->count() }} Heritage Events</div>
+                        <div style="font-weight:800; color:var(--cms-text); font-size:16px; margin-bottom:2px">{{ $tribe->name }}</div>
+                        <div style="font-size:12px; color:var(--cms-text-muted); text-transform:uppercase; font-weight:800; letter-spacing:1px">{{ $tribe->activities_count ?? $tribe->activities->count() }} Heritage Events</div>
                     </div>
                 </a>
 
-                <div style="font-size:14px; color:rgba(255,255,255,0.6); font-weight:700">
+                <div style="font-size:14px; color:var(--cms-text-muted); font-weight:700">
                     {{ $tribe->region }}
                 </div>
 
-                <div style="font-size:14px; color:rgba(255,255,255,0.4); font-weight:700">
+                <div style="font-size:14px; color:var(--cms-text-muted); font-weight:700">
                     {{ $tribe->hero_name }}
                 </div>
 
@@ -61,7 +61,7 @@
                 </div>
 
                 <div style="display:flex; gap:8px; justify-content:flex-end">
-                    <a href="{{ route($routePrefix . '.tribes.edit', $tribe->id) }}" class="btn" style="width:36px; height:36px; background:rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
+                    <a href="{{ route($routePrefix . '.tribes.edit', $tribe->id) }}" class="btn" style="width:36px; height:36px; background:var(--cms-surface-raised); color:var(--cms-text); border: 1px solid var(--cms-border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
                     <button wire:click="delete({{ $tribe->id }})" onclick="return confirm('Archive heritage record permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>
                 </div>
             </div>

@@ -267,7 +267,7 @@
         width: 80px;
         height: 80px;
         border-radius: 15px;
-        background: rgba(255,255,255,0.2);
+        background: var(--cms-surface-raised);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -569,7 +569,7 @@
     }
 
     .gentle-lyrics {
-        background: rgba(255,255,255,0.1);
+        background: var(--cms-surface-raised);
         border-radius: 10px;
         padding: 1.5rem;
         margin: 1rem 0;

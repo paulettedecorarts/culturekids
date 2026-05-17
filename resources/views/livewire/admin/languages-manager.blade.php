@@ -4,7 +4,7 @@
             <div class="sa-page-title">Language Registry</div>
             <div class="sa-breadcrumb">Super Admin · Platform · Dialect and translation coverage</div>
         </div>
-        <a class="btn btn-primary btn-sm" href="{{ route('admin.languages.create') }}" style="background:var(--clay-red); border:none; color:#fff; padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full); font-weight:700; text-decoration:none">+ Add Language</a>
+        <a class="btn btn-primary btn-sm" href="{{ route('admin.languages.create') }}" style="background:var(--clay-red); border:none; color:var(--cms-text); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full); font-weight:700; text-decoration:none">+ Add Language</a>
     </div>
 
     @if(session()->has('message'))
@@ -21,8 +21,8 @@
     </div>
 
     <div style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4); flex-wrap:wrap;">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search name, native name or code..." style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:#fff; font-size:12px; outline:none; min-width:250px;">
-        <select wire:model.live="statusFilter" style="background:#1a2744; border:1px solid rgba(255,255,255,.1); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:#fff; font-size:12px; outline:none;">
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search name, native name or code..." style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:250px;">
+        <select wire:model.live="statusFilter" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;">
             <option value="all">All status</option>
             <option value="verified">Verified</option>
             <option value="partial">Partial</option>
@@ -44,22 +44,22 @@
                 <div style="display:flex;align-items:center;gap:12px">
                     <span style="font-size:20px">{{ $language->flag_emoji ?: '🗣️' }}</span>
                     <div>
-                        <div style="font-weight:700;color:#fff;font-size:13px">{{ $language->name }}</div>
-                        <div style="font-size:11px;color:rgba(255,255,255,.5)">{{ $language->native_name ?: '—' }}</div>
+                        <div style="font-weight:700;color:var(--cms-text);font-size:13px">{{ $language->name }}</div>
+                        <div style="font-size:11px;color:var(--cms-text-muted)">{{ $language->native_name ?: '—' }}</div>
                     </div>
                 </div>
-                <code style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--savanna-gold)">{{ $language->code }}</code>
+                <code style="background:var(--cms-surface-raised);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--savanna-gold)">{{ $language->code }}</code>
                 <div style="display:flex;align-items:center;gap:10px">
-                    <div style="flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden">
+                    <div style="flex:1;height:4px;background:var(--cms-surface-raised);border-radius:2px;overflow:hidden">
                         <div style="width:{{ $language->translation_coverage }}%;height:100%;background:{{ $language->translation_coverage >= 80 ? 'var(--banana-green)' : ($language->translation_coverage >= 50 ? 'var(--sunfire)' : 'var(--clay-red)') }}"></div>
                     </div>
-                    <span style="font-size:10px;font-weight:700;color:#fff">{{ $language->translation_coverage }}%</span>
+                    <span style="font-size:10px;font-weight:700;color:var(--cms-text)">{{ $language->translation_coverage }}%</span>
                 </div>
                 <span class="status-pill {{ $language->status === 'verified' ? 'status-published' : ($language->status === 'partial' ? 'status-review' : 'status-draft') }}">{{ ucfirst($language->status) }}</span>
                 <div><a class="btn btn-sm" href="{{ route('admin.languages.detail', ['id' => $language->id]) }}" style="text-decoration:none">Details</a></div>
             </div>
         @empty
-            <div style="padding:20px;color:rgba(255,255,255,.6)">No languages found.</div>
+            <div style="padding:20px;color:var(--cms-text-muted)">No languages found.</div>
         @endforelse
     </div>
 

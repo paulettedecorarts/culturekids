@@ -1,13 +1,13 @@
 <div class="culture-editor-page">
     <style>
-    .culture-editor-page .ce-card { background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px;margin-bottom:20px; }
-    .culture-editor-page .ce-title { font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
-    .culture-editor-page .ce-label { display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
-    .culture-editor-page .ce-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
-    .culture-editor-page .ce-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:rgba(255,255,255,.07); }
-    .culture-editor-page .ce-input::placeholder { color:rgba(255,255,255,.3); }
-    .culture-editor-page select.ce-input { background:#1a2744;color:#fff;color-scheme:dark; }
-    .culture-editor-page select.ce-input option { background:#1a2744;color:#fff; }
+    .culture-editor-page .ce-card { background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:24px;margin-bottom:20px; }
+    .culture-editor-page .ce-title { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:18px; }
+    .culture-editor-page .ce-label { display:block;font-size:11px;font-weight:600;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px; }
+    .culture-editor-page .ce-input { display:block;width:100%;box-sizing:border-box;padding:9px 12px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-surface-raised);color:var(--cms-text);font-size:13px;font-family:var(--font-admin,inherit);transition:border-color .2s; }
+    .culture-editor-page .ce-input:focus { outline:none;border-color:rgba(212,160,23,.6);background:var(--cms-surface-hover); }
+    .culture-editor-page .ce-input::placeholder { color:var(--cms-text-muted); }
+    .culture-editor-page select.ce-input { background:var(--cms-input-bg);color:var(--cms-text);color-scheme:dark; }
+    .culture-editor-page select.ce-input option { background:var(--cms-input-bg);color:var(--cms-text); }
     .culture-editor-page textarea.ce-input { resize:vertical;min-height:80px;line-height:1.5; }
     .culture-editor-page .ce-error { font-size:10px;color:#ff8c8c;margin-top:4px; }
     .culture-editor-page .ce-field { display:flex;flex-direction:column;min-width:0; }
@@ -98,7 +98,7 @@
                     </select>
                 </div>
                 <div class="ce-field">
-                    <label class="ce-label">Cover Image <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">max 5MB</span></label>
+                    <label class="ce-label">Cover Image <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 5MB</span></label>
                     <input wire:model="cover_image_file" type="file" class="ce-input" accept="image/*">
                     @if($activity && $activity->cover_image_path)
                         <img src="{{ asset('storage/' . $activity->cover_image_path) }}" style="margin-top:6px;max-width:80px;border-radius:4px">
@@ -112,7 +112,7 @@
                     <textarea wire:model="description" class="ce-input" rows="3" placeholder="Describe this culture activity..."></textarea>
                 </div>
                 <div class="ce-field">
-                    <label class="ce-label">Cultural Note <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
+                    <label class="ce-label">Cultural Note <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">optional</span></label>
                     <textarea wire:model="cultural_note" class="ce-input" rows="3" placeholder="Cultural context and significance..."></textarea>
                 </div>
             </div>
@@ -128,17 +128,17 @@
                 <div style="font-size:11px;font-weight:600;color:#F2CB5A;margin-bottom:8px">Quick Fill from Clan Registry</div>
                 <div style="display:flex;gap:10px;align-items:center">
                     <select wire:change="selectClan($event.target.value)"
-                        style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid rgba(212,160,23,.3);background:#1a2744;color:#fff;font-size:13px;outline:none;cursor:pointer">
+                        style="flex:1;padding:9px 12px;border-radius:8px;border:1px solid rgba(212,160,23,.3);background:var(--cms-input-bg);color:var(--cms-text);font-size:13px;outline:none;cursor:pointer">
                         <option value="">— Select a clan to auto-fill fields —</option>
                         @foreach($this->clansForTribe as $clan)
                             <option value="{{ $clan->id }}">{{ $clan->totem_emoji }} {{ $clan->name }} {{ $clan->totem ? '· '.$clan->totem : '' }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:6px">Selecting a clan will populate the fields below. You can still edit them manually.</div>
+                <div style="font-size:10px;color:var(--cms-text-muted);margin-top:6px">Selecting a clan will populate the fields below. You can still edit them manually.</div>
             </div>
             @else
-            <div style="margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:11px;color:rgba(255,255,255,.4)">
+            <div style="margin-bottom:16px;padding:10px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;font-size:11px;color:var(--cms-text-muted)">
                 💡 No clans registered for this tribe yet. <a href="{{ route($routePrefix . '.clans.create') }}" style="color:#F2CB5A;text-decoration:none">Add clans to the registry</a> to enable quick-fill.
             </div>
             @endif
@@ -185,7 +185,7 @@
 
             {{-- Content Sections --}}
             <div style="margin-bottom:16px">
-                <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Content Sections</div>
+                <div style="font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Content Sections</div>
                 <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:10px;align-items:end;margin-bottom:12px">
                     <div class="ce-field">
                         <label class="ce-label" style="font-size:10px">Section Title</label>
@@ -201,15 +201,15 @@
                     </div>
                 </div>
                 @forelse($content_sections as $i => $section)
-                    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                         <div style="flex:1;min-width:0">
-                            <div style="color:#fff;font-size:12px;font-weight:600">{{ $section['title'] ?: 'Untitled' }}</div>
-                            <div style="color:rgba(255,255,255,.5);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $section['text'] }}</div>
+                            <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $section['title'] ?: 'Untitled' }}</div>
+                            <div style="color:var(--cms-text-muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $section['text'] }}</div>
                         </div>
-                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px">×</button>
+                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px">×</button>
                     </div>
                 @empty
-                    <div style="font-size:11px;color:rgba(255,255,255,.35);padding:12px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:8px">No sections added yet</div>
+                    <div style="font-size:11px;color:var(--cms-text-muted);padding:12px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">No sections added yet</div>
                 @endforelse
             </div>
         </div>
@@ -218,7 +218,7 @@
         {{-- ── Quiz Questions (for clan_story / clan_history) ── --}}
         @if(in_array($culture_type, ['clan_story', 'clan_history', 'clan_profile']))
         <div class="ce-card">
-            <div class="ce-title">Quiz Questions <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">optional — shown after reading</span></div>
+            <div class="ce-title">Quiz Questions <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">optional — shown after reading</span></div>
             <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px">
                 <div class="ce-field">
                     <label class="ce-label" style="font-size:10px">Question</label>
@@ -234,16 +234,16 @@
                 </div>
             </div>
             @forelse($quiz_questions as $i => $q)
-                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                     <div style="width:24px;height:24px;border-radius:50%;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#F2CB5A;flex-shrink:0">{{ $i + 1 }}</div>
                     <div style="flex:1;min-width:0">
-                        <div style="color:#fff;font-size:12px;font-weight:600">{{ $q['question'] }}</div>
+                        <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $q['question'] }}</div>
                         <div style="color:rgba(74,124,89,.8);font-size:11px">✓ {{ $q['answer'] }}</div>
                     </div>
-                    <button type="button" wire:click="removeQuestion({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px">×</button>
+                    <button type="button" wire:click="removeQuestion({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px">×</button>
                 </div>
             @empty
-                <div style="font-size:11px;color:rgba(255,255,255,.35);padding:12px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:8px">No quiz questions added yet</div>
+                <div style="font-size:11px;color:var(--cms-text-muted);padding:12px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">No quiz questions added yet</div>
             @endforelse
         </div>
         @endif
@@ -254,16 +254,16 @@
             <div class="ce-title">🗺️ Clan Map Settings</div>
             <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#60A5FA;font-weight:600;margin-bottom:4px">How Clan Map Works</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.5">
+                <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
                     Upload a map image showing the clan's territory. Children will explore the map and learn about the clan's homeland, landmarks, and neighbouring clans.
                 </div>
             </div>
             <div class="ce-grid-2">
                 <div class="ce-field">
-                    <label class="ce-label">Map Background Image <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
+                    <label class="ce-label">Map Background Image <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
                     <input wire:model="map_image_file" type="file" class="ce-input" accept="image/*">
                     @if($activity && $activity->map_image_path)
-                        <img src="{{ asset('storage/' . $activity->map_image_path) }}" style="margin-top:8px;max-width:200px;border-radius:6px;border:1px solid rgba(255,255,255,.1)">
+                        <img src="{{ asset('storage/' . $activity->map_image_path) }}" style="margin-top:8px;max-width:200px;border-radius:6px;border:1px solid var(--cms-border)">
                     @endif
                 </div>
                 <div class="ce-field">
@@ -274,7 +274,7 @@
 
             {{-- Landmarks --}}
             <div style="margin-top:16px">
-                <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Key Landmarks & Places</div>
+                <div style="font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Key Landmarks & Places</div>
                 <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:10px;align-items:end;margin-bottom:12px">
                     <div class="ce-field">
                         <label class="ce-label" style="font-size:10px">Place Name</label>
@@ -290,16 +290,16 @@
                     </div>
                 </div>
                 @forelse($content_sections as $i => $section)
-                    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                         <span style="font-size:16px">📍</span>
                         <div style="flex:1">
-                            <div style="color:#fff;font-size:12px;font-weight:600">{{ $section['title'] }}</div>
-                            <div style="color:rgba(255,255,255,.5);font-size:11px">{{ $section['text'] }}</div>
+                            <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $section['title'] }}</div>
+                            <div style="color:var(--cms-text-muted);font-size:11px">{{ $section['text'] }}</div>
                         </div>
-                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px">×</button>
+                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px">×</button>
                     </div>
                 @empty
-                    <div style="font-size:11px;color:rgba(255,255,255,.35);padding:12px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:8px">No landmarks added yet</div>
+                    <div style="font-size:11px;color:var(--cms-text-muted);padding:12px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">No landmarks added yet</div>
                 @endforelse
             </div>
         </div>
@@ -315,17 +315,17 @@
                     <textarea wire:model="content" class="ce-input" rows="4" placeholder="A comprehensive overview of the clan — who they are, where they live, and what makes them unique..."></textarea>
                 </div>
                 <div class="ce-field">
-                    <label class="ce-label">Key Facts <span style="color:rgba(255,255,255,.35);font-weight:400;text-transform:none;font-size:10px">add as sections</span></label>
+                    <label class="ce-label">Key Facts <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">add as sections</span></label>
                     <div style="display:flex;gap:8px;margin-bottom:8px">
                         <input wire:model="newSectionTitle" type="text" class="ce-input" placeholder="Fact label (e.g. Founded)" style="flex:1">
                         <input wire:model="newSectionText" type="text" class="ce-input" placeholder="Value (e.g. 14th century)" style="flex:1">
                         <button type="button" wire:click="addSection" style="height:36px;padding:0 12px;border-radius:8px;background:rgba(74,124,89,.2);color:#6FA882;border:1px solid rgba(74,124,89,.35);cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap">+ Add</button>
                     </div>
                     @foreach($content_sections as $i => $section)
-                        <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:6px;margin-bottom:4px">
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:6px;margin-bottom:4px">
                             <span style="color:#F2CB5A;font-size:11px;font-weight:600;min-width:80px">{{ $section['title'] }}</span>
-                            <span style="color:rgba(255,255,255,.7);font-size:11px;flex:1">{{ $section['text'] }}</span>
-                            <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:16px">×</button>
+                            <span style="color:var(--cms-text-muted);font-size:11px;flex:1">{{ $section['text'] }}</span>
+                            <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:16px">×</button>
                         </div>
                     @endforeach
                 </div>
@@ -339,7 +339,7 @@
             <div class="ce-title">🎨 Clan Crest Design Settings</div>
             <div style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#F2CB5A;font-weight:600;margin-bottom:4px">How Clan Crest Design Works</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.5">
+                <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
                     Children design a clan crest using the clan's traditional colours, totem, and symbols. Provide design instructions and reference elements below.
                 </div>
             </div>
@@ -351,7 +351,7 @@
 
             {{-- Design elements --}}
             <div>
-                <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Design Elements to Include</div>
+                <div style="font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Design Elements to Include</div>
                 <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:10px;align-items:end;margin-bottom:12px">
                     <div class="ce-field">
                         <label class="ce-label" style="font-size:10px">Element Name</label>
@@ -367,15 +367,15 @@
                     </div>
                 </div>
                 @forelse($content_sections as $i => $section)
-                    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:6px">
+                    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
                         <div style="flex:1">
                             <div style="color:#F2CB5A;font-size:12px;font-weight:600">{{ $section['title'] }}</div>
-                            <div style="color:rgba(255,255,255,.6);font-size:11px">{{ $section['text'] }}</div>
+                            <div style="color:var(--cms-text-muted);font-size:11px">{{ $section['text'] }}</div>
                         </div>
-                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px">×</button>
+                        <button type="button" wire:click="removeSection({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px">×</button>
                     </div>
                 @empty
-                    <div style="font-size:11px;color:rgba(255,255,255,.35);padding:12px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:8px">No design elements added yet</div>
+                    <div style="font-size:11px;color:var(--cms-text-muted);padding:12px;text-align:center;border:1px dashed var(--cms-border);border-radius:8px">No design elements added yet</div>
                 @endforelse
             </div>
         </div>
