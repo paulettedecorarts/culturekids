@@ -66,4 +66,10 @@ trait UsesPortalContext
     {
         return $this->portalRouteName($this->portalComicsRouteBase().'.'.$suffix);
     }
+
+    /** Org-admin approved library is view-only (no edit/delete on reused show pages). */
+    public function portalCanEditContent(): bool
+    {
+        return ! request()->routeIs('cms.admin.approved-content.*');
+    }
 }

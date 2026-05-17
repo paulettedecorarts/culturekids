@@ -1,14 +1,16 @@
 <div class="lang-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($routePrefix . '.language-activities') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← Language Activities</a>
+            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.language-activities' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Language Activities' : 'Approved Content' }}</a>
             <div class="sa-page-title">{{ $activity->activity_type_icon }} {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->activity_type_label }} • {{ strtoupper($activity->language_code) }} • {{ $activity->tribe->name }}</div>
         </div>
-        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
-            <button wire:click="edit" class="btn btn-primary">Edit Activity</button>
-            <a href="{{ route($routePrefix . '.language-activities') }}" class="btn btn-ghost" style="text-decoration:none">Back</a>
-        </div>
+        @if($this->portalCanEditContent())
+            <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+                <button wire:click="edit" class="btn btn-primary">Edit Activity</button>
+                <a href="{{ route($routePrefix . '.language-activities') }}" class="btn btn-ghost" style="text-decoration:none">Back</a>
+            </div>
+        @endif
     </div>
 
     @if(session()->has('message'))

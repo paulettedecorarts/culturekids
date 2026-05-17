@@ -599,7 +599,13 @@ class OrganisationContentReviewService
             return null;
         }
 
-        return $this->approvedPayload($decision, $activity->title, $activity->tribe?->name);
+        $viewUrl = match ($decision->content_type) {
+            OrganisationContentDecision::TYPE_FLASHCARD => route('cms.admin.approved-content.flashcards.show', ['id' => $activity->id]),
+            OrganisationContentDecision::TYPE_PUZZLE => route('cms.admin.approved-content.puzzles.show', ['id' => $activity->id]),
+            default => null,
+        };
+
+        return $this->approvedPayload($decision, $activity->title, $activity->tribe?->name, $viewUrl);
     }
 
     /** @return ?array<string, mixed> */
@@ -610,7 +616,12 @@ class OrganisationContentReviewService
             return null;
         }
 
-        return $this->approvedPayload($decision, $drawing->title, $drawing->tribe?->name);
+        return $this->approvedPayload(
+            $decision,
+            $drawing->title,
+            $drawing->tribe?->name,
+            route('cms.admin.approved-content.drawings.show', ['id' => $drawing->id])
+        );
     }
 
     /** @return ?array<string, mixed> */
@@ -621,7 +632,12 @@ class OrganisationContentReviewService
             return null;
         }
 
-        return $this->approvedPayload($decision, $activity->title, $activity->tribe?->name);
+        return $this->approvedPayload(
+            $decision,
+            $activity->title,
+            $activity->tribe?->name,
+            route('cms.admin.approved-content.language-activities.show', ['id' => $activity->id])
+        );
     }
 
     /**
@@ -635,7 +651,16 @@ class OrganisationContentReviewService
             return null;
         }
 
-        return $this->approvedPayload($decision, $item->title, $item->tribe?->name);
+        $viewUrl = match ($decision->content_type) {
+            OrganisationContentDecision::TYPE_GAME => route('cms.admin.approved-content.games.show', ['id' => $item->id]),
+            OrganisationContentDecision::TYPE_MAZE => route('cms.admin.approved-content.mazes.show', ['id' => $item->id]),
+            OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => route('cms.admin.approved-content.spot-differences.show', ['id' => $item->id]),
+            OrganisationContentDecision::TYPE_WORD_SEARCH => route('cms.admin.approved-content.word-searches.show', ['id' => $item->id]),
+            OrganisationContentDecision::TYPE_CULTURE => route('cms.admin.approved-content.culture-activities.show', ['id' => $item->id]),
+            default => null,
+        };
+
+        return $this->approvedPayload($decision, $item->title, $item->tribe?->name, $viewUrl);
     }
 
     /** @return array<string, mixed> */

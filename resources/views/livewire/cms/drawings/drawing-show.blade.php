@@ -1,21 +1,23 @@
 <div class="drawing-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($routePrefix . '.drawings') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← Drawings</a>
+            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.drawings' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Drawings' : 'Approved Content' }}</a>
             <div class="sa-page-title">{{ $drawing->title }}</div>
             <div class="sa-breadcrumb">{{ $drawing->drawing_type_display }} • {{ $drawing->tribe->name ?? 'Unknown Tribe' }}</div>
         </div>
-        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
-            <a href="{{ route($routePrefix . '.drawings.play', $drawing->id) }}" target="_blank" class="btn btn-success" style="text-decoration:none">
-                🎨 Try Drawing
-            </a>
-            <button wire:click="edit" class="btn btn-primary">
-                Edit Drawing
-            </button>
-            <a href="{{ route($routePrefix . '.drawings') }}" class="btn btn-ghost" style="text-decoration:none">
-                Back to Drawings
-            </a>
-        </div>
+        @if($this->portalCanEditContent())
+            <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+                <a href="{{ route($routePrefix . '.drawings.play', $drawing->id) }}" target="_blank" class="btn btn-success" style="text-decoration:none">
+                    🎨 Try Drawing
+                </a>
+                <button wire:click="edit" class="btn btn-primary">
+                    Edit Drawing
+                </button>
+                <a href="{{ route($routePrefix . '.drawings') }}" class="btn btn-ghost" style="text-decoration:none">
+                    Back to Drawings
+                </a>
+            </div>
+        @endif
     </div>
 
     @if(session()->has('message'))

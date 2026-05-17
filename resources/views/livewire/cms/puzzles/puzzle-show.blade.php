@@ -97,14 +97,16 @@
 <div class="puzzle-show-page">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($routePrefix . '.puzzles') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← Puzzles</a>
+            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.puzzles' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Puzzles' : 'Approved Content' }}</a>
             <div class="sa-page-title">{{ $activity->title }}</div>
             <div class="sa-breadcrumb">Puzzle · {{ $activity->tribe->name }}</div>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <a href="{{ route($routePrefix . '.puzzles.edit', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4);text-decoration:none;padding:8px 14px">Edit</a>
-            <button type="button" wire:click="deletePuzzle" wire:confirm="Delete this puzzle and all generated images?" class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35);padding:8px 14px">Delete</button>
-        </div>
+        @if($this->portalCanEditContent())
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <a href="{{ route($routePrefix . '.puzzles.edit', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4);text-decoration:none;padding:8px 14px">Edit</a>
+                <button type="button" wire:click="deletePuzzle" wire:confirm="Delete this puzzle and all generated images?" class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35);padding:8px 14px">Delete</button>
+            </div>
+        @endif
     </div>
 
     @if(session()->has('message'))

@@ -1,14 +1,16 @@
 <div class="sd-show-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
-            <a href="{{ route($routePrefix . '.spot-differences') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← Spot the Difference</a>
+            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.spot-differences' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalCanEditContent() ? 'Spot the Difference' : 'Approved Content' }}</a>
             <div class="sa-page-title">🔍 {{ $activity->title }}</div>
             <div class="sa-breadcrumb">{{ $activity->scene_name ?: 'Spot the Difference' }} • {{ $activity->tribe->name }} • Ages {{ $activity->age_range }}</div>
         </div>
-        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
-            <button wire:click="edit" class="btn btn-primary">Edit Activity</button>
-            <a href="{{ route($routePrefix . '.spot-differences') }}" class="btn btn-ghost" style="text-decoration:none">Back</a>
-        </div>
+        @if($this->portalCanEditContent())
+            <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+                <button wire:click="edit" class="btn btn-primary">Edit Activity</button>
+                <a href="{{ route($routePrefix . '.spot-differences') }}" class="btn btn-ghost" style="text-decoration:none">Back</a>
+            </div>
+        @endif
     </div>
 
     @if(session()->has('message'))

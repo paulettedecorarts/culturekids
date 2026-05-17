@@ -1,24 +1,26 @@
 <div class="activity-detail-page">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div style="display:flex;align-items:center;gap:12px">
-            <a href="{{ route($routePrefix . '.activities') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← Activities</a>
+            <a href="{{ route($this->portalCanEditContent() ? $routePrefix . '.activities' : 'cms.admin.approved-content') }}" class="btn btn-ghost btn-sm" style="text-decoration:none">← {{ $this->portalCanEditContent() ? 'Activities' : 'Approved Content' }}</a>
             <div>
                 <div class="sa-page-title">{{ $activity ? 'Activity Details' : 'Create Activity' }}</div>
                 <div class="sa-breadcrumb">{{ $activity ? "Activity #{$activity->id}" : 'New activity record' }}</div>
             </div>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-            @if($activity && ! $isEditing)
-                <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit</button>
-            @endif
-            @if($isEditing)
-                <button type="button" class="btn btn-sm" wire:click="saveActivity" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">Save</button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">Cancel</button>
-            @endif
-            @if($activity)
-                <button type="button" class="btn btn-sm" wire:click="deleteActivity" wire:confirm="Delete this activity?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
-            @endif
-        </div>
+        @if($this->portalCanEditContent())
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                @if($activity && ! $isEditing)
+                    <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit</button>
+                @endif
+                @if($isEditing)
+                    <button type="button" class="btn btn-sm" wire:click="saveActivity" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">Save</button>
+                    <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">Cancel</button>
+                @endif
+                @if($activity)
+                    <button type="button" class="btn btn-sm" wire:click="deleteActivity" wire:confirm="Delete this activity?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
+                @endif
+            </div>
+        @endif
     </div>
 
     @if(session()->has('message'))
