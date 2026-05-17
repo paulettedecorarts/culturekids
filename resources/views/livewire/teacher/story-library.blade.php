@@ -37,11 +37,11 @@
     </div>
 
     @if ($catalogItems->isEmpty())
-        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:24px; padding:32px; text-align:center; font-weight:600; color:#92400E;">
+        <div class="th-alert th-alert--warn" style="padding:32px; text-align:center;">
             {{ __('No approved content matches these filters.') }}
         </div>
     @else
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:24px;">
+        <div class="th-library-grid">
             @foreach ($catalogItems as $item)
                 @php
                     $href = $item['view_url'] ?? null;
@@ -65,30 +65,22 @@
                     }
                 @endphp
                 @if ($href)
-                    <a
-                        href="{{ $href }}"
-                        wire:navigate
-                        style="text-decoration:none; color:inherit; background:#fff; border-radius:32px; border:1px solid var(--cream-mid); overflow:hidden; box-shadow:0 8px 32px rgba(26,18,8,.06); transition:transform .2s; display:block;"
-                        onmouseover="this.style.transform='translateY(-4px)'"
-                        onmouseout="this.style.transform='none'"
-                    >
+                    <a href="{{ $href }}" wire:navigate class="th-library-card">
                 @else
-                    <div style="background:#fff; border-radius:32px; border:1px solid var(--cream-mid); overflow:hidden; box-shadow:0 8px 32px rgba(26,18,8,.06); display:block; opacity:.85;">
+                    <div class="th-library-card th-library-card--static">
                 @endif
-                    <div style="aspect-ratio:4/3; background:linear-gradient(135deg,var(--cream-warm),var(--cream-mid)); display:flex; align-items:center; justify-content:center; position:relative;">
+                    <div class="th-library-card__media">
                         @if (! empty($item['cover_image_path']))
-                            <img src="{{ asset('storage/'.$item['cover_image_path']) }}" alt="" style="width:100%; height:100%; object-fit:cover;">
+                            <img src="{{ asset('storage/'.$item['cover_image_path']) }}" alt="">
                         @else
-                            <span style="font-size:48px">{{ $emoji }}</span>
+                            <span class="th-library-card__emoji">{{ $emoji }}</span>
                         @endif
-                        <span style="position:absolute; top:12px; left:12px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; background:rgba(255,255,255,.92); padding:4px 10px; border-radius:999px; color:var(--clay-red);">{{ $tag }}</span>
+                        <span class="th-library-card__type">{{ $tag }}</span>
                     </div>
-                    <div style="padding:20px 22px 24px;">
-                        <p style="font-size:11px; font-weight:800; color:var(--clay-red); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px">
-                            {{ $item['tribe_name'] ?? __('Tribe') }}
-                        </p>
-                        <h3 style="font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--ink); line-height:1.25; margin-bottom:8px">{{ $item['title'] }}</h3>
-                        <p style="font-size:12px; font-weight:700; color:var(--stone)">
+                    <div class="th-library-card__body">
+                        <p class="th-library-card__tribe">{{ $item['tribe_name'] ?? __('Tribe') }}</p>
+                        <h3 class="th-library-card__title">{{ $item['title'] }}</h3>
+                        <p class="th-library-card__meta">
                             @if ($item['age_min'] !== null && $item['age_max'] !== null)
                                 {{ $item['age_min'] }}–{{ $item['age_max'] }} {{ __('yrs') }}
                             @elseif ($item['meta'])
@@ -106,7 +98,7 @@
             @endforeach
         </div>
 
-        <div style="margin-top:32px">
+        <div class="th-library-pagination">
             {{ $catalogItems->links('vendor.pagination.teacher') }}
         </div>
     @endif
