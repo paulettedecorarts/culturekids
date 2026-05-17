@@ -49,7 +49,7 @@ class ActivityTypeSelector extends Component
         }
 
         if ($type === 'story') {
-            return $this->redirectRoute($this->portalRouteName('stories.create'), navigate: true);
+            return $this->redirectRoute($this->portalComicsRouteName('create'), navigate: true);
         }
 
         if ($type === 'colouring') {

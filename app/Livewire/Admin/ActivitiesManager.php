@@ -88,6 +88,7 @@ class ActivitiesManager extends Component
     {
         return view('livewire.admin.activities-manager', [
             'routePrefix' => $this->portalRoutePrefix(),
+            'comicsRouteBase' => $this->portalComicsRouteBase(),
         ])->layout($this->portalLayout());
     }
 }

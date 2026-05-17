@@ -53,4 +53,17 @@ trait UsesPortalContext
     {
         return $this->portalRoutePrefix().'.'.$suffix;
     }
+
+    /**
+     * Comic/story route segment: editor portal registers story-packs.*, admin uses stories.*.
+     */
+    protected function portalComicsRouteBase(): string
+    {
+        return $this->isEditorPortal() ? 'story-packs' : 'stories';
+    }
+
+    protected function portalComicsRouteName(string $suffix): string
+    {
+        return $this->portalRouteName($this->portalComicsRouteBase().'.'.$suffix);
+    }
 }

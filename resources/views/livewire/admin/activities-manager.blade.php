@@ -199,7 +199,7 @@
                             $comicId = $metadata['comic_id'] ?? null;
                         @endphp
                         @if($comicId)
-                            <a href="{{ route($routePrefix . '.stories.detail', $comicId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.' . $comicsRouteBase . '.detail', $comicId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @else
                             <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
                         @endif
