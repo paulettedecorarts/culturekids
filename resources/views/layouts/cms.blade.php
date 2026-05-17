@@ -640,6 +640,8 @@
         .status-published { background: #DCFCE7; color: #166534; }
         .status-review { background: #FEF3C7; color: #92400E; }
         .status-draft { background: #F1F5F9; color: #475569; }
+        [data-cms-theme="dark"] .status-published { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+        [data-cms-theme="dark"] .status-review { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
         [data-cms-theme="dark"] .status-draft { background: rgba(255,255,255,.08); color: rgba(255,255,255,.55); }
 
         .cms-asset-thumb {

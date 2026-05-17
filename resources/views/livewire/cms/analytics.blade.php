@@ -78,11 +78,11 @@
         }
 
         .cms-analytics-module .analytics-card {
-            background: #fff;
-            border: 1px solid var(--cream-mid);
+            background: var(--cms-surface);
+            border: 1px solid var(--cms-border);
             border-radius: var(--r-xl);
             padding: var(--sp-6);
-            box-shadow: 0 8px 32px rgba(26,18,8,.05);
+            box-shadow: var(--cms-shadow);
         }
 
         .cms-analytics-module .card-title {
@@ -90,21 +90,16 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.3px;
-            color: var(--stone);
+            color: var(--cms-text-muted);
             margin-bottom: var(--sp-4);
         }
 
         .cms-analytics-module .empty-state {
             padding: var(--sp-8);
-            color: var(--stone);
+            color: var(--cms-text-muted);
             text-align: center;
             font-weight: 700;
         }
 
-        .cms-analytics-module .btn.is-active {
-            border-color: var(--clay-red);
-            color: var(--clay-red);
-            background: var(--sunfire-pale);
-        }
     </style>
 </div>

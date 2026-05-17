@@ -241,3 +241,71 @@
     border-color: var(--sa-border) !important;
     color: var(--sa-text) !important;
 }
+
+/* Flash alerts (themes manager shared component) */
+.sa-content .cms-flash-success {
+    background: rgba(74, 124, 89, 0.12);
+    border: 1px solid rgba(74, 124, 89, 0.35);
+    color: var(--banana-green);
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: var(--sp-6);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+[data-sa-theme="dark"] .sa-content .cms-flash-success {
+    color: var(--banana-light);
+}
+
+.sa-content .cms-flash-error {
+    background: rgba(196, 75, 43, 0.12);
+    border: 1px solid rgba(196, 75, 43, 0.35);
+    color: var(--clay-red-light);
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: var(--sp-6);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+[data-sa-theme="dark"] .sa-content .cms-flash-error {
+    color: #f4a89a;
+}
+
+/* Theme manager cards & controls */
+.sa-content .theme-mgr-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.sa-content .theme-mgr-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sa-shadow, 0 8px 32px rgba(0, 0, 0, 0.25));
+}
+
+.sa-content .theme-mgr-preset-btn {
+    background: var(--sa-surface-raised);
+    border: 1px solid var(--sa-border);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.sa-content .theme-mgr-preset-btn:hover {
+    background: var(--sa-surface-hover, var(--sa-surface));
+    border-color: var(--savanna-gold);
+}
+
+.sa-content .theme-mgr-modal-close {
+    background: var(--sa-surface-raised);
+    border: 1px solid var(--sa-border);
+    color: var(--sa-text);
+    transition: background 0.2s;
+}
+
+.sa-content .theme-mgr-modal-close:hover {
+    background: var(--sa-surface-hover, var(--sa-surface));
+}
+
+.sa-content .sa-modal-panel.theme-mgr-modal-panel {
+    max-width: 1200px;
+    border-radius: 32px;
+}

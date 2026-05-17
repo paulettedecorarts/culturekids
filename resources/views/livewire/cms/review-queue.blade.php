@@ -7,7 +7,7 @@
     </div>
 
     @if (session()->has('message'))
-        <div style="margin-bottom:12px; padding:10px 14px; border:1px solid #DCFCE7; background:#F0FDF4; color:#166534; border-radius:10px; font-size:12px; font-weight:700;">
+        <div class="cms-flash-success">
             {{ session('message') }}
         </div>
     @endif
@@ -27,7 +27,7 @@
             @forelse($reviewComics as $comic)
                 <div class="cms-table-row" style="grid-template-columns:2fr 1fr 180px;">
                     <span style="font-weight:700">{{ $comic->title }}</span>
-                    <span style="font-size:12px; color:var(--stone)">{{ $comic->updated_at?->diffForHumans() }}</span>
+                    <span style="font-size:12px; color:var(--cms-text-muted)">{{ $comic->updated_at?->diffForHumans() }}</span>
                     <span style="display:flex; gap:6px;">
                         <button
                             class="btn btn-primary btn-sm"
@@ -52,7 +52,7 @@
                     </span>
                 </div>
             @empty
-                <div style="padding:16px; color:var(--stone); font-weight:700;">No comics awaiting review.</div>
+                <div style="padding:16px; color:var(--cms-text-muted); font-weight:700;">No comics awaiting review.</div>
             @endforelse
         </div>
 
@@ -63,7 +63,7 @@
             @forelse($reviewSongs as $song)
                 <div class="cms-table-row" style="grid-template-columns:2fr 1fr 180px;">
                     <span style="font-weight:700">{{ $song->title }}</span>
-                    <span style="font-size:12px; color:var(--stone)">{{ $song->updated_at?->diffForHumans() }}</span>
+                    <span style="font-size:12px; color:var(--cms-text-muted)">{{ $song->updated_at?->diffForHumans() }}</span>
                     <span style="display:flex; gap:6px;">
                         <button
                             class="btn btn-primary btn-sm"
@@ -88,7 +88,7 @@
                     </span>
                 </div>
             @empty
-                <div style="padding:16px; color:var(--stone); font-weight:700;">No songs awaiting review.</div>
+                <div style="padding:16px; color:var(--cms-text-muted); font-weight:700;">No songs awaiting review.</div>
             @endforelse
         </div>
     </div>

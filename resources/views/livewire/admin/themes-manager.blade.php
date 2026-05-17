@@ -22,13 +22,13 @@
     </div>
 
     @if (session()->has('message'))
-        <div style="background:rgba(74,124,89,0.1); border:1px solid rgba(74,124,89,0.3); color:var(--banana-light); padding:12px 20px; border-radius:12px; margin-bottom:var(--sp-6); font-size:12px; font-weight:700">
+        <div class="cms-flash-success">
             ✨ {{ session('message') }}
         </div>
     @endif
 
     @if (session()->has('error'))
-        <div style="background:rgba(196,75,43,0.2); border:1px solid rgba(196,75,43,0.4); color:var(--clay-red-light); padding:12px 20px; border-radius:12px; margin-bottom:var(--sp-6); font-size:12px; font-weight:700">
+        <div class="cms-flash-error">
             ⚠️ {{ session('error') }}
         </div>
     @endif
@@ -36,7 +36,7 @@
     <!-- Themes Grid -->
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-4)">
         @forelse($themes as $theme)
-            <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-xl);overflow:hidden;transition:all 0.3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+            <div class="theme-mgr-card" style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-xl);overflow:hidden">
                 <!-- Color Preview -->
                 <div style="height:120px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px;background:var(--cms-input-bg)">
                     <div style="background:{{ $theme->colors['primary'] }};border-radius:8px"></div>
@@ -119,15 +119,15 @@
 
     <!-- Create/Edit Modal -->
     @if($showModal)
-        <div style="position:fixed;inset:0;background:rgba(26,18,8,0.45);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto">
-            <div style="background:var(--cms-input-bg);width:100%;max-width:1200px;border:1px solid var(--cms-border);border-radius:32px;box-shadow:0 40px 100px rgba(0,0,0,0.5);overflow:hidden;max-height:90vh;display:flex;flex-direction:column">
+        <div class="cms-modal-backdrop sa-modal-backdrop" style="overflow-y:auto">
+            <div class="cms-modal-panel sa-modal-panel theme-mgr-modal-panel" style="max-height:90vh;display:flex;flex-direction:column">
                 <!-- Header -->
                 <div style="padding:32px;border-bottom:1px solid var(--cms-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
                     <div>
                         <h2 style="font-family:var(--font-display);font-size:28px;color:var(--cms-text);margin-bottom:4px">{{ $editing ? '🎨 Edit Theme' : '✨ Create New Theme' }}</h2>
                         <div style="font-size:12px;color:var(--cms-text-muted);font-weight:700">Design your platform's visual identity</div>
                     </div>
-                    <button wire:click="$set('showModal', false)" style="background: var(--cms-surface-raised);border: 1px solid var(--cms-border);color:var(--cms-text);width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                    <button type="button" wire:click="$set('showModal', false)" class="theme-mgr-modal-close" style="width:40px;height:40px;border-radius:12px;font-size:20px;cursor:pointer">×</button>
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 400px;flex:1;overflow:hidden">
@@ -139,7 +139,7 @@
                             
                             <div style="display:grid;gap:20px">
                                 <div>
-                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Organization</label>
+                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">Organization</label>
                                     @if($isOrgAdminOnly)
                                         <input
                                             type="text"
@@ -160,18 +160,18 @@
                                 </div>
 
                                 <div>
-                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Theme Name</label>
+                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">Theme Name</label>
                                     <input wire:model.live="name" type="text" placeholder="Savanna Sunset" style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);font-size:15px">
                                     @error('name') <div style="color:var(--clay-red);font-size:10px;margin-top:4px">{{ $message }}</div> @enderror
                                 </div>
 
                                 <div>
-                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Slug (Auto-generated)</label>
+                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">Slug (Auto-generated)</label>
                                     <input wire:model="slug" type="text" readonly style="width:100%;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text-muted);font-family:monospace;cursor:not-allowed">
                                 </div>
 
                                 <div>
-                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">Description</label>
+                                    <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">Description</label>
                                     <textarea wire:model="description" rows="2" placeholder="A warm, earthy theme inspired by African savannas..." style="width:100%;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:14px;color:var(--cms-text);font-family:var(--font-admin);resize:vertical"></textarea>
                                 </div>
                             </div>
@@ -182,12 +182,11 @@
                             <h3 style="font-size:14px;font-weight:800;color:var(--savanna-gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--sp-4)">Quick Presets</h3>
                             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
                                 @foreach($presets as $key => $preset)
-                                    <button 
+                                    <button
                                         type="button"
                                         wire:click="applyPreset('{{ $key }}')"
-                                        style="background:var(--cms-surface-raised);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;text-align:left;cursor:pointer;transition:all 0.2s"
-                                        onmouseover="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='var(--savanna-gold)'"
-                                        onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.1)'"
+                                        class="theme-mgr-preset-btn"
+                                        style="border-radius:12px;padding:12px;text-align:left;cursor:pointer"
                                     >
                                         <div style="display:flex;gap:8px;margin-bottom:8px">
                                             <div style="width:20px;height:20px;border-radius:6px;background:{{ $preset['colors']['primary'] }}"></div>
@@ -207,7 +206,7 @@
                             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
                                 @foreach(['primary' => 'Primary', 'secondary' => 'Secondary', 'accent' => 'Accent', 'success' => 'Success', 'warning' => 'Warning', 'danger' => 'Danger'] as $key => $label)
                                     <div>
-                                        <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
+                                        <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid var(--cms-border);border-radius:12px;cursor:pointer;background:transparent">
                                             <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
@@ -224,7 +223,7 @@
                             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
                                 @foreach(['background' => 'Background', 'surface' => 'Surface', 'text_primary' => 'Text Primary', 'text_secondary' => 'Text Secondary', 'text_muted' => 'Text Muted'] as $key => $label)
                                     <div>
-                                        <label style="display:block;font-size:11px;font-weight:800;color:var(--stone);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
+                                        <label style="display:block;font-size:11px;font-weight:800;color:var(--cms-text-muted);text-transform:uppercase;margin-bottom:8px">{{ $label }}</label>
                                         <div style="display:flex;gap:8px;align-items:center">
                                             <input wire:model.live="{{ $key }}" type="color" style="width:60px;height:48px;border:2px solid var(--cms-border);border-radius:12px;cursor:pointer;background:transparent">
                                             <input wire:model.live="{{ $key }}" type="text" style="flex:1;background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px;color:var(--cms-text);font-family:monospace;font-size:13px">
@@ -241,7 +240,7 @@
                     </form>
 
                     <!-- Live Preview Section -->
-                    <div style="background:{{ $background }};padding:32px;overflow-y:auto;border-left:1px solid var(--cms-border)">
+                    <div class="theme-mgr-preview" style="background:{{ $background }};padding:32px;overflow-y:auto">
                         <h3 style="font-size:14px;font-weight:800;color:{{ $text_primary }};text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--sp-4)">Live Preview</h3>
                         
                         <!-- Preview Card -->

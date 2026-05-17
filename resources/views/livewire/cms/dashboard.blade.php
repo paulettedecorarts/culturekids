@@ -38,7 +38,7 @@
                         <span class="btn-link">Recent</span>
                     </div>
                 @empty
-                    <div style="text-align:center;padding:var(--sp-8);color:var(--stone)">
+                    <div style="text-align:center;padding:var(--sp-8);color:var(--cms-text-muted)">
                         <p style="font-size:14px">No recent activity</p>
                     </div>
                 @endforelse
@@ -76,8 +76,8 @@
             </div>
 
             <div class="org-status-box">
-                <div style="font-size:10px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px">System Health</div>
-                <p style="font-size:12px; color:var(--stone); line-height:1.5; margin:0">Org storage reporting is not wired yet; use your host or S3 console for usage.</p>
+                <div style="font-size:10px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px">System Health</div>
+                <p style="font-size:12px; color:var(--cms-text-muted); line-height:1.5; margin:0">Org storage reporting is not wired yet; use your host or S3 console for usage.</p>
             </div>
         </div>
     </div>
@@ -85,10 +85,10 @@
     <style>
         .dashboard-grid { display: grid; grid-template-columns: 1fr 340px; gap: 32px; }
         
-        .card-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--stone); margin-bottom: 24px; }
+        .card-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--cms-text-muted); margin-bottom: 24px; }
         
         /* Activity List */
-        .activity-card { background: #fff; border: 1px solid var(--cream-mid); border-radius: var(--r-xl); padding: 32px; box-shadow: 0 4px 24px rgba(26,18,8,.04); }
+        .activity-card { background: var(--cms-surface); border: 1px solid var(--cms-border); border-radius: var(--r-xl); padding: 32px; box-shadow: 0 4px 24px rgba(26,18,8,.04); }
         .activity-list { display: flex; flex-direction: column; gap: 4px; }
         .activity-item { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: var(--r-md); transition: background 0.2s; cursor: pointer; }
         .activity-item:hover { background: var(--cream); }
@@ -97,18 +97,18 @@
         .activity-icon.edit { background: rgba(232,135,42,.1); color: var(--sunfire); }
         .activity-icon.approve { background: rgba(74,124,89,.1); color: var(--banana-green); }
         .activity-info { flex: 1; }
-        .activity-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-        .activity-meta { font-size: 12px; color: var(--stone); font-weight: 600; }
+        .activity-name { font-size: 15px; font-weight: 700; color: var(--cms-text); margin-bottom: 2px; }
+        .activity-meta { font-size: 12px; color: var(--cms-text-muted); font-weight: 600; }
         .btn-link { background: transparent; border: none; font-size: 11px; font-weight: 800; color: var(--clay-red); text-transform: uppercase; cursor: pointer; }
 
         /* Shortcuts */
-        .shortcuts-card { background: #fff; border: 1px solid var(--cream-mid); border-radius: var(--r-xl); padding: 32px; box-shadow: 0 4px 24px rgba(26,18,8,.04); display: flex; flex-direction: column; }
+        .shortcuts-card { background: var(--cms-surface); border: 1px solid var(--cms-border); border-radius: var(--r-xl); padding: 32px; box-shadow: 0 4px 24px rgba(26,18,8,.04); display: flex; flex-direction: column; }
         .shortcuts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
         .shortcut-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px 12px; background: var(--cream); border: 2px solid var(--cream-mid); border-radius: 20px; text-decoration: none; transition: all 0.2s; }
-        .shortcut-item:hover { border-color: var(--clay-red); background: #fff; box-shadow: 0 4px 12px rgba(196,75,43,.1); transform: translateY(-2px); }
+        .shortcut-item:hover { border-color: var(--clay-red); background: var(--cms-surface); box-shadow: 0 4px 12px rgba(196,75,43,.1); transform: translateY(-2px); }
         .shortcut-icon { font-size: 24px; }
-        .shortcut-label { font-size: 11px; font-weight: 800; color: var(--ink); text-align: center; }
+        .shortcut-label { font-size: 11px; font-weight: 800; color: var(--cms-text); text-align: center; }
 
-        .org-status-box { background: var(--cream); border-radius: 20px; padding: 20px; margin-top: auto; border: 1px solid var(--cream-mid); }
+        .org-status-box { background: var(--cream); border-radius: 20px; padding: 20px; margin-top: auto; border: 1px solid var(--cms-border); }
     </style>
 </div>

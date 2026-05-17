@@ -22,7 +22,13 @@ HTML;
             <span class="cms-sidebar-mark" aria-hidden="true">P</span>
             <div class="cms-sidebar-brand-text">
                 Paulette CMS
-                <span>Content Studio</span>
+                <span>
+                    @if ($isAdmin && ! ($isEditor ?? false) && ! ($isSuper ?? false))
+                        Org Admin
+                    @else
+                        Content Studio
+                    @endif
+                </span>
             </div>
         </a>
         <button

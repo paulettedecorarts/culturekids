@@ -778,3 +778,333 @@
 .cms-content .drawing-editor-container input[style*="surface-raised"] {
     background: var(--cms-input-bg) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Org admin & legacy light-only tokens (both themes)
+   ═══════════════════════════════════════════════════════════════ */
+
+.cms-content {
+    --ink: var(--cms-text);
+    --ink-light: var(--cms-text-muted);
+    --stone: var(--cms-text-muted);
+    --cream: var(--cms-surface-hover);
+    --cream-mid: var(--cms-border);
+    --cream-warm: var(--cms-border-subtle);
+}
+
+/* Panels/cards that still use inline #fff or cream borders */
+.cms-content .cms-panel,
+.cms-content .cms-card {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    border-radius: var(--r-xl);
+    padding: var(--sp-6);
+    box-shadow: var(--cms-shadow);
+    color: var(--cms-text);
+}
+
+.cms-content [style*="background:#fff"],
+.cms-content [style*="background: #fff"] {
+    background: var(--cms-surface) !important;
+    border-color: var(--cms-border) !important;
+    color: var(--cms-text);
+}
+
+.cms-content [style*="border:1px solid var(--cream-mid)"],
+.cms-content [style*="border: 1px solid var(--cream-mid)"] {
+    border-color: var(--cms-border) !important;
+}
+
+.cms-content [style*="border-top:1px solid var(--cream-mid)"],
+.cms-content [style*="border-bottom:1px solid var(--cream-mid)"] {
+    border-color: var(--cms-border) !important;
+}
+
+.cms-content [style*="background:#F8F8F8"],
+.cms-content [style*="background: #F8F8F8"] {
+    background: var(--cms-surface-raised) !important;
+    color: var(--cms-text-muted) !important;
+}
+
+/* Modals (org profile, people, classrooms) */
+.cms-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(6px);
+}
+
+[data-cms-theme="light"] .cms-modal-backdrop {
+    background: rgba(26, 18, 8, 0.45);
+}
+
+[data-cms-theme="dark"] .cms-modal-backdrop {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.cms-modal-panel {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+    color: var(--cms-text);
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+[data-cms-theme="light"] .cms-modal-panel {
+    box-shadow: 0 24px 64px rgba(26, 18, 8, 0.18) !important;
+}
+
+[data-cms-theme="dark"] .cms-modal-panel {
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45) !important;
+}
+
+.cms-modal-panel h2,
+.cms-modal-panel [id$="-title"] {
+    color: var(--cms-text) !important;
+}
+
+.cms-modal-panel input,
+.cms-modal-panel select,
+.cms-modal-panel textarea {
+    background: var(--cms-input-bg) !important;
+    color: var(--cms-text) !important;
+    border-color: var(--cms-input-border) !important;
+}
+
+.cms-modal-panel select option {
+    background: var(--cms-input-bg);
+    color: var(--cms-text);
+}
+
+/* Org admin dashboard */
+.cms-content .cms-admin-dashboard .admin-card {
+    background: var(--cms-surface);
+    border: 1px solid var(--cms-border);
+    border-radius: var(--r-xl);
+    padding: 32px;
+    box-shadow: var(--cms-shadow);
+}
+
+.cms-content .cms-admin-dashboard .card-title {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--cms-text-muted);
+    margin-bottom: 24px;
+}
+
+.cms-content .cms-admin-dashboard .presence-status {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--cms-surface-raised);
+    padding: 20px;
+    border-radius: 24px;
+    border: 1px solid var(--cms-border);
+    margin-bottom: 32px;
+}
+
+.cms-content .cms-admin-dashboard .preview-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--cms-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    border: 1px solid var(--cms-border);
+    box-shadow: var(--cms-shadow);
+}
+
+.cms-content .cms-admin-dashboard .presence-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--cms-text);
+    margin-bottom: 2px;
+}
+
+.cms-content .cms-admin-dashboard .presence-link {
+    font-size: 12px;
+    color: var(--cms-text-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.cms-content .cms-admin-dashboard .meter-bg {
+    height: 8px;
+    background: var(--cms-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Editor dashboard cards (shared layout patterns) */
+.cms-content .activity-card,
+.cms-content .shortcuts-card {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+    box-shadow: var(--cms-shadow) !important;
+}
+
+.cms-content .activity-card .card-title,
+.cms-content .shortcuts-card .card-title {
+    color: var(--cms-text-muted) !important;
+}
+
+.cms-content .activity-name {
+    color: var(--cms-text) !important;
+}
+
+.cms-content .activity-meta {
+    color: var(--cms-text-muted) !important;
+}
+
+.cms-content .shortcut-item {
+    background: var(--cms-surface-raised) !important;
+    border-color: var(--cms-border) !important;
+}
+
+.cms-content .shortcut-item:hover {
+    background: var(--cms-surface) !important;
+    border-color: var(--clay-red) !important;
+}
+
+.cms-content .shortcut-label {
+    color: var(--cms-text) !important;
+}
+
+.cms-content .org-status-box {
+    background: var(--cms-surface-raised) !important;
+    border-color: var(--cms-border) !important;
+}
+
+/* Analytics module */
+.cms-content .cms-analytics-module .analytics-card {
+    background: var(--cms-surface) !important;
+    border: 1px solid var(--cms-border) !important;
+    box-shadow: var(--cms-shadow) !important;
+}
+
+.cms-content .cms-analytics-module .card-title {
+    color: var(--cms-text-muted) !important;
+}
+
+.cms-content .cms-analytics-module .empty-state {
+    color: var(--cms-text-muted) !important;
+}
+
+.cms-content .cms-analytics-module .btn.is-active {
+    border-color: var(--clay-red) !important;
+    color: var(--clay-red) !important;
+    background: var(--cms-surface-raised) !important;
+}
+
+[data-cms-theme="dark"] .cms-content .cms-analytics-module .btn.is-active {
+    background: rgba(212, 160, 23, 0.15) !important;
+}
+
+/* Themes manager on cms.admin (shared admin component) */
+.cms-content [style*="background:var(--indigo-night)"],
+.cms-content [style*="background: var(--indigo-night)"] {
+    background: var(--cms-surface) !important;
+    border-color: var(--cms-border) !important;
+}
+
+[data-cms-theme="dark"] .cms-content .sa-tribe-form-view input,
+[data-cms-theme="dark"] .cms-content .sa-user-form-view input,
+[data-cms-theme="dark"] .cms-content .organization-create-page input {
+    background: var(--cms-input-bg) !important;
+}
+
+/* Super-admin component titles inside CMS (org admin themes, etc.) */
+.cms-content .sa-page-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--cms-text);
+    line-height: 1.2;
+}
+
+.cms-content .sa-breadcrumb {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cms-text-muted);
+    margin-top: 4px;
+}
+
+.cms-flash-error {
+    background: rgba(196, 75, 43, 0.12);
+    border: 1px solid rgba(196, 75, 43, 0.35);
+    color: var(--clay-red-light);
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: var(--sp-6);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+[data-cms-theme="dark"] .cms-flash-error {
+    color: #f4a89a;
+}
+
+/* Inline light-only shadows → theme shadow */
+.cms-content [style*="rgba(26,18,8,.05)"],
+.cms-content [style*="rgba(26, 18, 8, .05)"],
+.cms-content [style*="rgba(26,18,8,.04)"],
+.cms-content [style*="rgba(26, 18, 8, .04)"] {
+    box-shadow: var(--cms-shadow) !important;
+}
+
+.cms-content [style*="rgba(26,18,8,.18)"],
+.cms-content [style*="rgba(26, 18, 8, .18)"] {
+    box-shadow: var(--cms-shadow) !important;
+}
+
+/* Theme manager (shared with super admin; dual modal classes) */
+.cms-content .theme-mgr-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cms-content .theme-mgr-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--cms-shadow);
+}
+
+.cms-content .theme-mgr-preset-btn {
+    background: var(--cms-surface-raised);
+    border: 1px solid var(--cms-border);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.cms-content .theme-mgr-preset-btn:hover {
+    background: var(--cms-surface-hover);
+    border-color: var(--savanna-gold);
+}
+
+.cms-content .theme-mgr-modal-close {
+    background: var(--cms-surface-raised);
+    border: 1px solid var(--cms-border);
+    color: var(--cms-text);
+    transition: background 0.2s;
+}
+
+.cms-content .theme-mgr-modal-close:hover {
+    background: var(--cms-surface-hover);
+}
+
+.cms-content .cms-modal-panel.theme-mgr-modal-panel {
+    max-width: 1200px;
+    border-radius: 32px;
+}
+
+.cms-content .theme-mgr-modal-panel .theme-mgr-preview {
+    border-left: 1px solid var(--cms-border);
+}
