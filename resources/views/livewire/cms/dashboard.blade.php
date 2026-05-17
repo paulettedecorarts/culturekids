@@ -1,8 +1,8 @@
 <div class="cms-dashboard">
     <div class="cms-header">
         <div>
-            <h1 class="cms-page-title">Welcome back, Editor</h1>
-            <div class="cms-breadcrumb">Paulette CMS · Organizational Hub</div>
+            <h1 class="cms-page-title">Dashboard</h1>
+            <div class="cms-breadcrumb">Overview · content production</div>
         </div>
         <div style="margin-left:auto; display:flex; gap:var(--sp-2)">
             <a class="btn btn-ghost btn-sm" href="{{ route('cms.editor.assets') }}" style="text-decoration:none">🗂 Manage Assets</a>

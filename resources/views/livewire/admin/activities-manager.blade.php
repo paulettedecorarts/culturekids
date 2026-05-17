@@ -44,9 +44,9 @@
         </div>
     </div>
 
-    <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap">
-        <input wire:model.live.debounce.300ms="search" placeholder="Search activities..." style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
-        <select @if($flashcardsPortal) disabled @endif wire:model.live="typeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+    <div class="act-filters">
+        <input wire:model.live.debounce.300ms="search" placeholder="Search activities..." class="act-filter">
+        <select @if($flashcardsPortal) disabled @endif wire:model.live="typeFilter" class="act-filter">
             <option value="">All Types</option>
             <option value="flashcard">Flashcard</option>
             <option value="puzzle">Puzzle</option>
@@ -60,13 +60,13 @@
             <option value="story">Story</option>
             <option value="culture">Culture</option>
         </select>
-        <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="tribeFilter" class="act-filter">
             <option value="">All Tribes</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
         </select>
-        <select wire:model.live="statusFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid rgba(255,255,255,.12);background:#1a2744;color:#fff;font-family:var(--font-admin);font-size:12px;outline:none">
+        <select wire:model.live="statusFilter" class="act-filter">
             <option value="">All Status</option>
             <option value="published">Published</option>
             <option value="draft">Draft</option>
@@ -114,14 +114,14 @@
                         @endif
                     </div>
                     <div style="min-width:0">
-                        <div style="font-weight:700;color:#fff;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->title }}</div>
-                        <div style="font-size:11px;color:rgba(255,255,255,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $activity->description ?: 'No description' }}</div>
+                        <div class="act-row-title">{{ $activity->title }}</div>
+                        <div class="act-row-sub">{{ $activity->description ?: 'No description' }}</div>
                     </div>
                 </div>
                 <span style="background:rgba(74,124,89,.2);color:#6FA882;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:capitalize">{{ str_replace('_', ' ', $activity->type) }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $activity->tribe->name }}</span>
+                <span class="act-cell-muted">{{ $activity->tribe->name }}</span>
                 <span class="status-pill {{ $activity->is_published ? 'status-published' : 'status-draft' }}">{{ $activity->is_published ? 'Published' : 'Draft' }}</span>
-                <span style="font-size:12px;color:rgba(255,255,255,.6)">{{ $activity->age_range ?: '—' }}</span>
+                <span class="act-cell-muted">{{ $activity->age_range ?: '—' }}</span>
                 <div style="display:flex;gap:6px">
                     @if($activity->type === 'song')
                         @php
@@ -228,16 +228,23 @@
     </div>
 
     <style>
-        .act-table-grid { display:grid; grid-template-columns:minmax(0,2.4fr) minmax(90px,.9fr) minmax(120px,1fr) minmax(90px,.8fr) minmax(70px,.6fr) 120px; }
-        .activities-manager-page select {
-            background:#1a2744;
-            color:#fff;
-            color-scheme: dark;
+        .act-filters { display:flex; gap:var(--sp-3); margin-bottom:var(--sp-4); flex-wrap:wrap; }
+        .act-filter {
+            padding:8px 14px; border-radius:var(--r-full);
+            border:1px solid var(--cms-input-border);
+            background:var(--cms-input-bg); color:var(--cms-text);
+            font-family:var(--font-admin); font-size:12px; outline:none;
         }
+        .act-filters .act-filter:first-child { flex:1; min-width:180px; }
+        .act-row-title { font-weight:700; color:var(--cms-text); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .act-row-sub { font-size:11px; color:var(--cms-text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:.85; }
+        .act-cell-muted { font-size:12px; color:var(--cms-text-muted); }
+        .act-empty { padding:22px; color:var(--cms-text-muted); }
+        .act-table-grid { display:grid; grid-template-columns:minmax(0,2.4fr) minmax(90px,.9fr) minmax(120px,1fr) minmax(90px,.8fr) minmax(70px,.6fr) 120px; }
         .activities-manager-page select option,
         .activities-manager-page select optgroup {
-            background:#1a2744;
-            color:#fff;
+            background:var(--cms-input-bg);
+            color:var(--cms-text);
         }
         @media (max-width: 1024px) {
             .act-table-grid { grid-template-columns:minmax(0,2fr) minmax(90px,.9fr) minmax(100px,.9fr) minmax(90px,.8fr); }
