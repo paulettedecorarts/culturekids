@@ -1,21 +1,39 @@
-<div style="margin-bottom:20px; padding:0 4px">
+<div class="th-classroom-switcher-inner">
     @if ($classrooms->isEmpty())
-        <div style="font-size:11px; font-weight:600; color:rgba(255,255,255,.45); line-height:1.45">
+        <div class="th-classroom-switcher__empty">
             {{ __('No class assigned yet. Ask your organisation admin to assign you as a teacher in Classrooms.') }}
         </div>
+        <div
+            class="th-classroom-switcher__compact"
+            title="{{ __('No class assigned') }}"
+            aria-hidden="true"
+        >🏫</div>
     @elseif ($classrooms->count() === 1)
-        <div style="font-size:10px; font-weight:800; color:rgba(255,255,255,.35); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px">{{ __('Your class') }}</div>
-        <div style="font-size:13px; font-weight:800; color:#fff">{{ $classrooms->first()->name }}</div>
+        <div class="th-classroom-switcher__label">{{ __('Your class') }}</div>
+        <div class="th-classroom-switcher__name">{{ $classrooms->first()->name }}</div>
+        <div
+            class="th-classroom-switcher__compact"
+            title="{{ $classrooms->first()->name }}"
+            aria-hidden="true"
+        >🏫</div>
     @else
-        <label for="teacher-class-switch" style="display:block; font-size:10px; font-weight:800; color:rgba(255,255,255,.35); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px">{{ __('Active class') }}</label>
+        <label for="teacher-class-switch" class="th-classroom-switcher__label">{{ __('Active class') }}</label>
         <select
             id="teacher-class-switch"
             wire:model.live="activeId"
-            style="width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08); color:#fff; font-size:13px; font-weight:700; font-family:var(--font-admin); cursor:pointer"
+            class="th-classroom-switcher__select"
         >
             @foreach ($classrooms as $room)
                 <option value="{{ $room->id }}">{{ $room->name }}</option>
             @endforeach
         </select>
+        @php
+            $activeName = $classrooms->firstWhere('id', $activeId)?->name ?? $classrooms->first()->name;
+        @endphp
+        <div
+            class="th-classroom-switcher__compact"
+            title="{{ $activeName }}"
+            aria-hidden="true"
+        >🏫</div>
     @endif
 </div>
