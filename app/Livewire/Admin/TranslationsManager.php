@@ -60,8 +60,27 @@ class TranslationsManager extends Component
                     $inner->where('word', 'like', "%{$needle}%")
                         ->orWhere('translation', 'like', "%{$needle}%")
                         ->orWhere('phonetic', 'like', "%{$needle}%")
+                        ->orWhere('sub_item_key', 'like', "%{$needle}%")
                         ->orWhereHas('panel.comic', fn ($c) => $c->where('title', 'like', "%{$needle}%"))
                         ->orWhereHas('panel.comic.tribe', fn ($t) => $t->where('name', 'like', "%{$needle}%"));
+
+                    foreach (array_keys(config('content_translations.types', [])) as $type) {
+                        if ($type === OrganisationContentDecision::TYPE_STORY) {
+                            continue;
+                        }
+                        $titleCol = config('content_translations.types.'.$type.'.title_column', 'title');
+                        $modelClass = config('content_translations.types.'.$type.'.model');
+                        if (! $modelClass) {
+                            continue;
+                        }
+                        $ids = $modelClass::query()
+                            ->where($titleCol, 'like', "%{$needle}%")
+                            ->limit(50)
+                            ->pluck('id');
+                        if ($ids->isNotEmpty()) {
+                            $inner->orWhere(fn ($row) => $row->where('content_type', $type)->whereIn('content_id', $ids));
+                        }
+                    }
                 });
             })
             ->when($this->statusFilter === 'missing', fn ($q) => $q->where(function ($s) {

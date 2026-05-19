@@ -14,18 +14,35 @@ Culture Kids manages vocabulary and glosses through a **unified admin** backed b
 | Legacy alias | `PanelVocabTag` extends `ContentTranslation` (story scope) for panel editor compatibility |
 | Catalog | `ContentTranslationCatalogService` — type/content/sub-item dropdowns, context labels |
 | Persistence | `ContentTranslationPersistenceService` — syncs to native models where applicable (language words, flashcard slides, word-search JSON, culture proverb) |
-| Admin | Super Admin → **Translations** (list + filters), **Add** / **Edit** full-page form with **Activity type** + **Content item** (+ sub-item when required) |
+| Admin | Super Admin → **Translations** (list + filters), **Add** / **Edit** split workspace: type-specific fields **left**, read-only source preview **right** |
 | CMS editor | Same routes under `/cms/editor/translations` |
+| Presenter | `ContentTranslationFormPresenter` — field labels per activity/sub-type, source preview payloads, “Load from source” mapping |
 
-### Sub-items by type
+### Admin form layout
 
-| Activity type | Sub-item |
-|---------------|----------|
-| Story | Comic panel (`panel:{id}`) |
-| Flashcard | Slide (`slide:{id}`) |
-| Language activity | Vocab word (`word:{id}`) |
-| Word search | Word key in puzzle grid |
-| Others | None (content-level only) |
+1. **Choose content** — activity type, content item (and sub-item if the list is empty until the workspace opens).
+2. **Split workspace** (when content is selected):
+   - **Left:** Translation fields aligned with that type’s CRUD editor (e.g. story hotspot coords, flashcard front/back labels, language word row, word-search hint, culture proverb).
+   - **Right:** Existing source version (panel image + hotspots, flashcard front/back preview, language word row, etc.) with a **sub-item navigator** (panels, cards, words) where applicable.
+3. **Load from source** — copies native field values into the translation form so mappings stay in sync with the activity editor.
+
+### Sub-items by type (all 12)
+
+| Activity type | Parts you can translate |
+|---------------|-------------------------|
+| Story | Panels (`panel:{id}`) + hotspot coords |
+| Song | Full lyrics or timed segments (`segment:{id}`) |
+| Flashcard | Cards (`slide:{id}`) |
+| Puzzle | Content tag, description (`field:tag`, `field:description`) |
+| Drawing / Colouring | Type-specific fields (hero, prompts, colour labels, scene text) |
+| Language | Sentence + each vocab word (`word:{id}`) |
+| Game | Each question (`question:{id}`) |
+| Maze | Hero + collectibles (`field:hero_character`, `collectible:{n}`) |
+| Spot the difference | Each zone label (`zone:{id}`) |
+| Word search | Each grid word (`ws:{index}`) |
+| Culture | Proverb + main content (`field:proverb`, `field:content`) |
+
+Native sync writes back to the same tables/JSON the CMS editors use (`ContentTranslationSubItemResolver`).
 
 ### Mobile API (stories)
 

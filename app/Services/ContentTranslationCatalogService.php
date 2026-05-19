@@ -3,15 +3,12 @@
 namespace App\Services;
 
 use App\Models\Activity;
-use App\Models\ActivityFlashcardSlide;
 use App\Models\Comic;
-use App\Models\ComicPanel;
 use App\Models\ContentTranslation;
 use App\Models\CultureActivity;
 use App\Models\Drawing;
 use App\Models\Game;
 use App\Models\LanguageActivity;
-use App\Models\LanguageActivityWord;
 use App\Models\Maze;
 use App\Models\OrganisationContentDecision;
 use App\Models\Song;
@@ -22,6 +19,10 @@ use Illuminate\Support\Collection;
 
 class ContentTranslationCatalogService
 {
+    public function __construct(
+        protected ContentTranslationSubItemResolver $subItems,
+    ) {}
+
     /** @return array<string, string> */
     public function typeOptions(): array
     {
@@ -75,40 +76,7 @@ class ContentTranslationCatalogService
      */
     public function subItemOptions(string $contentType, int $contentId): array
     {
-        return match ($contentType) {
-            OrganisationContentDecision::TYPE_STORY => ComicPanel::query()
-                ->where('comic_id', $contentId)
-                ->orderBy('order_index')
-                ->get()
-                ->map(fn (ComicPanel $panel) => [
-                    'key' => 'panel:'.$panel->id,
-                    'label' => 'Panel '.((int) $panel->order_index + 1)
-                        .($panel->caption ? ' — '.\Illuminate\Support\Str::limit($panel->caption, 50) : ''),
-                    'panel_id' => $panel->id,
-                ])
-                ->all(),
-            OrganisationContentDecision::TYPE_FLASHCARD => ActivityFlashcardSlide::query()
-                ->where('activity_id', $contentId)
-                ->orderBy('order_index')
-                ->get()
-                ->map(fn (ActivityFlashcardSlide $slide) => [
-                    'key' => 'slide:'.$slide->id,
-                    'label' => 'Card '.((int) $slide->order_index + 1)
-                        .($slide->front_label ? ' — '.$slide->front_label : ''),
-                ])
-                ->all(),
-            OrganisationContentDecision::TYPE_LANGUAGE => LanguageActivityWord::query()
-                ->where('language_activity_id', $contentId)
-                ->orderBy('order_index')
-                ->get()
-                ->map(fn (LanguageActivityWord $word) => [
-                    'key' => 'word:'.$word->id,
-                    'label' => $word->word.($word->translation ? ' → '.$word->translation : ''),
-                ])
-                ->all(),
-            OrganisationContentDecision::TYPE_WORD_SEARCH => $this->wordSearchSubItems($contentId),
-            default => [],
-        };
+        return $this->subItems->options($contentType, $contentId);
     }
 
     public function contextLabel(ContentTranslation $translation): string
@@ -142,43 +110,7 @@ class ContentTranslationCatalogService
 
     protected function subItemKeyLabel(string $contentType, string $key): string
     {
-        if (str_starts_with($key, 'panel:')) {
-            return 'Panel';
-        }
-        if (str_starts_with($key, 'slide:')) {
-            return 'Flashcard';
-        }
-        if (str_starts_with($key, 'word:')) {
-            return 'Vocab word';
-        }
-        if (str_starts_with($key, 'ws:')) {
-            return 'Word list #'.(substr($key, 3) + 1);
-        }
-
-        return $key;
-    }
-
-    /** @return array<int, array{key: string, label: string}> */
-    protected function wordSearchSubItems(int $wordSearchId): array
-    {
-        $words = WordSearch::query()->whereKey($wordSearchId)->value('words');
-        if (! is_array($words)) {
-            return [];
-        }
-
-        $options = [];
-        foreach ($words as $index => $entry) {
-            $word = is_array($entry) ? ($entry['word'] ?? '') : (string) $entry;
-            if ($word === '') {
-                continue;
-            }
-            $options[] = [
-                'key' => 'ws:'.$index,
-                'label' => $word.(is_array($entry) && ! empty($entry['translation']) ? ' → '.$entry['translation'] : ''),
-            ];
-        }
-
-        return $options;
+        return $this->subItems->labelForKey($contentType, $key);
     }
 
     protected function applyOrgScope(Builder $query, string $contentType, ?int $orgId, bool $isSuperAdmin): void

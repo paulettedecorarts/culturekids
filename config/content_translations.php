@@ -32,7 +32,7 @@ return [
             'label' => 'Song',
             'model' => Song::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'lyric_segments',
         ],
         OrganisationContentDecision::TYPE_FLASHCARD => [
             'label' => 'Flashcard',
@@ -45,14 +45,14 @@ return [
             'label' => 'Puzzle',
             'model' => Activity::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'content_fields',
             'query' => ['type' => 'puzzle'],
         ],
         OrganisationContentDecision::TYPE_DRAWING => [
             'label' => 'Drawing',
             'model' => Drawing::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'drawing_fields',
             'query' => fn ($q) => $q->where(function ($inner) {
                 $inner->whereNull('drawing_type')->orWhere('drawing_type', '!=', 'coloring');
             }),
@@ -61,7 +61,7 @@ return [
             'label' => 'Colouring',
             'model' => Drawing::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'drawing_fields',
             'query' => fn ($q) => $q->where('drawing_type', 'coloring'),
         ],
         OrganisationContentDecision::TYPE_LANGUAGE => [
@@ -74,19 +74,19 @@ return [
             'label' => 'Game',
             'model' => Game::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'game_questions',
         ],
         OrganisationContentDecision::TYPE_MAZE => [
             'label' => 'Maze',
             'model' => Maze::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'maze_items',
         ],
         OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => [
             'label' => 'Spot the difference',
             'model' => SpotDifference::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'spot_zones',
         ],
         OrganisationContentDecision::TYPE_WORD_SEARCH => [
             'label' => 'Word search',
@@ -98,7 +98,7 @@ return [
             'label' => 'Culture activity',
             'model' => CultureActivity::class,
             'title_column' => 'title',
-            'sub_items' => null,
+            'sub_items' => 'culture_fields',
         ],
     ],
 

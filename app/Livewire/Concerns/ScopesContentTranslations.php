@@ -25,28 +25,34 @@ trait ScopesContentTranslations
                             $story->where('content_type', OrganisationContentDecision::TYPE_STORY)
                                 ->whereHas('panel.comic', fn ($q) => $q->where('org_id', $orgId));
                         })
-                        ->orWhere(fn ($other) => $other->where('content_type', '!=', OrganisationContentDecision::TYPE_STORY)
-                            ->whereIn('content_id', $this->allowedContentIdsForOrg($orgId)));
+                        ->orWhere(function ($other) use ($orgId) {
+                            foreach ($this->allowedContentIdPairsForOrg($orgId) as $pair) {
+                                $other->orWhere(function ($row) use ($pair) {
+                                    $row->where('content_type', $pair['type'])
+                                        ->where('content_id', $pair['id']);
+                                });
+                            }
+                        });
                 });
             });
     }
 
-    /** @return array<int, int> */
-    protected function allowedContentIdsForOrg(int $orgId): array
+    /** @return list<array{type: string, id: int}> */
+    protected function allowedContentIdPairsForOrg(int $orgId): array
     {
         $catalog = app(ContentTranslationCatalogService::class);
-        $ids = [];
+        $pairs = [];
 
         foreach (array_keys(config('content_translations.types', [])) as $type) {
             if ($type === OrganisationContentDecision::TYPE_STORY) {
                 continue;
             }
             foreach ($catalog->contentItemsForType($type, $orgId, false) as $item) {
-                $ids[] = $item->id;
+                $pairs[] = ['type' => $type, 'id' => (int) $item->id];
             }
         }
 
-        return array_values(array_unique($ids));
+        return $pairs;
     }
 
     protected function catalog(): ContentTranslationCatalogService
