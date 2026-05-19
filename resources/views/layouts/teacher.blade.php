@@ -94,8 +94,13 @@
             updateViewport() {
                 this.isMobile = window.matchMedia('(max-width: 1023px)').matches;
                 if (!this.isMobile) {
-                    this.sidebarOpen = false;
+                    this.closeMobileSidebar();
                 }
+            },
+            openMobileDrawer() {
+                this.sidebarOpen = true;
+                document.documentElement.classList.add('th-drawer-open');
+                document.documentElement.removeAttribute('data-th-sidebar');
             },
             syncTheme() {
                 var theme = null;
@@ -127,7 +132,11 @@
             },
             toggleSidebar() {
                 if (this.isMobile) {
-                    this.sidebarOpen = !this.sidebarOpen;
+                    if (this.sidebarOpen) {
+                        this.closeMobileSidebar();
+                    } else {
+                        this.openMobileDrawer();
+                    }
                     return;
                 }
                 this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -142,12 +151,12 @@
             },
             closeMobileSidebar() {
                 this.sidebarOpen = false;
+                document.documentElement.classList.remove('th-drawer-open');
+                this.syncSidebar();
             }
         }"
         :class="{ 'th-shell--nav-open': sidebarOpen && isMobile }"
     >
-        @include('layouts.partials.teacher-sidebar')
-
         <div
             class="th-sidebar-backdrop"
             x-cloak
@@ -156,6 +165,8 @@
             @click="closeMobileSidebar()"
             aria-hidden="true"
         ></div>
+
+        @include('layouts.partials.teacher-sidebar')
 
         <main class="th-main">
             @include('layouts.partials.teacher-topbar')

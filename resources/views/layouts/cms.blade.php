@@ -775,8 +775,13 @@
             updateViewport() {
                 this.isMobile = window.matchMedia('(max-width: 1023px)').matches;
                 if (!this.isMobile) {
-                    this.sidebarOpen = false;
+                    this.closeMobileSidebar();
                 }
+            },
+            openMobileDrawer() {
+                this.sidebarOpen = true;
+                document.documentElement.classList.add('cms-drawer-open');
+                document.documentElement.removeAttribute('data-cms-sidebar');
             },
             syncTheme() {
                 var theme = null;
@@ -808,7 +813,11 @@
             },
             toggleSidebar() {
                 if (this.isMobile) {
-                    this.sidebarOpen = !this.sidebarOpen;
+                    if (this.sidebarOpen) {
+                        this.closeMobileSidebar();
+                    } else {
+                        this.openMobileDrawer();
+                    }
                     return;
                 }
                 this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -823,6 +832,8 @@
             },
             closeMobileSidebar() {
                 this.sidebarOpen = false;
+                document.documentElement.classList.remove('cms-drawer-open');
+                this.syncSidebar();
             }
         }"
         :class="{ 'cms-shell--nav-open': sidebarOpen && isMobile }"
@@ -833,8 +844,6 @@
             $isSuper = auth()->user()->hasRole('super_admin');
         @endphp
 
-        @include('layouts.partials.cms-sidebar', compact('isEditor', 'isAdmin', 'isSuper'))
-
         <div
             class="cms-sidebar-backdrop"
             x-cloak
@@ -843,6 +852,8 @@
             @click="closeMobileSidebar()"
             aria-hidden="true"
         ></div>
+
+        @include('layouts.partials.cms-sidebar', compact('isEditor', 'isAdmin', 'isSuper'))
 
         <main class="cms-main">
             @include('layouts.partials.cms-topbar', compact('isEditor', 'isAdmin', 'isSuper'))

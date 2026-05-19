@@ -17,7 +17,6 @@ HTML;
     class="th-sidebar"
     :class="{ 'is-collapsed': sidebarCollapsed && !isMobile, 'is-mobile-open': sidebarOpen && isMobile }"
     :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
-    @click="if (isMobile && $event.target.closest('a.th-nav-item, button.th-nav-item, .th-sidebar-brand')) closeMobileSidebar()"
 >
     <div class="th-sidebar-head">
         <a href="{{ route('teacher.dashboard') }}" class="th-sidebar-brand" title="{{ __('Teacher Hub') }}">

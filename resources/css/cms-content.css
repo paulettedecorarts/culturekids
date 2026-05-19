@@ -1105,8 +1105,10 @@
     border-radius: 32px;
 }
 
-.cms-content .theme-mgr-modal-panel .theme-mgr-preview {
-    border-left: 1px solid var(--cms-border);
+@media (min-width: 1024px) {
+    .cms-content .theme-mgr-modal-panel .theme-mgr-preview {
+        border-left: 1px solid var(--cms-border);
+    }
 }
 
 /* Reused admin Livewire blades (translations, stories, etc.) */
