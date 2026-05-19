@@ -1,0 +1,532 @@
+/**
+ * Portal responsive — Super Admin (.sa-content) + CMS (.cms-content).
+ * Mobile-first overrides for all pages, lists, and editor forms.
+ */
+
+.sa-content,
+.cms-content {
+    --portal-gutter: var(--sp-4);
+    overflow-x: clip;
+}
+
+/* ── Page headers (title + actions) ── */
+.sa-content .sa-page-header,
+.cms-content .cms-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-6);
+}
+
+/* First row under page root: title + primary CTA */
+.sa-content > div > div:first-child[style*="justify-content"],
+.cms-content > div > div:first-child[style*="justify-content"],
+.sa-content > div > header[style*="justify-content"],
+.cms-content > div > header[style*="justify-content"] {
+    flex-wrap: wrap !important;
+    gap: var(--sp-4) !important;
+    align-items: flex-start !important;
+}
+
+/* Stats rows (inline or class) */
+.sa-content .sa-stats-row,
+.cms-content .cms-stats-row,
+.sa-content [class*="-stats-row"],
+.sa-content div[style*="sa-stats-row"] {
+    display: grid !important;
+    gap: var(--sp-3) !important;
+}
+
+/* Filter / toolbar rows */
+.sa-content .sa-filter-bar,
+.cms-content .sa-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+}
+
+.sa-content .sa-filter-bar > *,
+.cms-content .sa-filter-bar > * {
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+/* Tables */
+.sa-content .sa-table-wrap,
+.cms-content .sa-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sa-content .sa-table-actions,
+.cms-content .sa-table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* CMS table pattern */
+.cms-content .cms-table-header,
+.cms-content .cms-table-row {
+    min-width: min(100%, 480px);
+}
+
+/* Activity manager custom grid */
+.sa-content .act-table-head,
+.sa-content .act-table-row {
+    min-width: min(100%, 520px);
+}
+
+/* Forms: inputs never overflow */
+.sa-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]),
+.sa-content select,
+.sa-content textarea,
+.cms-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]),
+.cms-content select,
+.cms-content textarea {
+    max-width: 100%;
+}
+
+.sa-content img,
+.cms-content img,
+.sa-content video,
+.cms-content video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Editor page roots — full width */
+.sa-content [class$="-editor-page"],
+.sa-content [class$="-form-page"],
+.sa-content [class$="-form-root"],
+.sa-content [class$="-detail-page"],
+.sa-content [class$="-manager-view"],
+.sa-content [class$="-management-view"],
+.cms-content [class$="-editor-page"],
+.cms-content [class$="-show-page"],
+.cms-content [class$="-manager-page"] {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Shared editor form grids */
+.sa-content [class*="-grid-4"],
+.sa-content [class*="-grid-5"],
+.sa-content [class*="-grid-2"],
+.sa-content .ge-grid-4,
+.sa-content .ge-grid-5,
+.sa-content .ge-grid-2,
+.sa-content .le-grid-4,
+.sa-content .le-grid-5,
+.sa-content .le-grid-2,
+.sa-content .we-grid-4,
+.sa-content .we-grid-5,
+.sa-content .we-grid-2,
+.sa-content .me-grid-4,
+.sa-content .me-grid-5,
+.sa-content .me-grid-2,
+.sa-content .ce-grid-4,
+.sa-content .ce-grid-2,
+.sa-content .cf-grid-4,
+.sa-content .cf-grid-2,
+.cms-content [class*="-grid-4"],
+.cms-content [class*="-grid-5"],
+.cms-content [class*="-grid-2"],
+.cms-content .ge-grid-4,
+.cms-content .ge-grid-5,
+.cms-content .ge-grid-2,
+.cms-content .le-grid-4,
+.cms-content .le-grid-5,
+.cms-content .le-grid-2,
+.cms-content .we-grid-4,
+.cms-content .we-grid-5,
+.cms-content .we-grid-2,
+.cms-content .me-grid-4,
+.cms-content .me-grid-5,
+.cms-content .me-grid-2,
+.cms-content .ce-grid-4,
+.cms-content .ce-grid-2 {
+    display: grid;
+    gap: 16px;
+}
+
+.sa-content .le-grid-word,
+.cms-content .le-grid-word {
+    display: grid;
+    gap: 8px;
+    align-items: end;
+}
+
+/* Puzzle editor */
+.sa-content .puzzle-editor-layout,
+.cms-content .puzzle-editor-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+}
+
+.sa-content .puzzle-form-grid,
+.cms-content .puzzle-form-grid {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+/* Story form */
+.sa-content .story-form-main-grid,
+.sa-content .story-form-row-title-tribe,
+.sa-content .story-form-row-meta {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+/* Activity / flashcard grids */
+.sa-content .act-grid,
+.cms-content .act-grid {
+    display: grid;
+    gap: 10px;
+}
+
+/* Panel editor — 3 columns → stack */
+.sa-content .panel-editor-layout,
+.sa-content div[style*="grid-template-columns:280px"],
+.sa-content div[style*="grid-template-columns: 280px"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--sp-5) !important;
+}
+
+/* Detail layouts: sidebar + main */
+.sa-content div[style*="grid-template-columns:360px"],
+.sa-content div[style*="grid-template-columns: 360px"],
+.sa-content div[style*="grid-template-columns:minmax(0,320px)"],
+.sa-content div[style*="grid-template-columns:minmax(0, 320px)"],
+.cms-content div[style*="grid-template-columns:minmax(0,1fr) minmax(300px"],
+.cms-content div[style*="grid-template-columns: minmax(0, 1fr) minmax(300px"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--sp-5) !important;
+}
+
+/* Impersonate / two-column panels */
+.sa-content div[style*="grid-template-columns:2fr 1fr"]:not(.sa-table-head):not(.sa-table-row),
+.sa-content div[style*="grid-template-columns: 2fr 1fr"]:not(.sa-table-head):not(.sa-table-row) {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--sp-4) !important;
+}
+
+/* Theme manager modal */
+.sa-content .theme-mgr-modal-panel,
+.cms-content .theme-mgr-modal-panel {
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+}
+
+/* Card grids */
+.sa-content [style*="repeat(auto-fill"],
+.sa-content [style*="repeat(auto-fit"],
+.cms-content [style*="repeat(auto-fill"],
+.cms-content [style*="repeat(auto-fit"] {
+    min-width: 0;
+}
+
+/* Org create responsive (has own media — reinforce) */
+.sa-content .org-create-page .org-field-row,
+.cms-content .org-create-page .org-field-row {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+/* Review queue table */
+.cms-content .review-queue-page .rq-table-head,
+.cms-content .review-queue-page .rq-table-row {
+    min-width: min(100%, 560px);
+}
+
+/* Word search preview grid — allow horizontal scroll */
+.cms-content .ws-show-grid,
+.cms-content .ws-preview-grid {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* ═══ Tablet (≤1023px) ═══ */
+@media (max-width: 1023px) {
+    .sa-content .sa-page-title,
+    .cms-content .cms-page-title,
+    .cms-content .page-title {
+        font-size: clamp(22px, 4.5vw, 28px);
+        line-height: 1.15;
+    }
+
+    .sa-content .sa-stats-row[style*="repeat(4"],
+    .sa-content .sa-stats-row[style*="repeat(3"],
+    .cms-content .cms-stats-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .sa-content [class*="-grid-4"],
+    .sa-content [class*="-grid-5"],
+    .cms-content [class*="-grid-4"],
+    .cms-content [class*="-grid-5"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .sa-content .le-grid-word,
+    .cms-content .le-grid-word {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .sa-content .puzzle-form-grid,
+    .cms-content .puzzle-form-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .sa-content div[style*="grid-template-columns:repeat(3"],
+    .sa-content div[style*="grid-template-columns: repeat(3"],
+    .sa-content div[style*="grid-template-columns:repeat(4"],
+    .sa-content div[style*="grid-template-columns: repeat(4"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .sa-content div[style*="grid-template-columns:1fr 400px"],
+    .sa-content div[style*="grid-template-columns: 1fr 400px"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ═══ Phone (≤767px) ═══ */
+@media (max-width: 767px) {
+    .sa-content > div > div:first-child[style*="justify-content"] > a,
+    .sa-content > div > div:first-child[style*="justify-content"] > .btn,
+    .sa-content > div > div:first-child[style*="justify-content"] > .lw-submit-btn,
+    .cms-content > div > div:first-child[style*="justify-content"] > a,
+    .cms-content > div > div:first-child[style*="justify-content"] > .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .sa-content .sa-stats-row,
+    .cms-content .cms-stats-row,
+    .sa-content [class*="-stats-row"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* sa-table → card stack */
+    .sa-content .sa-table-wrap .sa-table-head {
+        display: none !important;
+    }
+
+    .sa-content .sa-table-wrap .sa-table-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+        min-width: 0 !important;
+    }
+
+    .sa-content .sa-table-wrap .sa-table-row > span,
+    .sa-content .sa-table-wrap .sa-table-row > div {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .sa-content .sa-table-wrap .sa-table-actions {
+        padding-top: var(--sp-2);
+        border-top: 1px solid var(--sa-border-subtle);
+        margin-top: var(--sp-2);
+    }
+
+    /* Inline grid tables (users, tribes, clans, etc.) */
+    .sa-content div[style*="display:grid"][style*="grid-template-columns:2fr"],
+    .sa-content div[style*="display: grid"][style*="grid-template-columns:2fr"],
+    .sa-content div[style*="display:grid"][style*="grid-template-columns: 2fr"],
+    .cms-content div[style*="display:grid"][style*="grid-template-columns:2fr"],
+    .cms-content .cms-table-header[style*="grid-template-columns:1fr auto"],
+    .cms-content .cms-table-row[style*="grid-template-columns:1fr"] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: var(--sp-4) !important;
+        min-width: 0 !important;
+    }
+
+    .sa-content div[style*="text-transform:uppercase"][style*="grid-template-columns"],
+    .sa-content div[style*="text-transform: uppercase"][style*="grid-template-columns"],
+    .cms-content .cms-table-header {
+        display: none !important;
+    }
+
+    /* act-table mobile stack */
+    .sa-content .act-table-head {
+        display: none !important;
+    }
+
+    .sa-content .act-table-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+    }
+
+    /* All editor grids → single column */
+    .sa-content [class*="-grid-4"],
+    .sa-content [class*="-grid-5"],
+    .sa-content [class*="-grid-2"],
+    .sa-content .ge-grid-4,
+    .sa-content .ge-grid-5,
+    .sa-content .ge-grid-2,
+    .sa-content .le-grid-4,
+    .sa-content .le-grid-5,
+    .sa-content .le-grid-2,
+    .sa-content .le-grid-word,
+    .sa-content .we-grid-4,
+    .sa-content .we-grid-5,
+    .sa-content .we-grid-2,
+    .sa-content .me-grid-4,
+    .sa-content .me-grid-5,
+    .sa-content .me-grid-2,
+    .sa-content .ce-grid-4,
+    .sa-content .ce-grid-2,
+    .sa-content .cf-grid-4,
+    .sa-content .cf-grid-2,
+    .cms-content [class*="-grid-4"],
+    .cms-content [class*="-grid-5"],
+    .cms-content [class*="-grid-2"],
+    .cms-content .ge-grid-4,
+    .cms-content .ge-grid-5,
+    .cms-content .ge-grid-2,
+    .cms-content .le-grid-4,
+    .cms-content .le-grid-5,
+    .cms-content .le-grid-2,
+    .cms-content .le-grid-word,
+    .cms-content .we-grid-4,
+    .cms-content .we-grid-5,
+    .cms-content .we-grid-2,
+    .cms-content .me-grid-4,
+    .cms-content .me-grid-5,
+    .cms-content .me-grid-2,
+    .cms-content .ce-grid-4,
+    .cms-content .ce-grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sa-content .puzzle-form-grid,
+    .cms-content .puzzle-form-grid,
+    .sa-content .story-form-main-grid,
+    .sa-content .story-form-row-title-tribe,
+    .sa-content .story-form-row-meta,
+    .sa-content .act-grid,
+    .cms-content .act-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Inline multi-column field rows in game/language editors */
+    .sa-content div[style*="grid-template-columns:1fr auto 1fr"],
+    .sa-content div[style*="grid-template-columns:1fr 1fr 1fr 120px"],
+    .sa-content div[style*="grid-template-columns:2fr 1fr 1fr 1fr"],
+    .sa-content div[style*="grid-template-columns:repeat(3"],
+    .sa-content div[style*="grid-template-columns:repeat(4"],
+    .sa-content div[style*="grid-template-columns: 1fr 1fr"],
+    .cms-content div[style*="grid-template-columns:1fr 1fr"],
+    .cms-content div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: var(--sp-3) !important;
+    }
+
+    /* Filter bars inside padded cards */
+    .sa-content div[style*="border-radius:32px"] > div[style*="display:flex"],
+    .sa-content div[style*="border-radius: 32px"] > div[style*="display:flex"],
+    .cms-content div[style*="border-radius:32px"] > div[style*="display:flex"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .sa-content div[style*="border-radius:32px"],
+    .sa-content div[style*="border-radius: 32px"],
+    .cms-content div[style*="border-radius:32px"],
+    .cms-content .sa-table-wrap[style*="padding:32px"],
+    .cms-content .sa-table-wrap[style*="padding: 32px"] {
+        padding: var(--sp-4) !important;
+        border-radius: var(--r-lg) !important;
+    }
+
+    .sa-content .translation-form-page .tf-workspace,
+    .sa-content .tf-workspace,
+    .sa-content .translation-form-page .tf-preview-flashcard,
+    .sa-content .tf-preview-flashcard {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sa-content .translation-form-page .tf-hotspot-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sa-content .org-create-page .org-field-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sa-content form[style*="grid-template-columns:1fr 1fr"],
+    .cms-content form[style*="grid-template-columns:1fr 1fr"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--sp-4) !important;
+    }
+
+    .sa-content .sa-modal-panel,
+    .cms-content .sa-modal-panel,
+    .cms-content .cms-modal-panel {
+        width: calc(100vw - 24px) !important;
+        max-width: none !important;
+        margin: var(--sp-3) !important;
+        padding: var(--sp-4) !important;
+        border-radius: var(--r-lg) !important;
+    }
+
+    .sa-content .lw-submit-button,
+    .sa-content .story-form-footer,
+    .sa-content .story-form-actions {
+        flex-direction: column !important;
+    }
+
+    .sa-content .lw-submit-btn--md,
+    .sa-content .lw-submit-btn--primary,
+    .sa-content .lw-submit-btn--block,
+    .cms-content .lw-submit-btn--md {
+        width: 100%;
+    }
+
+    .sa-content .sa-table-action {
+        min-height: 40px;
+        justify-content: center;
+    }
+}
+
+/* ═══ Small phone (≤479px) ═══ */
+@media (max-width: 479px) {
+    .sa-content,
+    .cms-content {
+        --portal-gutter: var(--sp-3);
+    }
+
+    .sa-content .sa-page-title,
+    .cms-content .cms-page-title {
+        font-size: 20px;
+    }
+
+    .sa-content .sa-stat-val {
+        font-size: 26px;
+    }
+
+    .sa-content .sa-topbar-hello,
+    .cms-content .cms-topbar-hello {
+        font-size: 14px;
+    }
+}

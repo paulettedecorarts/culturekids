@@ -33,6 +33,8 @@
     @stack('styles')
 
     <style>{!! file_get_contents(resource_path('css/admin-content.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/admin-shell.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
 
     <style>
         :root {
@@ -425,21 +427,6 @@
             padding: var(--sp-6) var(--sp-8) var(--sp-8);
         }
 
-        [x-cloak] { display: none !important; }
-
-        @media (max-width: 900px) {
-            .sa-sidebar {
-                position: fixed;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                box-shadow: 4px 0 24px rgba(0,0,0,.25);
-            }
-            .sa-topbar { flex-wrap: wrap; padding: var(--sp-3) var(--sp-4); }
-            .sa-topbar-meta { display: none; }
-            .sa-content { padding: var(--sp-4); }
-        }
-
         /* Shared super-admin components */
         .sa-page-title {
             font-family: var(--font-display);
@@ -772,9 +759,19 @@
         x-data="{
             theme: 'dark',
             sidebarCollapsed: false,
+            sidebarOpen: false,
+            isMobile: false,
             init() {
                 this.syncTheme();
                 this.syncSidebar();
+                this.updateViewport();
+                window.addEventListener('resize', () => this.updateViewport());
+            },
+            updateViewport() {
+                this.isMobile = window.matchMedia('(max-width: 1023px)').matches;
+                if (!this.isMobile) {
+                    this.sidebarOpen = false;
+                }
             },
             syncTheme() {
                 var theme = null;
@@ -805,6 +802,10 @@
                 try { localStorage.setItem('sa-theme', value); } catch (e) {}
             },
             toggleSidebar() {
+                if (this.isMobile) {
+                    this.sidebarOpen = !this.sidebarOpen;
+                    return;
+                }
                 this.sidebarCollapsed = !this.sidebarCollapsed;
                 if (this.sidebarCollapsed) {
                     document.documentElement.setAttribute('data-sa-sidebar', 'collapsed');
@@ -814,10 +815,23 @@
                 try {
                     localStorage.setItem('sa-sidebar-collapsed', this.sidebarCollapsed ? 'true' : 'false');
                 } catch (e) {}
+            },
+            closeMobileSidebar() {
+                this.sidebarOpen = false;
             }
         }"
+        :class="{ 'sa-shell--nav-open': sidebarOpen && isMobile }"
     >
         @include('layouts.partials.admin-sidebar')
+
+        <div
+            class="sa-sidebar-backdrop"
+            x-cloak
+            x-show="sidebarOpen && isMobile"
+            x-transition.opacity
+            @click="closeMobileSidebar()"
+            aria-hidden="true"
+        ></div>
 
         <main class="sa-main">
             @include('layouts.partials.admin-topbar')

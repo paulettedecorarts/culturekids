@@ -14,8 +14,9 @@ HTML;
 
 <aside
     class="sa-sidebar"
-    :class="{ 'is-collapsed': sidebarCollapsed }"
-    :aria-expanded="(!sidebarCollapsed).toString()"
+    :class="{ 'is-collapsed': sidebarCollapsed && !isMobile, 'is-mobile-open': sidebarOpen && isMobile }"
+    :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
+    @click="if (isMobile && $event.target.closest('a.sa-nav-item, button.sa-nav-item, .sa-sidebar-brand')) closeMobileSidebar()"
 >
     <div class="sa-sidebar-head">
         <a href="{{ route('admin.dashboard') }}" class="sa-sidebar-brand" title="Super Admin">

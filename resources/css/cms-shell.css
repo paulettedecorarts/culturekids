@@ -1,0 +1,99 @@
+/**
+ * CMS portal shell — mobile drawer (same pattern as admin-shell).
+ */
+
+.cms-sidebar-backdrop {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .cms-sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        background: rgba(15, 20, 25, 0.55);
+        backdrop-filter: blur(2px);
+    }
+
+    .cms-sidebar {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: min(240px, 88vw) !important;
+        max-width: 320px;
+        transform: translateX(-100%);
+        transition: transform 0.24s ease, width 0.22s ease;
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.35);
+        pointer-events: none;
+        z-index: 50;
+    }
+
+    .cms-sidebar:not(.is-mobile-open) {
+        visibility: hidden;
+    }
+
+    .cms-sidebar.is-mobile-open,
+    .cms-sidebar.is-mobile-open.is-collapsed {
+        transform: translateX(0);
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    .cms-sidebar.is-mobile-open .cms-sidebar-brand-text,
+    .cms-sidebar.is-mobile-open .cms-nav-label,
+    .cms-sidebar.is-mobile-open .cms-nav-section-text,
+    [data-cms-sidebar="collapsed"] .cms-sidebar.is-mobile-open .cms-sidebar-brand-text,
+    [data-cms-sidebar="collapsed"] .cms-sidebar.is-mobile-open .cms-nav-label,
+    [data-cms-sidebar="collapsed"] .cms-sidebar.is-mobile-open .cms-nav-section-text {
+        opacity: 1 !important;
+        max-width: 200px !important;
+        pointer-events: auto !important;
+    }
+
+    .cms-sidebar.is-mobile-open .cms-nav-item,
+    [data-cms-sidebar="collapsed"] .cms-sidebar.is-mobile-open .cms-nav-item {
+        justify-content: flex-start !important;
+        padding: 10px 12px !important;
+        gap: 12px !important;
+    }
+
+    .cms-sidebar-toggle {
+        display: none;
+    }
+
+    .cms-shell--nav-open {
+        overflow: hidden;
+    }
+
+    .cms-shell--nav-open .cms-main {
+        overflow: hidden;
+    }
+
+    .cms-topbar {
+        flex-wrap: wrap;
+        padding: var(--sp-3) var(--sp-4);
+        gap: var(--sp-3);
+    }
+
+    .cms-topbar-welcome {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cms-topbar-meta {
+        display: none;
+    }
+
+    .cms-content {
+        padding: var(--sp-4);
+    }
+}
+
+@media (max-width: 639px) {
+    .cms-topbar-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+}

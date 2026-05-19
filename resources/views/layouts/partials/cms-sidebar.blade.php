@@ -14,8 +14,9 @@ HTML;
 
 <aside
     class="cms-sidebar"
-    :class="{ 'is-collapsed': sidebarCollapsed }"
-    :aria-expanded="(!sidebarCollapsed).toString()"
+    :class="{ 'is-collapsed': sidebarCollapsed && !isMobile, 'is-mobile-open': sidebarOpen && isMobile }"
+    :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
+    @click="if (isMobile && $event.target.closest('a.cms-nav-item, button.cms-nav-item, .cms-sidebar-brand')) closeMobileSidebar()"
 >
     <div class="cms-sidebar-head">
         <a href="{{ ($isEditor || $isSuper) ? route('cms.editor.dashboard') : route('cms.admin.dashboard') }}" class="cms-sidebar-brand" title="Paulette CMS">

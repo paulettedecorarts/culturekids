@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\ImpersonationController;
+use App\Http\Controllers\DashboardController;
+use App\Livewire\Profile\ProfilePage;
 use App\Livewire\Admin\ActivitiesManager;
 use App\Livewire\Admin\ActivityDetailPage;
 use App\Livewire\Admin\ActivityTypeSelector;
@@ -316,7 +318,11 @@ Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->
     Route::get('/worksheets', Worksheets::class)->name('worksheets');
 });
 
-Route::view('profile', 'profile')
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth'])
+    ->name('dashboard');
+
+Route::get('/profile', ProfilePage::class)
     ->middleware(['auth'])
     ->name('profile');
 

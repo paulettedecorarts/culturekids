@@ -1,0 +1,159 @@
+/**
+ * Super Admin shell — mobile-first navigation & layout (mirrors teacher-shell pattern).
+ */
+
+[x-cloak] {
+    display: none !important;
+}
+
+.sa-sidebar-backdrop {
+    display: none;
+}
+
+/* ── Tablet / phone: off-canvas drawer ── */
+@media (max-width: 1023px) {
+    .sa-sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        background: rgba(15, 20, 25, 0.55);
+        backdrop-filter: blur(2px);
+    }
+
+    .sa-sidebar {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: min(var(--sa-sidebar-width), 88vw) !important;
+        max-width: 320px;
+        transform: translateX(-100%);
+        transition: transform 0.24s ease, width 0.22s ease;
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.35);
+        pointer-events: none;
+        z-index: 50;
+    }
+
+    .sa-sidebar:not(.is-mobile-open) {
+        visibility: hidden;
+    }
+
+    .sa-sidebar.is-mobile-open,
+    .sa-sidebar.is-mobile-open.is-collapsed {
+        transform: translateX(0);
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    /* Full labels when drawer is open */
+    .sa-sidebar.is-mobile-open .sa-sidebar-brand-text,
+    .sa-sidebar.is-mobile-open .sa-nav-label,
+    .sa-sidebar.is-mobile-open .sa-nav-section-text,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-sidebar-brand-text,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-label,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-section-text {
+        opacity: 1 !important;
+        max-width: 200px !important;
+        pointer-events: auto !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-section,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-section {
+        margin: 16px 8px 8px !important;
+        height: auto !important;
+        background: transparent !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-section-text,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-section-text {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-item,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-item {
+        justify-content: flex-start !important;
+        padding: 10px 12px !important;
+        gap: 12px !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-item.active,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-nav-item.active {
+        border-left: 2px solid var(--savanna-gold) !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-sidebar-head,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-sidebar-head {
+        flex-direction: row !important;
+        align-items: flex-start !important;
+    }
+
+    .sa-sidebar.is-mobile-open .sa-sidebar-brand,
+    [data-sa-sidebar="collapsed"] .sa-sidebar.is-mobile-open .sa-sidebar-brand {
+        justify-content: flex-start !important;
+    }
+
+    .sa-sidebar-toggle {
+        display: none;
+    }
+
+    .sa-shell--nav-open {
+        overflow: hidden;
+    }
+
+    .sa-shell--nav-open .sa-main {
+        overflow: hidden;
+    }
+
+    .sa-topbar {
+        flex-wrap: wrap;
+        padding: var(--sp-3) var(--sp-4);
+        gap: var(--sp-3);
+    }
+
+    .sa-topbar-welcome {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sa-topbar-hello {
+        font-size: 15px;
+    }
+
+    .sa-topbar-meta {
+        display: none;
+    }
+
+    .sa-topbar-actions {
+        margin-left: auto;
+    }
+
+    .sa-content {
+        padding: var(--sp-4);
+    }
+}
+
+@media (max-width: 639px) {
+    .sa-topbar-avatar {
+        width: 38px;
+        height: 38px;
+        font-size: 13px;
+    }
+
+    .sa-topbar-hello {
+        font-size: 14px;
+    }
+
+    .sa-topbar-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .sa-topbar-theme-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+}

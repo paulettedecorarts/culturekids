@@ -66,7 +66,7 @@ class ImpersonateUser extends Component
             return redirect()->route('teacher.dashboard');
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route(\App\Support\PortalHome::dashboardRouteName($targetUser));
     }
 
     public function render()

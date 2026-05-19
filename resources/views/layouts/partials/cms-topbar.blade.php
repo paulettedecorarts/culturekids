@@ -24,8 +24,9 @@
             type="button"
             class="cms-topbar-icon-btn cms-topbar-sidebar-btn"
             @click="toggleSidebar()"
-            :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-            :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            :title="isMobile ? (sidebarOpen ? 'Close menu' : 'Open menu') : (sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar')"
+            :aria-label="isMobile ? (sidebarOpen ? 'Close menu' : 'Open menu') : (sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar')"
+            :aria-expanded="(isMobile ? sidebarOpen : !sidebarCollapsed).toString()"
         >
             <svg class="cms-topbar-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
