@@ -300,9 +300,9 @@
                             </div>
                         </div>
 
-                        <button type="submit" style="width:100%;background:var(--clay-red);color:var(--cms-text);padding:14px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none">
+                        <x-livewire-submit-button target="saveVocabTag" variant="block" class="btn btn-primary" style="width:100%;background:var(--clay-red);color:var(--cms-text);padding:14px;border-radius:12px;font-size:14px;font-weight:800;border:none">
                             💾 Save Vocabulary Tag
-                        </button>
+                        </x-livewire-submit-button>
                     </div>
                 </form>
             </div>

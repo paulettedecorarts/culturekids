@@ -23,25 +23,16 @@
             </div>
         </div>
         <div style="display:flex; gap:12px">
-            <button wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-70" class="btn btn-primary" style="padding:12px 32px; border-radius:14px; font-weight:800; font-size:13px; box-shadow:0 8px 24px rgba(196,75,43,0.3); position:relative">
-                <span wire:loading.remove.delay wire:target="save">{{ $editing ? 'Update Account' : 'Add Account' }}</span>
-                <span wire:loading.delay wire:target="save" style="display:none; align-items:center; gap:8px">
-                    <svg style="width:14px; height:14px; animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="8" opacity="0.25"/>
-                        <path d="M12 2a10 10 0 0 1 10 10" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                    {{ $editing ? 'Updating...' : 'Adding...' }}
-                </span>
-            </button>
+            <x-livewire-submit-button
+                type="button"
+                wire:click="save"
+                target="save"
+                :loading="$editing ? __('Updating…') : __('Adding…')"
+            >
+                {{ $editing ? 'Update Account' : 'Add Account' }}
+            </x-livewire-submit-button>
         </div>
     </div>
-
-    <style>
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .opacity-70 { opacity: 0.7; cursor: not-allowed; }
-        [wire\:loading\.delay] { display: none !important; }
-        [wire\:loading\.delay].wire-loading { display: flex !important; }
-    </style>
 
     <div style="display:flex; flex-direction:column; gap:32px">
         <!-- Main Form: Principal Credentials -->

@@ -7,9 +7,9 @@
                 <div class="sa-breadcrumb">Culture Management · Heritage Portfolio</div>
             </div>
         </div>
-        <button wire:click="save" class="btn btn-primary" style="padding:12px 32px; border-radius:14px; font-weight:800; font-size:13px; box-shadow:0 8px 24px rgba(196,75,43,0.3)">
+        <x-livewire-submit-button type="button" wire:click="save" target="save" :loading="$editing ? __('Updating…') : __('Saving…')">
             {{ $editing ? 'Synchronize Record' : 'Commit New Tribe' }}
-        </button>
+        </x-livewire-submit-button>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 400px; gap:32px; align-items:start">

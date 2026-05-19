@@ -133,7 +133,9 @@
                         </label>
                     @endforeach
                 </div>
-                <button type="button" wire:click="saveTribeAccess" class="btn btn-primary" style="padding:12px 24px; border-radius:14px; font-weight:800; font-size:12px">Save tribe access</button>
+                <x-livewire-submit-button type="button" wire:click="saveTribeAccess" target="saveTribeAccess" variant="md" loading="{{ __('Saving…') }}">
+                    Save tribe access
+                </x-livewire-submit-button>
             </div>
 
             <div style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:32px; padding:40px">
@@ -149,7 +151,9 @@
                         </select>
                         @error('plan') <div style="color:var(--clay-red); font-size:11px; margin-top:8px; font-weight:700">{{ $message }}</div> @enderror
                     </div>
-                    <button type="button" wire:click="saveSubscriptionPlan" class="btn btn-primary" style="padding:14px 24px; border-radius:14px; font-weight:800; font-size:12px">Save plan</button>
+                    <x-livewire-submit-button type="button" wire:click="saveSubscriptionPlan" target="saveSubscriptionPlan" variant="md" loading="{{ __('Saving…') }}">
+                        Save plan
+                    </x-livewire-submit-button>
                 </div>
             </div>
 

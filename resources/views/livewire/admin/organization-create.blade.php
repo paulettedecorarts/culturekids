@@ -199,7 +199,9 @@
             </div>
 
             <div class="org-create-actions">
-                <button type="submit" class="btn btn-primary" style="padding:14px 28px;border-radius:14px;font-weight:700">Create organization</button>
+                <x-livewire-submit-button target="save" variant="md" loading="{{ __('Creating…') }}">
+                    Create organization
+                </x-livewire-submit-button>
                 <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid var(--cms-input-border);color: var(--cms-text);text-decoration:none;padding:12px 20px">Back to list</a>
             </div>
         </form>

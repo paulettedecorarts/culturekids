@@ -148,9 +148,9 @@
                     </div>
 
                     <div style="margin-top:12px">
-                        <button type="submit" class="btn btn-primary" style="width:100%; padding:16px; border-radius:14px">
+                        <x-livewire-submit-button target="save" variant="block" :loading="$editing ? __('Saving…') : __('Creating…')">
                             {{ $editing ? 'Save Changes' : 'Create Module' }}
-                        </button>
+                        </x-livewire-submit-button>
                     </div>
                 </form>
             </div>

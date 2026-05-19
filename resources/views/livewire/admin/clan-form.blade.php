@@ -160,9 +160,9 @@
         {{-- Actions --}}
         <div style="display:flex;gap:12px;justify-content:flex-end;padding-bottom:40px">
             <a href="{{ route($routePrefix . '.clans') }}" class="btn btn-ghost" style="text-decoration:none;padding:12px 28px;border-radius:12px;font-size:14px;font-weight:600">Cancel</a>
-            <button type="submit" class="btn btn-primary" style="padding:12px 32px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 8px 24px rgba(196,75,43,0.3)">
+            <x-livewire-submit-button target="save" :loading="$editing ? __('Updating…') : __('Creating…')">
                 {{ $isEdit ? 'Update Clan' : 'Add Clan' }}
-            </button>
+            </x-livewire-submit-button>
         </div>
     </form>
 </div>

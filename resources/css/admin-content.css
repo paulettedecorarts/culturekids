@@ -29,6 +29,70 @@
 .sa-content .sa-stat-val { color: var(--sa-text) !important; }
 .sa-content .sa-stat-label { color: var(--sa-text-muted) !important; }
 
+/* Livewire submit buttons (x-livewire-submit-button) */
+@keyframes sa-btn-spin {
+    to { transform: rotate(360deg); }
+}
+
+.sa-content .lw-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sa-content .lw-submit-btn--primary {
+    padding: 12px 32px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(196, 75, 43, 0.3);
+}
+
+.sa-content .lw-submit-btn--block {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.sa-content .lw-submit-btn--md {
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.sa-content .lw-submit-btn--success-sm {
+    background: rgba(74, 124, 89, 0.25) !important;
+    color: #b8d9c6 !important;
+    border: 1px solid rgba(74, 124, 89, 0.4) !important;
+}
+
+.sa-content .lw-submit-btn--sm {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.sa-content .lw-submit-btn[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.sa-content .lw-submit-btn__loading {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.sa-content .lw-submit-btn__icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    animation: sa-btn-spin 1s linear infinite;
+}
+
 .sa-content .sa-table-wrap {
     background: var(--sa-surface) !important;
     border-color: var(--sa-border) !important;

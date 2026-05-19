@@ -139,7 +139,9 @@
 
                 <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
                     <button wire:click="closeModal" class="btn btn-ghost btn-sm">Cancel</button>
-                    <button wire:click="saveTag" class="btn btn-primary btn-sm">{{ $editing ? 'Save changes' : 'Create' }}</button>
+                    <x-livewire-submit-button type="button" wire:click="saveTag" target="saveTag" variant="sm" class="btn-primary" :loading="$editing ? __('Saving…') : __('Creating…')">
+                        {{ $editing ? 'Save changes' : 'Create' }}
+                    </x-livewire-submit-button>
                 </div>
             </div>
         </div>

@@ -12,9 +12,9 @@
                 <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit</button>
             @endif
             @if($isEditing)
-                <button type="button" class="btn btn-sm" wire:click="saveLanguage" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">
+                <x-livewire-submit-button type="button" wire:click="saveLanguage" target="saveLanguage" variant="success-sm">
                     {{ $language ? 'Save Changes' : 'Create Language' }}
-                </button>
+                </x-livewire-submit-button>
                 <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
                     {{ $language ? 'Cancel' : 'Back' }}
                 </button>

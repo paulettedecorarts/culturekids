@@ -17,15 +17,18 @@
         </div>
         <div style="display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap">
             <span class="sa-badge">⚡ God Mode Active</span>
-            <button
+            <x-livewire-submit-button
                 type="button"
-                class="btn btn-sm"
                 wire:click="toggleMaintenance"
                 wire:confirm="{{ $maintenanceMode ? 'Disable maintenance mode and bring the app back online?' : 'Enable maintenance mode? Public and API traffic will see a maintenance page (Super Admin routes stay available).' }}"
+                target="toggleMaintenance"
+                variant="sm"
+                class="btn btn-sm"
+                :loading="__('Updating…')"
                 style="{{ $maintenanceMode ? 'background:rgba(74,124,89,.2);color:var(--banana-green);border:1px solid rgba(74,124,89,.4)' : 'background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3)' }};padding:5px 12px;font-size:10px"
             >
                 {{ $maintenanceMode ? '✓ Maintenance ON' : '⚠️ Maintenance' }}
-            </button>
+            </x-livewire-submit-button>
         </div>
     </div>
 

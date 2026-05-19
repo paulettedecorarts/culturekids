@@ -101,14 +101,17 @@
                         Cannot Impersonate
                     </button>
                 @else
-                    <button 
+                    <x-livewire-submit-button
+                        type="button"
                         wire:click="impersonate({{ $user->id }})"
                         wire:confirm="Are you sure you want to impersonate {{ $user->name }}? All actions will be logged."
-                        class="btn btn-sm" 
+                        target="impersonate"
+                        variant="sm"
+                        loading="{{ __('Starting…') }}"
                         style="background:rgba(232,135,42,.2);color:var(--sunfire-light);padding:3px 7px;font-size:9px;border:1px solid rgba(232,135,42,.3)"
                     >
                         🎭 Impersonate
-                    </button>
+                    </x-livewire-submit-button>
                 @endif
             </div>
         @empty

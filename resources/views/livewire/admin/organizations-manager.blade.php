@@ -134,9 +134,9 @@
                     </div>
 
                     <div style="grid-column: span 2; margin-top:12px">
-                        <button type="submit" class="btn btn-primary" style="width:100%; padding:16px; border-radius:14px">
+                        <x-livewire-submit-button target="save" variant="block">
                             Save changes
-                        </button>
+                        </x-livewire-submit-button>
                     </div>
                 </form>
             </div>

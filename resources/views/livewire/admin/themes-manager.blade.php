@@ -234,9 +234,13 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary" style="width:100%;padding:16px;border-radius:14px;font-size:15px;font-weight:800">
+                        <x-livewire-submit-button
+                            target="save"
+                            variant="block"
+                            :loading="$editing ? __('Saving…') : __('Creating…')"
+                        >
                             {{ $editing ? '💾 Save Changes' : '✨ Create Theme' }}
-                        </button>
+                        </x-livewire-submit-button>
                     </form>
 
                     <!-- Live Preview Section -->

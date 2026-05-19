@@ -14,9 +14,9 @@
                 <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit Song</button>
             @endif
             @if($isEditing)
-                <button type="button" class="btn btn-sm" wire:click="saveSong" wire:loading.attr="disabled" wire:target="saveSong,media_file,cover_image" style="background:rgba(74,124,89,.25);color:#B8D9C6;border:1px solid rgba(74,124,89,.4)">
+                <x-livewire-submit-button type="button" wire:click="saveSong" target="saveSong,media_file,cover_image" variant="success-sm" :loading="$song ? __('Saving…') : __('Creating…')">
                     {{ $song ? 'Save Changes' : 'Create Song' }}
-                </button>
+                </x-livewire-submit-button>
                 <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
                     {{ $song ? 'Cancel' : 'Back' }}
                 </button>
