@@ -47,6 +47,20 @@ class Dashboard extends Component
         $this->maintenanceMode = app()->isDownForMaintenance();
     }
 
+    public function toggleGlobalModule(int $moduleId): void
+    {
+        $module = Module::query()->findOrFail($moduleId);
+        $module->update(['is_enabled' => ! $module->is_enabled]);
+
+        AuditLog::record(
+            $module->is_enabled ? 'MODULE_ENABLED' : 'MODULE_DISABLED',
+            'platform/modules/'.$module->key,
+            ['module_id' => $module->id, 'module_key' => $module->key]
+        );
+
+        session()->flash('message', "{$module->name} is now ".($module->is_enabled ? 'enabled' : 'disabled').' globally.');
+    }
+
     public function render(PlatformStatsService $stats, PlatformAnalyticsService $analytics)
     {
         $platformStats = $stats->snapshot();
@@ -62,7 +76,6 @@ class Dashboard extends Component
         $previewModules = Module::query()
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->take(6)
             ->get();
 
         return view('livewire.admin.dashboard', [

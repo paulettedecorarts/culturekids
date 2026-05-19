@@ -4,32 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\AgeProfile;
+use App\Services\OrganisationModuleResolver;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AgeProfileController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request, OrganisationModuleResolver $moduleResolver): JsonResponse
     {
+        $user = $request->user();
+
         $profiles = AgeProfile::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('min_age')
-            ->get([
-                'id',
-                'name',
-                'key',
-                'min_age',
-                'max_age',
-                'icon_emoji',
-                'color',
-                'ui_scale',
-                'touch_target_px',
-                'reading_level',
-                'activity_complexity',
-                'content_access_rules',
-                'ui_features',
-                'is_audio_first',
-            ]);
+            ->get()
+            ->map(fn (AgeProfile $profile) => $moduleResolver->formatAgeProfileForApi($profile, $user))
+            ->values();
 
         return response()->json([
             'age_profiles' => $profiles,

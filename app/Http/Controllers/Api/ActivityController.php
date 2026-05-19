@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Services\OrganisationModuleResolver;
 use App\Models\Tribe;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
+    use ChecksOrganisationModules;
     /**
      * Get all activities (flashcards, puzzles) - no organization scoping needed
      * Activities are already scoped through tribes
@@ -22,27 +25,31 @@ class ActivityController extends Controller
             ->where('is_published', true)
             ->orderBy('title');
 
-        // Filter by type if provided
+        $resolver = app(OrganisationModuleResolver::class);
+
         if ($type) {
+            $resolver->assertActivityTypeAllowedForUser($request->user(), $type);
             $query->where('type', $type);
         }
 
-        $activities = $query->get()->map(function ($activity) {
-            return [
-                'id' => $activity->id,
-                'title' => $activity->title,
-                'type' => $activity->type,
-                'age_range' => $activity->age_range,
-                'stars' => $activity->star_points ?? 10,
-                'description' => $activity->description,
-                'tribe' => $activity->tribe ? [
-                    'id' => $activity->tribe->id,
-                    'name' => $activity->tribe->name,
-                    'icon' => $activity->tribe->hero_emoji ?? $activity->tribe->hero_icon,
-                    'color' => $activity->tribe->color,
-                ] : null,
-            ];
-        });
+        $activities = $resolver->filterActivitiesForUser($query->get(), $request->user())
+            ->map(function ($activity) {
+                return [
+                    'id' => $activity->id,
+                    'title' => $activity->title,
+                    'type' => $activity->type,
+                    'age_range' => $activity->age_range,
+                    'stars' => $activity->star_points ?? 10,
+                    'description' => $activity->description,
+                    'tribe' => $activity->tribe ? [
+                        'id' => $activity->tribe->id,
+                        'name' => $activity->tribe->name,
+                        'icon' => $activity->tribe->hero_emoji ?? $activity->tribe->hero_icon,
+                        'color' => $activity->tribe->color,
+                    ] : null,
+                ];
+            })
+            ->values();
 
         return response()->json($activities);
     }
@@ -54,17 +61,22 @@ class ActivityController extends Controller
     {
         $tribe = Tribe::findOrFail($tribeId);
         
-        $activities = Activity::where('tribe_id', $tribeId)
-            ->orderBy('type')
-            ->orderBy('title')
-            ->get([
-                'id',
-                'title',
-                'type',
-                'age_range',
-                'star_points',
-                'description',
-            ])->map(function ($activity) {
+        $resolver = app(OrganisationModuleResolver::class);
+
+        $activities = $resolver->filterActivitiesForUser(
+            Activity::where('tribe_id', $tribeId)
+                ->orderBy('type')
+                ->orderBy('title')
+                ->get([
+                    'id',
+                    'title',
+                    'type',
+                    'age_range',
+                    'star_points',
+                    'description',
+                ]),
+            $request->user()
+        )->map(function ($activity) {
                 return [
                     'id' => $activity->id,
                     'title' => $activity->title,
@@ -73,7 +85,8 @@ class ActivityController extends Controller
                     'stars' => $activity->star_points ?? 10,
                     'description' => $activity->description,
                 ];
-            });
+            })
+            ->values();
 
         return response()->json([
             'tribe' => [
@@ -101,6 +114,8 @@ class ActivityController extends Controller
                 $q->orderBy('order_index');
             }
         ])->findOrFail($id);
+
+        app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $activity->type);
 
         // Check organization access
         if ($user->organisation_id && $activity->tribe) {

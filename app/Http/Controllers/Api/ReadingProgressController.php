@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\ReadingProgress;
 use App\Models\Comic;
@@ -10,11 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class ReadingProgressController extends Controller
 {
+    use ChecksOrganisationModules;
+
     /**
      * Update reading progress for a comic
      */
     public function updateProgress(Request $request)
     {
+        $this->assertModule($request, 'stories');
+
         $validator = Validator::make($request->all(), [
             'comic_id' => 'required|integer',
             'current_page' => 'required|integer|min:0',
@@ -61,6 +66,7 @@ class ReadingProgressController extends Controller
      */
     public function getProgress(Request $request, $comicId)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         
         $progress = ReadingProgress::where('user_id', $user->id)
@@ -93,6 +99,7 @@ class ReadingProgressController extends Controller
      */
     public function getAllProgress(Request $request)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         
         $progress = ReadingProgress::where('user_id', $user->id)

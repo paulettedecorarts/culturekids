@@ -63,7 +63,6 @@ HTML;
         {!! $saNavLink(route('admin.language-activities'), '📝', 'Language Activities', request()->routeIs('admin.language-activities*')) !!}
         {!! $saNavLink(route('admin.assets'), '🖼', 'Assets', request()->routeIs('admin.assets*')) !!}
         {!! $saNavLink(route('admin.translations'), '🌐', 'Translations', request()->routeIs('admin.translations*')) !!}
-        {!! $saNavLink(route('admin.modules-registry'), '🔧', 'Modules Registry', request()->routeIs('admin.modules-registry')) !!}
         {!! $saNavLink(route('admin.age-categories'), '🌱', 'Age Categories', request()->routeIs('admin.age-categories*')) !!}
         {!! $saNavLink(route('admin.tribe-registry'), '🌍', 'Tribe Directory', request()->routeIs('admin.tribe-registry*')) !!}
         {!! $saNavLink(route('admin.clans'), '🌳', 'Clan Registry', request()->routeIs('admin.clans*')) !!}

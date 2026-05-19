@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\DB;
 
 class OrganisationContentReviewService
 {
+    public function __construct(
+        private readonly OrganisationModuleResolver $moduleResolver,
+    ) {}
     /** @return Collection<int, array{content_type: string, type_label: string, id: int, title: string, updated_at: mixed, status: ?string}> */
     public function pendingForOrganisation(int $orgId): Collection
     {
@@ -76,7 +79,10 @@ class OrganisationContentReviewService
             $items->push($this->row($row, OrganisationContentDecision::TYPE_CULTURE, $row->status));
         }
 
-        return $this->sortPendingItems($items, 'updated_desc');
+        return $this->moduleResolver->filterReviewItemsForOrganisation(
+            $this->sortPendingItems($items, 'updated_desc'),
+            $orgId
+        );
     }
 
     /**
@@ -143,16 +149,23 @@ class OrganisationContentReviewService
             ->limit(500)
             ->get();
 
-        return $decisions
-            ->map(fn (OrganisationContentDecision $decision) => $this->hydrateApprovedRow($decision))
-            ->filter()
-            ->unique(fn (array $row) => $row['content_type'].':'.$row['id'])
-            ->values();
+        return $this->moduleResolver->filterReviewItemsForOrganisation(
+            $decisions
+                ->map(fn (OrganisationContentDecision $decision) => $this->hydrateApprovedRow($decision))
+                ->filter()
+                ->unique(fn (array $row) => $row['content_type'].':'.$row['id'])
+                ->values(),
+            $orgId
+        );
     }
 
     public function approve(int $orgId, int $userId, string $contentType, int $contentId): ?string
     {
         if (! in_array($contentType, OrganisationContentDecision::ALL_TYPES, true)) {
+            return null;
+        }
+
+        if (! $this->moduleResolver->isContentTypeAllowedForOrganisation($orgId, $contentType)) {
             return null;
         }
 
@@ -168,6 +181,10 @@ class OrganisationContentReviewService
     public function reject(int $orgId, int $userId, string $contentType, int $contentId): ?string
     {
         if (! in_array($contentType, OrganisationContentDecision::ALL_TYPES, true)) {
+            return null;
+        }
+
+        if (! $this->moduleResolver->isContentTypeAllowedForOrganisation($orgId, $contentType)) {
             return null;
         }
 

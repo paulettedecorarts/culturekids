@@ -126,7 +126,8 @@ Cannot impersonate self or other super admins.
 | Badges earned (7 days) | Not shown | No |
 | Active org table + Manage | Table present; some actions are placeholders | Partial |
 | “God Mode Active” badge | “SUPER ADMIN” style badge | Similar |
-| Module toggles on dashboard | “Coming soon” + link to `/admin/modules` | Partial |
+| Module toggles on dashboard | Live global toggles + link to `/admin/modules`; `ModuleSeeder` for six canonical keys | Done |
+| Mobile org modules API | `GET /api/v1/organisation/modules` + content route gating | Done — see [modules.md](./modules.md) |
 
 **Dashboard vs mockup: ~40–50%.**
 
@@ -194,7 +195,8 @@ Content / CMS breadth     █████████░  ~90% (beyond spec)
 ### Phase 1 (done)
 
 - **`App\Services\Admin\PlatformStatsService`** — shared platform metrics for the dashboard.
-- **Dashboard** — Active children, organisations, published stories, learning completions (7d); org Manage links; module preview.
+- **Dashboard** — Active children, organisations, published stories, learning completions (7d); org Manage links; interactive module toggles.
+- **Modules** — `ModuleSeeder`, `GET /api/v1/organisation/modules`, API enforcement on comics/songs/activities/offline — [modules.md](./modules.md), [system-workflows-reference.md](./system-workflows-reference.md).
 - **Sidebar** — Drawings, games, puzzles, mazes, spot-difference, word searches, culture/language activities, story packs, assets, translations.
 - **Maintenance mode** — Livewire toggle via `artisan down` / `up`; admin routes exempt in `bootstrap/app.php`.
 

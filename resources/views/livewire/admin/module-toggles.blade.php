@@ -29,10 +29,7 @@
         <div style="text-align:center;padding:var(--sp-12);color:var(--cms-text-muted)">
             <div style="font-size:48px;margin-bottom:var(--sp-4)">🧩</div>
             <div style="font-size:16px;font-weight:700;margin-bottom:var(--sp-2)">No modules configured</div>
-            <div style="font-size:13px;margin-bottom:var(--sp-4)">Create modules in the Module Registry first.</div>
-            <a href="{{ route('admin.modules-registry') }}" style="display:inline-block;background:var(--clay-red);color:var(--cms-text);padding:12px 24px;border-radius:14px;text-decoration:none;font-weight:700;font-size:13px">
-                Go to Module Registry →
-            </a>
+            <div style="font-size:13px">Run <code style="font-size:12px">php artisan db:seed --class=ModuleSeeder</code> to install the canonical module list.</div>
         </div>
     @endif
 </div>

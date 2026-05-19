@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\ChildProfile;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class AgeCategoryPolicyService
 {
+    public function __construct(
+        private readonly OrganisationModuleResolver $moduleResolver,
+    ) {}
     public function resolveForChild(ChildProfile $child): ?AgeProfile
     {
         if ($child->ageProfile) {
@@ -33,8 +36,13 @@ class AgeCategoryPolicyService
             ->first();
     }
 
-    public function applyContentPolicies(?AgeProfile $category, Builder $comics, Builder $songs, Builder $activities): void
-    {
+    public function applyContentPolicies(
+        ?AgeProfile $category,
+        Builder $comics,
+        Builder $songs,
+        Builder $activities,
+        ?User $user = null,
+    ): void {
         if (! $category) {
             return;
         }
@@ -45,20 +53,40 @@ class AgeCategoryPolicyService
         $this->applyAgeWindow($comics, 'age_min', 'age_max', $min, $max);
         $this->applyAgeWindow($songs, 'age_min', 'age_max', $min, $max);
 
-        $allowedModules = data_get($category->content_access_rules, 'modules', []);
-        if (is_array($allowedModules) && count($allowedModules) > 0) {
-            $activities->whereIn('type', $allowedModules);
+        $ageModules = data_get($category->content_access_rules, 'modules', []);
+        if (! is_array($ageModules) || $ageModules === []) {
+            return;
+        }
+
+        $effectiveAgeModules = $this->moduleResolver->effectiveAgeProfileModulesForUser($user, $ageModules);
+
+        if (! in_array('stories', $effectiveAgeModules, true)) {
+            $comics->whereRaw('0 = 1');
+        }
+
+        if (! in_array('songs', $effectiveAgeModules, true)) {
+            $songs->whereRaw('0 = 1');
+        }
+
+        $activityTypes = $this->moduleResolver->effectiveActivityTypesForAgeProfileModules($user, $ageModules);
+
+        if ($activityTypes === []) {
+            $activities->whereRaw('0 = 1');
+        } else {
+            $activities->whereIn('type', $activityTypes);
         }
     }
 
-    public function enrichUiPolicyPayload(?AgeProfile $category): array
+    public function enrichUiPolicyPayload(?AgeProfile $category, ?User $user = null): array
     {
         if (! $category) {
             return [];
         }
 
+        $formatted = $this->moduleResolver->formatAgeProfileForApi($category, $user);
+
         return [
-            'age_profile' => $category->only([
+            'age_profile' => collect($formatted)->only([
                 'id',
                 'name',
                 'key',
@@ -69,9 +97,9 @@ class AgeCategoryPolicyService
                 'reading_level',
                 'activity_complexity',
                 'is_audio_first',
-            ]),
-            'ui_features' => $category->ui_features ?? [],
-            'content_access_rules' => $category->content_access_rules ?? [],
+            ])->all(),
+            'ui_features' => $formatted['ui_features'] ?? [],
+            'content_access_rules' => $formatted['content_access_rules'] ?? [],
         ];
     }
 

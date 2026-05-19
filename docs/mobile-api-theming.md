@@ -1,6 +1,10 @@
 # Mobile API — Organisation Theming
 
+> **Modules:** For enabled feature flags per org, see [modules.md](./modules.md) (`GET /api/v1/organisation/modules`). Age bands expose `content_access_rules.effective_modules` on `GET /api/v1/age-profiles` — use those for child UI, not `modules` alone.
+
 Guide for Expo / React Native developers integrating white-label branding from the Culture Kids backend.
+
+When the organisation has disabled the **theme_engine** module, the API still returns **200** with the platform default palette and `"theme_engine_enabled": false`. Hide custom branding UI in the app when that flag is false.
 
 ---
 

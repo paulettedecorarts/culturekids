@@ -7,7 +7,9 @@ use App\Models\OrganisationComicDecision;
 use App\Models\OrganisationSongDecision;
 use App\Models\Song;
 use App\Models\Tribe;
+use App\Models\OrganisationContentDecision;
 use App\Models\User;
+use App\Services\OrganisationModuleResolver;
 use App\Services\TeacherApprovedCatalogService;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -59,6 +61,13 @@ class TeacherCatalogScope
             return $query->whereRaw('0 = 1');
         }
 
+        if (! app(OrganisationModuleResolver::class)->isContentTypeAllowedForOrganisation(
+            (int) $org->id,
+            OrganisationContentDecision::TYPE_STORY
+        )) {
+            return $query->whereRaw('0 = 1');
+        }
+
         $ids = $org->approvedComicIds();
 
         return $query->where(function ($q) use ($ids, $org) {
@@ -83,6 +92,13 @@ class TeacherCatalogScope
             return $query->whereRaw('0 = 1');
         }
 
+        if (! app(OrganisationModuleResolver::class)->isContentTypeAllowedForOrganisation(
+            (int) $org->id,
+            OrganisationContentDecision::TYPE_SONG
+        )) {
+            return $query->whereRaw('0 = 1');
+        }
+
         $ids = $org->approvedSongIds();
 
         return $query->where(function ($q) use ($ids, $org) {
@@ -101,6 +117,13 @@ class TeacherCatalogScope
 
         $org = $user->organisation;
         if (! $org) {
+            return false;
+        }
+
+        if (! app(OrganisationModuleResolver::class)->isContentTypeAllowedForOrganisation(
+            (int) $org->id,
+            OrganisationContentDecision::TYPE_STORY
+        )) {
             return false;
         }
 
@@ -128,6 +151,13 @@ class TeacherCatalogScope
 
         $org = $user->organisation;
         if (! $org) {
+            return false;
+        }
+
+        if (! app(OrganisationModuleResolver::class)->isContentTypeAllowedForOrganisation(
+            (int) $org->id,
+            OrganisationContentDecision::TYPE_SONG
+        )) {
             return false;
         }
 

@@ -13,7 +13,6 @@ use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\ImpersonateUser;
 use App\Livewire\Admin\LanguageDetailPage;
 use App\Livewire\Admin\LanguagesManager;
-use App\Livewire\Admin\ModuleRegistry;
 use App\Livewire\Admin\ModuleToggles;
 use App\Livewire\Admin\OrganizationCreate;
 use App\Livewire\Admin\OrganizationDetail;
@@ -151,7 +150,6 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('activities/types', ActivityTypeSelector::class)->name('activities.types');
     Route::get('activities/create', ActivityDetailPage::class)->name('activities.create');
     Route::get('activities/{id}', ActivityDetailPage::class)->name('activities.detail');
-    Route::get('/modules-registry', ModuleRegistry::class)->name('modules-registry');
     Route::get('/age-categories', AgeCategories::class)->name('age-categories');
     Route::get('/age-categories/create', AgeProfileDetailPage::class)->name('age-categories.create');
     Route::get('/age-categories/{id}', AgeProfileDetailPage::class)->name('age-categories.detail');

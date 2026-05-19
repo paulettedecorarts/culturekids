@@ -2,45 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
+use App\Services\OrganisationModuleResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class OfflineBundleController extends Controller
 {
+    use ChecksOrganisationModules;
     /**
      * Get bundle manifest for a tribe (all content metadata)
      * This returns metadata only - actual assets are downloaded separately
      */
     public function getTribeBundle(Request $request, int $tribeId): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $tribe = Tribe::findOrFail($tribeId);
-        
+        $resolver = app(OrganisationModuleResolver::class);
+        $user = $request->user();
+
         // Get all published comics for this tribe
-        $comics = Comic::where('tribe_id', $tribeId)
+        $comics = $resolver->filterComicsForUser(Comic::where('tribe_id', $tribeId)
             ->where('status', 'published')
             ->with([
                 'panels:id,comic_id,order_index,image_path,audio_url,caption',
                 'panels.vocabTags:id,panel_id,word,translation,phonetic,x_position,y_position,width,height',
             ])
-            ->get();
+            ->get(), $user);
 
         // Get all published songs for this tribe
-        $songs = Song::where('tribe_id', $tribeId)
+        $songs = $resolver->filterSongsForUser(Song::where('tribe_id', $tribeId)
             ->where('status', 'published')
-            ->get();
+            ->get(), $user);
 
         // Get all published activities for this tribe
-        $activities = Activity::where('tribe_id', $tribeId)
+        $activities = $resolver->filterActivitiesForUser(Activity::where('tribe_id', $tribeId)
             ->where('is_published', true)
             ->with('flashcardSlides')
-            ->get();
+            ->get(), $user);
 
         // Calculate total bundle size
         $totalSize = 0;
@@ -191,6 +197,8 @@ class OfflineBundleController extends Controller
      */
     public function downloadComicBundle(Request $request, int $comicId)
     {
+        $this->assertModule($request, 'offline_bundles');
+        $this->assertModule($request, 'stories');
         $comic = Comic::where('status', 'published')->findOrFail($comicId);
 
         if (!$comic->bundle_path || !Storage::disk('public')->exists($comic->bundle_path)) {
@@ -213,16 +221,19 @@ class OfflineBundleController extends Controller
      */
     public function getTribeBundleAssets(Request $request, int $tribeId): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $tribe = Tribe::findOrFail($tribeId);
-        
-        $comics = Comic::where('tribe_id', $tribeId)
+        $resolver = app(OrganisationModuleResolver::class);
+        $user = $request->user();
+
+        $comics = $resolver->filterComicsForUser(Comic::where('tribe_id', $tribeId)
             ->where('status', 'published')
             ->with('panels')
-            ->get();
+            ->get(), $user);
 
-        $songs = Song::where('tribe_id', $tribeId)
+        $songs = $resolver->filterSongsForUser(Song::where('tribe_id', $tribeId)
             ->where('status', 'published')
-            ->get();
+            ->get(), $user);
 
         $assets = [
             'comics' => [],
@@ -309,6 +320,7 @@ class OfflineBundleController extends Controller
      */
     public function markPackAsDownloaded(Request $request, int $tribeId): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $request->validate([
             'downloaded_at' => 'nullable|date',
         ]);
@@ -343,6 +355,7 @@ class OfflineBundleController extends Controller
      */
     public function removeDownloadedPack(Request $request, int $tribeId): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $user = $request->user();
 
         $deleted = ParentDownloadedPack::where('user_id', $user->id)
@@ -365,6 +378,7 @@ class OfflineBundleController extends Controller
      */
     public function getDownloadedPacks(Request $request): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $user = $request->user();
 
         $packs = ParentDownloadedPack::where('user_id', $user->id)
@@ -388,8 +402,10 @@ class OfflineBundleController extends Controller
      */
     public function getChildAccessibleContent(Request $request): JsonResponse
     {
+        $this->assertModule($request, 'offline_bundles');
         $user = $request->user();
-        
+        $resolver = app(OrganisationModuleResolver::class);
+
         // Get parent user (if child, get their parent)
         $parentId = $user->parent_id ?? $user->id;
 
@@ -407,16 +423,16 @@ class OfflineBundleController extends Controller
         }
 
         // Get comics from downloaded tribes
-        $comics = Comic::whereIn('tribe_id', $downloadedTribeIds)
+        $comics = $resolver->filterComicsForUser(Comic::whereIn('tribe_id', $downloadedTribeIds)
             ->where('status', 'published')
             ->with('tribe:id,name,icon,color')
-            ->get();
+            ->get(), $user);
 
         // Get songs from downloaded tribes
-        $songs = Song::whereIn('tribe_id', $downloadedTribeIds)
+        $songs = $resolver->filterSongsForUser(Song::whereIn('tribe_id', $downloadedTribeIds)
             ->where('status', 'published')
             ->with('tribe:id,name,icon,color')
-            ->get();
+            ->get(), $user);
 
         // Get tribe info
         $tribes = Tribe::whereIn('id', $downloadedTribeIds)->get();

@@ -19,7 +19,7 @@ class AgeProfileFunctionalityTest extends TestCase
 
     public function test_age_profiles_endpoint_requires_sanctum_auth(): void
     {
-        $this->getJson('/api/age-profiles')->assertUnauthorized();
+        $this->getJson('/api/v1/age-profiles')->assertUnauthorized();
     }
 
     public function test_super_admin_can_fetch_age_profiles_via_api(): void
@@ -27,7 +27,7 @@ class AgeProfileFunctionalityTest extends TestCase
         $user = $this->createSuperAdminUser();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/age-profiles');
+        $response = $this->getJson('/api/v1/age-profiles');
 
         $response->assertOk()
             ->assertJsonCount(4, 'age_profiles')
@@ -43,7 +43,7 @@ class AgeProfileFunctionalityTest extends TestCase
         $this->ensureRole('super_admin');
         $user->assignRole('super_admin');
 
-        $login = $this->postJson('/api/auth/login', [
+        $login = $this->postJson('/api/v1/auth/login', [
             'email' => 'admin@culturekids.app',
             'password' => 'password',
         ])->assertOk()
@@ -54,11 +54,11 @@ class AgeProfileFunctionalityTest extends TestCase
 
         $headers = ['Authorization' => 'Bearer '.$token];
 
-        $this->getJson('/api/auth/me', $headers)
+        $this->getJson('/api/v1/auth/me', $headers)
             ->assertOk()
             ->assertJsonPath('user.email', 'admin@culturekids.app');
 
-        $this->postJson('/api/auth/logout', [], $headers)
+        $this->postJson('/api/v1/auth/logout', [], $headers)
             ->assertOk()
             ->assertJsonPath('message', 'Successfully logged out');
     }

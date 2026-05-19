@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Comic;
 use App\Models\ReadingProgress;
@@ -10,12 +11,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ComicController extends Controller
 {
+    use ChecksOrganisationModules;
     /**
      * Get all published comics/stories
      * Scoped to user's organization or public comics
      */
     public function index(Request $request)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         
         $query = Comic::query()
@@ -72,6 +75,7 @@ class ComicController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         
         $query = Comic::query()
@@ -124,6 +128,7 @@ class ComicController extends Controller
      */
     public function getByTribe(Request $request, $tribeId)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         
         $query = Comic::query()
@@ -162,6 +167,7 @@ class ComicController extends Controller
      */
     public function complete(Request $request, $id)
     {
+        $this->assertModule($request, 'stories');
         $user = $request->user();
         $comic = Comic::with('tribe')->find($id);
         

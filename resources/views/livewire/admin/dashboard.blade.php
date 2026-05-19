@@ -99,11 +99,21 @@
     <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color: var(--cms-text-muted);margin-bottom:var(--sp-3);margin-top:var(--sp-5)">Global Module Control</p>
     <div class="sa-table-wrap" style="margin-bottom:var(--sp-3)">
         @foreach($previewModules as $module)
-            <div class="sa-table-row" style="grid-template-columns:1fr auto">
-                <span style="font-size:12px;color:var(--cms-text)">{{ $module->name }}</span>
-                <span class="status-pill {{ $module->is_enabled ? 'status-published' : 'status-draft' }}">
-                    {{ $module->is_enabled ? 'Enabled' : 'Disabled' }}
-                </span>
+            <div class="sa-table-row" style="grid-template-columns:1fr auto;align-items:center">
+                <span style="font-size:12px;color:var(--cms-text)">{{ $module->icon }} {{ $module->name }}</span>
+                <button
+                    type="button"
+                    wire:click="toggleGlobalModule({{ $module->id }})"
+                    wire:loading.attr="disabled"
+                    wire:target="toggleGlobalModule({{ $module->id }})"
+                    class="status-pill {{ $module->is_enabled ? 'status-published' : 'status-draft' }}"
+                    style="border:none;cursor:pointer"
+                >
+                    <span wire:loading.remove wire:target="toggleGlobalModule({{ $module->id }})">
+                        {{ $module->is_enabled ? 'Enabled' : 'Disabled' }}
+                    </span>
+                    <span wire:loading wire:target="toggleGlobalModule({{ $module->id }})">…</span>
+                </button>
             </div>
         @endforeach
     </div>

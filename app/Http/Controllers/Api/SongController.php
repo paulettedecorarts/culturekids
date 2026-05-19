@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Song;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
+    use ChecksOrganisationModules;
     /**
      * Get all published songs
      * Scoped to user's organization or public songs
      */
     public function index(Request $request)
     {
+        $this->assertModule($request, 'songs');
         $user = $request->user();
         
         $query = Song::query()
@@ -64,6 +67,7 @@ class SongController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $this->assertModule($request, 'songs');
         $user = $request->user();
         
         $query = Song::query()
@@ -112,6 +116,7 @@ class SongController extends Controller
      */
     public function getByTribe(Request $request, $tribeId)
     {
+        $this->assertModule($request, 'songs');
         $user = $request->user();
         
         $query = Song::query()

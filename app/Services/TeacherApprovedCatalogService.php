@@ -44,47 +44,52 @@ class TeacherApprovedCatalogService
         }
 
         $items = collect();
+        $moduleResolver = app(OrganisationModuleResolver::class);
 
-        TeacherCatalogScope::comicsQueryFor($user)
-            ->withCount('panels')
-            ->with('tribe:id,name,hero_emoji')
-            ->get(['id', 'title', 'tribe_id', 'age_min', 'age_max', 'cover_image_path'])
-            ->each(function (Comic $comic) use ($items): void {
-                $items->push([
-                    'content_type' => OrganisationContentDecision::TYPE_STORY,
-                    'type_label' => OrganisationContentDecision::labelFor(OrganisationContentDecision::TYPE_STORY),
-                    'id' => (int) $comic->id,
-                    'title' => $comic->title,
-                    'tribe_id' => $comic->tribe_id ? (int) $comic->tribe_id : null,
-                    'tribe_name' => $comic->tribe?->name,
-                    'tribe_emoji' => $comic->tribe?->hero_emoji,
-                    'age_min' => $comic->age_min !== null ? (int) $comic->age_min : null,
-                    'age_max' => $comic->age_max !== null ? (int) $comic->age_max : null,
-                    'meta' => $comic->panels_count.' panels',
-                    'view_url' => route('teacher.stories.show', $comic->id),
-                    'cover_image_path' => $comic->cover_image_path,
-                ]);
-            });
+        if ($moduleResolver->isContentTypeAllowedForOrganisation((int) $org->id, OrganisationContentDecision::TYPE_STORY)) {
+            TeacherCatalogScope::comicsQueryFor($user)
+                ->withCount('panels')
+                ->with('tribe:id,name,hero_emoji')
+                ->get(['id', 'title', 'tribe_id', 'age_min', 'age_max', 'cover_image_path'])
+                ->each(function (Comic $comic) use ($items): void {
+                    $items->push([
+                        'content_type' => OrganisationContentDecision::TYPE_STORY,
+                        'type_label' => OrganisationContentDecision::labelFor(OrganisationContentDecision::TYPE_STORY),
+                        'id' => (int) $comic->id,
+                        'title' => $comic->title,
+                        'tribe_id' => $comic->tribe_id ? (int) $comic->tribe_id : null,
+                        'tribe_name' => $comic->tribe?->name,
+                        'tribe_emoji' => $comic->tribe?->hero_emoji,
+                        'age_min' => $comic->age_min !== null ? (int) $comic->age_min : null,
+                        'age_max' => $comic->age_max !== null ? (int) $comic->age_max : null,
+                        'meta' => $comic->panels_count.' panels',
+                        'view_url' => route('teacher.stories.show', $comic->id),
+                        'cover_image_path' => $comic->cover_image_path,
+                    ]);
+                });
+        }
 
-        TeacherCatalogScope::songsQueryFor($user)
-            ->with('tribe:id,name,hero_emoji')
-            ->get(['id', 'title', 'tribe_id', 'age_min', 'age_max'])
-            ->each(function (Song $song) use ($items): void {
-                $items->push([
-                    'content_type' => OrganisationContentDecision::TYPE_SONG,
-                    'type_label' => OrganisationContentDecision::labelFor(OrganisationContentDecision::TYPE_SONG),
-                    'id' => (int) $song->id,
-                    'title' => $song->title,
-                    'tribe_id' => $song->tribe_id ? (int) $song->tribe_id : null,
-                    'tribe_name' => $song->tribe?->name,
-                    'tribe_emoji' => $song->tribe?->hero_emoji,
-                    'age_min' => $song->age_min !== null ? (int) $song->age_min : null,
-                    'age_max' => $song->age_max !== null ? (int) $song->age_max : null,
-                    'meta' => null,
-                    'view_url' => route('teacher.library.songs.show', $song->id),
-                    'cover_image_path' => null,
-                ]);
-            });
+        if ($moduleResolver->isContentTypeAllowedForOrganisation((int) $org->id, OrganisationContentDecision::TYPE_SONG)) {
+            TeacherCatalogScope::songsQueryFor($user)
+                ->with('tribe:id,name,hero_emoji')
+                ->get(['id', 'title', 'tribe_id', 'age_min', 'age_max'])
+                ->each(function (Song $song) use ($items): void {
+                    $items->push([
+                        'content_type' => OrganisationContentDecision::TYPE_SONG,
+                        'type_label' => OrganisationContentDecision::labelFor(OrganisationContentDecision::TYPE_SONG),
+                        'id' => (int) $song->id,
+                        'title' => $song->title,
+                        'tribe_id' => $song->tribe_id ? (int) $song->tribe_id : null,
+                        'tribe_name' => $song->tribe?->name,
+                        'tribe_emoji' => $song->tribe?->hero_emoji,
+                        'age_min' => $song->age_min !== null ? (int) $song->age_min : null,
+                        'age_max' => $song->age_max !== null ? (int) $song->age_max : null,
+                        'meta' => null,
+                        'view_url' => route('teacher.library.songs.show', $song->id),
+                        'cover_image_path' => null,
+                    ]);
+                });
+        }
 
         OrganisationContentDecision::query()
             ->where('organisation_id', $org->id)
@@ -98,7 +103,8 @@ class TeacherApprovedCatalogService
             ->filter()
             ->each(fn (array $row) => $items->push($row));
 
-        return $items
+        return $moduleResolver
+            ->filterReviewItemsForOrganisation($items, (int) $org->id)
             ->unique(fn (array $row) => $row['content_type'].':'.$row['id'])
             ->values();
     }

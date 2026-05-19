@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // Ensure Roles & Permissions are populated first
         $this->call(RoleSeeder::class);
+        $this->call(ModuleSeeder::class);
 
         // --- 1. Organisations ---
         // $naluwoozaOrg = Organisation::firstOrCreate([
