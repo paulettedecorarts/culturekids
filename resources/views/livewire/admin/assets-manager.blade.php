@@ -86,7 +86,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:80px 2fr 1fr 1fr 1fr 100px">
+        <div class="sa-table-head" style="grid-template-columns:80px 2fr 1fr 1fr 1fr minmax(160px, auto)">
             <span>Preview</span>
             <span>Asset Name</span>
             <span>Type</span>
@@ -96,7 +96,7 @@
         </div>
 
         @forelse($assets as $asset)
-            <div class="sa-table-row" style="grid-template-columns:80px 2fr 1fr 1fr 1fr 100px">
+            <div class="sa-table-row" style="grid-template-columns:80px 2fr 1fr 1fr 1fr minmax(160px, auto)">
                 <div style="width:40px;height:40px;background:var(--cms-surface-raised);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px">{{ $asset['icon'] }}</div>
                 <div>
                     <div style="font-weight:600;color:var(--cms-text);font-size:13px">{{ $asset['name'] }}</div>
@@ -107,15 +107,14 @@
                 <span style="font-size:12px;color:{{ $asset['is_orphan'] ? '#fda4af' : 'var(--savanna-gold)' }}">
                     {{ $asset['is_orphan'] ? 'Orphan' : $asset['linked_pack'] }}
                 </span>
-                <div style="display:flex;gap:6px">
-                    <a href="{{ $asset['url'] }}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:9px;text-decoration:none">Open</a>
+                <div class="sa-table-actions">
+                    <a href="{{ $asset['url'] }}" target="_blank" rel="noopener" class="sa-table-action">Open</a>
                     @if($asset['is_orphan'])
                         <button
                             type="button"
                             wire:click="deleteAsset('{{ $asset['path'] }}')"
                             wire:confirm="Delete this orphan asset from local storage?"
-                            class="btn btn-ghost btn-sm"
-                            style="padding:3px 8px;font-size:9px;color:#fecaca;border-color:rgba(196,75,43,.4)"
+                            class="sa-table-action sa-table-action--danger"
                         >
                             Delete
                         </button>

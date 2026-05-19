@@ -51,7 +51,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px 160px">
+        <div class="sa-table-head" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px minmax(180px, auto)">
             <span></span>
             <span>Title</span>
             <span>Tribe</span>
@@ -61,7 +61,7 @@
             <span>Actions</span>
         </div>
         @forelse($songs as $song)
-            <div class="sa-table-row" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px 160px">
+            <div class="sa-table-row" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px minmax(180px, auto)">
                 <div style="width:38px;height:38px;border-radius:8px;background:rgba(232,135,42,.2);display:flex;align-items:center;justify-content:center;font-size:16px">🎵</div>
                 <div>
                     <div style="font-weight:700;color:var(--cms-text);font-size:13px">{{ $song->title }}</div>
@@ -73,8 +73,8 @@
                 <span style="font-size:12px;color:var(--cms-text-muted)">{{ $song->language ?: '—' }}</span>
                 <span style="font-size:12px;color:var(--cms-text-muted)">{{ str_replace('_', ' ', $song->song_type) }}</span>
                 <span style="font-size:12px;color:var(--cms-text-muted)">{{ $song->duration_label }}</span>
-                <div style="display:flex;gap:6px">
-                    <a href="{{ route($routePrefix . '.songs.detail', $song->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:999px;font-size:10px;text-decoration:none">Details</a>
+                <div class="sa-table-actions">
+                    <a href="{{ route($routePrefix . '.songs.detail', $song->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                 </div>
             </div>
         @empty

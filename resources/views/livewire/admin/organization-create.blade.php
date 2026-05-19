@@ -111,7 +111,7 @@
                 <span>Create</span>
             </div>
         </div>
-        <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid var(--cms-input-border);color: var(--cms-text);text-decoration:none">Cancel</a>
+        <a href="{{ route('admin.organizations') }}" wire:navigate class="sa-table-action">Cancel</a>
     </div>
 
     <div class="org-create-shell">
@@ -202,7 +202,7 @@
                 <x-livewire-submit-button target="save" variant="md" loading="{{ __('Creating…') }}">
                     Create organization
                 </x-livewire-submit-button>
-                <a href="{{ route('admin.organizations') }}" wire:navigate class="btn btn-sm" style="border:1px solid var(--cms-input-border);color: var(--cms-text);text-decoration:none;padding:12px 20px">Back to list</a>
+                <a href="{{ route('admin.organizations') }}" wire:navigate class="sa-table-action">Back to list</a>
             </div>
         </form>
     </div>

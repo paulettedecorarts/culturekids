@@ -45,7 +45,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px 140px">
+        <div class="sa-table-head" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px minmax(200px, auto)">
             <span>Story</span>
             <span>Tribe</span>
             <span>Age Range</span>
@@ -55,7 +55,7 @@
         </div>
 
         <!-- Sample Row 1 -->
-        <div class="sa-table-row" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px 140px">
+        <div class="sa-table-row" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px minmax(200px, auto)">
             <div style="display:flex;align-items:center;gap:12px">
                 <div style="width:40px;height:32px;background:linear-gradient(135deg,#C44B2B,#6B2010);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🐇</div>
                 <div>
@@ -67,14 +67,14 @@
             <span style="font-size:12px;color:var(--cms-text-muted)">3–5 yrs</span>
             <span style="font-size:11px;color:var(--cms-text-muted)">Luganda</span>
             <span class="status-pill status-published">Published</span>
-            <div style="display:flex;gap:6px">
-                <button class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;cursor:pointer">Edit</button>
-                <button class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;cursor:pointer">Delete</button>
+            <div class="sa-table-actions">
+                <button class="sa-table-action sa-table-action--accent">Edit</button>
+                <button class="sa-table-action sa-table-action--danger">Delete</button>
             </div>
         </div>
 
         <!-- Sample Row 2 -->
-        <div class="sa-table-row" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px 140px">
+        <div class="sa-table-row" style="grid-template-columns:2.5fr 1fr 1fr 1fr 100px minmax(200px, auto)">
             <div style="display:flex;align-items:center;gap:12px">
                 <div style="width:40px;height:32px;background:linear-gradient(135deg,#4A7C59,#2D5438);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🌿</div>
                 <div>
@@ -86,9 +86,9 @@
             <span style="font-size:12px;color:var(--cms-text-muted)">2–4 yrs</span>
             <span style="font-size:11px;color:var(--cms-text-muted)">Acholi</span>
             <span class="status-pill status-review">In Review</span>
-            <div style="display:flex;gap:6px">
-                <button class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;cursor:pointer">Edit</button>
-                <button class="btn btn-sm" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;cursor:pointer">Delete</button>
+            <div class="sa-table-actions">
+                <button class="sa-table-action sa-table-action--accent">Edit</button>
+                <button class="sa-table-action sa-table-action--danger">Delete</button>
             </div>
         </div>
     </div>

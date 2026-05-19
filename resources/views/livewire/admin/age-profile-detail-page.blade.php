@@ -9,18 +9,18 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
             @if($profile && ! $isEditing)
-                <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit Profile</button>
+                <button type="button" class="sa-table-action sa-table-action--accent" wire:click="startEditing">Edit Profile</button>
             @endif
             @if($isEditing)
                 <x-livewire-submit-button type="button" wire:click="saveProfile" target="saveProfile" variant="success-sm">
                     {{ $profile ? 'Save Changes' : 'Create Profile' }}
                 </x-livewire-submit-button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
+                <button type="button" class="sa-table-action" wire:click="cancelEditing">
                     {{ $profile ? 'Cancel' : 'Back' }}
                 </button>
             @endif
             @if($profile)
-                <button type="button" class="btn btn-sm" wire:click="deleteProfile" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
+                <button type="button" class="sa-table-action sa-table-action--danger" wire:click="deleteProfile" >Delete</button>
             @endif
         </div>
     </div>

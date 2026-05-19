@@ -23,11 +23,10 @@
                 wire:confirm="{{ $maintenanceMode ? 'Disable maintenance mode and bring the app back online?' : 'Enable maintenance mode? Public and API traffic will see a maintenance page (Super Admin routes stay available).' }}"
                 target="toggleMaintenance"
                 variant="sm"
-                class="btn btn-sm"
+                class="sa-table-action {{ $maintenanceMode ? 'sa-table-action--accent' : 'sa-table-action--danger' }}"
                 :loading="__('Updating…')"
-                style="{{ $maintenanceMode ? 'background:rgba(74,124,89,.2);color:var(--banana-green);border:1px solid rgba(74,124,89,.4)' : 'background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.3)' }};padding:5px 12px;font-size:10px"
             >
-                {{ $maintenanceMode ? '✓ Maintenance ON' : '⚠️ Maintenance' }}
+                {{ $maintenanceMode ? 'Maintenance on' : 'Maintenance off' }}
             </x-livewire-submit-button>
         </div>
     </div>
@@ -59,7 +58,7 @@
 
     <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color: var(--cms-text-muted);margin-bottom:var(--sp-3);margin-top:var(--sp-6)">Active Organizations</p>
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
+        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr minmax(120px, auto)">
             <span>Organization</span>
             <span>Plan</span>
             <span>Users</span>
@@ -68,7 +67,7 @@
         </div>
 
         @forelse($activeOrganizations as $org)
-            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
+            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr minmax(120px, auto)">
                 <div style="display:flex;align-items:center;gap:var(--sp-2)">
                     <span style="font-size:18px">🏛</span>
                     <div>
@@ -83,8 +82,7 @@
 
                 <a
                     href="{{ route('admin.organizations.detail', $org) }}"
-                    class="btn btn-sm"
-                    style="background:var(--cms-surface-hover);color:var(--cms-text-muted);padding:3px 8px;font-size:9px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center"
+                    class="sa-table-action sa-table-action--accent"
                 >
                     Manage
                 </a>

@@ -55,7 +55,7 @@
 
     <!-- Users Table -->
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 120px">
+        <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr minmax(180px, auto)">
             <span>User</span>
             <span>Role</span>
             <span>Organization</span>
@@ -64,7 +64,7 @@
         </div>
         
         @forelse($users as $user)
-            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 120px">
+            <div class="sa-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr minmax(180px, auto)">
                 <div>
                     <div style="font-weight:600;color:var(--cms-text);font-size:12px">{{ $user->email }}</div>
                     <div style="font-size:10px;color:var(--cms-text-muted)">{{ $user->name }}</div>
@@ -92,27 +92,25 @@
                     {{ $user->updated_at->diffForHumans() }}
                 </span>
                 
-                @if($user->hasRole('super_admin'))
-                    <button 
-                        class="btn btn-sm" 
-                        style="background:var(--cms-surface-raised);color:var(--cms-text-muted);padding:3px 7px;font-size:9px;cursor:not-allowed"
-                        disabled
-                    >
-                        Cannot Impersonate
-                    </button>
-                @else
-                    <x-livewire-submit-button
-                        type="button"
-                        wire:click="impersonate({{ $user->id }})"
-                        wire:confirm="Are you sure you want to impersonate {{ $user->name }}? All actions will be logged."
-                        target="impersonate"
-                        variant="sm"
-                        loading="{{ __('Starting…') }}"
-                        style="background:rgba(232,135,42,.2);color:var(--sunfire-light);padding:3px 7px;font-size:9px;border:1px solid rgba(232,135,42,.3)"
-                    >
-                        🎭 Impersonate
-                    </x-livewire-submit-button>
-                @endif
+                <div class="sa-table-actions">
+                    @if($user->hasRole('super_admin'))
+                        <button type="button" class="sa-table-action" disabled>
+                            Cannot impersonate
+                        </button>
+                    @else
+                        <button
+                            type="button"
+                            class="sa-table-action sa-table-action--accent"
+                            wire:click="impersonate({{ $user->id }})"
+                            wire:confirm="Are you sure you want to impersonate {{ $user->name }}? All actions will be logged."
+                            wire:loading.attr="disabled"
+                            wire:target="impersonate"
+                        >
+                            <span wire:loading.remove wire:target="impersonate">Impersonate</span>
+                            <span wire:loading wire:target="impersonate">Starting…</span>
+                        </button>
+                    @endif
+                </div>
             </div>
         @empty
             <div class="sa-table-row" style="grid-template-columns:1fr">

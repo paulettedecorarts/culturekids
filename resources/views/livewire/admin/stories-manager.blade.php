@@ -113,19 +113,19 @@
                         @endif
                     </div>
 
-                    <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+                    <div class="sa-table-actions" style="width:100%">
                         <a
                             href="{{ route($storyRouteBase . '.detail', $story->id) }}"
-                            class="btn btn-sm"
-                            style="flex:1;min-width:72px;background:rgba(212,160,23,.15);color:var(--savanna-gold);border:1px solid rgba(212,160,23,.3);font-size:10px;padding:8px;text-decoration:none;display:flex;align-items:center;justify-content:center"
+                            class="sa-table-action sa-table-action--accent sa-table-action--grow"
                         >
                             View
                         </a>
                         @if(($canPublishContent ?? false) || $story->status !== 'published')
                             <button
+                                type="button"
                                 wire:click="togglePublish({{ $story->id }})"
-                                class="btn btn-sm"
-                                style="flex:1;min-width:72px;background:rgba(74,124,89,.15);color:var(--banana-light);border:1px solid rgba(74,124,89,.3);font-size:10px;padding:8px"
+                                class="sa-table-action sa-table-action--grow"
+                                style="background:rgba(74,124,89,.15);color:var(--banana-light);border-color:rgba(74,124,89,.35)"
                             >
                                 @if($canPublishContent ?? false)
                                     {{ $story->status === 'published' ? 'Unpublish' : 'Publish' }}
@@ -138,18 +138,17 @@
                         @endif
                         <a
                             href="{{ route($storyRouteBase . '.edit', $story->id) }}"
-                            class="btn btn-sm"
-                            style="flex:1;min-width:72px;background:var(--cms-surface-raised);color:var(--cms-text);border:1px solid var(--cms-border);font-size:10px;padding:8px;text-decoration:none;display:flex;align-items:center;justify-content:center"
+                            class="sa-table-action sa-table-action--grow"
                         >
                             Edit
                         </a>
                         <button
+                            type="button"
                             wire:click="delete({{ $story->id }})"
                             wire:confirm="Delete this story and all its assets?"
-                            class="btn btn-sm"
-                            style="background:rgba(196,75,43,.15);color:var(--clay-red-light);border:1px solid rgba(196,75,43,.3);font-size:10px;padding:8px 12px"
+                            class="sa-table-action sa-table-action--danger"
                         >
-                            🗑
+                            Delete
                         </button>
                     </div>
                 </div>

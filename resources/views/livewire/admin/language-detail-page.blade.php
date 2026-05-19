@@ -9,18 +9,18 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
             @if($language && ! $isEditing)
-                <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit</button>
+                <button type="button" class="sa-table-action sa-table-action--accent" wire:click="startEditing">Edit</button>
             @endif
             @if($isEditing)
                 <x-livewire-submit-button type="button" wire:click="saveLanguage" target="saveLanguage" variant="success-sm">
                     {{ $language ? 'Save Changes' : 'Create Language' }}
                 </x-livewire-submit-button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
+                <button type="button" class="sa-table-action" wire:click="cancelEditing">
                     {{ $language ? 'Cancel' : 'Back' }}
                 </button>
             @endif
             @if($language)
-                <button type="button" class="btn btn-sm" wire:click="deleteLanguage" wire:confirm="Delete this language?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
+                <button type="button" class="sa-table-action sa-table-action--danger" wire:click="deleteLanguage" wire:confirm="Delete this language?" >Delete</button>
             @endif
         </div>
     </div>

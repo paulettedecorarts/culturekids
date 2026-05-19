@@ -534,6 +534,105 @@
         .sa-table-row:hover { background: var(--sa-row-hover); }
         .sa-table-row:last-child { border-bottom: none; }
 
+        .sa-table-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .sa-table-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            min-width: 72px;
+            padding: 8px 16px;
+            border-radius: var(--r-full);
+            font-family: var(--font-admin);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-decoration: none;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid var(--sa-ghost-border);
+            background: var(--cms-surface-hover);
+            color: var(--sa-text);
+            transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+        }
+        .sa-table-action:hover {
+            background: var(--sa-row-hover);
+            border-color: var(--sa-border);
+            color: var(--sa-text);
+        }
+        .sa-table-action--accent {
+            background: rgba(212, 160, 23, .15);
+            border-color: rgba(212, 160, 23, .35);
+            color: var(--savanna-gold);
+        }
+        .sa-table-action--accent:hover {
+            background: rgba(212, 160, 23, .25);
+        }
+        .sa-table-action--danger {
+            background: rgba(196, 75, 43, .1);
+            border-color: rgba(196, 75, 43, .35);
+            color: var(--clay-red-light);
+        }
+        .sa-table-action--danger:hover {
+            background: rgba(196, 75, 43, .18);
+        }
+        .sa-table-action--info {
+            background: rgba(59, 130, 246, .15);
+            border-color: rgba(59, 130, 246, .35);
+            color: #60A5FA;
+        }
+        .sa-table-action--info:hover {
+            background: rgba(59, 130, 246, .25);
+        }
+        .sa-table-action--grow {
+            flex: 1 1 auto;
+            min-width: 88px;
+        }
+        .sa-icon-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--sa-ghost-border);
+            background: var(--cms-surface-hover);
+            color: var(--sa-text);
+            font-size: 16px;
+            line-height: 1;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background var(--dur-fast), border-color var(--dur-fast);
+        }
+        .sa-icon-action:hover {
+            background: var(--sa-row-hover);
+        }
+        .sa-icon-action--danger {
+            background: rgba(196, 75, 43, .1);
+            border-color: rgba(196, 75, 43, .3);
+            color: var(--clay-red-light);
+        }
+        .sa-icon-action--danger:hover {
+            background: rgba(196, 75, 43, .18);
+        }
+        .sa-icon-action:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+        .sa-page-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
         .status-pill {
             display: inline-flex;
             align-items: center;
@@ -581,7 +680,12 @@
             transition: all var(--dur-fast);
             text-decoration: none;
         }
-        .btn-sm { padding: 6px 14px; border-radius: var(--r-full); font-size: 12px; }
+        .btn-sm {
+            min-height: 36px;
+            padding: 8px 16px;
+            border-radius: var(--r-full);
+            font-size: 12px;
+        }
         .btn-primary { background: var(--clay-red); color: #fff; }
         .btn-primary:hover { background: var(--clay-red-light); }
         .btn-ghost {

@@ -31,7 +31,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr 120px">
+        <div class="sa-table-head" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr minmax(120px, auto)">
             <span>Language / Dialect</span>
             <span>Code</span>
             <span>Coverage</span>
@@ -40,7 +40,7 @@
         </div>
 
         @forelse($languages as $language)
-            <div class="sa-table-row" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr 120px">
+            <div class="sa-table-row" style="grid-template-columns:1.4fr 1fr 1.2fr 1fr minmax(120px, auto)">
                 <div style="display:flex;align-items:center;gap:12px">
                     <span style="font-size:20px">{{ $language->flag_emoji ?: '🗣️' }}</span>
                     <div>
@@ -56,7 +56,7 @@
                     <span style="font-size:10px;font-weight:700;color:var(--cms-text)">{{ $language->translation_coverage }}%</span>
                 </div>
                 <span class="status-pill {{ $language->status === 'verified' ? 'status-published' : ($language->status === 'partial' ? 'status-review' : 'status-draft') }}">{{ ucfirst($language->status) }}</span>
-                <div><a class="btn btn-sm" href="{{ route('admin.languages.detail', ['id' => $language->id]) }}" style="text-decoration:none">Details</a></div>
+                <div><a class="sa-table-action sa-table-action--accent" href="{{ route('admin.languages.detail', ['id' => $language->id]) }}">Details</a></div>
             </div>
         @empty
             <div style="padding:20px;color:var(--cms-text-muted)">No languages found.</div>

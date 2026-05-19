@@ -10,14 +10,14 @@
         @if($this->portalCanEditContent())
             <div style="display:flex;gap:8px;flex-wrap:wrap">
                 @if($activity && ! $isEditing)
-                    <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit</button>
+                    <button type="button" class="sa-table-action sa-table-action--accent" wire:click="startEditing">Edit</button>
                 @endif
                 @if($isEditing)
                     <x-livewire-submit-button type="button" wire:click="saveActivity" target="saveActivity" variant="success-sm">Save</x-livewire-submit-button>
-                    <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">Cancel</button>
+                    <button type="button" class="sa-table-action" wire:click="cancelEditing">Cancel</button>
                 @endif
                 @if($activity)
-                    <button type="button" class="btn btn-sm" wire:click="deleteActivity" wire:confirm="Delete this activity?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
+                    <button type="button" class="sa-table-action sa-table-action--danger" wire:click="deleteActivity" wire:confirm="Delete this activity?" >Delete</button>
                 @endif
             </div>
         @endif
@@ -144,9 +144,9 @@
                                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
                                     <span style="font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--cms-text-muted)">CARD {{ $idx + 1 }}</span>
                                     <div style="display:flex;gap:6px;flex-wrap:wrap">
-                                        <button type="button" wire:click="moveFlashcardSlideUp({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === 0 ? 'opacity:0.35;pointer-events:none' : '' }}">↑</button>
-                                        <button type="button" wire:click="moveFlashcardSlideDown({{ $idx }})" class="btn btn-sm" style="padding:4px 10px;font-size:10px;{{ $idx === count($flashcardSlides) - 1 ? 'opacity:0.35;pointer-events:none' : '' }}">↓</button>
-                                        <button type="button" wire:click="removeFlashcardSlide({{ $idx }})" wire:confirm="Remove this card?" class="btn btn-sm" style="padding:4px 10px;font-size:10px;background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Remove</button>
+                                        <button type="button" wire:click="moveFlashcardSlideUp({{ $idx }})" class="sa-table-action" style="min-width:44px;padding:8px 12px;{{ $idx === 0 ? 'opacity:0.35;pointer-events:none' : '' }}">↑</button>
+                                        <button type="button" wire:click="moveFlashcardSlideDown({{ $idx }})" class="sa-table-action" style="min-width:44px;padding:8px 12px;{{ $idx === count($flashcardSlides) - 1 ? 'opacity:0.35;pointer-events:none' : '' }}">↓</button>
+                                        <button type="button" wire:click="removeFlashcardSlide({{ $idx }})" wire:confirm="Remove this card?" class="sa-table-action" style="min-width:44px;padding:8px 12px;background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Remove</button>
                                     </div>
                                 </div>
                                 <div class="act-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">

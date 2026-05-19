@@ -71,7 +71,7 @@
                     {{ $clan->is_active ? 'Active' : 'Inactive' }}
                 </span>
                 <div style="display:flex;gap:6px">
-                    <a href="{{ route($routePrefix . '.clans.edit', $clan->id) }}" class="btn btn-sm" style="background:rgba(59,130,246,.18);color:#60A5FA;border:1px solid rgba(59,130,246,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Edit</a>
+                    <a href="{{ route($routePrefix . '.clans.edit', $clan->id) }}" class="sa-table-action sa-table-action--info">Edit</a>
                 </div>
             </div>
         @empty

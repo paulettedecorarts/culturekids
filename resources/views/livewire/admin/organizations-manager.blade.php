@@ -43,8 +43,8 @@
                         {{ ucfirst($org->status) }}
                     </span>
                     <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
-                        <button type="button" wire:click="edit({{ $org->id }})" class="btn btn-sm" style="background:var(--cms-input-bg); color: var(--cms-text); border:1px solid var(--cms-input-border); font-size:10px">Quick edit</button>
-                        <a href="{{ route('admin.organizations.detail', $org->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.15); color:var(--savanna-gold); border:1px solid rgba(212,160,23,.3); font-size:10px; display:inline-flex; align-items:center; text-decoration:none">Manage Entity</a>
+                        <button type="button" wire:click="edit({{ $org->id }})" class="sa-table-action">Quick edit</button>
+                        <a href="{{ route('admin.organizations.detail', $org->id) }}" class="sa-table-action sa-table-action--accent">Manage Entity</a>
                     </div>
                 </div>
                 <div style="display:flex;gap:var(--sp-6);font-size:12px;color:var(--cms-text-muted);flex-wrap:wrap">

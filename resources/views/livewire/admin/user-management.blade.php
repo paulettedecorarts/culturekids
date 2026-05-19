@@ -37,7 +37,7 @@
 
     <!-- Users Table -->
     <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:32px; overflow:hidden">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr minmax(160px, auto); padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
             <span>Identity</span>
             <span>Security Role</span>
             <span>Organization</span>
@@ -46,7 +46,7 @@
         </div>
 
         @forelse($users as $user)
-            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid var(--cms-border-subtle); transition:all 0.2s" class="cms-hover-row">
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr minmax(160px, auto); padding:24px 32px; align-items:center; border-bottom:1px solid var(--cms-border-subtle); transition:all 0.2s" class="cms-hover-row">
                 <a href="{{ route('admin.users.detail', $user->id) }}" style="display:flex; align-items:center; gap:16px; text-decoration:none">
                     <div style="width:40px; height:40px; border-radius:12px; background:{{ $user->hasRole('super_admin') ? 'var(--clay-red)' : 'rgba(255,255,255,0.05)' }}; border: 1px solid var(--cms-border); display:flex; align-items:center; justify-content:center; color:var(--cms-text); font-weight:800; font-family:var(--font-display)">
                         {{ substr($user->name, 0, 1) }}
@@ -73,19 +73,14 @@
                     {{ $user->created_at->format('M d, Y') }}
                 </div>
 
-                <div style="display:flex; gap:8px; justify-content:flex-end">
-                    <button 
-                        wire:click="resendSetupEmail({{ $user->id }})" 
-                        wire:loading.attr="disabled"
-                        title="Resend Setup Email"
-                        class="btn" 
-                        style="width:36px; height:36px; background:var(--cms-surface-raised); color:var(--cms-text); border: 1px solid var(--cms-border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer">
+                <div class="sa-table-actions" style="justify-content:flex-end">
+                    <button type="button" wire:click="resendSetupEmail({{ $user->id }})" wire:loading.attr="disabled" title="Resend setup email" class="sa-icon-action">
                         <span wire:loading.remove wire:target="resendSetupEmail({{ $user->id }})">📧</span>
-                        <span wire:loading wire:target="resendSetupEmail({{ $user->id }})" style="font-size:10px">⏳</span>
+                        <span wire:loading wire:target="resendSetupEmail({{ $user->id }})">…</span>
                     </button>
-                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn" style="width:36px; height:36px; background:var(--cms-surface-raised); color:var(--cms-text); border: 1px solid var(--cms-border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
+                    <a href="{{ route('admin.users.edit', $user->id) }}" class="sa-icon-action" title="Edit user">⚙️</a>
                     @if($user->id !== auth()->id())
-                        <button wire:click="delete({{ $user->id }})" onclick="return confirm('Archive this account permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>
+                        <button type="button" wire:click="delete({{ $user->id }})" onclick="return confirm('Archive this account permanently?') || event.stopImmediatePropagation()" class="sa-icon-action sa-icon-action--danger" title="Delete user">🗑</button>
                     @endif
                 </div>
             </div>

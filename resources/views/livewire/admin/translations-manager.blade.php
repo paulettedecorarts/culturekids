@@ -48,7 +48,7 @@
     </div>
 
     <div class="sa-table-wrap">
-        <div class="sa-table-head" style="grid-template-columns:1.4fr 1.6fr 1.6fr 1.2fr 120px">
+        <div class="sa-table-head" style="grid-template-columns:1.4fr 1.6fr 1.6fr 1.2fr minmax(180px, auto)">
             <span>Word</span>
             <span>Translation</span>
             <span>Context</span>
@@ -57,7 +57,7 @@
         </div>
 
         @forelse($tags as $tag)
-            <div class="sa-table-row" style="grid-template-columns:1.4fr 1.6fr 1.6fr 1.2fr 120px">
+            <div class="sa-table-row" style="grid-template-columns:1.4fr 1.6fr 1.6fr 1.2fr minmax(180px, auto)">
                 <span style="font-size:12px;color:var(--cms-text);font-weight:700">{{ $tag->word }}</span>
                 <span style="font-size:12px;color:{{ $tag->translation ? 'var(--banana-green)' : 'var(--sunfire)' }};font-style:{{ $tag->translation ? 'normal' : 'italic' }}">
                     {{ $tag->translation ?: 'Missing' }}
@@ -71,8 +71,10 @@
                 </span>
                 <span style="font-size:12px;color:var(--cms-text-muted)">{{ $tag->phonetic ?: '—' }}</span>
                 <div style="display:flex;gap:6px">
-                    <button wire:click="editTag({{ $tag->id }})" class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:9px">Edit</button>
-                    <button wire:click="deleteTag({{ $tag->id }})" wire:confirm="Delete this translation tag?" class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:9px;color:#fecaca;border-color:rgba(196,75,43,.35)">Delete</button>
+                    <div class="sa-table-actions">
+                        <button type="button" wire:click="editTag({{ $tag->id }})" class="sa-table-action">Edit</button>
+                        <button type="button" wire:click="deleteTag({{ $tag->id }})" wire:confirm="Delete this translation tag?" class="sa-table-action sa-table-action--danger">Delete</button>
+                    </div>
                 </div>
             </div>
         @empty

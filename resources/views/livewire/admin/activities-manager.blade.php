@@ -122,16 +122,16 @@
                 <span class="act-cell-muted">{{ $activity->tribe->name }}</span>
                 <span class="status-pill {{ $activity->is_published ? 'status-published' : 'status-draft' }}">{{ $activity->is_published ? 'Published' : 'Draft' }}</span>
                 <span class="act-cell-muted">{{ $activity->age_range ?: '—' }}</span>
-                <div style="display:flex;gap:6px">
+                <div class="sa-table-actions">
                     @if($activity->type === 'song')
                         @php
                             $metadata = is_string($activity->metadata) ? json_decode($activity->metadata, true) : $activity->metadata;
                             $songId = $metadata['legacy_song_id'] ?? null;
                         @endphp
                         @if($songId)
-                            <a href="{{ route($routePrefix . '.songs.activities.show', $songId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.songs.activities.show', $songId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'drawing_kit')
                         @php
@@ -139,9 +139,9 @@
                             $drawingId = $metadata['legacy_drawing_id'] ?? null;
                         @endphp
                         @if($drawingId)
-                            <a href="{{ route($routePrefix . '.drawings.show', $drawingId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.drawings.show', $drawingId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'vocab_pack')
                         @php
@@ -149,9 +149,9 @@
                             $langActivityId = $metadata['legacy_language_activity_id'] ?? null;
                         @endphp
                         @if($langActivityId)
-                            <a href="{{ route($routePrefix . '.language-activities.show', $langActivityId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.language-activities.show', $langActivityId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'game')
                         @php
@@ -159,9 +159,9 @@
                             $gameId = $metadata['legacy_game_id'] ?? null;
                         @endphp
                         @if($gameId)
-                            <a href="{{ route($routePrefix . '.games.show', $gameId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.games.show', $gameId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'maze')
                         @php
@@ -169,9 +169,9 @@
                             $mazeId = $metadata['legacy_maze_id'] ?? null;
                         @endphp
                         @if($mazeId)
-                            <a href="{{ route($routePrefix . '.mazes.show', $mazeId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.mazes.show', $mazeId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'spot_difference')
                         @php
@@ -179,9 +179,9 @@
                             $sdId = $metadata['legacy_spot_difference_id'] ?? null;
                         @endphp
                         @if($sdId)
-                            <a href="{{ route($routePrefix . '.spot-differences.show', $sdId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.spot-differences.show', $sdId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'word_search')
                         @php
@@ -189,9 +189,9 @@
                             $wsId = $metadata['legacy_word_search_id'] ?? null;
                         @endphp
                         @if($wsId)
-                            <a href="{{ route($routePrefix . '.word-searches.show', $wsId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.word-searches.show', $wsId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'story')
                         @php
@@ -199,9 +199,9 @@
                             $comicId = $metadata['comic_id'] ?? null;
                         @endphp
                         @if($comicId)
-                            <a href="{{ route($routePrefix . '.' . $comicsRouteBase . '.detail', $comicId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.' . $comicsRouteBase . '.detail', $comicId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'culture')
                         @php
@@ -209,12 +209,12 @@
                             $cultureId = $metadata['legacy_culture_activity_id'] ?? null;
                         @endphp
                         @if($cultureId)
-                            <a href="{{ route($routePrefix . '.culture-activities.show', $cultureId) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.culture-activities.show', $cultureId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @else
-                        <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="btn btn-sm" style="background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.3);padding:4px 10px;border-radius:var(--r-full);font-size:10px;font-weight:700;text-decoration:none">Details</a>
+                        <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @endif
                 </div>
             </div>
@@ -240,7 +240,8 @@
         .act-row-sub { font-size:11px; color:var(--cms-text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:.85; }
         .act-cell-muted { font-size:12px; color:var(--cms-text-muted); }
         .act-empty { padding:22px; color:var(--cms-text-muted); }
-        .act-table-grid { display:grid; grid-template-columns:minmax(0,2.4fr) minmax(90px,.9fr) minmax(120px,1fr) minmax(90px,.8fr) minmax(70px,.6fr) 120px; }
+        .act-table-grid { display:grid; grid-template-columns:minmax(0,2.4fr) minmax(90px,.9fr) minmax(120px,1fr) minmax(90px,.8fr) minmax(70px,.6fr) minmax(140px, auto); }
+        .act-table-grid .sa-table-actions { justify-content: flex-end; }
         .activities-manager-page select option,
         .activities-manager-page select optgroup {
             background:var(--cms-input-bg);

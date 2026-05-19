@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="age-actions">
-                    <a class="btn btn-sm" href="{{ route('admin.age-categories.detail', ['id' => $category->id]) }}">Details</a>
+                    <a class="sa-table-action sa-table-action--accent" href="{{ route('admin.age-categories.detail', ['id' => $category->id]) }}">Details</a>
                 </div>
             </article>
         @endforeach

@@ -73,32 +73,13 @@
                     @endif
 
                     <!-- Actions -->
-                    <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--cms-border)">
+                    <div class="sa-table-actions" style="width:100%;margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--cms-border)">
                         @if(!$theme->is_default)
-                            <button 
-                                wire:click="setDefault({{ $theme->id }})"
-                                class="btn btn-sm" 
-                                style="flex:1;background:rgba(212,160,23,.15);color:var(--savanna-gold);border:1px solid rgba(212,160,23,.3);font-size:10px;padding:8px"
-                            >
-                                Set Default
-                            </button>
+                            <button type="button" wire:click="setDefault({{ $theme->id }})" class="sa-table-action sa-table-action--accent sa-table-action--grow">Set default</button>
                         @endif
-                        <button 
-                            wire:click="edit({{ $theme->id }})"
-                            class="btn btn-sm" 
-                            style="flex:1;background:var(--cms-surface-raised);color:var(--cms-text);border:1px solid var(--cms-border);font-size:10px;padding:8px"
-                        >
-                            Edit
-                        </button>
+                        <button type="button" wire:click="edit({{ $theme->id }})" class="sa-table-action sa-table-action--grow">Edit</button>
                         @if(!$theme->is_default)
-                            <button 
-                                wire:click="delete({{ $theme->id }})"
-                                wire:confirm="Delete this theme?"
-                                class="btn btn-sm" 
-                                style="background:rgba(196,75,43,.15);color:var(--clay-red-light);border:1px solid rgba(196,75,43,.3);font-size:10px;padding:8px 12px"
-                            >
-                                🗑
-                            </button>
+                            <button type="button" wire:click="delete({{ $theme->id }})" wire:confirm="Delete this theme?" class="sa-table-action sa-table-action--danger">Delete</button>
                         @endif
                     </div>
                 </div>

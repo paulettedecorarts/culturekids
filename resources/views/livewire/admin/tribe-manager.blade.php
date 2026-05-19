@@ -28,7 +28,7 @@
 
     <!-- Tribes Grid/Table -->
     <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:32px; overflow:hidden">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr minmax(140px, auto); padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
             <span>Tribe Identity</span>
             <span>Ancestral Region</span>
             <span>Guardian Hero</span>
@@ -37,7 +37,7 @@
         </div>
 
         @forelse($tribes as $tribe)
-            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 100px; padding:24px 32px; align-items:center; border-bottom:1px solid var(--cms-border-subtle); transition:all 0.2s" class="cms-hover-row">
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr minmax(140px, auto); padding:24px 32px; align-items:center; border-bottom:1px solid var(--cms-border-subtle); transition:all 0.2s" class="cms-hover-row">
                 <a href="{{ route($routePrefix . '.tribes.detail', $tribe->id) }}" style="display:flex; align-items:center; gap:20px; text-decoration:none">
                     <div style="width:52px; height:52px; border-radius:16px; background:{{ $tribe->color }}; border: 1px solid var(--cms-border); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 8px 16px {{ $tribe->color.'30' }}">
                         {{ $tribe->hero_emoji ?: '🗺️' }}
@@ -60,9 +60,9 @@
                     {{ $tribe->greeting }}
                 </div>
 
-                <div style="display:flex; gap:8px; justify-content:flex-end">
-                    <a href="{{ route($routePrefix . '.tribes.edit', $tribe->id) }}" class="btn" style="width:36px; height:36px; background:var(--cms-surface-raised); color:var(--cms-text); border: 1px solid var(--cms-border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; text-decoration:none">⚙️</a>
-                    <button wire:click="delete({{ $tribe->id }})" onclick="return confirm('Archive heritage record permanently?') || event.stopImmediatePropagation()" class="btn" style="width:36px; height:36px; background:rgba(196,75,43,0.1); color:var(--clay-red); border:1px solid rgba(196,75,43,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px">🗑</button>
+                <div class="sa-table-actions" style="justify-content:flex-end">
+                    <a href="{{ route($routePrefix . '.tribes.edit', $tribe->id) }}" class="sa-icon-action" title="Edit tribe">⚙️</a>
+                    <button type="button" wire:click="delete({{ $tribe->id }})" onclick="return confirm('Archive heritage record permanently?') || event.stopImmediatePropagation()" class="sa-icon-action sa-icon-action--danger" title="Delete tribe">🗑</button>
                 </div>
             </div>
         @empty

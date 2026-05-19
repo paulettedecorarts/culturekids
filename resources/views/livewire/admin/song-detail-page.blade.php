@@ -11,18 +11,18 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
             @if($song && ! $isEditing)
-                <button type="button" class="btn btn-sm" wire:click="startEditing" style="background:rgba(212,160,23,.2);color:#F2CB5A;border:1px solid rgba(212,160,23,.4)">Edit Song</button>
+                <button type="button" class="sa-table-action sa-table-action--accent" wire:click="startEditing">Edit Song</button>
             @endif
             @if($isEditing)
                 <x-livewire-submit-button type="button" wire:click="saveSong" target="saveSong,media_file,cover_image" variant="success-sm" :loading="$song ? __('Saving…') : __('Creating…')">
                     {{ $song ? 'Save Changes' : 'Create Song' }}
                 </x-livewire-submit-button>
-                <button type="button" class="btn btn-sm" wire:click="cancelEditing" style="background:var(--cms-surface-hover);color:var(--cms-text);border:1px solid var(--cms-border)">
+                <button type="button" class="sa-table-action" wire:click="cancelEditing">
                     {{ $song ? 'Cancel' : 'Back' }}
                 </button>
             @endif
             @if($song)
-                <button type="button" class="btn btn-sm" wire:click="deleteSong" wire:confirm="Delete this song?" style="background:rgba(196,75,43,.2);color:#E06444;border:1px solid rgba(196,75,43,.35)">Delete</button>
+                <button type="button" class="sa-table-action sa-table-action--danger" wire:click="deleteSong" wire:confirm="Delete this song?" >Delete</button>
             @endif
         </div>
     </div>
