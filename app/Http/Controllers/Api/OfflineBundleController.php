@@ -122,17 +122,9 @@ class OfflineBundleController extends Controller
                             'audio_url' => $panel->audio_url 
                                 ? Storage::disk('public')->url($panel->audio_url) 
                                 : null,
-                            'vocab_tags' => $panel->vocabTags->map(function ($tag) {
-                                return [
-                                    'word' => $tag->word,
-                                    'translation' => $tag->translation,
-                                    'phonetic' => $tag->phonetic,
-                                    'x_position' => $tag->x_position,
-                                    'y_position' => $tag->y_position,
-                                    'width' => $tag->width,
-                                    'height' => $tag->height,
-                                ];
-                            }),
+                            'vocab_tags' => $panel->vocabTags->map(
+                                fn ($tag) => \App\Support\PanelVocabTagSerializer::toArray($tag, includeId: false)
+                            ),
                         ];
                     }),
                 ];

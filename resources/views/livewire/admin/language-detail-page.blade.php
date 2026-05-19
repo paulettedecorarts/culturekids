@@ -38,9 +38,19 @@
                 <div><label>Native name</label><input wire:model.defer="native_name" type="text">@error('native_name')<div class="error">{{ $message }}</div>@enderror</div>
                 <div><label>Code</label><input wire:model.defer="code" type="text" placeholder="lug-UG">@error('code')<div class="error">{{ $message }}</div>@enderror</div>
                 <div><label>Flag emoji</label><input wire:model.defer="flag_emoji" type="text" placeholder="🇺🇬">@error('flag_emoji')<div class="error">{{ $message }}</div>@enderror</div>
-                <div><label>Coverage %</label><input wire:model.defer="translation_coverage" type="number" min="0" max="100">@error('translation_coverage')<div class="error">{{ $message }}</div>@enderror</div>
+                <div>
+                    <label>Coverage %</label>
+                    <div style="padding:10px 12px;border-radius:8px;background:var(--cms-input-bg);border:1px solid var(--cms-border);font-weight:700">
+                        {{ $translation_coverage }}% <span style="font-weight:500;color:var(--cms-text-muted);font-size:11px">(from language activities)</span>
+                    </div>
+                </div>
                 <div><label>Sort order</label><input wire:model.defer="sort_order" type="number" min="0">@error('sort_order')<div class="error">{{ $message }}</div>@enderror</div>
-                <div><label>Status</label><select wire:model.defer="status"><option value="verified">Verified</option><option value="partial">Partial</option><option value="pending">Pending</option></select></div>
+                <div>
+                    <label>Status</label>
+                    <div style="padding:10px 12px;border-radius:8px;background:var(--cms-input-bg);border:1px solid var(--cms-border);font-weight:700;text-transform:capitalize">
+                        {{ $status }} <span style="font-weight:500;color:var(--cms-text-muted);font-size:11px">(auto from coverage)</span>
+                    </div>
+                </div>
             </div>
             <div style="margin-top:10px"><label>Notes</label><textarea wire:model.defer="notes" rows="4"></textarea></div>
             <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap">

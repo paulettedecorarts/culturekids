@@ -139,7 +139,7 @@ Cannot impersonate self or other super admins.
 
 Built in admin but not all listed in the God Mode sidebar mockup:
 
-- Content CMS breadth: stories/comics, songs, activities, puzzles, games, tribes, clans, languages, drawings, story packs, translations, assets
+- Content CMS breadth: stories/comics, songs, activities, puzzles, games, tribes, clans, languages, drawings, story packs, translations, assets — see [translations.md](./translations.md)
 - Users management
 - Permissions viewer (Spatie; largely read-only UI)
 - Audit logs UI (`/admin/audit-logs`)

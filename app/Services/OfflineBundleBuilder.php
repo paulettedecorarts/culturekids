@@ -47,16 +47,10 @@ class OfflineBundleBuilder
                 'caption' => $panel->caption,
                 'image_path' => $panel->image_path,
                 'audio_url' => $panel->audio_url,
-                'vocab_tags' => $panel->vocabTags->map(fn ($tag) => [
-                    'word' => $tag->word,
-                    'translation' => $tag->translation,
-                    'phonetic' => $tag->phonetic,
-                    'x_position' => $tag->x_position,
-                    'y_position' => $tag->y_position,
-                    'width' => $tag->width,
-                    'height' => $tag->height,
-                    'metadata' => $tag->metadata,
-                ])->values()->all(),
+                'vocab_tags' => $panel->vocabTags
+                    ->map(fn ($tag) => \App\Support\PanelVocabTagSerializer::toArray($tag, includeId: false))
+                    ->values()
+                    ->all(),
                 'metadata' => $panel->metadata,
             ];
 

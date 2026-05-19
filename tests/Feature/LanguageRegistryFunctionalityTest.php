@@ -17,7 +17,7 @@ class LanguageRegistryFunctionalityTest extends TestCase
 
     public function test_languages_endpoint_requires_authentication(): void
     {
-        $this->getJson('/api/languages')->assertUnauthorized();
+        $this->getJson('/api/v1/languages')->assertUnauthorized();
     }
 
     public function test_super_admin_can_fetch_languages_registry_api(): void
@@ -25,7 +25,7 @@ class LanguageRegistryFunctionalityTest extends TestCase
         $user = $this->createSuperAdminUser();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/languages');
+        $response = $this->getJson('/api/v1/languages');
 
         $response->assertOk()
             ->assertJsonCount(2, 'languages')
@@ -41,9 +41,7 @@ class LanguageRegistryFunctionalityTest extends TestCase
             ->set('native_name', 'Runyankore')
             ->set('code', 'nyn-UG')
             ->set('flag_emoji', '🇺🇬')
-            ->set('translation_coverage', 40)
             ->set('audio_pack_available', true)
-            ->set('status', 'partial')
             ->set('is_active', true)
             ->set('sort_order', 30)
             ->set('notes', 'Initial onboarding set.')
@@ -51,16 +49,20 @@ class LanguageRegistryFunctionalityTest extends TestCase
             ->assertHasNoErrors();
 
         $created = Language::where('code', 'nyn-UG')->firstOrFail();
-        $this->assertDatabaseHas('languages', ['id' => $created->id, 'name' => 'Runyankole']);
+        $this->assertDatabaseHas('languages', [
+            'id' => $created->id,
+            'name' => 'Runyankole',
+            'translation_coverage' => 0,
+            'status' => 'pending',
+        ]);
 
         Livewire::test(LanguageDetailPage::class, ['id' => $created->id])
             ->call('startEditing')
-            ->set('translation_coverage', 72)
-            ->set('status', 'verified')
+            ->set('name', 'Runyankole (updated)')
             ->call('saveLanguage')
             ->assertHasNoErrors();
 
-        $this->assertDatabaseHas('languages', ['id' => $created->id, 'translation_coverage' => 72, 'status' => 'verified']);
+        $this->assertDatabaseHas('languages', ['id' => $created->id, 'name' => 'Runyankole (updated)']);
 
         Livewire::test(LanguageDetailPage::class, ['id' => $created->id])
             ->call('deleteLanguage')

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\LanguageActivity;
+use App\Models\LanguageActivityWord;
+use App\Models\PanelVocabTag;
+use App\Observers\TranslationCoverageObserver;
 use App\Services\Push\FcmPushGateway;
 use App\Services\Push\LogPushGateway;
 use App\Services\Push\PushGateway;
@@ -42,6 +46,16 @@ class AppServiceProvider extends ServiceProvider
         $this->configurePagination();
         $this->configureLivewire();
         $this->ensureLivewireTemporaryUploadDirectoryExists();
+        $this->registerTranslationCoverageObservers();
+    }
+
+    protected function registerTranslationCoverageObservers(): void
+    {
+        $observer = TranslationCoverageObserver::class;
+
+        LanguageActivity::observe($observer);
+        LanguageActivityWord::observe($observer);
+        PanelVocabTag::observe($observer);
     }
 
     /**

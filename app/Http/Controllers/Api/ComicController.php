@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Comic;
 use App\Models\ReadingProgress;
+use App\Support\PanelVocabTagSerializer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -79,9 +80,13 @@ class ComicController extends Controller
         $user = $request->user();
         
         $query = Comic::query()
-            ->with(['tribe:id,name,hero_emoji,hero_icon,color', 'panels' => function ($q) {
-                $q->orderBy('order_index');
-            }])
+            ->with([
+                'tribe:id,name,hero_emoji,hero_icon,color',
+                'panels' => function ($q) {
+                    $q->orderBy('order_index');
+                },
+                'panels.vocabTags',
+            ])
             ->where('id', $id)
             ->published();
 
@@ -115,9 +120,13 @@ class ComicController extends Controller
                 return [
                     'id' => $panel->id,
                     'order' => $panel->order_index,
-                    'image_path' => $panel->image_path ? asset('storage/' . $panel->image_path) : null,
-                    'text' => $panel->text_content,
-                    'audio_path' => $panel->audio_path ? asset('storage/' . $panel->audio_path) : null,
+                    'image_path' => $panel->image_path ? asset('storage/'.$panel->image_path) : null,
+                    'text' => $panel->caption,
+                    'audio_path' => $panel->audio_url ? asset('storage/'.$panel->audio_url) : null,
+                    'vocab_tags' => $panel->vocabTags
+                        ->map(fn ($tag) => PanelVocabTagSerializer::toArray($tag))
+                        ->values()
+                        ->all(),
                 ];
             }),
         ]);

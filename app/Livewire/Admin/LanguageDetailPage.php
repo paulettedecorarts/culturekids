@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Language;
+use App\Services\TranslationCoverageService;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -40,6 +41,8 @@ class LanguageDetailPage extends Component
     {
         if ($id) {
             $this->language = Language::findOrFail($id);
+            app(TranslationCoverageService::class)->syncLanguageRegistryWithStatus($this->language->code);
+            $this->language->refresh();
             $this->fillFromLanguage($this->language);
             $this->isCreate = false;
             $this->isEditing = false;
@@ -73,14 +76,17 @@ class LanguageDetailPage extends Component
     {
         $data = $this->validate($this->rules());
 
+        $coverageService = app(TranslationCoverageService::class);
+        $coverage = $coverageService->coveragePercentForLanguageCode($data['code']);
+
         $payload = [
             'name' => $data['name'],
             'native_name' => $data['native_name'],
             'code' => $data['code'],
             'flag_emoji' => $data['flag_emoji'],
-            'translation_coverage' => $data['translation_coverage'],
+            'translation_coverage' => $coverage,
             'audio_pack_available' => $data['audio_pack_available'],
-            'status' => $data['status'],
+            'status' => $coverageService->derivedStatus($coverage),
             'is_active' => $data['is_active'],
             'sort_order' => $data['sort_order'],
             'notes' => $data['notes'],
@@ -93,6 +99,9 @@ class LanguageDetailPage extends Component
             $this->language = Language::create($payload);
             session()->flash('message', 'Language created.');
         }
+
+        $coverageService->syncLanguageRegistryWithStatus($this->language->code);
+        $this->language->refresh();
 
         return $this->redirectRoute('admin.languages.detail', ['id' => $this->language->id], navigate: true);
     }
@@ -121,9 +130,7 @@ class LanguageDetailPage extends Component
             'native_name' => ['nullable', 'string', 'max:120'],
             'code' => ['required', 'string', 'max:35', Rule::unique('languages', 'code')->ignore($this->language?->id)],
             'flag_emoji' => ['nullable', 'string', 'max:10'],
-            'translation_coverage' => ['required', 'integer', 'min:0', 'max:100'],
             'audio_pack_available' => ['required', 'boolean'],
-            'status' => ['required', Rule::in(['verified', 'partial', 'pending'])],
             'is_active' => ['required', 'boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:9999'],
             'notes' => ['nullable', 'string'],

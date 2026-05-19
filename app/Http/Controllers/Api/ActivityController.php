@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
-use App\Services\OrganisationModuleResolver;
+use App\Models\LanguageActivity;
 use App\Models\Tribe;
+use App\Services\OrganisationModuleResolver;
+use App\Support\LanguageActivityApiSerializer;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -161,6 +163,17 @@ class ActivityController extends Controller
         if ($activity->type === 'puzzle') {
             $response['puzzle_data'] = $activity->metadata;
             $response['printable_url'] = $activity->printableAssetUrl();
+        }
+
+        if ($activity->type === 'vocab_pack') {
+            $legacyId = data_get($activity->metadata, 'legacy_language_activity_id');
+            $languageActivity = $legacyId
+                ? LanguageActivity::with('words')->find($legacyId)
+                : null;
+
+            if ($languageActivity) {
+                $response['language_activity'] = LanguageActivityApiSerializer::toArray($languageActivity);
+            }
         }
 
         return response()->json($response);
