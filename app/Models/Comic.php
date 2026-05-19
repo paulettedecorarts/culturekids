@@ -107,6 +107,10 @@ class Comic extends Model
 
     protected function syncToActivities(): void
     {
+        if ($this->star_points === null) {
+            $this->refresh();
+        }
+
         $metadata = array_merge($this->metadata ?? [], [
             'source'   => 'comic_mirror',
             'comic_id' => $this->id,

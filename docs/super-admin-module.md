@@ -15,7 +15,7 @@ The platform shell, org management, impersonation, age profiles, themes, and con
 | **S1** Access / God Mode | `admin.culturekids.app`, `SuperAdminMiddleware`, `config(['scoping.org_id' => null])` | `/admin/*`, middleware `role:super_admin` + `log.admin`. **No** `SuperAdminMiddleware` or `scopingSetup.org_id`. No global Eloquent org scope — admin queries are effectively platform-wide. Subdomain is deploy/DNS only. | **~70%** |
 | **S2** Orgs & subscriptions | CRUD, suspend, Free/School/Enterprise, per-org modules, tribe selection | `OrganizationsManager`, `OrganizationCreate`, `OrganizationDetail`: plan tiers, active/inactive toggle, per-org module pivots, `allowed_tribe_ids` in settings. API: `PUT .../organisations/{id}/modules`. | **~90%** |
 | **S3** Age profiles & UI rules | Bands 2–3…5–6, complexity/unlock rules, `age_profiles`, mobile API | `AgeCategories` + `AgeProfileDetailPage` (min/max age, ui_scale, reading_level, activity_complexity, content_access_rules, ui_features). API: `GET /api/v1/age-profiles` (Sanctum). Child profiles auto-assign age from DOB (tests). | **~85%** |
-| **S4** Theme engine | No-code tokens per org, `theme_configs`, JSON API for app | `ThemesManager` + `themes` table (colors, per `org_id`), preview in admin. Also `Organisation.theme` JSON. **No** `theme_configs` table name; **no** theme endpoint in `routes/api.php` for mobile. | **~55%** |
+| **S4** Theme engine | No-code tokens per org, `theme_configs`, JSON API for app | `ThemesManager` + `themes` table; `GET /api/v1/organisation/theme` via `OrganisationThemeResolver`. `organisations.theme` JSON merged as overrides. | **~85%** |
 | **S5** Impersonation | Temp token, audit with `impersonator_id` | Session-based `Auth::login()` + `impersonator_id` on `audit_logs` — **not** Sanctum `createToken('impersonation')`. UI at `/admin/impersonate`, stop via `POST admin/stop-impersonation`. Portal isolation enforced. | **~80%** |
 
 ---
@@ -183,6 +183,8 @@ Content / CMS breadth     █████████░  ~90% (beyond spec)
 | Middleware | `EnsurePortalRoleIsolation`, `LogSuperAdminActions` |
 | Seeded super admin | `DatabaseSeeder` — `admin@culturekids.app` / `password` |
 | Age profiles API | `routes/api.php` → `AgeProfileController` |
+| Organisation theme API | `routes/api.php` → `OrganisationThemeController` |
+| Theme resolver | `app/Services/OrganisationThemeResolver.php` |
 | Org modules API | `OrganisationModuleAdminController` |
 
 ---
@@ -196,9 +198,36 @@ Content / CMS breadth     █████████░  ~90% (beyond spec)
 - **Sidebar** — Drawings, games, puzzles, mazes, spot-difference, word searches, culture/language activities, story packs, assets, translations.
 - **Maintenance mode** — Livewire toggle via `artisan down` / `up`; admin routes exempt in `bootstrap/app.php`.
 
-### Phase 2+ (remaining)
+### Phase 2 (done)
 
-1. **Theme API** — Add `GET /api/v1/organisation/theme` (or similar) for Expo app.
+- **`GET /api/v1/organisation/theme`** (Sanctum) — Returns resolved theme for the authenticated user’s organisation.
+- **`App\Services\OrganisationThemeResolver`** — Merges default `themes` row (per org or global), then `organisations.theme` JSON overrides.
+- **Tests:** `tests/Feature/Api/OrganisationThemeApiTest.php`
+- **App developer guide:** [mobile-api-theming.md](./mobile-api-theming.md)
+
+Response shape:
+
+```json
+{
+  "theme": {
+    "source": "organisation_theme|organisation_override|platform_default|platform_theme",
+    "organisation_id": 1,
+    "theme_id": 5,
+    "name": "Sunrise Brand",
+    "slug": "sunrise_brand",
+    "logo_url": null,
+    "colors": { "primary": "#2E4D8A", ... },
+    "typography": null,
+    "spacing": null,
+    "borders": null,
+    "metadata": {}
+  }
+}
+```
+
+### Phase 3+ (remaining)
+
+1. **Subdomain** — Configure `admin.culturekids.app` in Coolify/DNS if desired.
 2. **Scoping middleware (optional)** — Only if a global tenant scope is introduced.
 3. **Subdomain** — Configure `admin.culturekids.app` in Coolify/DNS if desired.
 4. **Dedicated badge metric** — Optional `badge_awards` table if product needs audit trail beyond completion counts.

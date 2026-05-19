@@ -39,19 +39,23 @@ class PlatformStatsServiceTest extends TestCase
             'hero_name' => 'Hero',
         ]);
 
+        $storyStarPoints = 15;
+
         Comic::create([
             'tribe_id' => $tribe->id,
             'title' => 'Story One',
             'age_min' => 2,
             'age_max' => 3,
             'status' => 'published',
+            'star_points' => $storyStarPoints,
         ]);
 
-        $activity = Activity::create([
-            'tribe_id' => $tribe->id,
-            'type' => 'story',
-            'title' => 'Activity One',
-        ]);
+        $activity = Activity::query()
+            ->where('type', 'story')
+            ->where('title', 'Story One')
+            ->firstOrFail();
+
+        $this->assertSame($storyStarPoints, $activity->star_points);
 
         ProgressEvent::create([
             'child_profile_id' => $child->id,

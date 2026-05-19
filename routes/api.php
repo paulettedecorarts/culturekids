@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ChildProfileController;
 use App\Http\Controllers\Api\ComicController;
 use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
+use App\Http\Controllers\Api\OrganisationThemeController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\PushDeviceController;
 use App\Http\Controllers\Api\ReadingProgressController;
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/age-profiles', [AgeProfileController::class, 'index']);
     Route::get('/languages', [LanguageRegistryController::class, 'index']);
     Route::get('/tribes', [TribeCatalogController::class, 'index']);
+    Route::get('/organisation/theme', [OrganisationThemeController::class, 'show']);
     
     // Activities
     Route::get('/activities', [ActivityController::class, 'index']);
