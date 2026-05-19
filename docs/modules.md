@@ -59,7 +59,10 @@ Helpers: `isEnabledForUser()`, `isContentTypeAllowed()`, `isActivityTypeAllowed(
 |-------|---------|
 | `/admin` | Dashboard quick global toggles |
 | `/admin/modules` | Full global on/off |
-| `/admin/organisations/{id}` | Per-org overrides |
+| `/admin/organizations/{id}` | Per-organisation module toggles (all 15 modules) |
+| `/cms/admin/organizations` | Org admin: toggle modules for **their** school only |
+
+Per-org toggles use the `module_organisation` pivot (`is_enabled`). No pivot row means **enabled** for that org (opt-out). First click to turn **Off** creates a pivot with `is_enabled = false`.
 
 There is **no** module registry form — new modules are added in `config/modules.php` when shipping a feature.
 
@@ -106,7 +109,76 @@ Mappings in `config/modules.php`:
 | `effective_organisation_module_keys` | Org module keys that apply |
 | `effective_activity_types` | DB activity types allowed for this child context |
 
-Expo should gate UI with **`effective_modules`** (or `effective_organisation_module_keys`), not `modules` alone.
+## Expo / React Native — module and content gating
+
+Use **two** authenticated calls after login. Do not gate tiles, tabs, or deep links from age-band `modules` alone.
+
+### 1. School licence — `GET /api/v1/organisation/modules`
+
+Returns every product module with `enabled: true | false` for the logged-in user’s organisation (B2C: all globally enabled modules).
+
+- Hide or disable **entire product areas** (Stories, Songs, Offline, Theme, Kiosk, …).
+- Story reader still uses API path `/api/v1/comics`; the module key is **`stories`**.
+- If `theme_engine` is off, `GET /api/v1/organisation/theme` returns platform defaults — see [mobile-api-theming.md](./mobile-api-theming.md).
+
+Cache key example: `ck_org_modules_v1_{organization_id ?? 'b2c'}`.
+
+### 2. Child age band — `GET /api/v1/age-profiles`
+
+Each profile includes `content_access_rules`. Important fields:
+
+| Field | Use in Expo |
+|-------|-------------|
+| `modules` | Age-band definition only — **do not** use alone for visibility |
+| `effective_modules` | **Use this** — age allow list ∩ org licence (`stories`, `puzzle`, …) |
+| `effective_organisation_module_keys` | Same gate, org naming (`stories`, `puzzles`, …) |
+| `effective_activity_types` | Filter activity lists (`puzzle`, `flashcard`, `song`, …) |
+
+Resolve the active child’s profile (from `ChildProfile.age_profile_id` or DOB), then read **`effective_modules`** for that profile’s `key`.
+
+Stories are **not** in `effective_activity_types` (comics API). Gate stories when `effective_modules` contains `stories` (or `effective_organisation_module_keys` contains `stories`).
+
+### Combined rule
+
+Show a content type only when **both** are true:
+
+1. Org module enabled (`organisation/modules` or `effective_organisation_module_keys`).
+2. Child’s age profile allows it (`effective_modules` for the selected child).
+
+The API enforces this on the server (403 / filtered lists). The app should still hide disabled UI to avoid dead ends.
+
+### Suggested startup (after token restore)
+
+```
+GET /api/v1/auth/me
+GET /api/v1/organisation/modules    → school licence
+GET /api/v1/organisation/theme      → branding (if theme_engine)
+GET /api/v1/age-profiles            → per-band effective_modules
+```
+
+Steps 2–4 can run in parallel once the token is valid.
+
+### Example (TypeScript)
+
+```ts
+type AgeProfileRules = {
+  modules: string[];
+  effective_modules: string[];
+  effective_organisation_module_keys: string[];
+  effective_activity_types: string[];
+};
+
+function childCanAccessStories(
+  orgModules: { key: string; enabled: boolean }[],
+  rules: AgeProfileRules,
+): boolean {
+  const orgOk = orgModules.find((m) => m.key === 'stories')?.enabled ?? false;
+  const ageOk = rules.effective_modules.includes('stories');
+  return orgOk && ageOk;
+}
+```
+
+Prefer `effective_modules` over manually intersecting `modules` with `organisation/modules` — the backend already applies `config/modules.php` mappings.
 
 ## See also
 

@@ -3,8 +3,10 @@
 namespace App\Livewire\CMS;
 
 use App\Models\AuditLog;
+use App\Models\Module;
 use App\Models\Organisation;
 use App\Models\User;
+use App\Services\OrganisationModuleToggleService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -112,6 +114,25 @@ class Organizations extends Component
         session()->flash('message', 'Organization profile updated.');
     }
 
+    public function toggleOrgModule(int $moduleId, OrganisationModuleToggleService $toggleService): void
+    {
+        $org = auth()->user()?->organisation;
+        if (! $org || (int) $org->id !== (int) $this->organizationId) {
+            return;
+        }
+
+        $module = Module::findOrFail($moduleId);
+        $result = $toggleService->toggle($org, $module, 'ORG_MODULE_TOGGLE_BY_ORG_ADMIN');
+
+        if (! $result['ok']) {
+            session()->flash('message', $result['message']);
+
+            return;
+        }
+
+        session()->flash('message', 'Module access updated for your organization.');
+    }
+
     protected function refreshOrgUserCounts(): void
     {
         $orgId = auth()->user()?->organisation_id;
@@ -144,6 +165,23 @@ class Organizations extends Component
 
     public function render()
     {
-        return view('livewire.cms.organizations');
+        $org = auth()->user()?->organisation?->load('modules');
+        $toggleService = app(OrganisationModuleToggleService::class);
+
+        $modules = Module::query()
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
+        $moduleStates = $org
+            ? $modules->mapWithKeys(fn (Module $m) => [
+                $m->id => $toggleService->isEnabledForOrganisation($org, $m),
+            ])
+            : collect();
+
+        return view('livewire.cms.organizations', [
+            'modules' => $modules,
+            'moduleStates' => $moduleStates,
+        ]);
     }
 }

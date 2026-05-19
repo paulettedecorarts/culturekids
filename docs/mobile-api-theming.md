@@ -1,6 +1,6 @@
 # Mobile API — Organisation Theming
 
-> **Modules:** For enabled feature flags per org, see [modules.md](./modules.md) (`GET /api/v1/organisation/modules`). Age bands expose `content_access_rules.effective_modules` on `GET /api/v1/age-profiles` — use those for child UI, not `modules` alone.
+> **Modules & content gating:** See [modules.md — Expo / React Native](./modules.md#expo--react-native--module-and-content-gating). Summary: gate UI with `GET /api/v1/organisation/modules` **and** `content_access_rules.effective_modules` from `GET /api/v1/age-profiles` — not age-band `modules` alone.
 
 Guide for Expo / React Native developers integrating white-label branding from the Culture Kids backend.
 
@@ -331,17 +331,20 @@ Store the full `theme` object in AsyncStorage (or MMKV). Invalidate when:
 
 ## Startup sequence (with other config)
 
-Align with age profiles and catalog loading:
+Align with organisation modules, age profiles, and catalog loading:
 
 ```
 1. Restore Sanctum token from secure storage
-2. GET /api/v1/auth/me          → confirm user + organization_id
-3. GET /api/v1/organisation/theme → apply branding
-4. GET /api/v1/age-profiles     → child UI rules
-5. Navigate to home / child picker
+2. GET /api/v1/auth/me                → confirm user + organization_id
+3. GET /api/v1/organisation/modules   → school licence (which product areas exist)
+4. GET /api/v1/organisation/theme     → apply branding
+5. GET /api/v1/age-profiles           → child UI rules (use effective_modules per band)
+6. Navigate to home / child picker
 ```
 
-Parallelising steps 3–4 is fine once the token is valid.
+Parallelising steps 3–5 is fine once the token is valid.
+
+Full gating rules (org + age, `stories` vs `/comics`, caching): [modules.md — Expo / React Native](./modules.md#expo--react-native--module-and-content-gating).
 
 ---
 
@@ -406,6 +409,7 @@ php artisan test --filter=OrganisationThemeApiTest
 
 ## Related documentation
 
+- **Module & content gating (Expo):** [modules.md](./modules.md#expo--react-native--module-and-content-gating)
 - Internal gap analysis: [super-admin-module.md](./super-admin-module.md) (Phase 2)
 - Age profiles API: same auth pattern — `GET /api/v1/age-profiles`
 - Auth: `POST /api/v1/auth/login`, `GET /api/v1/auth/me`

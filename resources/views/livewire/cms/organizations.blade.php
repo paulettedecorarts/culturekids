@@ -51,6 +51,39 @@
         </div>
     </div>
 
+    @if ($organizationId)
+        <div class="cms-panel" style="margin-top:var(--sp-6)">
+            <div class="cms-table-header" style="grid-template-columns:1fr; margin:-24px -24px 16px;">
+                <span>Licensed modules</span>
+            </div>
+            <p style="font-size:13px; color:var(--cms-text-muted); margin-bottom:20px; line-height:1.5">
+                Turn product features on or off for <strong>{{ $name }}</strong>. Teachers, parents, and the mobile app only see content for enabled modules. Modules disabled platform-wide cannot be enabled here.
+            </p>
+            <div style="display:flex; flex-direction:column; gap:10px">
+                @foreach ($modules as $module)
+                    @php $on = $moduleStates[$module->id] ?? false; @endphp
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 16px; border-radius:12px; border:1px solid var(--cms-border); background:var(--cms-surface)">
+                        <div style="display:flex; align-items:center; gap:12px; min-width:0">
+                            <span style="font-size:20px">{{ $module->icon ?: '•' }}</span>
+                            <div style="min-width:0">
+                                <div style="font-weight:700; font-size:14px; color:var(--cms-text)">{{ $module->name }}</div>
+                                <div style="font-size:11px; color:var(--cms-text-muted); font-weight:600">{{ $module->key }}@if(!$module->is_enabled) · off globally @endif</div>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            wire:click="toggleOrgModule({{ $module->id }})"
+                            wire:loading.attr="disabled"
+                            @if(!$module->is_enabled) disabled @endif
+                            class="btn btn-sm"
+                            style="flex-shrink:0; border-radius:999px; font-weight:800; {{ $on ? 'background:rgba(74,124,89,0.15); color:var(--banana-green); border-color:rgba(74,124,89,0.35)' : '' }}"
+                        >{{ $on ? 'On' : 'Off' }}</button>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     @if ($showEditModal)
         <div
             wire:click="closeEditModal"

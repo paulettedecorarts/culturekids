@@ -65,6 +65,8 @@ Seeded super admin: `admin@culturekids.app` / `password` (`DatabaseSeeder`).
 
 All mobile routes are under **`/api/v1/`** (see `bootstrap/app.php` / `RouteServiceProvider`). Prefer this prefix in new tests and Expo clients.
 
+**Expo module gating:** [modules.md — Expo / React Native](./modules.md#expo--react-native--module-and-content-gating) (`organisation/modules` + age-profile `effective_modules`).
+
 ## Deferred / not in webapp
 
 - Badge awards dedicated table (use progress/events until product defines)

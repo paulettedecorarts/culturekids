@@ -160,6 +160,7 @@ Goal: **15 modules** (12 content + 3 platform), one key per activity, enforced c
 - `OrganisationModuleResolver::formatAgeProfileForApi()` — effective_* fields on age profiles API  
 - `AgeCategoryPolicyService` — comics/songs/activities filtered with org + age rules  
 - **Tests:** `AgeProfileModuleBridgeTest`, extended `AgeCategoryPolicyServiceTest`
+- **Expo:** [modules.md — Expo / React Native](./modules.md#expo--react-native--module-and-content-gating)
 
 ---
 

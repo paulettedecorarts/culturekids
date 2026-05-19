@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\Module;
 use App\Models\Organisation;
 use App\Models\Tribe;
+use App\Services\OrganisationModuleToggleService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -62,32 +63,18 @@ class OrganizationDetail extends Component
         session()->flash('message', 'Organization status updated.');
     }
 
-    public function toggleOrgModule(int $moduleId): void
+    public function toggleOrgModule(int $moduleId, OrganisationModuleToggleService $toggleService): void
     {
         $module = Module::findOrFail($moduleId);
-        if (! $module->is_enabled) {
-            session()->flash('message', 'This module is disabled platform-wide. Enable it under Modules first.');
+        $result = $toggleService->toggle($this->organization, $module);
+
+        if (! $result['ok']) {
+            session()->flash('message', $result['message']);
 
             return;
         }
 
-        $org = $this->organization->fresh();
-        $attached = $org->modules()->where('modules.id', $moduleId)->first();
-
-        if ($attached) {
-            $next = ! $attached->pivot->is_enabled;
-            $org->modules()->updateExistingPivot($moduleId, ['is_enabled' => $next]);
-        } else {
-            $org->modules()->attach($moduleId, ['is_enabled' => false]);
-        }
-
-        $pivotRow = $org->modules()->where('modules.id', $moduleId)->first();
-        AuditLog::record('ORG_MODULE_TOGGLE', "organisations/{$org->id}", [
-            'module_key' => $module->key,
-            'is_enabled' => $pivotRow ? (bool) $pivotRow->pivot->is_enabled : false,
-        ]);
-
-        $this->organization = $org->load('modules');
+        $this->organization = $this->organization->fresh(['modules']);
         session()->flash('message', 'Module access updated for this organization.');
     }
 
@@ -130,8 +117,9 @@ class OrganizationDetail extends Component
             ->limit(40)
             ->get();
 
+        $toggleService = app(OrganisationModuleToggleService::class);
         $moduleStates = $modules->mapWithKeys(fn (Module $m) => [
-            $m->id => $this->moduleEnabledForOrg($org, $m),
+            $m->id => $toggleService->isEnabledForOrganisation($org, $m),
         ]);
 
         return view('livewire.admin.organization-detail', [
@@ -143,18 +131,4 @@ class OrganizationDetail extends Component
         ]);
     }
 
-    private function moduleEnabledForOrg(Organisation $org, Module $module): bool
-    {
-        if (! $module->is_enabled) {
-            return false;
-        }
-
-        $attached = $org->modules->firstWhere('id', $module->id);
-
-        if ($attached === null) {
-            return true;
-        }
-
-        return (bool) $attached->pivot->is_enabled;
-    }
 }
