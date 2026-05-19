@@ -50,8 +50,19 @@ HTML;
 
         <div class="sa-nav-section"><span class="sa-nav-section-text">Content</span></div>
         {!! $saNavLink(route('admin.stories'), '📖', 'Stories', request()->routeIs('admin.stories*')) !!}
+        {!! $saNavLink(route('admin.story-packs'), '📚', 'Story Packs', request()->routeIs('admin.story-packs*')) !!}
         {!! $saNavLink(route('admin.songs'), '🎵', 'Songs', request()->routeIs('admin.songs*')) !!}
         {!! $saNavLink(route('admin.activities'), '🎯', 'Activities', request()->routeIs('admin.activities*')) !!}
+        {!! $saNavLink(route('admin.drawings'), '🖍', 'Drawings', request()->routeIs('admin.drawings*')) !!}
+        {!! $saNavLink(route('admin.games'), '🎮', 'Games', request()->routeIs('admin.games*')) !!}
+        {!! $saNavLink(route('admin.puzzles'), '🧩', 'Puzzles', request()->routeIs('admin.puzzles*')) !!}
+        {!! $saNavLink(route('admin.mazes'), '🌀', 'Mazes', request()->routeIs('admin.mazes*')) !!}
+        {!! $saNavLink(route('admin.spot-differences'), '🔍', 'Spot the Difference', request()->routeIs('admin.spot-differences*')) !!}
+        {!! $saNavLink(route('admin.word-searches'), '🔤', 'Word Searches', request()->routeIs('admin.word-searches*')) !!}
+        {!! $saNavLink(route('admin.culture-activities'), '🏺', 'Culture Activities', request()->routeIs('admin.culture-activities*')) !!}
+        {!! $saNavLink(route('admin.language-activities'), '📝', 'Language Activities', request()->routeIs('admin.language-activities*')) !!}
+        {!! $saNavLink(route('admin.assets'), '🖼', 'Assets', request()->routeIs('admin.assets*')) !!}
+        {!! $saNavLink(route('admin.translations'), '🌐', 'Translations', request()->routeIs('admin.translations*')) !!}
         {!! $saNavLink(route('admin.modules-registry'), '🔧', 'Modules Registry', request()->routeIs('admin.modules-registry')) !!}
         {!! $saNavLink(route('admin.age-categories'), '🌱', 'Age Categories', request()->routeIs('admin.age-categories*')) !!}
         {!! $saNavLink(route('admin.tribe-registry'), '🌍', 'Tribe Directory', request()->routeIs('admin.tribe-registry*')) !!}

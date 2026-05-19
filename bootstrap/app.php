@@ -23,6 +23,16 @@ return Application::configure(basePath: dirname(__DIR__))
         // Trust all proxies in production (Coolify/nginx reverse proxy)
         $middleware->trustProxies(at: '*');
 
+        // Super Admin can operate the panel while the app is in maintenance mode.
+        $middleware->preventRequestsDuringMaintenance(except: [
+            'admin',
+            'admin/*',
+            'livewire/*',
+            'login',
+            'logout',
+            'up',
+        ]);
+
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
