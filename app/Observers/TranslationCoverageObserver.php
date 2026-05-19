@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\LanguageActivity;
 use App\Models\LanguageActivityWord;
+use App\Models\ContentTranslation;
 use App\Models\PanelVocabTag;
 use App\Services\TranslationCoverageService;
 
@@ -13,17 +14,17 @@ class TranslationCoverageObserver
         private readonly TranslationCoverageService $coverage
     ) {}
 
-    public function saved(LanguageActivity|LanguageActivityWord|PanelVocabTag $model): void
+    public function saved(LanguageActivity|LanguageActivityWord|ContentTranslation|PanelVocabTag $model): void
     {
         $this->syncFromModel($model);
     }
 
-    public function deleted(LanguageActivity|LanguageActivityWord|PanelVocabTag $model): void
+    public function deleted(LanguageActivity|LanguageActivityWord|ContentTranslation|PanelVocabTag $model): void
     {
         $this->syncFromModel($model);
     }
 
-    private function syncFromModel(LanguageActivity|LanguageActivityWord|PanelVocabTag $model): void
+    private function syncFromModel(LanguageActivity|LanguageActivityWord|ContentTranslation|PanelVocabTag $model): void
     {
         if ($model instanceof LanguageActivity) {
             $this->coverage->syncLanguageRegistryWithStatus($model->language_code);

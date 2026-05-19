@@ -34,6 +34,11 @@ class ComicPanel extends Model
         return $this->hasMany(PanelVocabTag::class, 'panel_id');
     }
 
+    public function contentTranslations(): HasMany
+    {
+        return $this->hasMany(ContentTranslation::class, 'panel_id');
+    }
+
     /**
      * Check if panel is a PDF
      */

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\ContentTranslation;
 use App\Models\PanelVocabTag;
 
 final class PanelVocabTagSerializer
@@ -9,7 +10,7 @@ final class PanelVocabTagSerializer
     /**
      * @return array<string, mixed>
      */
-    public static function toArray(PanelVocabTag $tag, bool $includeId = true): array
+    public static function toArray(ContentTranslation|PanelVocabTag $tag, bool $includeId = true): array
     {
         $payload = [
             'word' => $tag->word,

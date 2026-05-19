@@ -60,7 +60,7 @@ Styles live in `resources/css/admin-content.css` under `.lw-submit-btn*`.
 - Dashboard (maintenance toggle)
 - Users (create/edit)
 - Organizations (list modal, create, detail plan/tribes)
-- Themes, modules registry, tribes, clans, translations
+- Themes, modules registry, tribes, clans, translations (list + full-page form)
 - Age profiles, languages, activities, songs
 - Panel editor (vocabulary tag)
 - Impersonate user

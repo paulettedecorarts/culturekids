@@ -26,6 +26,7 @@ use App\Livewire\Admin\StoryDetail;
 use App\Livewire\Admin\StoryForm;
 use App\Livewire\Admin\StoryPacksManager;
 use App\Livewire\Admin\ThemesManager;
+use App\Livewire\Admin\TranslationFormPage;
 use App\Livewire\Admin\TranslationsManager;
 use App\Livewire\Admin\TribeDetail;
 use App\Livewire\Admin\TribeForm;
@@ -94,6 +95,8 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('story-packs', StoryPacksManager::class)->name('story-packs');
     Route::get('assets', AssetsManager::class)->name('assets');
     Route::get('translations', TranslationsManager::class)->name('translations');
+    Route::get('translations/create', TranslationFormPage::class)->name('translations.create');
+    Route::get('translations/{id}/edit', TranslationFormPage::class)->name('translations.edit');
 
     // Activities section items
     Route::get('songs', SongsManager::class)->name('songs');
@@ -197,6 +200,8 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/story-packs/{id}', StoryDetail::class)->name('story-packs.detail');
     Route::get('/assets', AssetsManager::class)->name('assets');
     Route::get('/translations', TranslationsManager::class)->name('translations');
+    Route::get('/translations/create', TranslationFormPage::class)->name('translations.create');
+    Route::get('/translations/{id}/edit', TranslationFormPage::class)->name('translations.edit');
 
     Route::get('/songs', SongsManager::class)->name('songs');
     Route::get('/songs/create', SongDetailPage::class)->name('songs.create');

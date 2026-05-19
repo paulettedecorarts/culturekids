@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\LanguageActivity;
 use App\Models\LanguageActivityWord;
+use App\Models\ContentTranslation;
 use App\Models\PanelVocabTag;
 use App\Observers\TranslationCoverageObserver;
 use App\Services\Push\FcmPushGateway;
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
 
         LanguageActivity::observe($observer);
         LanguageActivityWord::observe($observer);
+        ContentTranslation::observe($observer);
         PanelVocabTag::observe($observer);
     }
 

@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Language;
 use App\Models\LanguageActivity;
 use App\Models\LanguageActivityWord;
+use App\Models\ContentTranslation;
+use App\Models\OrganisationContentDecision;
 use App\Models\PanelVocabTag;
 
 class TranslationCoverageService
@@ -65,7 +67,7 @@ class TranslationCoverageService
      */
     public function panelVocabCoveragePercent(?int $organisationId = null): int
     {
-        $query = PanelVocabTag::query();
+        $query = ContentTranslation::query();
 
         if ($organisationId !== null) {
             $query->whereHas('panel.comic', fn ($q) => $q->where('org_id', $organisationId));

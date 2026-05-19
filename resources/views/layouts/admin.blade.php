@@ -593,6 +593,22 @@
             flex: 1 1 auto;
             min-width: 88px;
         }
+        .sa-table-action--primary {
+            background: var(--clay-red);
+            border-color: var(--clay-red-dark);
+            color: #ffffff;
+        }
+        .sa-table-action--primary:hover {
+            background: var(--clay-red-light);
+            border-color: var(--clay-red);
+            color: #ffffff;
+        }
+        .sa-page-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
         .sa-icon-action {
             display: inline-flex;
             align-items: center;

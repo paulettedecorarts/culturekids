@@ -1108,3 +1108,80 @@
 .cms-content .theme-mgr-modal-panel .theme-mgr-preview {
     border-left: 1px solid var(--cms-border);
 }
+
+/* Reused admin Livewire blades (translations, stories, etc.) */
+.cms-content .sa-page-title { color: var(--cms-text) !important; }
+.cms-content .sa-breadcrumb { color: var(--cms-text-muted) !important; }
+
+.cms-content .sa-page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.cms-content .sa-table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    min-width: 72px;
+    padding: 8px 16px;
+    border-radius: var(--r-full);
+    font-family: var(--font-admin);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid var(--cms-ghost-border);
+    background: var(--cms-surface-hover);
+    color: var(--cms-text);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+[data-cms-theme="light"] .cms-content .sa-table-action {
+    background: #ffffff;
+    border-color: rgba(26, 18, 8, 0.2);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(26, 18, 8, 0.06);
+}
+
+.cms-content .sa-table-action--danger {
+    background: rgba(196, 75, 43, 0.1);
+    border-color: rgba(196, 75, 43, 0.35);
+    color: var(--clay-red-light);
+}
+
+[data-cms-theme="light"] .cms-content .sa-table-action--danger {
+    background: #fdeee9;
+    border-color: #c44b2b;
+    color: #9a3218;
+}
+
+.cms-content .lw-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 36px;
+}
+
+.cms-content .lw-submit-btn--md,
+.cms-content .lw-submit-btn--primary {
+    padding: 8px 20px;
+    border-radius: var(--r-full);
+    font-weight: 800;
+    font-size: 12px;
+    background: var(--clay-red) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--clay-red-dark) !important;
+    box-shadow: 0 2px 10px rgba(196, 75, 43, 0.22);
+}
+
+.cms-content .lw-submit-btn--success-sm {
+    background: var(--banana-green) !important;
+    color: #ffffff !important;
+    border: 1px solid #3d6650 !important;
+    font-weight: 800 !important;
+}
