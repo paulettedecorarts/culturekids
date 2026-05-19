@@ -225,12 +225,18 @@ Response shape:
 }
 ```
 
-### Phase 3+ (remaining)
+### Phase 3 (webapp — done)
 
-1. **Subdomain** — Configure `admin.culturekids.app` in Coolify/DNS if desired.
+- **`App\Services\Admin\PlatformAnalyticsService`** — shared engagement metrics (pupils, completions, stars, 7-day chart, top stories).
+- **Global dashboard** — includes engagement section + link to full analytics page.
+- **Analytics page** — refactored to use the same partial (`engagement-analytics.blade.php`).
+
+### Phase 4+ (remaining)
+
+1. **Subdomain** — Configure `admin.culturekids.app` in Coolify/DNS *(deferred)*.
 2. **Scoping middleware (optional)** — Only if a global tenant scope is introduced.
-3. **Subdomain** — Configure `admin.culturekids.app` in Coolify/DNS if desired.
-4. **Dedicated badge metric** — Optional `badge_awards` table if product needs audit trail beyond completion counts.
+3. **Dedicated badge metric** — Optional `badge_awards` table if product needs audit trail beyond completion counts.
+4. **Submit buttons on CMS / Teacher portals** — reuse `x-livewire-submit-button` outside Super Admin if desired.
 
 ---
 

@@ -373,3 +373,120 @@
     max-width: 1200px;
     border-radius: 32px;
 }
+
+/* Engagement analytics (dashboard + analytics page) */
+.sa-content .sa-engagement-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--sp-6);
+    margin-top: var(--sp-4);
+}
+
+@media (max-width: 900px) {
+    .sa-content .sa-engagement-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sa-content .sa-engagement-chart,
+.sa-content .sa-engagement-top {
+    background: var(--sa-surface) !important;
+    border: 1px solid var(--sa-border) !important;
+    border-radius: var(--r-2xl);
+    padding: var(--sp-6);
+}
+
+.sa-content .sa-engagement-chart-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--sa-text) !important;
+    font-family: var(--font-display);
+    margin: 0 0 var(--sp-6);
+}
+
+.sa-content .sa-engagement-bars {
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-3);
+    padding-bottom: var(--sp-2);
+}
+
+.sa-content .sa-engagement-bar {
+    flex: 1;
+    min-height: 4px;
+    background: linear-gradient(to top, var(--savanna-gold), transparent);
+    border-radius: 4px 4px 0 0;
+    transition: background 0.15s ease;
+}
+
+.sa-content .sa-engagement-bar:hover {
+    background: var(--savanna-gold);
+}
+
+.sa-content .sa-engagement-days {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    border-top: 1px solid var(--sa-border-subtle);
+    padding-top: 10px;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.sa-content .sa-engagement-day {
+    font-size: 11px;
+    color: var(--sa-text-muted);
+    font-weight: 400;
+}
+
+.sa-content .sa-engagement-day.is-today {
+    color: var(--sa-text);
+    font-weight: 800;
+}
+
+.sa-content .sa-stat-val--compact {
+    font-size: clamp(14px, 2vw, 20px) !important;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.sa-content .sa-engagement-top-list {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+.sa-content .sa-engagement-top-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+}
+
+.sa-content .sa-engagement-top-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.sa-content .sa-engagement-top-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sa-text) !important;
+}
+
+.sa-content .sa-engagement-top-meta {
+    font-size: 11px;
+    color: var(--sa-text-muted) !important;
+}
+
+.sa-content .sa-engagement-empty {
+    text-align: center;
+    padding: var(--sp-6);
+    color: var(--sa-text-muted);
+    font-size: 13px;
+}

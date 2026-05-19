@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\AuditLog;
 use App\Models\Module;
 use App\Models\Organisation;
+use App\Services\Admin\PlatformAnalyticsService;
 use App\Services\Admin\PlatformStatsService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
@@ -46,9 +47,10 @@ class Dashboard extends Component
         $this->maintenanceMode = app()->isDownForMaintenance();
     }
 
-    public function render(PlatformStatsService $stats)
+    public function render(PlatformStatsService $stats, PlatformAnalyticsService $analytics)
     {
         $platformStats = $stats->snapshot();
+        $engagement = $analytics->engagementSnapshot();
 
         $activeOrganizations = Organisation::query()
             ->withCount('users')
@@ -65,6 +67,7 @@ class Dashboard extends Component
 
         return view('livewire.admin.dashboard', [
             'stats' => $platformStats,
+            'analytics' => $engagement,
             'activeOrganizations' => $activeOrganizations,
             'previewModules' => $previewModules,
             'maintenanceMode' => app()->isDownForMaintenance(),

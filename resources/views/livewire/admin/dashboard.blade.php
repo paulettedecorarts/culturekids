@@ -55,6 +55,8 @@
         </div>
     </div>
 
+    @include('livewire.admin.partials.engagement-analytics', ['analytics' => $analytics])
+
     <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color: var(--cms-text-muted);margin-bottom:var(--sp-3);margin-top:var(--sp-6)">Active Organizations</p>
     <div class="sa-table-wrap">
         <div class="sa-table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
