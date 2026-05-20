@@ -1,10 +1,10 @@
 <div>
-    <div class="cms-header">
+    <div class="cms-header cms-page-header">
         <div>
             <h1 class="cms-page-title">Media Assets</h1>
             <div class="cms-breadcrumb">Content · Assets · Gallery</div>
         </div>
-        <div style="display:flex; gap:12px">
+        <div class="cms-page-actions" style="display:flex; gap:12px; flex-wrap:wrap">
             <div style="background:var(--cream-warm); border:1px solid var(--cream-mid); padding:8px 16px; border-radius:var(--r-full); font-size:12px; font-weight:700; color:var(--stone)">📦 Filter Type</div>
             <button class="btn btn-primary btn-sm">+ Upload Asset</button>
         </div>
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:var(--sp-6);">
+    <div class="cms-card-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:var(--sp-4);">
         @for($i = 1; $i <= 10; $i++)
         <div style="background:#fff; border:1px solid var(--cream-mid); border-radius:var(--r-lg); overflow:hidden; box-shadow:0 8px 24px rgba(26,18,8,.04); transition:transform 0.2s; cursor:pointer;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
             <div style="aspect-ratio:3/2; background:var(--cream); padding: var(--sp-4); display:flex; align-items:center; justify-content:center; font-size:32px; border-bottom:1px solid var(--cream-mid);">

@@ -38,8 +38,8 @@
         </div>
     </div>
 
-    <div style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4);">
-        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search word, translation, content title…" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:280px;">
+    <div class="cms-toolbar-flex" style="display:flex; gap:var(--sp-2); margin-bottom:var(--sp-4);">
+        <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search word, translation, content title…" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none; min-width:0; flex:1;">
         <select wire:model.live="typeFilter" style="background:var(--cms-input-bg); border:1px solid var(--cms-border); border-radius:var(--r-full); padding:var(--sp-2) var(--sp-4); color:var(--cms-text); font-size:12px; outline:none;">
             <option value="">All types</option>
             @foreach($typeOptions as $value => $label)

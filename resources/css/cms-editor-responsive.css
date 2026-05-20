@@ -1,0 +1,300 @@
+/**
+ * CMS Editor portal — responsive overrides.
+ * Mirrors portal-responsive rules that only targeted .sa-content; CMS reuses admin markup under .cms-content.
+ */
+
+.cms-content [class$="-editor-page"],
+.cms-content [class$="-manager-page"],
+.cms-content [class$="-show-page"],
+.cms-content [class$="-form-root"],
+.cms-content .offline-bundles-page,
+.cms-content .story-form-root,
+.cms-content .puzzle-editor-page,
+.cms-content .panel-editor-root {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Page headers (sa-page-title rows without .cms-header) */
+.cms-content > div > div:first-child:has(.sa-page-title),
+.cms-content .story-form-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-4);
+}
+
+.cms-content > div > div:first-child:has(.sa-page-title) .btn,
+.cms-content > div > div:first-child:has(.sa-page-title) a.btn {
+    flex-shrink: 0;
+}
+
+.cms-content .cms-filter-grid {
+    display: grid;
+    gap: var(--sp-3);
+}
+
+.cms-content .cms-card-grid {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+.cms-content .cms-toolbar-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    align-items: stretch;
+}
+
+.cms-content .cms-toolbar-flex > input,
+.cms-content .cms-toolbar-flex > select {
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+/* Panel editor 3-column layout */
+.cms-content .panel-editor-layout,
+.cms-content div[style*="grid-template-columns:280px"],
+.cms-content div[style*="grid-template-columns: 280px"] {
+    display: grid;
+    gap: var(--sp-5);
+}
+
+.cms-content .story-form-main-grid,
+.cms-content .story-form-row-title-tribe,
+.cms-content .story-form-row-meta {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+.cms-content .puzzle-editor-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+}
+
+.cms-content .translation-form-page .tf-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-4);
+}
+
+.cms-content .drawings-manager-page > div:first-child:has(.sa-page-title) > a.btn,
+.cms-content [class$="-manager-page"] > div:first-child:has(.sa-page-title) > a.btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+.cms-content .act-table-head,
+.cms-content .act-table-row {
+    min-width: min(100%, 520px);
+}
+
+/* ═══ Tablet (≤1023px) ═══ */
+@media (max-width: 1023px) {
+    .cms-content .sa-stats-row,
+    .cms-content .cms-stats-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .cms-content [class*="-grid-4"],
+    .cms-content [class*="-grid-5"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .cms-content .le-grid-word {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .cms-content .puzzle-form-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .cms-content .cms-filter-grid[style*="grid-template-columns:2fr"],
+    .cms-content div[style*="grid-template-columns:2fr 1fr 1fr 1fr"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .cms-content .cms-card-grid[style*="minmax(320px"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .cms-content div[style*="grid-template-columns:repeat(3"],
+    .cms-content div[style*="grid-template-columns: repeat(3"],
+    .cms-content div[style*="grid-template-columns:repeat(4"],
+    .cms-content div[style*="grid-template-columns: repeat(4"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .cms-content .theme-mgr-modal-panel .theme-mgr-preview {
+        display: none !important;
+    }
+}
+
+/* ═══ Phone (≤767px) ═══ */
+@media (max-width: 767px) {
+    .cms-content > div > div:first-child:has(.sa-page-title) > div:last-child,
+    .cms-content > div > div:first-child:has(.sa-page-title) > a.btn,
+    .cms-content > div > div:first-child:has(.sa-page-title) > .btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .cms-content .panel-editor-layout,
+    .cms-content div[style*="grid-template-columns:280px"],
+    .cms-content div[style*="grid-template-columns: 280px"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--sp-5) !important;
+    }
+
+    .cms-content .story-form-main-grid,
+    .cms-content .story-form-row-title-tribe,
+    .cms-content .story-form-row-meta,
+    .cms-content .story-form-footer,
+    .cms-content .story-form-actions {
+        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--sp-4) !important;
+    }
+
+    .cms-content .cms-filter-grid,
+    .cms-content div[style*="grid-template-columns:2fr 1fr 1fr 1fr"],
+    .cms-content div[style*="grid-template-columns:repeat(5"],
+    .cms-content div[style*="grid-template-columns: repeat(5"],
+    .cms-content div[style*="grid-template-columns:repeat(4"],
+    .cms-content div[style*="grid-template-columns: repeat(4"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .cms-card-grid,
+    .cms-content div[style*="minmax(320px"],
+    .cms-content div[style*="repeat(auto-fill,minmax(320px"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .cms-toolbar-flex,
+    .cms-content div[style*="display:flex"][style*="margin-bottom:var(--sp-4)"]:not(.sa-table-actions):not(.sa-table-wrap) {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .cms-content .cms-toolbar-flex > input,
+    .cms-content .cms-toolbar-flex > select,
+    .cms-content div[style*="display:flex"][style*="margin-bottom:var(--sp-4)"] > input,
+    .cms-content div[style*="display:flex"][style*="margin-bottom:var(--sp-4)"] > select {
+        width: 100% !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+    .cms-content .act-table-head {
+        display: none !important;
+    }
+
+    .cms-content .act-table-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+    }
+
+    .cms-content .translation-form-page .tf-workspace,
+    .cms-content .tf-workspace,
+    .cms-content .translation-form-page .tf-preview-flashcard,
+    .cms-content .tf-preview-flashcard {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .translation-form-page .tf-hotspot-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Offline bundles table → cards */
+    .cms-content .offline-bundles-table .offline-bundles-head,
+    .cms-content .offline-bundles-table .sa-table-head {
+        display: none !important;
+    }
+
+    .cms-content .offline-bundles-table .offline-bundles-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+    }
+
+    .cms-content .offline-bundles-table .offline-bundles-row > *:not(:first-child)::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--cms-text-muted);
+        margin-bottom: 4px;
+    }
+
+    .cms-content .offline-bundles-table .offline-bundles-row > span:first-child::before,
+    .cms-content .offline-bundles-table .offline-bundles-row > div:first-child::before {
+        display: none;
+    }
+
+    .cms-content .offline-bundles-summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cms-content .offline-bundles-poll-hint {
+        grid-column: 1 / -1;
+        margin-left: 0;
+    }
+
+    .cms-content .offline-bundles-actions .btn {
+        width: 100%;
+    }
+
+    .cms-content .sa-table-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .cms-content .sa-table-actions .sa-table-action,
+    .cms-content .sa-table-actions .btn {
+        flex: 1 1 calc(50% - 4px);
+        min-width: min(100%, 120px);
+    }
+
+    .cms-content .translation-form-page .tf-header .sa-page-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .cms-content .translation-form-page .tf-header .sa-page-actions > * {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cms-content .drawings-manager-page > div:first-child:has(.sa-page-title) > a.btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+    .cms-content .offline-bundles-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .cms-content .sa-table-actions .sa-table-action,
+    .cms-content .sa-table-actions .btn {
+        flex: 1 1 100%;
+    }
+}

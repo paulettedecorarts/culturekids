@@ -99,13 +99,13 @@
                 wire:key="bundle-{{ $item['content_type'] }}-{{ $item['content_id'] }}"
                 style="grid-template-columns:120px 2fr 1fr minmax(120px, 1.2fr) 120px;align-items:center"
             >
-                <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cms-text-muted)">{{ $item['type_label'] }}</span>
-                <div>
+                <span data-label="{{ __('Type') }}" style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cms-text-muted)">{{ $item['type_label'] }}</span>
+                <div data-label="{{ __('Title') }}">
                     <div style="font-weight:700;color:var(--cms-text);font-size:14px">{{ $item['title'] }}</div>
                     <div style="font-size:10px;color:var(--cms-text-muted);font-family:monospace">#{{ $item['content_id'] }}</div>
                 </div>
-                <span style="font-size:12px;color:var(--cms-text-muted)">{{ $item['tribe_name'] ?? '—' }}</span>
-                <div class="offline-bundles-status-cell">
+                <span data-label="{{ __('Tribe') }}" style="font-size:12px;color:var(--cms-text-muted)">{{ $item['tribe_name'] ?? '—' }}</span>
+                <div class="offline-bundles-status-cell" data-label="{{ __('Status') }}">
                     <span class="ob-status-pill {{ $statusClasses[$item['status']] ?? 'ob-status--pending' }}">
                         @if(in_array($item['status'], ['queued', 'building'], true))
                             <span class="ob-status-spinner" aria-hidden="true"></span>
@@ -122,7 +122,7 @@
                         <div class="ob-status-meta">{{ __('Built :time', ['time' => \Carbon\Carbon::parse($item['built_at'])->diffForHumans()]) }}</div>
                     @endif
                 </div>
-                <div>
+                <div data-label="{{ __('Actions') }}">
                     <button
                         type="button"
                         wire:click="rebuild('{{ $item['content_type'] }}', {{ $item['content_id'] }})"

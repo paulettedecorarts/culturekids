@@ -36,6 +36,7 @@
     <style>{!! file_get_contents(resource_path('css/cms-content.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/cms-shell.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/cms-editor-responsive.css')) !!}</style>
 
     <style>
         :root {

@@ -176,7 +176,10 @@
 /* Story form */
 .sa-content .story-form-main-grid,
 .sa-content .story-form-row-title-tribe,
-.sa-content .story-form-row-meta {
+.sa-content .story-form-row-meta,
+.cms-content .story-form-main-grid,
+.cms-content .story-form-row-title-tribe,
+.cms-content .story-form-row-meta {
     display: grid;
     gap: var(--sp-4);
 }
@@ -190,8 +193,11 @@
 
 /* Panel editor — 3 columns → stack */
 .sa-content .panel-editor-layout,
+.cms-content .panel-editor-layout,
 .sa-content div[style*="grid-template-columns:280px"],
-.sa-content div[style*="grid-template-columns: 280px"] {
+.sa-content div[style*="grid-template-columns: 280px"],
+.cms-content div[style*="grid-template-columns:280px"],
+.cms-content div[style*="grid-template-columns: 280px"] {
     display: flex !important;
     flex-direction: column !important;
     gap: var(--sp-5) !important;

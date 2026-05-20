@@ -34,7 +34,7 @@
     </div>
 
     <!-- Filters -->
-    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-5)">
+    <div class="cms-filter-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-5)">
         <input wire:model.live="searchTerm" type="text" placeholder="🔍 Search stories..." style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none">
 
         <select wire:model.live="filterTribe" style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer">
@@ -61,7 +61,7 @@
     </div>
 
     <!-- Stories Grid -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-4)">
+    <div class="cms-card-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-4)">
         @forelse($stories as $story)
             <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:var(--r-xl);overflow:hidden;transition:all 0.3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
                 <div style="height:180px;background:linear-gradient(135deg, rgba(196,75,43,0.3), rgba(107,32,16,0.3));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">

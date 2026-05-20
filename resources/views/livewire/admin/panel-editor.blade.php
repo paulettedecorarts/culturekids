@@ -28,7 +28,7 @@
             <div style="font-size:13px">Add panels to this story first.</div>
         </div>
     @else
-        <div style="display:grid;grid-template-columns:280px 1fr 320px;gap:32px">
+        <div class="panel-editor-layout" style="display:grid;grid-template-columns:280px 1fr 320px;gap:32px">
             <!-- Left Sidebar: Panel List -->
             <div style="display:flex;flex-direction:column;gap:16px">
                 <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:24px;padding:24px">
