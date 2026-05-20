@@ -37,6 +37,16 @@ class Theme extends Model
     /**
      * Get default theme colors structure
      */
+    /**
+     * Colors with platform defaults filled in for any missing keys.
+     *
+     * @return array<string, string>
+     */
+    public function resolvedColors(): array
+    {
+        return array_merge(static::defaultColors(), $this->colors ?? []);
+    }
+
     public static function defaultColors(): array
     {
         return [

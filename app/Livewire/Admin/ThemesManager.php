@@ -79,6 +79,13 @@ class ThemesManager extends Component
     public function edit($id)
     {
         $theme = Theme::findOrFail($id);
+
+        if ($this->isOrgAdminOnly() && $theme->org_id === null) {
+            session()->flash('error', 'Platform themes are read-only. Set one as your organization default, or customize your adopted copy below.');
+
+            return;
+        }
+
         $this->selectedId = $id;
         $this->org_id = $theme->org_id;
         $this->name = $theme->name;
@@ -131,6 +138,13 @@ class ThemesManager extends Component
 
         if ($this->editing) {
             $theme = Theme::findOrFail($this->selectedId);
+
+            if ($isOrgAdminOnly && $theme->org_id === null) {
+                session()->flash('error', 'Platform themes cannot be edited.');
+
+                return;
+            }
+
             $theme->update($data);
             
             AuditLog::record('UPDATE', "themes/{$theme->id}", [
@@ -158,6 +172,12 @@ class ThemesManager extends Component
         $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
         $theme = Theme::findOrFail($id);
 
+        if ($isOrgAdminOnly && $theme->org_id === null) {
+            session()->flash('error', 'Platform themes cannot be deleted.');
+
+            return;
+        }
+
         if ($isOrgAdminOnly && (int) $theme->org_id !== (int) $user->organisation_id) {
             session()->flash('error', 'You are not allowed to delete this theme.');
             return;
@@ -182,9 +202,14 @@ class ThemesManager extends Component
         $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
         $theme = Theme::findOrFail($id);
 
-        if ($isOrgAdminOnly && (int) $theme->org_id !== (int) $user->organisation_id) {
-            session()->flash('error', 'You are not allowed to modify this theme.');
-            return;
+        if ($isOrgAdminOnly) {
+            if ($theme->org_id === null) {
+                $theme = $this->resolveOrgThemeFromPlatform($theme, (int) $user->organisation_id);
+            } elseif ((int) $theme->org_id !== (int) $user->organisation_id) {
+                session()->flash('error', 'You are not allowed to modify this theme.');
+
+                return;
+            }
         }
         
         // Remove default from themes in the same org (or global if org_id is null)
@@ -204,6 +229,57 @@ class ThemesManager extends Component
         
         $orgName = $theme->org_id ? $theme->organisation->name : 'Global';
         session()->flash('message', "'{$theme->name}' set as default theme for {$orgName}.");
+    }
+
+    /**
+     * Org admin: clone a platform theme for this organisation (if not already adopted).
+     */
+    protected function resolveOrgThemeFromPlatform(Theme $platformTheme, int $orgId): Theme
+    {
+        if ($platformTheme->org_id !== null) {
+            return $platformTheme;
+        }
+
+        $existing = Theme::query()
+            ->where('org_id', $orgId)
+            ->where('metadata->platform_theme_id', $platformTheme->id)
+            ->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
+        $baseSlug = 'org_'.$orgId.'_from_'.$platformTheme->slug;
+        $slug = $baseSlug;
+        $suffix = 0;
+        while (Theme::query()->where('slug', $slug)->exists()) {
+            $suffix++;
+            $slug = $baseSlug.'_'.$suffix;
+        }
+
+        return Theme::create([
+            'org_id' => $orgId,
+            'name' => $platformTheme->name,
+            'slug' => $slug,
+            'description' => $platformTheme->description,
+            'is_default' => false,
+            'is_active' => true,
+            'colors' => $platformTheme->colors,
+            'typography' => $platformTheme->typography,
+            'spacing' => $platformTheme->spacing,
+            'borders' => $platformTheme->borders,
+            'metadata' => array_merge($platformTheme->metadata ?? [], [
+                'platform_theme_id' => $platformTheme->id,
+                'adopted_from_platform' => true,
+            ]),
+        ]);
+    }
+
+    protected function isOrgAdminOnly(): bool
+    {
+        $user = auth()->user();
+
+        return $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
     }
 
     public function applyPreset($preset)
@@ -306,23 +382,48 @@ class ThemesManager extends Component
     public function render()
     {
         $user = auth()->user();
-        $isOrgAdminOnly = $user && $user->hasRole('org_admin') && ! $user->hasRole('super_admin');
+        $isOrgAdminOnly = $this->isOrgAdminOnly();
         $orgId = $user?->organisation_id;
 
-        $query = Theme::with('organisation')->latest();
+        $platformThemes = collect();
+        $orgThemes = null;
+        $themes = null;
+        $activePlatformThemeIds = [];
 
         if ($isOrgAdminOnly) {
-            $query->where('org_id', $orgId);
+            $platformThemes = Theme::query()
+                ->whereNull('org_id')
+                ->where('is_active', true)
+                ->orderByDesc('is_default')
+                ->orderBy('name')
+                ->get();
+
+            $orgThemes = Theme::with('organisation')
+                ->where('org_id', $orgId)
+                ->latest()
+                ->paginate(12);
+
+            $orgDefault = Theme::query()
+                ->where('org_id', $orgId)
+                ->where('is_default', true)
+                ->first();
+
+            $activePlatformThemeIds = [];
+            if ($orgDefault && is_array($orgDefault->metadata) && isset($orgDefault->metadata['platform_theme_id'])) {
+                $activePlatformThemeIds[] = (int) $orgDefault->metadata['platform_theme_id'];
+            }
         } else {
-            // Super admin behavior.
+            $query = Theme::with('organisation')->latest();
+
             if ($this->selectedOrgId === 'global') {
                 $query->whereNull('org_id');
             } elseif ($this->selectedOrgId) {
                 $query->where('org_id', $this->selectedOrgId);
             }
+
+            $themes = $query->paginate(12);
         }
-        
-        $themes = $query->paginate(12);
+
         $presets = $this->getPresets();
         $organisations = $isOrgAdminOnly
             ? \App\Models\Organisation::where('id', $orgId)->orderBy('name')->get()
@@ -330,6 +431,9 @@ class ThemesManager extends Component
 
         return view('livewire.admin.themes-manager', [
             'themes' => $themes,
+            'platformThemes' => $platformThemes,
+            'orgThemes' => $orgThemes,
+            'activePlatformThemeIds' => $activePlatformThemeIds,
             'presets' => $presets,
             'organisations' => $organisations,
             'isOrgAdminOnly' => $isOrgAdminOnly,

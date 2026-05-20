@@ -15,10 +15,22 @@
     <header class="themes-mgmt-header">
         <div>
             <div class="sa-page-title">Theme Management</div>
-            <div class="sa-breadcrumb">Visual identity & branding control</div>
+            <div class="sa-breadcrumb">
+                @if($isOrgAdminOnly)
+                    Platform palettes & your organization themes
+                @else
+                    Visual identity & branding control
+                @endif
+            </div>
         </div>
         <button type="button" wire:click="create" class="btn btn-primary btn-sm themes-mgmt-create-btn">🎨 Create Theme</button>
     </header>
+
+    @if($isOrgAdminOnly)
+        <p class="themes-mgmt-org-hint" style="font-size:13px; color:var(--cms-text-muted); margin:0 0 var(--sp-5); line-height:1.5; max-width:52rem">
+            <strong>Platform-wide themes</strong> are curated by Culture Kids (read-only). Use one as your school default, or create custom themes below. Adopting a platform theme copies it to your organization without changing the global palette.
+        </p>
+    @endif
 
     @if (session()->has('message'))
         <div class="cms-flash-success">✨ {{ session('message') }}</div>
@@ -28,14 +40,124 @@
         <div class="cms-flash-error">⚠️ {{ session('error') }}</div>
     @endif
 
+    @if($isOrgAdminOnly)
+        <section class="themes-mgmt-section-block">
+            <h2 class="themes-mgmt-section-heading">Platform-wide themes</h2>
+            <div class="themes-mgmt-grid">
+                @forelse($platformThemes as $theme)
+                    @php
+                        $inUse = in_array($theme->id, $activePlatformThemeIds, true);
+                        $swatch = $theme->resolvedColors();
+                    @endphp
+                    <article class="theme-mgr-card theme-mgr-card--platform">
+                        <div class="theme-mgr-card-swatches">
+                            <div style="background:{{ $swatch['primary'] }}"></div>
+                            <div style="background:{{ $swatch['secondary'] }}"></div>
+                            <div style="background:{{ $swatch['accent'] }}"></div>
+                            <div style="background:{{ $swatch['success'] }}"></div>
+                        </div>
+                        <div class="theme-mgr-card-body">
+                            <div class="theme-mgr-card-title-row">
+                                <div class="theme-mgr-card-title-wrap">
+                                    <h3 class="theme-mgr-card-title">
+                                        {{ $theme->name }}
+                                        <span class="theme-mgr-default-badge" style="background:rgba(46,77,138,0.12); color:#2E4D8A">PLATFORM</span>
+                                        @if($theme->is_default)
+                                            <span class="theme-mgr-default-badge">GLOBAL DEFAULT</span>
+                                        @endif
+                                        @if($inUse)
+                                            <span class="theme-mgr-default-badge">IN USE</span>
+                                        @endif
+                                    </h3>
+                                    <p class="theme-mgr-card-meta">{{ $theme->slug }} · Culture Kids</p>
+                                </div>
+                            </div>
+                            @if($theme->description)
+                                <p class="theme-mgr-card-desc">{{ $theme->description }}</p>
+                            @endif
+                            <div class="sa-table-actions theme-mgr-card-actions">
+                                <button type="button" wire:click="setDefault({{ $theme->id }})" class="sa-table-action sa-table-action--accent sa-table-action--grow">
+                                    Use for my organization
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div class="themes-mgmt-empty">
+                        <p class="themes-mgmt-empty-text">No platform themes are available yet.</p>
+                    </div>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="themes-mgmt-section-block" style="margin-top:var(--sp-8)">
+            <h2 class="themes-mgmt-section-heading">Your organization themes</h2>
+            <div class="themes-mgmt-grid">
+                @forelse($orgThemes as $theme)
+                    @php $swatch = $theme->resolvedColors(); @endphp
+                    <article class="theme-mgr-card">
+                        <div class="theme-mgr-card-swatches">
+                            <div style="background:{{ $swatch['primary'] }}"></div>
+                            <div style="background:{{ $swatch['secondary'] }}"></div>
+                            <div style="background:{{ $swatch['accent'] }}"></div>
+                            <div style="background:{{ $swatch['success'] }}"></div>
+                        </div>
+                        <div class="theme-mgr-card-body">
+                            <div class="theme-mgr-card-title-row">
+                                <div class="theme-mgr-card-title-wrap">
+                                    <h3 class="theme-mgr-card-title">
+                                        {{ $theme->name }}
+                                        @if($theme->is_default)
+                                            <span class="theme-mgr-default-badge">DEFAULT</span>
+                                        @endif
+                                        @if(is_array($theme->metadata) && !empty($theme->metadata['adopted_from_platform']))
+                                            <span class="theme-mgr-default-badge" style="background:rgba(74,124,89,0.12); color:var(--banana-green)">FROM PLATFORM</span>
+                                        @endif
+                                    </h3>
+                                    <p class="theme-mgr-card-meta">
+                                        {{ $theme->slug }}
+                                        @if($theme->org_id)
+                                            · {{ $theme->organisation->name }}
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                            @if($theme->description)
+                                <p class="theme-mgr-card-desc">{{ $theme->description }}</p>
+                            @endif
+                            <div class="sa-table-actions theme-mgr-card-actions">
+                                @if(!$theme->is_default)
+                                    <button type="button" wire:click="setDefault({{ $theme->id }})" class="sa-table-action sa-table-action--accent sa-table-action--grow">Set default</button>
+                                @endif
+                                <button type="button" wire:click="edit({{ $theme->id }})" class="sa-table-action sa-table-action--grow">Edit</button>
+                                @if(!$theme->is_default)
+                                    <button type="button" wire:click="delete({{ $theme->id }})" wire:confirm="Delete this theme?" class="sa-table-action sa-table-action--danger">Delete</button>
+                                @endif
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div class="themes-mgmt-empty">
+                        <div class="themes-mgmt-empty-icon" aria-hidden="true">🎨</div>
+                        <p class="themes-mgmt-empty-title">No custom themes yet</p>
+                        <p class="themes-mgmt-empty-text">Pick a platform theme above, or create your own palette.</p>
+                    </div>
+                @endforelse
+            </div>
+            <div class="themes-mgmt-pagination">
+                {{ $orgThemes->links(data: ['scrollTo' => false]) }}
+            </div>
+        </section>
+    @else
     <div class="themes-mgmt-grid">
         @forelse($themes as $theme)
+            @php $swatch = $theme->resolvedColors(); @endphp
             <article class="theme-mgr-card">
                 <div class="theme-mgr-card-swatches">
-                    <div style="background:{{ $theme->colors['primary'] }}"></div>
-                    <div style="background:{{ $theme->colors['secondary'] }}"></div>
-                    <div style="background:{{ $theme->colors['accent'] }}"></div>
-                    <div style="background:{{ $theme->colors['success'] }}"></div>
+                    <div style="background:{{ $swatch['primary'] }}"></div>
+                    <div style="background:{{ $swatch['secondary'] }}"></div>
+                    <div style="background:{{ $swatch['accent'] }}"></div>
+                    <div style="background:{{ $swatch['success'] }}"></div>
                 </div>
 
                 <div class="theme-mgr-card-body">
@@ -85,6 +207,7 @@
     <div class="themes-mgmt-pagination">
         {{ $themes->links(data: ['scrollTo' => false]) }}
     </div>
+    @endif
 
     @if($showModal)
         <div class="cms-modal-backdrop sa-modal-backdrop theme-mgr-backdrop">
@@ -247,6 +370,14 @@
 
     <style>
         .themes-mgmt-page { min-width: 0; max-width: 100%; }
+
+        .themes-mgmt-section-heading {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--cms-text);
+            margin: 0 0 var(--sp-4);
+        }
 
         .themes-mgmt-org-bar {
             display: flex;
