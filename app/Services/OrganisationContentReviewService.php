@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Jobs\BuildOfflineBundle;
 use App\Jobs\HandlePublishedContentSideEffects;
+use App\Services\OfflineBundlePublisher;
 use App\Models\Activity;
 use App\Models\AuditLog;
 use App\Models\Comic;
@@ -371,7 +371,7 @@ class OrganisationContentReviewService
 
             if ($comic->status === 'review') {
                 $comic->update(['status' => 'published']);
-                BuildOfflineBundle::dispatch($comic->id);
+                OfflineBundlePublisher::queue(OrganisationContentDecision::TYPE_STORY, $comic->id);
                 HandlePublishedContentSideEffects::dispatch(null, comicId: $comic->id);
             }
         });
@@ -416,6 +416,7 @@ class OrganisationContentReviewService
 
             if ($song->status === 'review') {
                 $song->update(['status' => 'published']);
+                OfflineBundlePublisher::queue(OrganisationContentDecision::TYPE_SONG, $song->id);
                 HandlePublishedContentSideEffects::dispatch(null, songId: $song->id);
             }
         });
@@ -455,6 +456,7 @@ class OrganisationContentReviewService
         }
 
         $this->recordDecision($orgId, $userId, $contentType, $contentId, OrganisationContentDecision::DECISION_APPROVED);
+        OfflineBundlePublisher::queue($contentType, $contentId);
         AuditLog::record('APPROVE_CONTENT', "{$contentType}/{$contentId}", ['organisation_id' => $orgId]);
 
         return (string) $item->title;

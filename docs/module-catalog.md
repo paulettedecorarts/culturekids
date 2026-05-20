@@ -134,8 +134,9 @@ Goal: **15 modules** (12 content + 3 platform), one key per activity, enforced c
 ### Phase 2 — Mobile API enforcement ✅ Done
 
 - **Activities** — full type map; `?type=` returns 403 when module off; index filters by module  
-- **Offline bundles** — manifests/assets/child content omit disabled stories, songs, activities  
-- **Comic download** — requires `stories` + `offline_bundles`  
+- **Offline bundles** — `.ckb` ZIP for all 12 content types; manifests omit disabled modules — [offline-bundles.md](./offline-bundles.md)  
+- **Content download** — `GET /api/v1/offline/content/{contentType}/{contentId}/download` (requires `offline_bundles` + type module)  
+- **Comic download (legacy)** — requires `stories` + `offline_bundles`  
 - **Reading progress** — requires `stories`  
 - **Theme** — when `theme_engine` off, returns platform default + `theme_engine_enabled: false`  
 - **Tests** — `OrganisationModuleEnforcementTest`

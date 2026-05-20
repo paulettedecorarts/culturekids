@@ -74,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/offline/tribes/{tribeId}/bundle', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getTribeBundle']);
     Route::get('/offline/tribes/{tribeId}/assets', [\App\Http\Controllers\Api\OfflineBundleController::class, 'getTribeBundleAssets']);
     Route::get('/offline/comics/{comicId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'downloadComicBundle']);
+    Route::get('/offline/content/{contentType}/{contentId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'downloadContentBundle']);
     
     // Parent Downloaded Packs Management
     Route::post('/offline/packs/{tribeId}/download', [\App\Http\Controllers\Api\OfflineBundleController::class, 'markPackAsDownloaded']);

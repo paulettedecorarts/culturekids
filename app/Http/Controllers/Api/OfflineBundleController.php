@@ -6,6 +6,8 @@ use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Comic;
+use App\Models\OfflineContentBundle;
+use App\Models\OrganisationContentDecision;
 use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
@@ -96,8 +98,11 @@ class OfflineBundleController extends Controller
                 'color' => $tribe->color,
             ],
             'comics' => $comics->map(function ($comic) {
-                return [
+                $bundle = $this->bundleRecord(OrganisationContentDecision::TYPE_STORY, (int) $comic->id);
+
+                return array_merge([
                     'id' => $comic->id,
+                    'content_type' => OrganisationContentDecision::TYPE_STORY,
                     'title' => $comic->title,
                     'description' => $comic->description,
                     'age_min' => $comic->age_min,
@@ -107,9 +112,8 @@ class OfflineBundleController extends Controller
                     'cover_image_url' => $comic->cover_image_path 
                         ? Storage::disk('public')->url($comic->cover_image_path) 
                         : null,
-                    'bundle_path' => $comic->bundle_path,
-                    'bundle_hash' => $comic->bundle_hash,
                     'bundle_size_bytes' => $comic->bundle_size_bytes,
+                ], $this->bundleFields($bundle, $comic->bundle_path, $comic->bundle_hash, OrganisationContentDecision::TYPE_STORY, (int) $comic->id), [
                     'panels' => $comic->panels->map(function ($panel) {
                         return [
                             'id' => $panel->id,
@@ -127,11 +131,14 @@ class OfflineBundleController extends Controller
                             ),
                         ];
                     }),
-                ];
+                ]);
             }),
             'songs' => $songs->map(function ($song) {
-                return [
+                $bundle = $this->bundleRecord(OrganisationContentDecision::TYPE_SONG, (int) $song->id);
+
+                return array_merge([
                     'id' => $song->id,
+                    'content_type' => OrganisationContentDecision::TYPE_SONG,
                     'title' => $song->title,
                     'description' => $song->description,
                     'lyrics' => $song->lyrics,
@@ -144,12 +151,16 @@ class OfflineBundleController extends Controller
                         ? Storage::disk('public')->url($song->cover_image_path) 
                         : null,
                     'duration_seconds' => $song->duration_seconds,
-                ];
+                ], $this->bundleFields($bundle, null, null, OrganisationContentDecision::TYPE_SONG, (int) $song->id));
             }),
             'activities' => $activities->map(function ($activity) {
-                return [
+                $contentType = $this->activityContentType((string) $activity->type);
+                $bundle = $contentType ? $this->bundleRecord($contentType, (int) $activity->id) : null;
+
+                return array_merge([
                     'id' => $activity->id,
                     'type' => $activity->type,
+                    'content_type' => $contentType,
                     'title' => $activity->title,
                     'description' => $activity->description,
                     'age_range' => $activity->age_range,
@@ -171,7 +182,7 @@ class OfflineBundleController extends Controller
                                 : null,
                         ];
                     }),
-                ];
+                ], $this->bundleFields($bundle, null, null, $contentType, (int) $activity->id));
             }),
             'stats' => [
                 'comics_count' => $comics->count(),
@@ -185,25 +196,45 @@ class OfflineBundleController extends Controller
     }
 
     /**
-     * Download a specific comic bundle (.ckb file)
+     * Download a specific comic bundle (.ckb file) — legacy route.
      */
     public function downloadComicBundle(Request $request, int $comicId)
     {
-        $this->assertModule($request, 'offline_bundles');
-        $this->assertModule($request, 'stories');
-        $comic = Comic::where('status', 'published')->findOrFail($comicId);
+        return $this->downloadContentBundle($request, OrganisationContentDecision::TYPE_STORY, $comicId);
+    }
 
-        if (!$comic->bundle_path || !Storage::disk('public')->exists($comic->bundle_path)) {
+    /**
+     * Download a .ckb for any published content type (12 activity types).
+     */
+    public function downloadContentBundle(Request $request, string $contentType, int $contentId)
+    {
+        $this->assertModule($request, 'offline_bundles');
+        $this->assertContentModule($request, $contentType);
+
+        if (! in_array($contentType, OrganisationContentDecision::ALL_TYPES, true)) {
+            abort(404);
+        }
+
+        $bundle = $this->bundleRecord($contentType, $contentId);
+        $path = $bundle?->bundle_path;
+
+        if ($contentType === OrganisationContentDecision::TYPE_STORY && ! $path) {
+            $comic = Comic::where('status', 'published')->findOrFail($contentId);
+            $path = $comic->bundle_path;
+        }
+
+        if (! $path || ! Storage::disk('public')->exists($path)) {
             return response()->json([
-                'message' => 'Bundle not available. Please contact support.',
+                'message' => 'Bundle not available. Ask your school to rebuild offline packs.',
             ], 404);
         }
 
-        $filePath = Storage::disk('public')->path($comic->bundle_path);
-        
-        return response()->download($filePath, "comic-{$comic->id}.ckb", [
+        $filePath = Storage::disk('public')->path($path);
+        $filename = "{$contentType}-{$contentId}.ckb";
+
+        return response()->download($filePath, $filename, [
             'Content-Type' => 'application/zip',
-            'Content-Disposition' => 'attachment; filename="comic-'.$comic->id.'.ckb"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
@@ -434,6 +465,47 @@ class OfflineBundleController extends Controller
             'songs' => $songs,
             'tribes' => $tribes,
         ]);
+    }
+
+    private function bundleRecord(string $contentType, int $contentId): ?OfflineContentBundle
+    {
+        return OfflineContentBundle::forContent($contentType, $contentId);
+    }
+
+    /**
+     * @return array{bundle_path: ?string, bundle_hash: ?string, bundle_ready: bool, bundle_download_url: ?string}
+     */
+    private function bundleFields(?OfflineContentBundle $bundle, ?string $legacyPath = null, ?string $legacyHash = null, ?string $contentType = null, ?int $contentId = null): array
+    {
+        $path = $bundle?->bundle_path ?? $legacyPath;
+        $hash = $bundle?->bundle_hash ?? $legacyHash;
+        $ready = $path !== null && $path !== '';
+
+        return [
+            'bundle_path' => $path,
+            'bundle_hash' => $hash,
+            'bundle_ready' => $ready,
+            'bundle_download_url' => ($ready && $contentType && $contentId)
+                ? url("/api/v1/offline/content/{$contentType}/{$contentId}/download")
+                : null,
+        ];
+    }
+
+    private function activityContentType(string $activityType): ?string
+    {
+        return match ($activityType) {
+            'flashcard' => OrganisationContentDecision::TYPE_FLASHCARD,
+            'puzzle' => OrganisationContentDecision::TYPE_PUZZLE,
+            default => null,
+        };
+    }
+
+    private function assertContentModule(Request $request, string $contentType): void
+    {
+        $moduleKey = config('modules.content_types')[$contentType] ?? null;
+        if ($moduleKey) {
+            $this->assertModule($request, $moduleKey);
+        }
     }
 }
 

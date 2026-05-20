@@ -89,6 +89,7 @@ Story content uses module key **`stories`** (API path remains `/api/v1/comics`).
 | `/songs` | 403 (`songs`) |
 | `/activities` | Hidden; `?type=` → 403 |
 | `/offline/*` | 403 if `offline_bundles` off; manifest omits disabled content types |
+| `/offline/content/{type}/{id}/download` | `.ckb` for any of the 12 content types — see [offline-bundles.md](./offline-bundles.md) |
 | `/organisation/theme` | Platform default + `theme_engine_enabled: false` |
 
 ## Age profile bridging (Phase 5)
