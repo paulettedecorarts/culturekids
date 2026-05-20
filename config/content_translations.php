@@ -53,16 +53,14 @@ return [
             'model' => Drawing::class,
             'title_column' => 'title',
             'sub_items' => 'drawing_fields',
-            'query' => fn ($q) => $q->where(function ($inner) {
-                $inner->whereNull('drawing_type')->orWhere('drawing_type', '!=', 'coloring');
-            }),
+            'query_scope' => 'drawing_exclude_coloring',
         ],
         OrganisationContentDecision::TYPE_COLOURING => [
             'label' => 'Colouring',
             'model' => Drawing::class,
             'title_column' => 'title',
             'sub_items' => 'drawing_fields',
-            'query' => fn ($q) => $q->where('drawing_type', 'coloring'),
+            'query_scope' => 'drawing_coloring_only',
         ],
         OrganisationContentDecision::TYPE_LANGUAGE => [
             'label' => 'Language activity',

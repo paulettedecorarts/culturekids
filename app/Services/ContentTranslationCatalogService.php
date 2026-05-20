@@ -48,13 +48,10 @@ class ContentTranslationCatalogService
 
         $query = $modelClass::query()->with('tribe:id,name');
 
-        if (isset($def['query'])) {
-            $filter = $def['query'];
-            if (is_callable($filter)) {
-                $filter($query);
-            } elseif (is_array($filter)) {
-                $query->where($filter);
-            }
+        if (isset($def['query_scope'])) {
+            $this->applyQueryScope($query, (string) $def['query_scope']);
+        } elseif (isset($def['query']) && is_array($def['query'])) {
+            $query->where($def['query']);
         }
 
         $this->applyOrgScope($query, $contentType, $orgId, $isSuperAdmin);
@@ -111,6 +108,17 @@ class ContentTranslationCatalogService
     protected function subItemKeyLabel(string $contentType, string $key): string
     {
         return $this->subItems->labelForKey($contentType, $key);
+    }
+
+    protected function applyQueryScope(Builder $query, string $scope): void
+    {
+        match ($scope) {
+            'drawing_exclude_coloring' => $query->where(function (Builder $inner): void {
+                $inner->whereNull('drawing_type')->orWhere('drawing_type', '!=', 'coloring');
+            }),
+            'drawing_coloring_only' => $query->where('drawing_type', 'coloring'),
+            default => null,
+        };
     }
 
     protected function applyOrgScope(Builder $query, string $contentType, ?int $orgId, bool $isSuperAdmin): void
