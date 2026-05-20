@@ -44,7 +44,7 @@ HTML;
         </button>
     </div>
 
-    <nav class="cms-sidebar-nav" aria-label="CMS navigation">
+    <nav class="cms-sidebar-nav" aria-label="CMS navigation" @click="if (isMobile) closeMobileSidebar()">
         @if($isEditor || $isSuper)
             {!! $cmsNavLink(route('cms.editor.dashboard'), '📊', 'Dashboard', request()->routeIs('cms.editor.dashboard')) !!}
         @elseif($isAdmin)

@@ -1,10 +1,10 @@
 <div>
-    <div class="cms-header">
+    <div class="cms-header cms-page-header">
         <div>
             <h1 class="cms-page-title">Content Editors</h1>
             <div class="cms-breadcrumb">Manage CMS editor accounts</div>
         </div>
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end">
+        <div class="cms-page-actions">
             <button type="button" class="btn btn-primary btn-sm" wire:click="openInviteModal">Invite editor</button>
         </div>
     </div>

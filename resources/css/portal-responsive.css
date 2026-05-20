@@ -239,10 +239,35 @@
     gap: var(--sp-4);
 }
 
-/* Review queue table */
-.cms-content .review-queue-page .rq-table-head,
-.cms-content .review-queue-page .rq-table-row {
-    min-width: min(100%, 560px);
+/* CMS dashboard two-column layout */
+.cms-content .cms-dashboard .dashboard-grid,
+.cms-content .dashboard-grid {
+    display: grid;
+    gap: var(--sp-6);
+}
+
+/* Review queue */
+.cms-content .review-queue-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    align-items: center;
+}
+
+.cms-content .review-queue-filters__search {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.cms-content .review-queue-filters__select {
+    flex: 1 1 140px;
+    min-width: 0;
+}
+
+.cms-content .review-queue-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 /* Word search preview grid — allow horizontal scroll */
@@ -294,6 +319,15 @@
     .sa-content div[style*="grid-template-columns:1fr 400px"],
     .sa-content div[style*="grid-template-columns: 1fr 400px"] {
         grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .cms-dashboard .dashboard-grid,
+    .cms-content .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .theme-mgr-modal-panel .theme-mgr-preview {
+        display: none !important;
     }
 }
 
@@ -499,13 +533,135 @@
     .sa-content .lw-submit-btn--md,
     .sa-content .lw-submit-btn--primary,
     .sa-content .lw-submit-btn--block,
-    .cms-content .lw-submit-btn--md {
+    .cms-content .lw-submit-btn--md,
+    .cms-content .lw-submit-btn--primary,
+    .cms-content .lw-submit-btn--block {
         width: 100%;
+        min-height: 44px;
     }
 
-    .sa-content .sa-table-action {
-        min-height: 40px;
+    .sa-content .sa-table-action,
+    .cms-content .sa-table-action,
+    .cms-content .btn-sm,
+    .cms-content .btn.btn-primary,
+    .cms-content .btn.btn-ghost {
+        min-height: 44px;
         justify-content: center;
+    }
+
+    /* CMS editor: sa-table → cards (managers reuse admin table markup) */
+    .cms-content .sa-table-wrap .sa-table-head {
+        display: none !important;
+    }
+
+    .cms-content .sa-table-wrap .sa-table-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+        min-width: 0 !important;
+    }
+
+    .cms-content .sa-table-wrap .sa-table-row > span,
+    .cms-content .sa-table-wrap .sa-table-row > div {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .cms-content .sa-table-wrap .sa-table-actions {
+        padding-top: var(--sp-2);
+        border-top: 1px solid var(--cms-border-subtle);
+        margin-top: var(--sp-2);
+        justify-content: flex-start;
+    }
+
+    /* CMS asset tables (story packs, songs list, review queue, people) */
+    .cms-content .cms-asset-table .cms-table-header {
+        display: none !important;
+    }
+
+    .cms-content .cms-asset-table .cms-table-row,
+    .cms-content .cms-asset-table .review-queue-table-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: var(--sp-4) !important;
+        grid-template-columns: unset !important;
+        min-width: 0 !important;
+    }
+
+    .cms-content .cms-asset-table .review-queue-table-grid > span[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--cms-text-muted);
+        margin-bottom: 4px;
+    }
+
+    .cms-content .cms-asset-table .review-queue-title {
+        white-space: normal;
+    }
+
+    .cms-content .review-queue-filters {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .cms-content .review-queue-filters__search,
+    .cms-content .review-queue-filters__select,
+    .cms-content .review-queue-filters__clear {
+        width: 100% !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+    .cms-content .review-queue-results-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .cms-content .review-queue-actions .btn {
+        flex: 1 1 auto;
+        min-width: min(100%, 120px);
+    }
+
+    /* Editor dashboard */
+    .cms-content .cms-dashboard .dashboard-grid,
+    .cms-content .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cms-content .cms-dashboard .activity-card,
+    .cms-content .cms-dashboard .shortcuts-card {
+        padding: var(--sp-4) !important;
+    }
+
+    .cms-content .cms-dashboard .cms-header > div[style*="margin-left:auto"],
+    .cms-content .cms-header > div[style*="margin-left:auto"],
+    .cms-content .cms-header > div[style*="display:flex"]:not(:first-child) {
+        width: 100%;
+        margin-left: 0 !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .cms-content .cms-header .btn,
+    .cms-content .cms-header a.btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Theme modal live preview — form only on phone (matches super admin) */
+    .cms-content .theme-mgr-modal-panel .theme-mgr-preview {
+        display: none !important;
     }
 }
 
@@ -528,5 +684,13 @@
     .sa-content .sa-topbar-hello,
     .cms-content .cms-topbar-hello {
         font-size: 14px;
+    }
+
+    .cms-content .sa-table-action--grow {
+        flex: 1 1 100%;
+    }
+
+    .cms-content .review-queue-actions .btn {
+        flex: 1 1 100%;
     }
 }

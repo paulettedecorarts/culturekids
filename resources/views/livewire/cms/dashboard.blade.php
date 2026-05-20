@@ -1,10 +1,10 @@
 <div class="cms-dashboard">
-    <div class="cms-header">
+    <div class="cms-header cms-page-header">
         <div>
             <h1 class="cms-page-title">Dashboard</h1>
             <div class="cms-breadcrumb">Overview · content production</div>
         </div>
-        <div style="margin-left:auto; display:flex; gap:var(--sp-2)">
+        <div class="cms-page-actions">
             <a class="btn btn-ghost btn-sm" href="{{ route('cms.editor.assets') }}" style="text-decoration:none">🗂 Manage Assets</a>
             <a class="btn btn-primary btn-sm" href="{{ route('cms.editor.story-packs') }}" style="text-decoration:none">+ New Comic Pack</a>
         </div>
@@ -84,6 +84,15 @@
 
     <style>
         .dashboard-grid { display: grid; grid-template-columns: 1fr 340px; gap: 32px; }
+        @media (max-width: 1023px) {
+            .dashboard-grid { grid-template-columns: 1fr; gap: var(--sp-6); }
+            .cms-dashboard .shortcuts-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 767px) {
+            .cms-dashboard .shortcuts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .cms-dashboard .activity-item { flex-wrap: wrap; }
+            .cms-dashboard .activity-item .btn-link { width: 100%; text-align: right; margin-top: 4px; }
+        }
         
         .card-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--cms-text-muted); margin-bottom: 24px; }
         

@@ -1,5 +1,5 @@
-<div>
-    <div class="cms-header">
+<div class="review-queue-page">
+    <div class="cms-header cms-page-header">
         <div>
             <h1 class="cms-page-title">Content Review Queue</h1>
             <div class="cms-breadcrumb">Management · {{ $organization }} · Approval</div>
@@ -93,12 +93,12 @@
         </div>
         @forelse($pendingItems as $item)
             <div class="cms-table-row review-queue-table-grid" style="cursor:default;">
-                <span class="review-queue-type">{{ $item['type_label'] }}</span>
-                <span class="review-queue-title">{{ $item['title'] }}</span>
-                <span class="review-queue-muted">{{ $item['tribe_name'] ?? '—' }}</span>
-                <span class="review-queue-muted">{{ $item['updated_at']?->diffForHumans() }}</span>
-                <span class="review-queue-status">{{ ucfirst($item['status'] ?? 'published') }}</span>
-                <span class="review-queue-actions">
+                <span class="review-queue-type" data-label="{{ __('Type') }}">{{ $item['type_label'] }}</span>
+                <span class="review-queue-title" data-label="{{ __('Title') }}">{{ $item['title'] }}</span>
+                <span class="review-queue-muted" data-label="{{ __('Tribe') }}">{{ $item['tribe_name'] ?? '—' }}</span>
+                <span class="review-queue-muted" data-label="{{ __('Updated') }}">{{ $item['updated_at']?->diffForHumans() }}</span>
+                <span class="review-queue-status" data-label="{{ __('Status') }}">{{ ucfirst($item['status'] ?? 'published') }}</span>
+                <span class="review-queue-actions" data-label="{{ __('Actions') }}">
                     <button
                         type="button"
                         class="btn btn-primary btn-sm"
@@ -269,8 +269,8 @@
         }
 
         @media (max-width: 900px) {
-            .review-queue-table-grid {
-                grid-template-columns: minmax(0, 1fr);
+            .review-queue-filters__search {
+                flex: 1 1 100%;
             }
         }
     </style>
