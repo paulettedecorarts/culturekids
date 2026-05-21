@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Log upload requests before web/session/throttle (route middleware runs too late if those fail).
+        $middleware->prepend(LogLivewireUploadDiagnostics::class);
+
         // Trust all proxies in production (Coolify/nginx reverse proxy)
         $middleware->trustProxies(at: '*');
 
@@ -48,5 +51,17 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->reportable(function (\Throwable $e): void {
+            $request = request();
+            if (! $request?->is('livewire/upload-file')) {
+                return;
+            }
+
+            LogLivewireUploadDiagnostics::log('error', 'livewire.upload.reported', [
+                'message' => $e->getMessage(),
+                'class' => $e::class,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        });
     })->create();

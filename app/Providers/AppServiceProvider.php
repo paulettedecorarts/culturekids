@@ -73,7 +73,6 @@ class AppServiceProvider extends ServiceProvider
             if ($dir !== '') {
                 Storage::disk($disk)->makeDirectory($dir);
             }
-            Storage::disk('livewire-tmp')->makeDirectory('livewire-tmp');
             @chmod(storage_path('app/livewire-tmp'), 0775);
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::channel('uploads')->error('livewire.tmp_dir.failed', [

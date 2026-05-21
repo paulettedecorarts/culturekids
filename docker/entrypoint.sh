@@ -46,5 +46,9 @@ php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌
 php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped."
 php artisan view:cache && echo "      ✅ Views cached." || echo "      ⚠️  View cache skipped."
 
+# php-fpm runs as www-data — fix ownership if artisan above ran as root during build/exec
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
+
 echo "🚀 Starting nginx + php-fpm + queue worker..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
