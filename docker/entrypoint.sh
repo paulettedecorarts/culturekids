@@ -9,6 +9,10 @@ fi
 
 php /var/www/html/docker/wait-for-mysql.php || exit 1
 
+mkdir -p storage/app/livewire-tmp storage/logs
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
+
 echo "[1/5] Running migrations..."
 php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }
 
