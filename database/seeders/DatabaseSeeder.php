@@ -3,88 +3,74 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Organisation;
+use App\Services\Seed\HeritageContentSeedImporter;
 use Illuminate\Database\Seeder;
 
+/**
+ * Master seed — run everything with:
+ *
+ *   php artisan db:seed
+ *
+ * Includes:
+ * - Roles & permissions
+ * - Organisation modules (15)
+ * - Super admin login (admin@culturekids.app / password)
+ * - Heritage Heroes content from seed/activities.seed.json (1,210 items)
+ * - Word flashcards from seed/wordFlashcards.seed.json (1,100 cards → 11 decks)
+ * - Comic → activities sync (idempotent)
+ *
+ * Age profiles & languages are created by migrations on fresh migrate.
+ */
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Ensure Roles & Permissions are populated first
+        $this->command?->info('═══ Culture Kids — full database seed ═══');
+
+        $this->command?->info('→ Roles & permissions');
         $this->call(RoleSeeder::class);
+
+        $this->command?->info('→ Organisation modules');
         $this->call(ModuleSeeder::class);
 
-        // --- 1. Organisations ---
-        // $naluwoozaOrg = Organisation::firstOrCreate([
-        //     'slug' => 'naluwooza-org',
-        // ], [
-        //     'name' => 'Naluwooza Org',
-        //     'plan' => 'enterprise',
-        // ]);
-
-        // $ugSchoolsOrg = Organisation::firstOrCreate([
-        //     'slug' => 'ug-schools',
-        // ], [
-        //     'name' => 'Uganda Schools Org',
-        //     'plan' => 'school',
-        // ]);
-
-        // --- 2. Test Credentials ---
-
-        // #1: Super Admin
-        $superAdmin = User::firstOrCreate([
-            'email' => 'admin@culturekids.app',
-        ], [
-            'name' => 'Super Admin',
-            'password' => bcrypt('password'),
-        ]);
+        $this->command?->info('→ Platform admin user');
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'admin@culturekids.app'],
+            [
+                'name' => 'Super Admin',
+                'password' => bcrypt('password'),
+            ]
+        );
         $superAdmin->assignRole('super_admin');
+        $this->command?->info('  admin@culturekids.app / password');
 
-        // // #2: Org Admin
-        // $orgAdmin = User::firstOrCreate([
-        //     'email' => 'jane@naluwooza.ug',
-        // ], [
-        //     'name' => 'Jane (Org Admin)',
-        //     'password' => bcrypt('password'),
-        //     'organisation_id' => $naluwoozaOrg->id,
-        // ]);
-        // $orgAdmin->assignRole('org_admin');
+        $this->command?->info('→ Heritage content (activities + word flashcards JSON)');
+        $summary = app(HeritageContentSeedImporter::class)->import($this->command);
 
-        // #3: CMS Editor
-        // $cmsEditor = User::firstOrCreate([
-        //     'email' => 'editor@culturekids.app',
-        // ], [
-        //     'name' => 'Content Editor',
-        //     'password' => bcrypt('password'),
-        // ]);
-        // $cmsEditor->assignRole('cms_editor');
+        $hf = $summary['heritage_activities'];
+        $wf = $summary['word_flashcards'];
 
-        // #4: Teacher
-        // $teacher = User::firstOrCreate([
-        //     'email' => 'teacher@ugschools.ug',
-        // ], [
-        //     'name' => 'Teacher',
-        //     'password' => bcrypt('password'),
-        //     'organisation_id' => $ugSchoolsOrg->id,
-        // ]);
-        // $teacher->assignRole('teacher');
-
-        // // #5: Parent
-        // $parent = User::firstOrCreate([
-        //     'email' => 'parent@home.ug',
-        // ], [
-        //     'name' => 'Demo Parent',
-        //     'password' => bcrypt('password'),
-        // ]);
-        // $parent->assignRole('parent');
-
-        $this->command->info('✅ Test credentials successfully seeded!');
-
-        // Sync existing content to the activities table
-        // These are idempotent — safe to run on every deployment
+        $this->command?->info('→ Comic / activities mirror sync');
         $this->call(SyncComicsToActivitiesSeeder::class);
+
+        $this->command?->info('');
+        $this->command?->info('═══ Seed complete ═══');
+        $this->command?->info("Tribes: {$summary['tribes']}");
+        $this->command?->info("Word flashcard decks: {$wf['activities']} ({$wf['slides']} slides)");
+        $this->command?->info(sprintf(
+            'Heritage activities: %d (language %d, puzzle %d, story %d, culture %d, song %d, maze %d, spot %d, wordsearch %d, drawing %d, game %d, skipped %d)',
+            $hf['total'],
+            $hf['language'],
+            $hf['puzzle'],
+            $hf['story'],
+            $hf['culture'],
+            $hf['song'],
+            $hf['maze'],
+            $hf['spot_difference'],
+            $hf['word_search'],
+            $hf['drawing'],
+            $hf['game'],
+            $hf['skipped']
+        ));
     }
 }
