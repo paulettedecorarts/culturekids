@@ -53,7 +53,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->reportable(function (\Throwable $e): void {
             $request = request();
-            if (! $request?->is('livewire/upload-file')) {
+            $path = $request?->path() ?? '';
+            if ($path !== 'livewire/upload-file' && ! str_contains($request?->getPathInfo() ?? '', 'livewire/upload-file')) {
                 return;
             }
 

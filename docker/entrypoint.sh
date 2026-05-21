@@ -29,6 +29,7 @@ chmod 2775 storage/app/livewire-tmp storage/app/public 2>/dev/null || true
 
 touch storage/logs/laravel.log storage/logs/uploads.log
 chown www-data:www-data storage/logs/*.log
+chmod 664 storage/logs/*.log 2>/dev/null || true
 
 if ! su -s /bin/sh www-data -c 'touch storage/app/livewire-tmp/.write-test && rm -f storage/app/livewire-tmp/.write-test'; then
     echo "❌ www-data cannot write to storage/app/livewire-tmp — Livewire uploads will fail."

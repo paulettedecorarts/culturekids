@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use App\Http\Livewire\FileUploadController as AppFileUploadController;
 use Livewire\Features\SupportFileUploads\FileUploadController;
 use Livewire\Livewire;
 
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(FileUploadController::class, AppFileUploadController::class);
+
         $this->app->singleton(PushGateway::class, function () {
             return config('push.provider') === 'fcm'
                 ? new FcmPushGateway

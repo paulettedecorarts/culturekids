@@ -11,11 +11,13 @@ class LogLivewireUploadDiagnostics
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->is('livewire/upload-file')) {
+        if (! $this->isUploadRequest($request)) {
             return $next($request);
         }
 
         $filesMeta = $this->filesMeta();
+
+        error_log('[culturekids] livewire.upload.request path='.$request->path().' files='.json_encode($filesMeta));
 
         self::log('info', 'livewire.upload.request', [
             'content_length' => $request->server('CONTENT_LENGTH'),
@@ -78,6 +80,12 @@ class LogLivewireUploadDiagnostics
     /**
      * @return array<string, array<string, mixed>>
      */
+    protected function isUploadRequest(Request $request): bool
+    {
+        return $request->is('livewire/upload-file')
+            || str_contains($request->getPathInfo(), 'livewire/upload-file');
+    }
+
     protected function filesMeta(): array
     {
         $filesMeta = [];
