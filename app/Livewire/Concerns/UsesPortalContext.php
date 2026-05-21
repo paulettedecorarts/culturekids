@@ -75,7 +75,7 @@ trait UsesPortalContext
     /** Org-admin approved library is view-only (no edit/delete on reused show pages). */
     public function portalCanEditContent(): bool
     {
-        return ! request()->routeIs('cms.admin.approved-content.*', 'teacher.library.*');
+        return ! request()->routeIs('cms.admin.*', 'teacher.library.*');
     }
 
     public function portalIsTeacherLibrary(): bool
@@ -90,6 +90,10 @@ trait UsesPortalContext
             return 'teacher.library';
         }
 
+        if (request()->routeIs('cms.admin.flashcards.show', 'cms.admin.approved-content.flashcards.show')) {
+            return 'cms.admin.flashcards';
+        }
+
         return $this->portalCanEditContent() ? $manageRouteName : 'cms.admin.approved-content';
     }
 
@@ -97,6 +101,10 @@ trait UsesPortalContext
     {
         if ($this->portalIsTeacherLibrary()) {
             return 'Library';
+        }
+
+        if (request()->routeIs('cms.admin.flashcards.show', 'cms.admin.approved-content.flashcards.show')) {
+            return 'Flashcards';
         }
 
         return $this->portalCanEditContent() ? $manageLabel : 'Approved Content';

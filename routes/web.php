@@ -151,6 +151,7 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('puzzles/{id}', PuzzleShow::class)->name('puzzles.show');
     Route::get('puzzles', PuzzlesIndex::class)->name('puzzles');
 
+    Route::get('flashcards', ActivitiesManager::class)->name('flashcards');
     Route::get('activities', ActivitiesManager::class)->name('activities');
     Route::get('activities/types', ActivityTypeSelector::class)->name('activities.types');
     Route::get('activities/create', ActivityDetailPage::class)->name('activities.create');
@@ -271,6 +272,8 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
     Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('/review', ReviewQueue::class)->name('review');
     Route::get('/approved-content', ApprovedContent::class)->name('approved-content');
+    Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
+    Route::get('/flashcards/{id}', ActivityDetailPage::class)->name('flashcards.show');
     Route::get('/approved-content/stories/{id}', StoryPreview::class)->name('approved-content.stories.show');
     Route::get('/approved-content/songs/{id}', SongPreview::class)->name('approved-content.songs.show');
     Route::get('/approved-content/flashcards/{id}', ActivityDetailPage::class)->name('approved-content.flashcards.show');

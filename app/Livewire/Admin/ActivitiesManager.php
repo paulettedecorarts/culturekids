@@ -34,7 +34,7 @@ class ActivitiesManager extends Component
 
     public function mount(): void
     {
-        if (request()->routeIs('cms.editor.flashcards')) {
+        if (request()->routeIs('cms.editor.flashcards', 'cms.admin.flashcards', 'admin.flashcards')) {
             $this->flashcardsPortal = true;
             $this->typeFilter = 'flashcard';
         }

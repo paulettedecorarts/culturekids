@@ -52,6 +52,7 @@ HTML;
         {!! $saNavLink(route('admin.stories'), '📖', 'Stories', request()->routeIs('admin.stories*')) !!}
         {!! $saNavLink(route('admin.story-packs'), '📚', 'Story Packs', request()->routeIs('admin.story-packs*')) !!}
         {!! $saNavLink(route('admin.songs'), '🎵', 'Songs', request()->routeIs('admin.songs*')) !!}
+        {!! $saNavLink(route('admin.flashcards'), '🃏', 'Flashcards', request()->routeIs('admin.flashcards*')) !!}
         {!! $saNavLink(route('admin.activities'), '🎯', 'Activities', request()->routeIs('admin.activities*')) !!}
         {!! $saNavLink(route('admin.drawings'), '🖍', 'Drawings', request()->routeIs('admin.drawings*')) !!}
         {!! $saNavLink(route('admin.games'), '🎮', 'Games', request()->routeIs('admin.games*')) !!}

@@ -71,6 +71,9 @@ HTML;
             <div class="cms-nav-section"><span class="cms-nav-section-text">Management</span></div>
             {!! $cmsNavLink(route('cms.admin.review'), '✅', 'Review Queue', request()->routeIs('cms.admin.review')) !!}
             {!! $cmsNavLink(route('cms.admin.approved-content'), '📚', 'Approved Content', request()->routeIs('cms.admin.approved-content*')) !!}
+            @if($isAdmin && ! ($isEditor ?? false))
+                {!! $cmsNavLink(route('cms.admin.flashcards'), '🃏', 'Flashcards', request()->routeIs('cms.admin.flashcards*')) !!}
+            @endif
             {!! $cmsNavLink(route('cms.admin.themes'), '🎨', 'Themes', request()->routeIs('cms.admin.themes')) !!}
             {!! $cmsNavLink(route('cms.admin.organizations'), '🏫', 'Organizations', request()->routeIs('cms.admin.organizations')) !!}
             {!! $cmsNavLink(route('cms.admin.people'), '👥', 'Teachers & children', request()->routeIs('cms.admin.people')) !!}

@@ -10,9 +10,11 @@
                 @endif
             </div>
         </div>
-        <a href="{{ route($routePrefix . '.activities.types') }}{{ $flashcardsPortal ? '?type=flashcard' : '' }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">
-            + {{ $flashcardsPortal ? 'Create Flashcard' : 'Add Activity' }}
-        </a>
+        @if($this->portalCanEditContent())
+            <a href="{{ route($routePrefix . '.activities.types') }}{{ $flashcardsPortal ? '?type=flashcard' : '' }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">
+                + {{ $flashcardsPortal ? 'Create Flashcard' : 'Add Activity' }}
+            </a>
+        @endif
     </div>
 
     @if(session()->has('message'))
@@ -213,6 +215,8 @@
                         @else
                             <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
+                    @elseif($activity->type === 'flashcard' && $routePrefix === 'cms.admin')
+                        <a href="{{ route('cms.admin.flashcards.show', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @else
                         <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @endif
