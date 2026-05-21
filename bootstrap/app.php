@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'livewire/upload-file',
+            'diag/upload-probe',
         ]);
 
         // Super Admin can operate the panel while the app is in maintenance mode.
@@ -35,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin',
             'admin/*',
             'livewire/*',
+            'diag/*',
             'login',
             'logout',
             'up',
@@ -51,21 +53,31 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Always mirror exceptions to stderr so Coolify logs show the real 500 cause.
         $exceptions->reportable(function (\Throwable $e): void {
-            $request = request();
-            $path = $request?->path() ?? '';
-            if ($path !== 'livewire/upload-file' && ! str_contains($request?->getPathInfo() ?? '', 'livewire/upload-file')) {
+            $uri = request()?->getRequestUri() ?? ($_SERVER['REQUEST_URI'] ?? '');
+            $isUpload = str_contains($uri, 'livewire/upload-file');
+
+            error_log(sprintf(
+                '[culturekids] %s %s: %s in %s:%d (uri=%s)',
+                $isUpload ? 'UPLOAD' : 'EXCEPTION',
+                $e::class,
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine(),
+                $uri
+            ));
+
+            if (! $isUpload) {
                 return;
             }
 
-            $context = [
+            LogLivewireUploadDiagnostics::log('error', 'livewire.upload.reported', [
                 'message' => $e->getMessage(),
                 'class' => $e::class,
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'livewire_tmp_writable' => is_writable(storage_path('app/livewire-tmp')),
-            ];
-            LogLivewireUploadDiagnostics::log('error', 'livewire.upload.reported', $context);
-            error_log('[culturekids] livewire.upload.reported '.json_encode($context, JSON_UNESCAPED_SLASHES));
+            ]);
         });
     })->create();

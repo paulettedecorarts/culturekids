@@ -64,15 +64,17 @@ class LogLivewireUploadDiagnostics
      */
     public static function log(string $level, string $message, array $context = []): void
     {
+        $line = sprintf(
+            '[culturekids uploads] %s %s',
+            $message,
+            json_encode($context, JSON_UNESCAPED_SLASHES) ?: '{}'
+        );
+        error_log($line);
+
         try {
             Log::channel('uploads')->{$level}($message, $context);
         } catch (\Throwable $e) {
-            error_log(sprintf(
-                '[culturekids uploads] %s %s (log channel failed: %s)',
-                $message,
-                json_encode($context, JSON_UNESCAPED_SLASHES) ?: '{}',
-                $e->getMessage()
-            ));
+            error_log('[culturekids uploads] log channel failed: '.$e->getMessage());
             report($e);
         }
     }

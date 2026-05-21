@@ -54,7 +54,11 @@ php artisan storage:link --force 2>/dev/null && echo "      ✅ Storage linked."
 
 echo "[4/4] Application cache (fast path)..."
 php artisan package:discover --ansi && echo "      ✅ Packages discovered." || { echo "      ❌ Package discover failed."; exit 1; }
-php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
+if [ "${APP_DEBUG:-false}" = "true" ]; then
+    php artisan config:clear && echo "      ✅ Config cleared (APP_DEBUG=true — no config cache)."
+else
+    php artisan config:cache && echo "      ✅ Config cached."
+fi
 
 # Slow steps — off by default. Nginx does not listen until this script finishes; enabling these causes 504s behind Cloudflare/Coolify.
 if [ "${RUN_VIEW_CACHE:-false}" = "true" ]; then

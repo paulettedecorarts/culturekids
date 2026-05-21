@@ -359,3 +359,28 @@ Route::get('/health', function () {
         'env' => config('app.env'),
     ]);
 });
+
+// Debug-only: verify multipart POST reaches PHP/Laravel (not Livewire signed URL).
+Route::post('/diag/upload-probe', function () {
+    if (! config('app.debug')) {
+        abort(404);
+    }
+
+    error_log('[culturekids] diag/upload-probe FILES='.json_encode($_FILES));
+
+    return response()->json([
+        'ok' => true,
+        'content_length' => request()->server('CONTENT_LENGTH'),
+        'files' => collect(request()->allFiles())->map(fn ($f) => [
+            'name' => $f->getClientOriginalName(),
+            'size' => $f->getSize(),
+            'error' => $f->getError(),
+            'valid' => $f->isValid(),
+        ]),
+        'ini' => [
+            'upload_max_filesize' => ini_get('upload_max_filesize'),
+            'post_max_size' => ini_get('post_max_size'),
+            'upload_tmp_dir' => ini_get('upload_tmp_dir'),
+        ],
+    ]);
+});
