@@ -24,19 +24,17 @@ else
 fi
 
 echo "[3/5] Linking storage..."
-php artisan storage:link --force && echo "      ✅ Storage linked." || echo "      ⚠️  Storage link skipped."
+php artisan storage:link --force 2>/dev/null && echo "      ✅ Storage linked." || echo "      ⚠️  Storage link skipped."
 
-echo "[4/5] Clearing all caches..."
-php artisan config:clear && echo "      ✅ Config cleared."
-php artisan route:clear && echo "      ✅ Routes cleared."
-php artisan view:clear && echo "      ✅ Views cleared."
-php artisan cache:clear && echo "      ✅ Cache cleared."
-php artisan event:clear && echo "      ✅ Events cleared."
+echo "[4/5] Clearing caches..."
+php artisan config:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
 
 echo "[5/5] Rebuilding caches..."
 php artisan package:discover --ansi && echo "      ✅ Packages discovered." || { echo "      ❌ Package discover failed."; exit 1; }
 php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
-php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped (duplicate route name detected)."
+php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped."
 php artisan view:cache && echo "      ✅ Views cached." || echo "      ⚠️  View cache skipped."
 
 echo "🚀 Starting nginx + php-fpm + queue worker..."

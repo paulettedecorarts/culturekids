@@ -12,6 +12,7 @@ use App\Services\Push\LogPushGateway;
 use App\Services\Push\PushGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->configureDefaults();
         $this->configurePagination();
+        $this->configureBladeLayouts();
         $this->configureLivewire();
         $this->ensureLivewireTemporaryUploadDirectoryExists();
         $this->registerTranslationCoverageObservers();
@@ -86,6 +88,15 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('vendor.pagination.portal');
         Paginator::defaultSimpleView('vendor.pagination.portal');
+    }
+
+    /**
+     * Map resources/views/layouts/* to <x-layouts::…> (Flux / Livewire starter convention).
+     */
+    protected function configureBladeLayouts(): void
+    {
+        Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');
+        Blade::anonymousComponentPath(resource_path('views/pages'), 'pages');
     }
 
     protected function configureLivewire(): void
