@@ -82,6 +82,10 @@ COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/zz-app.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+RUN mkdir -p /tmp/nginx/client_body /tmp/nginx/fastcgi /tmp/nginx/proxy \
+    && chown -R www-data:www-data /tmp/nginx \
+    && chmod -R 770 /tmp/nginx
+
 RUN chown -R www-data:www-data \
     /var/www/html/storage \
     /var/www/html/bootstrap/cache

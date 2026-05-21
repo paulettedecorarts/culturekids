@@ -9,6 +9,10 @@ fi
 
 php /var/www/html/docker/wait-for-mysql.php || exit 1
 
+mkdir -p /tmp/nginx/client_body /tmp/nginx/fastcgi /tmp/nginx/proxy
+chown -R www-data:www-data /tmp/nginx
+chmod -R 770 /tmp/nginx
+
 mkdir -p \
     storage/app/livewire-tmp \
     storage/app/private \
@@ -77,6 +81,12 @@ if ! su -s /bin/sh www-data -c 'touch storage/app/livewire-tmp/.write-test && rm
     echo "❌ Post-cache: www-data still cannot write storage/app/livewire-tmp."
     exit 1
 fi
+
+if ! su -s /bin/sh www-data -c 'touch /tmp/nginx/client_body/.write-test && rm -f /tmp/nginx/client_body/.write-test'; then
+    echo "❌ www-data cannot write nginx client_body temp — uploads will fail."
+    exit 1
+fi
+echo "✅ nginx temp dirs (/tmp/nginx) writable by www-data."
 
 echo "🚀 Starting nginx + php-fpm + queue worker..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
