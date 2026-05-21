@@ -272,6 +272,8 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
     Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('/review', ReviewQueue::class)->name('review');
     Route::get('/approved-content', ApprovedContent::class)->name('approved-content');
+    Route::get('/activities', ActivitiesManager::class)->name('activities');
+    Route::get('/activities/{id}', ActivityDetailPage::class)->name('activities.show');
     Route::get('/flashcards', ActivitiesManager::class)->name('flashcards');
     Route::get('/flashcards/{id}', ActivityDetailPage::class)->name('flashcards.show');
     Route::get('/approved-content/stories/{id}', StoryPreview::class)->name('approved-content.stories.show');

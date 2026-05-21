@@ -215,8 +215,13 @@
                         @else
                             <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
-                    @elseif($activity->type === 'flashcard' && $routePrefix === 'cms.admin')
-                        <a href="{{ route('cms.admin.flashcards.show', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                    @elseif($routePrefix === 'cms.admin')
+                        @php
+                            $adminDetailRoute = $activity->type === 'flashcard'
+                                ? 'cms.admin.flashcards.show'
+                                : 'cms.admin.activities.show';
+                        @endphp
+                        <a href="{{ route($adminDetailRoute, $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @else
                         <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @endif

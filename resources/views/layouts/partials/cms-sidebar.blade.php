@@ -72,6 +72,7 @@ HTML;
             {!! $cmsNavLink(route('cms.admin.review'), '✅', 'Review Queue', request()->routeIs('cms.admin.review')) !!}
             {!! $cmsNavLink(route('cms.admin.approved-content'), '📚', 'Approved Content', request()->routeIs('cms.admin.approved-content*')) !!}
             @if($isAdmin && ! ($isEditor ?? false))
+                {!! $cmsNavLink(route('cms.admin.activities'), '🎯', 'Activities', request()->routeIs('cms.admin.activities*')) !!}
                 {!! $cmsNavLink(route('cms.admin.flashcards'), '🃏', 'Flashcards', request()->routeIs('cms.admin.flashcards*')) !!}
             @endif
             {!! $cmsNavLink(route('cms.admin.themes'), '🎨', 'Themes', request()->routeIs('cms.admin.themes')) !!}

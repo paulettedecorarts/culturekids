@@ -94,6 +94,10 @@ trait UsesPortalContext
             return 'cms.admin.flashcards';
         }
 
+        if (request()->routeIs('cms.admin.activities.show')) {
+            return 'cms.admin.activities';
+        }
+
         return $this->portalCanEditContent() ? $manageRouteName : 'cms.admin.approved-content';
     }
 
@@ -105,6 +109,10 @@ trait UsesPortalContext
 
         if (request()->routeIs('cms.admin.flashcards.show', 'cms.admin.approved-content.flashcards.show')) {
             return 'Flashcards';
+        }
+
+        if (request()->routeIs('cms.admin.activities.show')) {
+            return 'Activities';
         }
 
         return $this->portalCanEditContent() ? $manageLabel : 'Approved Content';
