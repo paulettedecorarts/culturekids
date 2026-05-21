@@ -1,5 +1,8 @@
 # All configuration is inline — no host .env required for deploy.
-# Deploy the FULL file (app + mysql + redis). DB password must match on app and mysql.
+# Deploy the FULL file (app + mysql + redis).
+#
+# Coolify: if MySQL stays unhealthy, delete persistent volume "mysql_data"
+# (Storage → mysql volume → delete) then redeploy — old DB data keeps old passwords.
 
 networks:
   culturekids:
@@ -15,38 +18,33 @@ services:
       - culturekids
 
     environment:
-      # Application
       APP_NAME: "Paulette Culture Kids"
       APP_ENV: production
       APP_DEBUG: "false"
-      APP_KEY: base64:k3T6SGc/Lh1cSsYYjTqjAlXcPykicgi0XEK8mcxjwIc=
-      APP_URL: https://pualatte.kwatagig.com
+      APP_KEY: "base64:k3T6SGc/Lh1cSsYYjTqjAlXcPykicgi0XEK8mcxjwIc="
+      APP_URL: "https://pualatte.kwatagig.com"
       APP_LOCALE: en
       APP_FALLBACK_LOCALE: en
       APP_FAKER_LOCALE: en_US
       APP_MAINTENANCE_DRIVER: file
       BCRYPT_ROUNDS: "12"
 
-      # Logging
       LOG_CHANNEL: stack
       LOG_STACK: single
       LOG_DEPRECATIONS_CHANNEL: "null"
       LOG_LEVEL: error
 
-      # Database (host `mysql` = compose service name on network `culturekids`)
       DB_CONNECTION: mysql
       DB_HOST: mysql
       DB_PORT: "3306"
       DB_DATABASE: paulette
       DB_USERNAME: paulette
-      DB_PASSWORD: PauletteKwatagig2024!
+      DB_PASSWORD: "PauletteKwatagig2024"
 
-      # Redis
       REDIS_CLIENT: predis
       REDIS_HOST: redis
       REDIS_PORT: "6379"
 
-      # Session / cache / queue
       SESSION_DRIVER: redis
       SESSION_LIFETIME: "120"
       SESSION_ENCRYPT: "false"
@@ -54,25 +52,21 @@ services:
       CACHE_STORE: redis
       QUEUE_CONNECTION: database
 
-      # First deploy: heritage JSON import (slow). Set to "false" after first successful boot.
       RUN_DB_SEED: "true"
 
-      # Filesystem
       BROADCAST_CONNECTION: log
       FILESYSTEM_DISK: local
 
-      # Mail
       MAIL_MAILER: smtp
       MAIL_SCHEME: ssl
       MAIL_HOST: server72.web-hosting.com
       MAIL_PORT: "465"
       MAIL_USERNAME: info@yilibapro.com
-      MAIL_PASSWORD: Mirinda@123
+      MAIL_PASSWORD: "Mirinda@123"
       MAIL_ENCRYPTION: ssl
       MAIL_FROM_ADDRESS: info@yilibapro.com
       MAIL_FROM_NAME: "Paulette Culture Kids"
 
-      # AWS (optional — unused unless you switch FILESYSTEM_DISK to s3)
       AWS_ACCESS_KEY_ID: ""
       AWS_SECRET_ACCESS_KEY: ""
       AWS_DEFAULT_REGION: us-east-1
@@ -102,20 +96,16 @@ services:
     environment:
       MYSQL_DATABASE: paulette
       MYSQL_USER: paulette
-      MYSQL_PASSWORD: PauletteKwatagig2024!
-      MYSQL_ROOT_PASSWORD: PauletteRootKwatagig2024!
+      MYSQL_PASSWORD: "PauletteKwatagig2024"
+      MYSQL_ROOT_PASSWORD: "PauletteRootKwatagig2024"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "mysql -h127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE -e 'SELECT 1' || exit 1",
-        ]
-      interval: 5s
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pPauletteRootKwatagig2024"]
+      interval: 10s
       timeout: 5s
-      retries: 30
-      start_period: 60s
+      retries: 12
+      start_period: 120s
 
   redis:
     image: redis:7-alpine
