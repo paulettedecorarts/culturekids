@@ -42,7 +42,7 @@
                 </div>
                 <div class="cf-field">
                     <label class="cf-label">Tribe <span style="color:#ff8c8c">*</span></label>
-                    <select wire:model="tribe_id" class="cf-input" required>
+                    <select wire:model.number="tribe_id" class="cf-input" required>
                         <option value="">Select Tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -117,7 +117,7 @@
                 </div>
                 <div class="cf-field">
                     <label class="cf-label">Sort Order</label>
-                    <input wire:model="sort_order" type="number" class="cf-input" min="0">
+                    <input wire:model.number="sort_order" type="number" class="cf-input" min="0">
                 </div>
             </div>
 

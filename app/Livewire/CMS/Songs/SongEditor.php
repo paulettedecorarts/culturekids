@@ -2,28 +2,34 @@
 
 namespace App\Livewire\CMS\Songs;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
-use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\Song;
 use App\Models\SongLyricSegment;
 use App\Models\Tribe;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class SongEditor extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads;
     use UsesPortalContext;
     use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
+
+    protected function starPointsMax(): int
+    {
+        return 1000;
+    }
 
     public ?Song $song = null;
 
@@ -69,7 +75,7 @@ class SongEditor extends Component
     public function mount(?int $id = null): void
     {
         // Log upload configuration for debugging
-        \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Upload Configuration', [
+        Log::channel('uploads')->info('SongEditor Upload Configuration', [
             'php_upload_max_filesize' => ini_get('upload_max_filesize'),
             'php_post_max_size' => ini_get('post_max_size'),
             'php_max_execution_time' => ini_get('max_execution_time'),
@@ -78,8 +84,8 @@ class SongEditor extends Component
             'expected_limits' => [
                 'audio_max' => '50MB (51200KB)',
                 'video_max' => '100MB (102400KB)',
-                'image_max' => '10MB (10240KB)'
-            ]
+                'image_max' => '10MB (10240KB)',
+            ],
         ]);
 
         if ($id !== null) {
@@ -116,20 +122,20 @@ class SongEditor extends Component
         ];
 
         // Log validation rules for debugging
-        \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Validation Rules', [
+        Log::channel('uploads')->info('SongEditor Validation Rules', [
             'audio_file_rules' => $rules['audio_file'],
             'video_file_rules' => $rules['video_file'],
             'cover_image_rules' => $rules['cover_image'],
             'max_sizes_kb' => [
                 'audio' => 51200,
                 'video' => 102400,
-                'image' => 10240
+                'image' => 10240,
             ],
             'max_sizes_mb' => [
                 'audio' => 50,
                 'video' => 100,
-                'image' => 10
-            ]
+                'image' => 10,
+            ],
         ]);
 
         return $rules;
@@ -201,7 +207,7 @@ class SongEditor extends Component
     {
         unset($this->lyric_segments[$index]);
         $this->lyric_segments = array_values($this->lyric_segments);
-        
+
         // Reorder indices
         foreach ($this->lyric_segments as $i => $segment) {
             $this->lyric_segments[$i]['order_index'] = $i;
@@ -213,51 +219,51 @@ class SongEditor extends Component
         try {
             // Log file upload attempts
             if ($this->audio_file) {
-                \Illuminate\Support\Facades\Log::channel('uploads')->info('Audio File Upload Attempt', [
+                Log::channel('uploads')->info('Audio File Upload Attempt', [
                     'original_name' => $this->audio_file->getClientOriginalName(),
                     'size_bytes' => $this->audio_file->getSize(),
                     'size_mb' => round($this->audio_file->getSize() / 1024 / 1024, 2),
                     'mime_type' => $this->audio_file->getMimeType(),
                     'extension' => $this->audio_file->getClientOriginalExtension(),
                     'is_valid' => $this->audio_file->isValid(),
-                    'max_allowed_mb' => 50
+                    'max_allowed_mb' => 50,
                 ]);
             }
 
             if ($this->video_file) {
-                \Illuminate\Support\Facades\Log::channel('uploads')->info('Video File Upload Attempt', [
+                Log::channel('uploads')->info('Video File Upload Attempt', [
                     'original_name' => $this->video_file->getClientOriginalName(),
                     'size_bytes' => $this->video_file->getSize(),
                     'size_mb' => round($this->video_file->getSize() / 1024 / 1024, 2),
                     'mime_type' => $this->video_file->getMimeType(),
                     'extension' => $this->video_file->getClientOriginalExtension(),
                     'is_valid' => $this->video_file->isValid(),
-                    'max_allowed_mb' => 100
+                    'max_allowed_mb' => 100,
                 ]);
             }
 
             if ($this->cover_image) {
-                \Illuminate\Support\Facades\Log::channel('uploads')->info('Cover Image Upload Attempt', [
+                Log::channel('uploads')->info('Cover Image Upload Attempt', [
                     'original_name' => $this->cover_image->getClientOriginalName(),
                     'size_bytes' => $this->cover_image->getSize(),
                     'size_mb' => round($this->cover_image->getSize() / 1024 / 1024, 2),
                     'mime_type' => $this->cover_image->getMimeType(),
                     'extension' => $this->cover_image->getClientOriginalExtension(),
                     'is_valid' => $this->cover_image->isValid(),
-                    'max_allowed_mb' => 10
+                    'max_allowed_mb' => 10,
                 ]);
             }
 
             $validated = $this->validate();
 
-            \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Validation Passed', [
+            Log::channel('uploads')->info('SongEditor Validation Passed', [
                 'validated_data_keys' => array_keys($validated),
                 'has_audio_file' => isset($validated['audio_file']),
                 'has_video_file' => isset($validated['video_file']),
-                'has_cover_image' => isset($validated['cover_image'])
+                'has_cover_image' => isset($validated['cover_image']),
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Illuminate\Support\Facades\Log::channel('uploads')->error('SongEditor Validation Failed', [
+        } catch (ValidationException $e) {
+            Log::channel('uploads')->error('SongEditor Validation Failed', [
                 'errors' => $e->errors(),
                 'file_info' => [
                     'audio_file_present' => $this->audio_file !== null,
@@ -267,16 +273,16 @@ class SongEditor extends Component
                 'php_limits' => [
                     'upload_max_filesize' => ini_get('upload_max_filesize'),
                     'post_max_size' => ini_get('post_max_size'),
-                    'max_file_uploads' => ini_get('max_file_uploads')
-                ]
+                    'max_file_uploads' => ini_get('max_file_uploads'),
+                ],
             ]);
             throw $e;
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::channel('uploads')->error('SongEditor Save Error', [
+            Log::channel('uploads')->error('SongEditor Save Error', [
                 'error_message' => $e->getMessage(),
                 'error_code' => $e->getCode(),
                 'file' => $e->getFile(),
-                'line' => $e->getLine()
+                'line' => $e->getLine(),
             ]);
             throw $e;
         }
@@ -302,7 +308,7 @@ class SongEditor extends Component
             ]);
 
             // Songs are universal content, not tied to specific organizations
-            if (!$song->exists) {
+            if (! $song->exists) {
                 $song->org_id = null;
             }
 
@@ -313,8 +319,8 @@ class SongEditor extends Component
             // Handle file uploads
             if ($this->audio_file) {
                 $audioPath = $this->audio_file->storeAs(
-                    'songs/' . $id,
-                    'audio.' . $this->audio_file->extension(),
+                    'songs/'.$id,
+                    'audio.'.$this->audio_file->extension(),
                     'public'
                 );
                 $song->audio_path = $audioPath;
@@ -322,8 +328,8 @@ class SongEditor extends Component
 
             if ($this->video_file) {
                 $videoPath = $this->video_file->storeAs(
-                    'songs/' . $id,
-                    'video.' . $this->video_file->extension(),
+                    'songs/'.$id,
+                    'video.'.$this->video_file->extension(),
                     'public'
                 );
                 $song->video_path = $videoPath;
@@ -331,8 +337,8 @@ class SongEditor extends Component
 
             if ($this->cover_image) {
                 $imagePath = $this->cover_image->storeAs(
-                    'songs/' . $id,
-                    'cover.' . $this->cover_image->extension(),
+                    'songs/'.$id,
+                    'cover.'.$this->cover_image->extension(),
                     'public'
                 );
                 $song->cover_image_path = $imagePath;
@@ -341,13 +347,13 @@ class SongEditor extends Component
             $song->save();
 
             // Save lyric segments if karaoke timing is enabled
-            if ($validated['has_karaoke_timing'] && !empty($this->lyric_segments)) {
+            if ($validated['has_karaoke_timing'] && ! empty($this->lyric_segments)) {
                 // Delete existing segments
                 SongLyricSegment::where('song_id', $id)->delete();
 
                 // Create new segments
                 foreach ($this->lyric_segments as $segmentData) {
-                    if (!empty($segmentData['segment_text'])) {
+                    if (! empty($segmentData['segment_text'])) {
                         SongLyricSegment::create([
                             'song_id' => $id,
                             'segment_text' => $segmentData['segment_text'],

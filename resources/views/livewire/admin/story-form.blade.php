@@ -31,7 +31,7 @@
                             </div>
                             <div class="story-form-field story-form-field-tribe">
                                 <label class="story-form-label">Tribe</label>
-                                <select wire:model="tribe_id" class="story-form-input story-form-select">
+                                <select wire:model.number="tribe_id" class="story-form-input story-form-select">
                                     <option value="">Select tribe</option>
                                     @foreach($tribes as $tribe)
                                         <option value="{{ $tribe->id }}">{{ $tribe->hero_emoji }} {{ $tribe->name }}</option>
@@ -50,27 +50,25 @@
                         <div class="story-form-row story-form-row-meta">
                             <div class="story-form-field">
                                 <label class="story-form-label">Min age</label>
-                                <select wire:model="age_min" class="story-form-input story-form-select">
-                                    <option value="2">2 years</option>
-                                    <option value="3">3 years</option>
-                                    <option value="4">4 years</option>
-                                    <option value="5">5 years</option>
+                                <select wire:model.number="age_min" class="story-form-input story-form-select">
+                                    @foreach (\App\Livewire\Admin\StoryForm::AGE_MIN_OPTIONS as $age)
+                                        <option value="{{ $age }}">{{ $age }} years</option>
+                                    @endforeach
                                 </select>
                                 @error('age_min') <div class="story-form-error">{{ $message }}</div> @enderror
                             </div>
                             <div class="story-form-field">
                                 <label class="story-form-label">Max age</label>
-                                <select wire:model="age_max" class="story-form-input story-form-select">
-                                    <option value="3">3 years</option>
-                                    <option value="4">4 years</option>
-                                    <option value="5">5 years</option>
-                                    <option value="6">6 years</option>
+                                <select wire:model.number="age_max" class="story-form-input story-form-select">
+                                    @foreach (\App\Livewire\Admin\StoryForm::AGE_MAX_OPTIONS as $age)
+                                        <option value="{{ $age }}">{{ $age }} years</option>
+                                    @endforeach
                                 </select>
                                 @error('age_max') <div class="story-form-error">{{ $message }}</div> @enderror
                             </div>
                             <div class="story-form-field">
                                 <label class="story-form-label">Star points</label>
-                                <input wire:model="star_points" type="number" min="1" max="100" class="story-form-input">
+                                <input wire:model.number="star_points" type="number" min="1" max="100" class="story-form-input">
                                 @error('star_points') <div class="story-form-error">{{ $message }}</div> @enderror
                             </div>
                             <div class="story-form-field">

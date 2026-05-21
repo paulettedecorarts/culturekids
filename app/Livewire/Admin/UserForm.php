@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Jobs\SendPasswordResetEmail;
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Models\AuditLog;
 use App\Models\Organisation;
 use App\Models\User;
@@ -15,6 +16,8 @@ use Spatie\Permission\Models\Role;
 #[Layout('layouts.admin')]
 class UserForm extends Component
 {
+    use CoercesNumericFormFields;
+
     public $user; // Existing model for editing
 
     public $editing = false;
@@ -59,6 +62,7 @@ class UserForm extends Component
 
     public function save()
     {
+        $this->normalizeNumericFormFields();
         $this->validate();
 
         $data = [
@@ -79,12 +83,13 @@ class UserForm extends Component
                 ]);
 
                 session()->flash('message', 'Account updated successfully.');
+
                 return redirect()->route('admin.users');
             } else {
                 // Create new user with temporary password
                 $data['password'] = Hash::make(uniqid());
                 $data['email_verified_at'] = now();
-                
+
                 $newUser = User::create($data);
                 $newUser->assignRole($this->selectedRole);
 
@@ -96,13 +101,13 @@ class UserForm extends Component
 
                 // Queue password reset email (non-blocking)
                 SendPasswordResetEmail::dispatch($this->email);
-                
-                session()->flash('message', 'Account created successfully. Password reset email will be sent to ' . $this->email);
-                
+
+                session()->flash('message', 'Account created successfully. Password reset email will be sent to '.$this->email);
+
                 // Clear form
                 $this->reset(['name', 'email', 'organisation_id', 'selectedRole']);
                 $this->resetValidation();
-                
+
                 return redirect()->route('admin.users');
             }
         } catch (\Throwable $e) {

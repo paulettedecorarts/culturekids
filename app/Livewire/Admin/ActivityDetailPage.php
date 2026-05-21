@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
@@ -20,6 +21,7 @@ use Livewire\WithFileUploads;
 
 class ActivityDetailPage extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads;
     use UsesPortalContext;
     use ValidatesOnlyChangedOnEdit;

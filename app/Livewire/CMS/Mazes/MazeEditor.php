@@ -2,6 +2,7 @@
 
 namespace App\Livewire\CMS\Mazes;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
@@ -15,53 +16,75 @@ use Livewire\WithFileUploads;
 
 class MazeEditor extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Maze $maze = null;
+
     public bool $isEdit = false;
 
     // Basic fields
-    public $tribe_id         = '';
-    public $title            = '';
-    public $description      = '';
-    public $maze_type        = 'standard';
+    public $tribe_id = '';
+
+    public $title = '';
+
+    public $description = '';
+
+    public $maze_type = 'standard';
+
     public $difficulty_level = 'easy';
-    public $age_min          = 3;
-    public $age_max          = 12;
-    public $star_points      = 10;
-    public $status           = 'draft';
-    public $cultural_note    = '';
-    public $hero_character   = '';
+
+    public $age_min = 3;
+
+    public $age_max = 12;
+
+    public $star_points = 10;
+
+    public $status = 'draft';
+
+    public $cultural_note = '';
+
+    public $hero_character = '';
 
     // Grid settings
     public int $grid_rows = 10;
+
     public int $grid_cols = 10;
-    public array $grid    = [];
+
+    public array $grid = [];
 
     // Positions
     public array $start_position = ['row' => 0, 'col' => 0];
-    public array $end_position   = ['row' => 9, 'col' => 9];
+
+    public array $end_position = ['row' => 9, 'col' => 9];
 
     // Collectibles
     public array $collectibles = [];
+
     public string $collectibleEmoji = '💎';
+
     public string $collectibleLabel = '';
+
     public bool $collectibleRequired = true;
+
     public int $collectibleRow = 0;
+
     public int $collectibleCol = 0;
 
     // Type-specific
     public $time_limit_seconds = '';
-    public $visibility_radius  = 3;
+
+    public $visibility_radius = 3;
 
     // File uploads
-    public $cover_image_file      = null;
+    public $cover_image_file = null;
+
     public $background_image_file = null;
 
     public function mount(?int $id = null): void
     {
         if ($id) {
-            $this->maze   = Maze::findOrFail($id);
+            $this->maze = Maze::findOrFail($id);
             $this->isEdit = true;
             $this->loadMazeData();
         } else {
@@ -73,25 +96,25 @@ class MazeEditor extends Component
     protected function loadMazeData(): void
     {
         $m = $this->maze;
-        $this->tribe_id          = $m->tribe_id;
-        $this->title             = $m->title;
-        $this->description       = $m->description;
-        $this->maze_type         = $m->maze_type;
-        $this->difficulty_level  = $m->difficulty_level;
-        $this->age_min           = $m->age_min;
-        $this->age_max           = $m->age_max;
-        $this->star_points       = $m->star_points;
-        $this->status            = $m->status;
-        $this->cultural_note     = $m->cultural_note;
-        $this->hero_character    = $m->hero_character;
-        $this->grid_rows         = $m->grid_rows;
-        $this->grid_cols         = $m->grid_cols;
-        $this->grid              = $m->grid ?? [];
-        $this->start_position    = $m->start_position ?? ['row' => 0, 'col' => 0];
-        $this->end_position      = $m->end_position ?? ['row' => $m->grid_rows - 1, 'col' => $m->grid_cols - 1];
-        $this->collectibles      = $m->collectibles ?? [];
+        $this->tribe_id = $m->tribe_id;
+        $this->title = $m->title;
+        $this->description = $m->description;
+        $this->maze_type = $m->maze_type;
+        $this->difficulty_level = $m->difficulty_level;
+        $this->age_min = $m->age_min;
+        $this->age_max = $m->age_max;
+        $this->star_points = $m->star_points;
+        $this->status = $m->status;
+        $this->cultural_note = $m->cultural_note;
+        $this->hero_character = $m->hero_character;
+        $this->grid_rows = $m->grid_rows;
+        $this->grid_cols = $m->grid_cols;
+        $this->grid = $m->grid ?? [];
+        $this->start_position = $m->start_position ?? ['row' => 0, 'col' => 0];
+        $this->end_position = $m->end_position ?? ['row' => $m->grid_rows - 1, 'col' => $m->grid_cols - 1];
+        $this->collectibles = $m->collectibles ?? [];
         $this->time_limit_seconds = $m->time_limit_seconds;
-        $this->visibility_radius  = $m->visibility_radius ?? 3;
+        $this->visibility_radius = $m->visibility_radius ?? 3;
 
         if (empty($this->grid)) {
             $this->initGrid();
@@ -109,7 +132,7 @@ class MazeEditor extends Component
             }
         }
         $this->start_position = ['row' => 0, 'col' => 1];
-        $this->end_position   = ['row' => $this->grid_rows - 1, 'col' => $this->grid_cols - 2];
+        $this->end_position = ['row' => $this->grid_rows - 1, 'col' => $this->grid_cols - 2];
     }
 
     // Grid interaction mode
@@ -168,10 +191,10 @@ class MazeEditor extends Component
     public function addCollectible(): void
     {
         $this->collectibles[] = [
-            'row'      => $this->collectibleRow,
-            'col'      => $this->collectibleCol,
-            'emoji'    => $this->collectibleEmoji,
-            'label'    => $this->collectibleLabel,
+            'row' => $this->collectibleRow,
+            'col' => $this->collectibleCol,
+            'emoji' => $this->collectibleEmoji,
+            'label' => $this->collectibleLabel,
             'required' => $this->collectibleRequired,
         ];
         $this->collectibleLabel = '';
@@ -192,18 +215,18 @@ class MazeEditor extends Component
     protected function rules(): array
     {
         return [
-            'tribe_id'         => ['required', 'exists:tribes,id'],
-            'title'            => ['required', 'string', 'max:255'],
-            'description'      => ['nullable', 'string', 'max:1000'],
-            'maze_type'        => ['required', 'in:standard,timed,collect_items,visibility,reverse,circular'],
+            'tribe_id' => ['required', 'exists:tribes,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'maze_type' => ['required', 'in:standard,timed,collect_items,visibility,reverse,circular'],
             'difficulty_level' => ['required', 'in:easy,medium,hard,expert,master'],
-            'age_min'          => ['required', 'integer', 'min:1', 'max:18'],
-            'age_max'          => ['required', 'integer', 'min:1', 'max:18', 'gte:age_min'],
-            'star_points'      => ['required', 'integer', 'min:1', 'max:100'],
-            'status'           => ['required', 'in:draft,published,archived'],
-            'grid_rows'        => ['required', 'integer', 'min:5', 'max:20'],
-            'grid_cols'        => ['required', 'integer', 'min:5', 'max:20'],
-            'cover_image_file'      => ['nullable', 'sometimes', 'image', 'max:5120'],
+            'age_min' => ['required', 'integer', 'min:1', 'max:18'],
+            'age_max' => ['required', 'integer', 'min:1', 'max:18', 'gte:age_min'],
+            'star_points' => ['required', 'integer', 'min:1', 'max:100'],
+            'status' => ['required', 'in:draft,published,archived'],
+            'grid_rows' => ['required', 'integer', 'min:5', 'max:20'],
+            'grid_cols' => ['required', 'integer', 'min:5', 'max:20'],
+            'cover_image_file' => ['nullable', 'sometimes', 'image', 'max:5120'],
             'background_image_file' => ['nullable', 'sometimes', 'image', 'max:10240'],
         ];
     }
@@ -213,50 +236,51 @@ class MazeEditor extends Component
         $this->validate();
 
         Log::info('MazeEditor save', [
-            'type'  => $this->maze_type,
-            'grid'  => $this->grid_rows . 'x' . $this->grid_cols,
+            'type' => $this->maze_type,
+            'grid' => $this->grid_rows.'x'.$this->grid_cols,
         ]);
 
         DB::transaction(function (): void {
             $maze = $this->maze ?? new Maze;
 
             $maze->fill([
-                'tribe_id'          => $this->tribe_id,
-                'title'             => $this->title,
-                'description'       => $this->description,
-                'maze_type'         => $this->maze_type,
-                'difficulty_level'  => $this->difficulty_level,
-                'age_min'           => $this->age_min,
-                'age_max'           => $this->age_max,
-                'star_points'       => $this->star_points,
-                'status'            => $this->status,
-                'cultural_note'     => $this->cultural_note,
-                'hero_character'    => $this->hero_character ?: null,
-                'grid'              => $this->grid,
-                'grid_rows'         => $this->grid_rows,
-                'grid_cols'         => $this->grid_cols,
-                'start_position'    => $this->start_position,
-                'end_position'      => $this->end_position,
-                'collectibles'      => $this->collectibles ?: null,
+                'tribe_id' => $this->tribe_id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'maze_type' => $this->maze_type,
+                'difficulty_level' => $this->difficulty_level,
+                'age_min' => $this->age_min,
+                'age_max' => $this->age_max,
+                'star_points' => $this->star_points,
+                'status' => $this->status,
+                'cultural_note' => $this->cultural_note,
+                'hero_character' => $this->hero_character ?: null,
+                'grid' => $this->grid,
+                'grid_rows' => $this->grid_rows,
+                'grid_cols' => $this->grid_cols,
+                'start_position' => $this->start_position,
+                'end_position' => $this->end_position,
+                'collectibles' => $this->collectibles ?: null,
                 'time_limit_seconds' => $this->time_limit_seconds ?: null,
-                'visibility_radius'  => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
+                'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
             ]);
 
             $maze->save();
 
             foreach ([
-                'cover_image_file'      => ['games/maze-covers', 'cover_image_path'],
+                'cover_image_file' => ['games/maze-covers', 'cover_image_path'],
                 'background_image_file' => ['games/maze-backgrounds', 'background_image_path'],
             ] as $field => [$dir, $column]) {
                 if ($this->$field) {
                     try {
                         $path = $this->$field->storeAs(
                             $dir,
-                            'maze_' . $maze->id . '_' . time() . '.' . $this->$field->getClientOriginalExtension(),
+                            'maze_'.$maze->id.'_'.time().'.'.$this->$field->getClientOriginalExtension(),
                             'public'
                         );
                         $maze->$column = $path;
-                    } catch (\Exception $e) {}
+                    } catch (\Exception $e) {
+                    }
                 }
             }
 
@@ -272,7 +296,7 @@ class MazeEditor extends Component
     {
         return view('livewire.cms.mazes.maze-editor', [
             'routePrefix' => $this->portalRoutePrefix(),
-            'mazeTypes'   => Maze::TYPES,
+            'mazeTypes' => Maze::TYPES,
             'difficulties' => Maze::DIFFICULTIES,
         ])->layout($this->portalLayout());
     }

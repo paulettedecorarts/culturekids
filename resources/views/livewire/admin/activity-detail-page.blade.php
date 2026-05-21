@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <label class="act-label">Tribe</label>
-                    <select wire:model="tribe_id" class="act-input">
+                    <select wire:model.number="tribe_id" class="act-input">
                         <option value="">Select tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -75,7 +75,7 @@
                 </div>
                 <div>
                     <label class="act-label">Star points</label>
-                    <input wire:model="star_points" type="number" min="0" class="act-input">
+                    <input wire:model.number="star_points" type="number" min="0" class="act-input">
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;margin-top:20px">
                     <input wire:model="is_published" id="is_published" type="checkbox">
@@ -126,7 +126,7 @@
                         </div>
                         <div>
                             <label class="act-label">Number of pieces</label>
-                            <input wire:model="puzzle_pieces" type="number" min="0" class="act-input" placeholder="12">
+                            <input wire:model.number="puzzle_pieces" type="number" min="0" class="act-input" placeholder="12">
                         </div>
                     </div>
                 @elseif($type === 'flashcard')

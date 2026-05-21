@@ -142,7 +142,7 @@
                 </div>
                 <div class="le-field">
                     <label class="le-label">Tribe <span style="color:#ff8c8c">*</span></label>
-                    <select wire:model="tribe_id" class="le-input" required>
+                    <select wire:model.number="tribe_id" class="le-input" required>
                         <option value="">Select Tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -191,17 +191,17 @@
                 </div>
                 <div class="le-field">
                     <label class="le-label">Min Age</label>
-                    <input wire:model="age_min" type="number" class="le-input" min="1" max="18">
+                    <input wire:model.number="age_min" type="number" class="le-input" min="1" max="18">
                     @error('age_min') <div class="le-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="le-field">
                     <label class="le-label">Max Age</label>
-                    <input wire:model="age_max" type="number" class="le-input" min="1" max="18">
+                    <input wire:model.number="age_max" type="number" class="le-input" min="1" max="18">
                     @error('age_max') <div class="le-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="le-field">
                     <label class="le-label">Star Points</label>
-                    <input wire:model="star_points" type="number" class="le-input" min="1" max="100">
+                    <input wire:model.number="star_points" type="number" class="le-input" min="1" max="100">
                 </div>
             </div>
 

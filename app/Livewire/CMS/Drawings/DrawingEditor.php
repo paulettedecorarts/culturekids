@@ -2,57 +2,80 @@
 
 namespace App\Livewire\CMS\Drawings;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Drawing;
 use App\Models\Tribe;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class DrawingEditor extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Drawing $drawing = null;
+
     public bool $isEdit = false;
 
     // Form fields
     public $tribe_id = '';
+
     public $title = '';
+
     public $description = '';
+
     public $drawing_type = 'coloring';
+
     public $difficulty_level = 'easy';
+
     public $age_min = 3;
+
     public $age_max = 12;
+
     public $star_points = 10;
+
     public $status = 'draft';
 
     // File uploads
     public $template_file = null;
+
     public $preview_file = null;
 
     // Configuration
     public $materials = [];
+
     public $color_palette = [];
+
     public $tools_config = [];
 
     // UI state
     public $materialInput = '';
+
     public $colorInput = '#FF0000';
 
     // Type-specific metadata fields (flat — Livewire doesn't support nested dot-notation wire:model)
-    public string $meta_scene_description   = '';
-    public string $meta_colour_hint         = '';
-    public string $meta_hero_name           = '';
-    public string $meta_hero_title          = '';
-    public string $meta_hero_instructions   = '';
-    public string $meta_design_prompt       = '';
-    public string $meta_design_stamps       = '';
-    public string $meta_free_draw_prompt    = '';
+    public string $meta_scene_description = '';
+
+    public string $meta_colour_hint = '';
+
+    public string $meta_hero_name = '';
+
+    public string $meta_hero_title = '';
+
+    public string $meta_hero_instructions = '';
+
+    public string $meta_design_prompt = '';
+
+    public string $meta_design_stamps = '';
+
+    public string $meta_free_draw_prompt = '';
+
     public string $meta_free_draw_checklist = '';
 
     // Type-specific metadata
@@ -86,14 +109,14 @@ class DrawingEditor extends Component
 
         // Load type-specific metadata
         $meta = $this->drawing->metadata ?? [];
-        $this->meta_scene_description   = $meta['coloring']['scene_description'] ?? '';
-        $this->meta_colour_hint         = $meta['coloring']['colour_hint'] ?? '';
-        $this->meta_hero_name           = $meta['hero']['name'] ?? '';
-        $this->meta_hero_title          = $meta['hero']['title'] ?? '';
-        $this->meta_hero_instructions   = $meta['hero']['instructions'] ?? '';
-        $this->meta_design_prompt       = $meta['design']['prompt'] ?? '';
-        $this->meta_design_stamps       = $meta['design']['stamps'] ?? '';
-        $this->meta_free_draw_prompt    = $meta['free_draw']['prompt'] ?? '';
+        $this->meta_scene_description = $meta['coloring']['scene_description'] ?? '';
+        $this->meta_colour_hint = $meta['coloring']['colour_hint'] ?? '';
+        $this->meta_hero_name = $meta['hero']['name'] ?? '';
+        $this->meta_hero_title = $meta['hero']['title'] ?? '';
+        $this->meta_hero_instructions = $meta['hero']['instructions'] ?? '';
+        $this->meta_design_prompt = $meta['design']['prompt'] ?? '';
+        $this->meta_design_stamps = $meta['design']['stamps'] ?? '';
+        $this->meta_free_draw_prompt = $meta['free_draw']['prompt'] ?? '';
         $this->meta_free_draw_checklist = $meta['free_draw']['checklist'] ?? '';
         $this->metadata = $this->drawing->metadata ?? [];
     }
@@ -104,7 +127,7 @@ class DrawingEditor extends Component
         $this->materials = ['Crayons', 'Paper'];
         $this->color_palette = [
             '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF',
-            '#FFA500', '#800080', '#FFC0CB', '#A52A2A', '#808080', '#000000'
+            '#FFA500', '#800080', '#FFC0CB', '#A52A2A', '#808080', '#000000',
         ];
         $this->tools_config = [
             'brushes' => [
@@ -125,7 +148,7 @@ class DrawingEditor extends Component
 
     public function addMaterial(): void
     {
-        if (trim($this->materialInput) !== '' && !in_array(trim($this->materialInput), $this->materials)) {
+        if (trim($this->materialInput) !== '' && ! in_array(trim($this->materialInput), $this->materials)) {
             $this->materials[] = trim($this->materialInput);
             $this->materialInput = '';
         }
@@ -139,7 +162,7 @@ class DrawingEditor extends Component
 
     public function addColor(): void
     {
-        if (!in_array($this->colorInput, $this->color_palette)) {
+        if (! in_array($this->colorInput, $this->color_palette)) {
             $this->color_palette[] = $this->colorInput;
         }
     }
@@ -155,7 +178,7 @@ class DrawingEditor extends Component
         $this->color_palette = [
             '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF',
             '#FFA500', '#800080', '#FFC0CB', '#A52A2A', '#808080', '#000000',
-            '#FFFFFF', '#8B4513', '#90EE90', '#FFB6C1', '#20B2AA', '#DDA0DD'
+            '#FFFFFF', '#8B4513', '#90EE90', '#FFB6C1', '#20B2AA', '#DDA0DD',
         ];
     }
 
@@ -214,7 +237,7 @@ class DrawingEditor extends Component
             if ($this->template_file) {
                 $templatePath = $this->template_file->storeAs(
                     'drawings/templates',
-                    'template_' . $drawing->id . '_' . time() . '.' . $this->template_file->getClientOriginalExtension(),
+                    'template_'.$drawing->id.'_'.time().'.'.$this->template_file->getClientOriginalExtension(),
                     'public'
                 );
                 $drawing->template_path = $templatePath;
@@ -224,7 +247,7 @@ class DrawingEditor extends Component
             if ($this->preview_file) {
                 $previewPath = $this->preview_file->storeAs(
                     'drawings/previews',
-                    'preview_' . $drawing->id . '_' . time() . '.' . $this->preview_file->getClientOriginalExtension(),
+                    'preview_'.$drawing->id.'_'.time().'.'.$this->preview_file->getClientOriginalExtension(),
                     'public'
                 );
                 $drawing->preview_path = $previewPath;

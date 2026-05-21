@@ -43,7 +43,7 @@
                 </div>
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Tribe</label>
-                    <select wire:model="tribe_id" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
+                    <select wire:model.number="tribe_id" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                         <option value="">Select tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -103,8 +103,8 @@
                 <div>
                     <label style="font-size:11px;color:var(--cms-text-muted)">Age min / max</label>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                        <input wire:model="age_min" type="number" min="1" max="18" placeholder="min" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
-                        <input wire:model="age_max" type="number" min="1" max="18" placeholder="max" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
+                        <input wire:model.number="age_min" type="number" min="1" max="18" placeholder="min" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
+                        <input wire:model.number="age_max" type="number" min="1" max="18" placeholder="max" style="padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                     </div>
                     @error('age_max') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
                 </div>

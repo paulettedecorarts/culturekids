@@ -2,7 +2,7 @@
     @if(! $isOrgAdminOnly)
         <div class="themes-mgmt-org-bar">
             <span class="themes-mgmt-org-label">Configuring For:</span>
-            <select wire:model.live="selectedOrgId" class="themes-mgmt-org-select">
+            <select wire:model.live.number="selectedOrgId" class="themes-mgmt-org-select">
                 <option value="">All Organizations</option>
                 <option value="global">Global (Platform-wide)</option>
                 @foreach($organisations as $org)
@@ -251,7 +251,7 @@
                                             <input type="text" value="{{ $organisations->first()?->name ?? 'My Organization' }}" readonly class="theme-mgr-input theme-mgr-input--readonly">
                                             <p class="theme-mgr-hint">Themes are locked to your organization.</p>
                                         @else
-                                            <select wire:model="org_id" class="theme-mgr-input theme-mgr-select">
+                                            <select wire:model.number="org_id" class="theme-mgr-input theme-mgr-select">
                                                 <option value="">Global (Platform-wide)</option>
                                                 @foreach($organisations as $org)
                                                     <option value="{{ $org->id }}">{{ $org->name }}</option>

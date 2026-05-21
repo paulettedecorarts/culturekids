@@ -25,7 +25,7 @@
 
                 <div>
                     <label class="song-label">Tribe <span style="color:#ff8c8c">*</span></label>
-                    <select wire:model="tribe_id" class="song-input">
+                    <select wire:model.number="tribe_id" class="song-input">
                         <option value="">Select a tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -83,19 +83,19 @@
 
                 <div>
                     <label class="song-label">Min Age <span style="color:#ff8c8c">*</span></label>
-                    <input wire:model="age_min" type="number" min="1" max="18" class="song-input" placeholder="3">
+                    <input wire:model.number="age_min" type="number" min="1" max="18" class="song-input" placeholder="3">
                     @error('age_min') <div class="song-error">{{ $message }}</div> @enderror
                 </div>
 
                 <div>
                     <label class="song-label">Max Age <span style="color:#ff8c8c">*</span></label>
-                    <input wire:model="age_max" type="number" min="1" max="18" class="song-input" placeholder="12">
+                    <input wire:model.number="age_max" type="number" min="1" max="18" class="song-input" placeholder="12">
                     @error('age_max') <div class="song-error">{{ $message }}</div> @enderror
                 </div>
 
                 <div>
                     <label class="song-label">Star Points <span style="color:#ff8c8c">*</span></label>
-                    <input wire:model="star_points" type="number" min="0" max="1000" class="song-input" placeholder="10">
+                    <input wire:model.number="star_points" type="number" min="0" max="1000" class="song-input" placeholder="10">
                     @error('star_points') <div class="song-error">{{ $message }}</div> @enderror
                 </div>
 

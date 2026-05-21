@@ -90,7 +90,7 @@
                 </div>
                 <div class="ge-field">
                     <label class="ge-label">Tribe <span style="color:#ff8c8c">*</span></label>
-                    <select wire:model="tribe_id" class="ge-input" required>
+                    <select wire:model.number="tribe_id" class="ge-input" required>
                         <option value="">Select Tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -119,17 +119,17 @@
             <div class="ge-grid-5">
                 <div class="ge-field">
                     <label class="ge-label">Min Age</label>
-                    <input wire:model="age_min" type="number" class="ge-input" min="1" max="18">
+                    <input wire:model.number="age_min" type="number" class="ge-input" min="1" max="18">
                     @error('age_min') <div class="ge-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="ge-field">
                     <label class="ge-label">Max Age</label>
-                    <input wire:model="age_max" type="number" class="ge-input" min="1" max="18">
+                    <input wire:model.number="age_max" type="number" class="ge-input" min="1" max="18">
                     @error('age_max') <div class="ge-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="ge-field">
                     <label class="ge-label">Star Points</label>
-                    <input wire:model="star_points" type="number" class="ge-input" min="1" max="100">
+                    <input wire:model.number="star_points" type="number" class="ge-input" min="1" max="100">
                 </div>
                 <div class="ge-field">
                     <label class="ge-label">Lives</label>

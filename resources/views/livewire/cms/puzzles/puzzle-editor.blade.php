@@ -49,7 +49,7 @@
                 </div>
                 <div>
                     <label class="pz-label">Star points</label>
-                    <input wire:model="star_points" type="number" min="0" class="pz-input">
+                    <input wire:model.number="star_points" type="number" min="0" class="pz-input">
                     @error('star_points') <div class="pz-error">{{ $message }}</div> @enderror
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;margin-top:8px">

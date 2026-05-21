@@ -11,6 +11,10 @@ trait ValidatesOnlyChangedOnEdit
 {
     public function validate($rules = null, $messages = [], $attributes = [])
     {
+        if (method_exists($this, 'normalizeNumericFormFields')) {
+            $this->normalizeNumericFormFields();
+        }
+
         if ($rules === null) {
             $rules = $this->validationRules();
         }

@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Song;
 use App\Models\Tribe;
-use App\Services\AudioUploadService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -15,10 +15,35 @@ use Livewire\WithFileUploads;
 
 class SongDetailPage extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads;
     use UsesPortalContext;
     use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
+
+    protected function starPointsMax(): int
+    {
+        return 1000;
+    }
+
+    protected function normalizeNumericFormFields(): void
+    {
+        $this->tribe_id = self::coercePositiveInt($this->tribe_id);
+
+        $this->age_min = ($this->age_min === null || $this->age_min === '')
+            ? null
+            : $this->coerceChildAgeProperty($this->age_min, 3);
+
+        $this->age_max = ($this->age_max === null || $this->age_max === '')
+            ? null
+            : $this->coerceChildAgeProperty($this->age_max, 12);
+
+        $this->star_points = self::coerceIntInRange($this->star_points, 10, 0, $this->starPointsMax());
+
+        if ($this->age_min !== null && $this->age_max !== null && $this->age_max < $this->age_min) {
+            $this->age_max = min(self::CHILD_AGE_MAX, max((int) $this->age_min, (int) $this->age_max));
+        }
+    }
 
     public ?Song $song = null;
 
@@ -141,7 +166,7 @@ class SongDetailPage extends Component
             if ($song->video_path) {
                 Storage::disk('public')->delete($song->video_path);
             }
-            
+
             // Store new file in audio_path (works for both audio and video)
             $song->audio_path = $this->media_file->store('songs/media', 'public');
             $song->video_path = null; // Clear video_path since we're using audio_path for all media

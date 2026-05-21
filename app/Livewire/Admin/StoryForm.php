@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Jobs\ProcessComicStoryMedia;
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
@@ -13,32 +14,40 @@ use App\Models\ComicProcessingStatus;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class StoryForm extends Component
 {
+    use CoercesNumericFormFields;
     use LogsFileUploads;
     use UsesPortalContext;
     use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
+    /** @var list<int> */
+    public const AGE_MIN_OPTIONS = [2, 3, 4, 5];
+
+    /** @var list<int> */
+    public const AGE_MAX_OPTIONS = [3, 4, 5, 6];
+
     public bool $editing = false;
 
     public ?int $comicId = null;
 
-    public $tribe_id;
+    public ?int $tribe_id = null;
 
-    public $title = '';
+    public string $title = '';
 
-    public $description = '';
+    public string $description = '';
 
-    public $age_min = 3;
+    public int $age_min = 3;
 
-    public $age_max = 4;
+    public int $age_max = 4;
 
-    public $star_points = 10;
+    public int $star_points = 10;
 
     public $status = 'draft';
 
@@ -58,9 +67,9 @@ class StoryForm extends Component
             'tribe_id' => 'required|exists:tribes,id',
             'title' => 'required|min:3|max:255',
             'description' => 'nullable|max:1000',
-            'age_min' => 'required|integer|min:2|max:5',
-            'age_max' => 'required|integer|min:3|max:6',
-            'star_points' => 'required|integer|min:1|max:100',
+            'age_min' => ['required', 'integer', Rule::in(self::AGE_MIN_OPTIONS)],
+            'age_max' => ['required', 'integer', Rule::in(self::AGE_MAX_OPTIONS), 'gte:age_min'],
+            'star_points' => ['required', 'integer', 'min:1', 'max:100'],
             'status' => 'required|in:draft,review,published',
             'cover_image' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
             'panel_files.*' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
@@ -83,9 +92,9 @@ class StoryForm extends Component
         $this->tribe_id = $comic->tribe_id;
         $this->title = $comic->title;
         $this->description = $comic->description ?? '';
-        $this->age_min = $comic->age_min;
-        $this->age_max = $comic->age_max;
-        $this->star_points = $comic->star_points;
+        $this->age_min = self::coerceAgeFromAllowed($comic->age_min, self::AGE_MIN_OPTIONS, 3);
+        $this->age_max = self::coerceAgeFromAllowed($comic->age_max, self::AGE_MAX_OPTIONS, 4);
+        $this->star_points = (int) $comic->star_points;
         $this->status = $comic->status;
 
         $this->existing_cover = $comic->cover_image_path;
@@ -98,6 +107,34 @@ class StoryForm extends Component
         })->toArray();
     }
 
+    public function updatedAgeMin(mixed $value): void
+    {
+        $this->age_min = self::coerceAgeFromAllowed($value, self::AGE_MIN_OPTIONS, 3);
+        if ($this->age_max < $this->age_min) {
+            $this->age_max = self::coerceAgeFromAllowed(max($this->age_min, self::AGE_MAX_OPTIONS[0]), self::AGE_MAX_OPTIONS, 4);
+        }
+    }
+
+    public function updatedAgeMax(mixed $value): void
+    {
+        $this->age_max = self::coerceAgeFromAllowed($value, self::AGE_MAX_OPTIONS, 4);
+    }
+
+    protected function normalizeNumericFormFields(): void
+    {
+        $this->tribe_id = self::coercePositiveInt($this->tribe_id);
+        $this->age_min = self::coerceAgeFromAllowed($this->age_min, self::AGE_MIN_OPTIONS, 3);
+        $this->age_max = self::coerceAgeFromAllowed($this->age_max, self::AGE_MAX_OPTIONS, 4);
+        if ($this->age_max < $this->age_min) {
+            $this->age_max = self::coerceAgeFromAllowed(
+                max($this->age_min, self::AGE_MAX_OPTIONS[0]),
+                self::AGE_MAX_OPTIONS,
+                4
+            );
+        }
+        $this->star_points = self::coerceIntInRange($this->star_points, 10, 1, 100);
+    }
+
     public function save()
     {
         $this->isSaving = true;
@@ -107,13 +144,6 @@ class StoryForm extends Component
         } catch (ValidationException $e) {
             $this->isSaving = false;
             throw $e;
-        }
-
-        if ((int) $this->age_min > (int) $this->age_max) {
-            $this->addError('age_max', 'Maximum age must be greater than or equal to minimum age.');
-            $this->isSaving = false;
-
-            return;
         }
 
         $savedComicId = null;

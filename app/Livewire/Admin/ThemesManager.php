@@ -2,43 +2,62 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Models\AuditLog;
+use App\Models\Organisation;
+use App\Models\Theme;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Theme;
-use App\Models\AuditLog;
-use Illuminate\Support\Str;
 
 class ThemesManager extends Component
 {
-    use WithPagination;
+    use CoercesNumericFormFields;
     use UsesPortalContext;
+    use WithPagination;
 
     public $showModal = false;
+
     public $editing = false;
+
     public $showPreview = false;
-    
+
     // Organization filter
     public $selectedOrgId = null;
-    
+
     // Form fields
     public $selectedId;
+
     public $org_id;
+
     public $name;
+
     public $description;
+
     public $slug;
-    
+
     // Colors
     public $primary = '#C44B2B';
+
     public $secondary = '#E8872A';
+
     public $accent = '#D4A017';
+
     public $success = '#4A7C59';
+
     public $warning = '#F2A84E';
+
     public $danger = '#9A3218';
+
     public $background = '#FAF6F0';
+
     public $surface = '#FFFFFF';
+
     public $text_primary = '#1A1208';
+
     public $text_secondary = '#6B5544';
+
     public $text_muted = '#9C8875';
 
     protected $rules = [
@@ -63,7 +82,7 @@ class ThemesManager extends Component
 
     public function updatedName($value)
     {
-        if (!$this->editing) {
+        if (! $this->editing) {
             $this->slug = Str::slug($value, '_');
         }
     }
@@ -91,12 +110,12 @@ class ThemesManager extends Component
         $this->name = $theme->name;
         $this->slug = $theme->slug;
         $this->description = $theme->description;
-        
+
         // Load colors
         foreach ($theme->colors as $key => $value) {
             $this->$key = $value;
         }
-        
+
         $this->editing = true;
         $this->showModal = true;
     }
@@ -105,9 +124,10 @@ class ThemesManager extends Component
     {
         $rules = $this->rules;
         if ($this->editing) {
-            $rules['slug'] = 'required|alpha_dash|unique:themes,slug,' . $this->selectedId;
+            $rules['slug'] = 'required|alpha_dash|unique:themes,slug,'.$this->selectedId;
         }
 
+        $this->normalizeNumericFormFields();
         $this->validate($rules);
 
         $user = auth()->user();
@@ -146,19 +166,19 @@ class ThemesManager extends Component
             }
 
             $theme->update($data);
-            
+
             AuditLog::record('UPDATE', "themes/{$theme->id}", [
                 'theme_name' => $this->name,
             ]);
-            
+
             session()->flash('message', 'Theme updated successfully.');
         } else {
             $theme = Theme::create($data);
-            
+
             AuditLog::record('CREATE', "themes/{$theme->id}", [
                 'theme_name' => $this->name,
             ]);
-            
+
             session()->flash('message', 'Theme created successfully.');
         }
 
@@ -180,18 +200,20 @@ class ThemesManager extends Component
 
         if ($isOrgAdminOnly && (int) $theme->org_id !== (int) $user->organisation_id) {
             session()->flash('error', 'You are not allowed to delete this theme.');
+
             return;
         }
-        
+
         if ($theme->is_default) {
             session()->flash('error', 'Cannot delete the default theme.');
+
             return;
         }
-        
+
         AuditLog::record('DELETE', "themes/{$theme->id}", [
             'theme_name' => $theme->name,
         ]);
-        
+
         $theme->delete();
         session()->flash('message', 'Theme removed successfully.');
     }
@@ -211,22 +233,22 @@ class ThemesManager extends Component
                 return;
             }
         }
-        
+
         // Remove default from themes in the same org (or global if org_id is null)
         Theme::where('org_id', $theme->org_id)
             ->where('is_default', true)
             ->update(['is_default' => false]);
-        
+
         // Set new default
         $theme->is_default = true;
         $theme->save();
-        
+
         AuditLog::record('UPDATE', "themes/{$theme->id}", [
             'action' => 'set_default',
             'theme_name' => $theme->name,
             'org_id' => $theme->org_id,
         ]);
-        
+
         $orgName = $theme->org_id ? $theme->organisation->name : 'Global';
         session()->flash('message', "'{$theme->name}' set as default theme for {$orgName}.");
     }
@@ -369,13 +391,13 @@ class ThemesManager extends Component
         $this->name = '';
         $this->slug = '';
         $this->description = '';
-        
+
         // Reset to defaults
         $defaults = Theme::defaultColors();
         foreach ($defaults as $key => $value) {
             $this->$key = $value;
         }
-        
+
         $this->resetErrorBag();
     }
 
@@ -426,8 +448,8 @@ class ThemesManager extends Component
 
         $presets = $this->getPresets();
         $organisations = $isOrgAdminOnly
-            ? \App\Models\Organisation::where('id', $orgId)->orderBy('name')->get()
-            : \App\Models\Organisation::orderBy('name')->get();
+            ? Organisation::where('id', $orgId)->orderBy('name')->get()
+            : Organisation::orderBy('name')->get();
 
         return view('livewire.admin.themes-manager', [
             'themes' => $themes,

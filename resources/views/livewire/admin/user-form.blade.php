@@ -46,7 +46,7 @@
 
                 <div class="user-form-field user-form-field--aside">
                     <label class="user-form-label">Host Organization</label>
-                    <select wire:model="organisation_id" class="user-form-input user-form-select">
+                    <select wire:model.number="organisation_id" class="user-form-input user-form-select">
                         <option value="">Global / Platform Level</option>
                         @foreach($organisations as $org)
                             <option value="{{ $org->id }}">{{ $org->name }}</option>

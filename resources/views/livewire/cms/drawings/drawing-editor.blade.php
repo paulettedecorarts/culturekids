@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Tribe</label>
-                    <select wire:model="tribe_id" class="form-select" required>
+                    <select wire:model.number="tribe_id" class="form-select" required>
                         <option value="">Select Tribe</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
@@ -73,19 +73,19 @@
             <div class="form-grid-small">
                 <div class="form-group">
                     <label class="form-label">Minimum Age</label>
-                    <input wire:model="age_min" type="number" class="form-input" min="1" max="18" required>
+                    <input wire:model.number="age_min" type="number" class="form-input" min="1" max="18" required>
                     @error('age_min') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Maximum Age</label>
-                    <input wire:model="age_max" type="number" class="form-input" min="1" max="18" required>
+                    <input wire:model.number="age_max" type="number" class="form-input" min="1" max="18" required>
                     @error('age_max') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Star Points</label>
-                    <input wire:model="star_points" type="number" class="form-input" min="1" max="100" required>
+                    <input wire:model.number="star_points" type="number" class="form-input" min="1" max="100" required>
                     @error('star_points') <div class="form-error">{{ $message }}</div> @enderror
                 </div>
 
