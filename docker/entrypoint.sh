@@ -4,11 +4,15 @@ set -e
 echo "[1/5] Running migrations..."
 php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }
 
-echo "[2/5] Seeding database..."
-php artisan db:seed --force && echo "      ✅ Seeding done." || { echo "      ❌ Seeding failed."; exit 1; }
+if [ "${RUN_DB_SEED:-false}" = "true" ]; then
+    echo "[2/5] Seeding database (RUN_DB_SEED=true)..."
+    php artisan db:seed --force && echo "      ✅ Seeding done." || { echo "      ❌ Seeding failed."; exit 1; }
+else
+    echo "[2/5] Skipping seed (set RUN_DB_SEED=true on first deploy only)."
+fi
 
 echo "[3/5] Linking storage..."
-php artisan storage:link && echo "      ✅ Storage linked." || echo "      ⚠️  Storage link skipped (already exists)."
+php artisan storage:link --force && echo "      ✅ Storage linked." || echo "      ⚠️  Storage link skipped."
 
 echo "[4/5] Clearing all caches..."
 php artisan config:clear && echo "      ✅ Config cleared."

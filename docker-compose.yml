@@ -3,9 +3,11 @@ services:
     build:
       context: .
       target: production
+    restart: unless-stopped
 
     environment:
       APP_ENV: production
+      APP_DEBUG: ${APP_DEBUG:-false}
       APP_KEY: ${APP_KEY}
       APP_URL: ${APP_URL}
       DB_CONNECTION: mysql
@@ -14,19 +16,22 @@ services:
       DB_DATABASE: ${DB_DATABASE:-paulette}
       DB_USERNAME: ${DB_USERNAME:-paulette}
       DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_CLIENT: predis
       REDIS_HOST: redis
       REDIS_PORT: 6379
       QUEUE_CONNECTION: database
       CACHE_STORE: redis
       SESSION_DRIVER: redis
-      MAIL_MAILER: smtp
-      MAIL_HOST: server72.web-hosting.com
-      MAIL_PORT: 465
-      MAIL_USERNAME: info@yilibapro.com
-      MAIL_PASSWORD: Mirinda@123
-      MAIL_ENCRYPTION: ssl
-      MAIL_FROM_ADDRESS: info@yilibapro.com
-      MAIL_FROM_NAME: "Paulette Culture Kids"
+      # Set RUN_DB_SEED=true only on first deploy (heritage import takes several minutes).
+      RUN_DB_SEED: ${RUN_DB_SEED:-false}
+      MAIL_MAILER: ${MAIL_MAILER:-smtp}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-tls}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-"Paulette Culture Kids"}
     ports:
       - "7000:80"
     depends_on:
@@ -39,6 +44,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    restart: unless-stopped
     command: --default-authentication-plugin=caching_sha2_password
     environment:
       MYSQL_DATABASE: ${DB_DATABASE:-paulette}
@@ -56,6 +62,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     volumes:
       - redis_data:/data
     healthcheck:
