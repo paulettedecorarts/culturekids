@@ -92,7 +92,7 @@ services:
       culturekids:
         aliases:
           - mysql
-    command: --default-authentication-plugin=caching_sha2_password
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: paulette
       MYSQL_USER: paulette
