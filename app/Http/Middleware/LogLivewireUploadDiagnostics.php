@@ -25,28 +25,51 @@ class LogLivewireUploadDiagnostics
             ];
         }
 
-        Log::channel('uploads')->info('livewire.upload.request', [
-            'content_length' => $request->server('CONTENT_LENGTH'),
-            'upload_max_filesize' => ini_get('upload_max_filesize'),
-            'post_max_size' => ini_get('post_max_size'),
-            'max_file_uploads' => ini_get('max_file_uploads'),
-            'files_meta' => $filesMeta,
-            'user_id' => auth()->id(),
-            'ip' => $request->ip(),
-        ]);
-
-        $response = $next($request);
-
-        if ($response->getStatusCode() >= 400) {
-            Log::channel('uploads')->error('livewire.upload.response.error', [
-                'status' => $response->getStatusCode(),
+        try {
+            Log::channel('uploads')->info('livewire.upload.request', [
                 'content_length' => $request->server('CONTENT_LENGTH'),
                 'upload_max_filesize' => ini_get('upload_max_filesize'),
                 'post_max_size' => ini_get('post_max_size'),
+                'max_file_uploads' => ini_get('max_file_uploads'),
                 'files_meta' => $filesMeta,
-                'response_content' => method_exists($response, 'getContent') ? $response->getContent() : null,
                 'user_id' => auth()->id(),
+                'ip' => $request->ip(),
             ]);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        try {
+            $response = $next($request);
+        } catch (\Throwable $e) {
+            try {
+                Log::channel('uploads')->error('livewire.upload.exception', [
+                    'message' => $e->getMessage(),
+                    'class' => $e::class,
+                    'files_meta' => $filesMeta,
+                    'user_id' => auth()->id(),
+                ]);
+            } catch (\Throwable) {
+                // ignore logging failures
+            }
+
+            throw $e;
+        }
+
+        if ($response->getStatusCode() >= 400) {
+            try {
+                Log::channel('uploads')->error('livewire.upload.response.error', [
+                    'status' => $response->getStatusCode(),
+                    'content_length' => $request->server('CONTENT_LENGTH'),
+                    'upload_max_filesize' => ini_get('upload_max_filesize'),
+                    'post_max_size' => ini_get('post_max_size'),
+                    'files_meta' => $filesMeta,
+                    'response_content' => method_exists($response, 'getContent') ? $response->getContent() : null,
+                    'user_id' => auth()->id(),
+                ]);
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
 
         return $response;

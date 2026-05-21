@@ -23,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Trust all proxies in production (Coolify/nginx reverse proxy)
         $middleware->trustProxies(at: '*');
 
+        $middleware->validateCsrfTokens(except: [
+            'livewire/upload-file',
+        ]);
+
         // Super Admin can operate the panel while the app is in maintenance mode.
         $middleware->preventRequestsDuringMaintenance(except: [
             'admin',

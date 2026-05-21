@@ -67,7 +67,7 @@ return [
         'disk' => 'livewire-tmp',
         // No max rule: size is bounded only by PHP ini (upload_max_filesize / post_max_size) and web server.
         'rules' => ['required', 'file', 'max:1048576'], // 1GB = 1048576 KB
-        'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
+        'directory' => 'livewire-tmp',
         'middleware' => ['throttle:120,1', 'log.livewire.upload'],
         // Livewire only accepts extensions listed here for /livewire/upload-file — include broad audio + existing media.
         'preview_mimes' => [

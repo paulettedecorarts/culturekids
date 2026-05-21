@@ -9,9 +9,18 @@ fi
 
 php /var/www/html/docker/wait-for-mysql.php || exit 1
 
-mkdir -p storage/app/livewire-tmp storage/logs
+mkdir -p \
+    storage/app/livewire-tmp \
+    storage/app/public \
+    storage/logs \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
+touch storage/logs/laravel.log storage/logs/uploads.log 2>/dev/null || true
+chown www-data:www-data storage/logs/*.log 2>/dev/null || true
 
 echo "[1/5] Running migrations..."
 php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }

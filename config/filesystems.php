@@ -49,9 +49,10 @@ return [
 
         'livewire-tmp' => [
             'driver' => 'local',
-            'root' => storage_path('app/livewire-tmp'),
-            'throw' => false,
-            'report' => false,
+            // Root is app/; Livewire stores under livewire-tmp/ (see config/livewire.php directory).
+            'root' => storage_path('app'),
+            'throw' => true,
+            'report' => true,
         ],
 
         's3' => [
