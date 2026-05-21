@@ -34,6 +34,7 @@ php artisan cache:clear && echo "      ✅ Cache cleared."
 php artisan event:clear && echo "      ✅ Events cleared."
 
 echo "[5/5] Rebuilding caches..."
+php artisan package:discover --ansi && echo "      ✅ Packages discovered." || { echo "      ❌ Package discover failed."; exit 1; }
 php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
 php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped (duplicate route name detected)."
 php artisan view:cache && echo "      ✅ Views cached." || echo "      ⚠️  View cache skipped."

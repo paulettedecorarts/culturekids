@@ -3,8 +3,6 @@ FROM php:8.3-fpm-alpine AS base
 RUN apk add --no-cache \
     nginx \
     supervisor \
-    nodejs \
-    npm \
     git \
     curl \
     zip \
@@ -42,21 +40,33 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# ── Dependencies ──────────────────────────────────────────────────────────────
+# ── Frontend assets (glibc Node — Vite 8 / Rolldown native bindings) ─────────
+FROM node:22-bookworm-slim AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY vite.config.js postcss.config.js tailwind.config.js ./
+COPY resources ./resources
+COPY public ./public
+
+RUN npm run build
+
+# ── PHP dependencies ──────────────────────────────────────────────────────────
 FROM base AS deps
 
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
-COPY package.json ./
-RUN npm install
-
-# ── Build ─────────────────────────────────────────────────────────────────────
+# ── Application build ─────────────────────────────────────────────────────────
 FROM deps AS build
 
 COPY . .
-RUN composer dump-autoload --optimize --no-dev \
-    && npm run build
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer dump-autoload --optimize --no-dev --no-scripts
+COPY --from=frontend /app/public/build ./public/build
 
 # ── Production image ──────────────────────────────────────────────────────────
 FROM base AS production
