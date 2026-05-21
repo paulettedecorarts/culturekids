@@ -52,8 +52,12 @@ services:
       CACHE_STORE: redis
       QUEUE_CONNECTION: database
 
-      # First deploy only — set to "true" once, redeploy, then set back to "false"
+      # First deploy only — set to "true" once, redeploy, then set back to "false" (seed blocks HTTP for minutes → 504)
       RUN_DB_SEED: "false"
+      RUN_VIEW_CACHE: "false"
+      RUN_ROUTE_CACHE: "false"
+      DB_WAIT_ATTEMPTS: "30"
+      DB_WAIT_SLEEP: "2"
 
       BROADCAST_CONNECTION: log
       FILESYSTEM_DISK: local

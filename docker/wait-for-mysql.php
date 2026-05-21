@@ -12,7 +12,7 @@ if ($password === false || $password === '') {
 }
 
 $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s', $host, $port, $database);
-$maxAttempts = (int) (getenv('DB_WAIT_ATTEMPTS') ?: 90);
+$maxAttempts = (int) (getenv('DB_WAIT_ATTEMPTS') ?: 30);
 $sleepSeconds = (int) (getenv('DB_WAIT_SLEEP') ?: 2);
 
 echo "Waiting for MySQL at {$host}:{$port} (database: {$database}, user: {$user})...\n";
