@@ -51,7 +51,7 @@ return [
             'driver' => 'local',
             // Root is app/; Livewire stores under livewire-tmp/ (see config/livewire.php directory).
             'root' => storage_path('app'),
-            'throw' => false,
+            'throw' => true,
             'report' => true,
         ],
 

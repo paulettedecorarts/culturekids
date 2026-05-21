@@ -57,11 +57,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 return;
             }
 
-            LogLivewireUploadDiagnostics::log('error', 'livewire.upload.reported', [
+            $context = [
                 'message' => $e->getMessage(),
                 'class' => $e::class,
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-            ]);
+                'livewire_tmp_writable' => is_writable(storage_path('app/livewire-tmp')),
+            ];
+            LogLivewireUploadDiagnostics::log('error', 'livewire.upload.reported', $context);
+            error_log('[culturekids] livewire.upload.reported '.json_encode($context, JSON_UNESCAPED_SLASHES));
         });
     })->create();

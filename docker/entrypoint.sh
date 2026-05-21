@@ -11,16 +11,31 @@ php /var/www/html/docker/wait-for-mysql.php || exit 1
 
 mkdir -p \
     storage/app/livewire-tmp \
+    storage/app/private \
     storage/app/public \
     storage/logs \
     storage/framework/cache/data \
     storage/framework/sessions \
     storage/framework/views \
     bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
-chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
-touch storage/logs/laravel.log storage/logs/uploads.log 2>/dev/null || true
-chown www-data:www-data storage/logs/*.log 2>/dev/null || true
+
+# Persistent volumes may retain root-owned files from an older queue worker — fix ownership every boot.
+chown -R www-data:www-data storage bootstrap/cache || {
+    echo "❌ Could not chown storage/ (check volume mount permissions)."
+    exit 1
+}
+chmod -R ug+rwX storage bootstrap/cache
+chmod 2775 storage/app/livewire-tmp storage/app/public 2>/dev/null || true
+
+touch storage/logs/laravel.log storage/logs/uploads.log
+chown www-data:www-data storage/logs/*.log
+
+if ! su -s /bin/sh www-data -c 'touch storage/app/livewire-tmp/.write-test && rm -f storage/app/livewire-tmp/.write-test'; then
+    echo "❌ www-data cannot write to storage/app/livewire-tmp — Livewire uploads will fail."
+    ls -la storage storage/app storage/app/livewire-tmp 2>/dev/null || true
+    exit 1
+fi
+echo "✅ storage/app/livewire-tmp is writable by www-data."
 
 echo "[1/4] Running migrations..."
 php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }
@@ -49,8 +64,14 @@ if [ "${RUN_ROUTE_CACHE:-false}" = "true" ]; then
     php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped."
 fi
 
-chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
-chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R ug+rwX storage bootstrap/cache
+chmod 2775 storage/app/livewire-tmp storage/app/public 2>/dev/null || true
+
+if ! su -s /bin/sh www-data -c 'touch storage/app/livewire-tmp/.write-test && rm -f storage/app/livewire-tmp/.write-test'; then
+    echo "❌ Post-cache: www-data still cannot write storage/app/livewire-tmp."
+    exit 1
+fi
 
 echo "🚀 Starting nginx + php-fpm + queue worker..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

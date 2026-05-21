@@ -40,7 +40,7 @@ class LogLivewireUploadDiagnostics
         }
 
         if ($response->getStatusCode() >= 400) {
-            self::log('error', 'livewire.upload.response.error', [
+            $context = [
                 'status' => $response->getStatusCode(),
                 'content_length' => $request->server('CONTENT_LENGTH'),
                 'upload_max_filesize' => ini_get('upload_max_filesize'),
@@ -48,7 +48,10 @@ class LogLivewireUploadDiagnostics
                 'files_meta' => $filesMeta,
                 'response_content' => method_exists($response, 'getContent') ? $response->getContent() : null,
                 'user_id' => auth()->id(),
-            ]);
+                'livewire_tmp_writable' => is_writable(storage_path('app/livewire-tmp')),
+            ];
+            self::log('error', 'livewire.upload.response.error', $context);
+            error_log('[culturekids] livewire.upload.response.error '.json_encode($context, JSON_UNESCAPED_SLASHES));
         }
 
         return $response;
