@@ -67,10 +67,15 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             $disk = config('livewire.temporary_file_upload.disk') ?: config('filesystems.default');
-            $dir = trim((string) (config('livewire.temporary_file_upload.directory') ?: 'livewire-tmp'), '/');
-            Storage::disk($disk)->makeDirectory($dir);
-        } catch (\Throwable) {
-            //
+            $dir = trim((string) (config('livewire.temporary_file_upload.directory') ?: ''), '/');
+            if ($dir !== '') {
+                Storage::disk($disk)->makeDirectory($dir);
+            }
+            @chmod(storage_path('app/livewire-tmp'), 0775);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::channel('uploads')->error('livewire.tmp_dir.failed', [
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -86,6 +91,7 @@ class AppServiceProvider extends ServiceProvider
     protected function configureLivewire(): void
     {
         Livewire::componentHook(\App\Livewire\Hooks\AbsolutePaginationPath::class);
+        Livewire::componentHook(\App\Livewire\Hooks\LogsFileUploadsHook::class);
     }
 
     protected function configureDefaults(): void

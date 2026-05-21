@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use App\Livewire\Concerns\LogsFileUploads;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -17,6 +19,8 @@ use Livewire\WithFileUploads;
 #[Layout('layouts.admin')]
 class OrganizationCreate extends Component
 {
+    use LogsFileUploads;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public string $name = '';

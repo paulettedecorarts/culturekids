@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Puzzles;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\Tribe;
@@ -18,7 +20,9 @@ use Livewire\WithFileUploads;
 
 class PuzzleEditor extends Component
 {
+    use LogsFileUploads;
     use UsesPortalContext;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public ?Activity $activity = null;

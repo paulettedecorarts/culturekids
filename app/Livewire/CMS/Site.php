@@ -6,11 +6,15 @@ use App\Models\AuditLog;
 use App\Models\Organisation;
 use App\Models\Tribe;
 use Illuminate\Validation\Rule;
+use App\Livewire\Concerns\LogsFileUploads;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class Site extends Component
 {
+    use LogsFileUploads;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public $organizationId;

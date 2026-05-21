@@ -64,7 +64,7 @@ return [
     */
 
     'temporary_file_upload' => [
-        'disk' => null,        // Example: 'local', 's3'              | Default: 'default'
+        'disk' => 'livewire-tmp',
         // No max rule: size is bounded only by PHP ini (upload_max_filesize / post_max_size) and web server.
         'rules' => ['required', 'file', 'max:1048576'], // 1GB = 1048576 KB
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'

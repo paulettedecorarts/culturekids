@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Games;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Game;
 use App\Models\GameQuestion;
 use App\Models\Tribe;
@@ -15,7 +17,7 @@ use Livewire\WithFileUploads;
 
 class GameEditor extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Game $game = null;
     public bool $isEdit = false;

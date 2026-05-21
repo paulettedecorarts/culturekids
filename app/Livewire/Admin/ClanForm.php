@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Clan;
 use App\Models\Tribe;
 use App\Support\FlashcardEmojiLibrary;
@@ -13,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class ClanForm extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Clan $clan = null;
     public bool $isEdit = false;
@@ -107,7 +109,7 @@ class ClanForm extends Component
             'proverb_translation' => ['nullable', 'string', 'max:500'],
             'color'              => ['nullable', 'string', 'max:20'],
             'sort_order'         => ['required', 'integer', 'min:0'],
-            'cover_image_file'   => ['nullable', 'sometimes', 'image', 'max:5120'],
+            'cover_image_file'   => ['nullable', 'image', 'max:5120'],
         ];
     }
 

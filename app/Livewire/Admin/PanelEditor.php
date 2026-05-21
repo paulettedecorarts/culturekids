@@ -9,11 +9,15 @@ use App\Models\PanelVocabTag;
 use App\Services\AudioUploadService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Livewire\Concerns\LogsFileUploads;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class PanelEditor extends Component
 {
+    use LogsFileUploads;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
     use UsesPortalContext;
 

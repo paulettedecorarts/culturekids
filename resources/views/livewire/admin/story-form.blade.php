@@ -104,6 +104,7 @@
                             @endif
                             <input wire:model="cover_image" type="file" accept="image/*,.pdf" class="story-form-input story-form-file">
                             <div class="story-form-hint">JPG, PNG, WebP, PDF · max ~50 MB</div>
+                            <p wire:loading wire:target="cover_image" class="story-form-hint" style="color:var(--banana-mid)">Uploading cover…</p>
                             @error('cover_image') <div class="story-form-error">{{ $message }}</div> @enderror
                         </div>
 
@@ -128,6 +129,7 @@
 
                             <input wire:model="panel_files" type="file" accept="image/*,.pdf" multiple class="story-form-input story-form-file">
                             <div class="story-form-hint">Multiple files · JPG, PNG, WebP, PDF · PDFs are queued and split into panels</div>
+                            <p wire:loading wire:target="panel_files" class="story-form-hint" style="color:var(--banana-mid)">Uploading panels…</p>
                             @error('panel_files.*') <div class="story-form-error">{{ $message }}</div> @enderror
                         </div>
                     </div>

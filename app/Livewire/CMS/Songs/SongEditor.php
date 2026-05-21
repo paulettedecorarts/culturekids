@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Songs;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\Song;
@@ -18,7 +20,9 @@ use Livewire\WithFileUploads;
 
 class SongEditor extends Component
 {
+    use LogsFileUploads;
     use UsesPortalContext;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public ?Song $song = null;
@@ -65,7 +69,7 @@ class SongEditor extends Component
     public function mount(?int $id = null): void
     {
         // Log upload configuration for debugging
-        \Log::info('SongEditor Upload Configuration', [
+        \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Upload Configuration', [
             'php_upload_max_filesize' => ini_get('upload_max_filesize'),
             'php_post_max_size' => ini_get('post_max_size'),
             'php_max_execution_time' => ini_get('max_execution_time'),
@@ -112,7 +116,7 @@ class SongEditor extends Component
         ];
 
         // Log validation rules for debugging
-        \Log::info('SongEditor Validation Rules', [
+        \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Validation Rules', [
             'audio_file_rules' => $rules['audio_file'],
             'video_file_rules' => $rules['video_file'],
             'cover_image_rules' => $rules['cover_image'],
@@ -209,7 +213,7 @@ class SongEditor extends Component
         try {
             // Log file upload attempts
             if ($this->audio_file) {
-                \Log::info('Audio File Upload Attempt', [
+                \Illuminate\Support\Facades\Log::channel('uploads')->info('Audio File Upload Attempt', [
                     'original_name' => $this->audio_file->getClientOriginalName(),
                     'size_bytes' => $this->audio_file->getSize(),
                     'size_mb' => round($this->audio_file->getSize() / 1024 / 1024, 2),
@@ -221,7 +225,7 @@ class SongEditor extends Component
             }
 
             if ($this->video_file) {
-                \Log::info('Video File Upload Attempt', [
+                \Illuminate\Support\Facades\Log::channel('uploads')->info('Video File Upload Attempt', [
                     'original_name' => $this->video_file->getClientOriginalName(),
                     'size_bytes' => $this->video_file->getSize(),
                     'size_mb' => round($this->video_file->getSize() / 1024 / 1024, 2),
@@ -233,7 +237,7 @@ class SongEditor extends Component
             }
 
             if ($this->cover_image) {
-                \Log::info('Cover Image Upload Attempt', [
+                \Illuminate\Support\Facades\Log::channel('uploads')->info('Cover Image Upload Attempt', [
                     'original_name' => $this->cover_image->getClientOriginalName(),
                     'size_bytes' => $this->cover_image->getSize(),
                     'size_mb' => round($this->cover_image->getSize() / 1024 / 1024, 2),
@@ -246,14 +250,14 @@ class SongEditor extends Component
 
             $validated = $this->validate();
 
-            \Log::info('SongEditor Validation Passed', [
+            \Illuminate\Support\Facades\Log::channel('uploads')->info('SongEditor Validation Passed', [
                 'validated_data_keys' => array_keys($validated),
                 'has_audio_file' => isset($validated['audio_file']),
                 'has_video_file' => isset($validated['video_file']),
                 'has_cover_image' => isset($validated['cover_image'])
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('SongEditor Validation Failed', [
+            \Illuminate\Support\Facades\Log::channel('uploads')->error('SongEditor Validation Failed', [
                 'errors' => $e->errors(),
                 'file_info' => [
                     'audio_file_present' => $this->audio_file !== null,
@@ -268,7 +272,7 @@ class SongEditor extends Component
             ]);
             throw $e;
         } catch (\Exception $e) {
-            \Log::error('SongEditor Save Error', [
+            \Illuminate\Support\Facades\Log::channel('uploads')->error('SongEditor Save Error', [
                 'error_message' => $e->getMessage(),
                 'error_code' => $e->getCode(),
                 'file' => $e->getFile(),

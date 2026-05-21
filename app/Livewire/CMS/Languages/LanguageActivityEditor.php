@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Languages;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Language;
 use App\Models\LanguageActivity;
 use App\Models\LanguageActivityWord;
@@ -16,7 +18,7 @@ use Livewire\WithFileUploads;
 
 class LanguageActivityEditor extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?LanguageActivity $activity = null;
     public bool $isEdit = false;

@@ -25,7 +25,7 @@ class LogLivewireUploadDiagnostics
             ];
         }
 
-        Log::info('livewire.upload.request', [
+        Log::channel('uploads')->info('livewire.upload.request', [
             'content_length' => $request->server('CONTENT_LENGTH'),
             'upload_max_filesize' => ini_get('upload_max_filesize'),
             'post_max_size' => ini_get('post_max_size'),
@@ -38,7 +38,7 @@ class LogLivewireUploadDiagnostics
         $response = $next($request);
 
         if ($response->getStatusCode() >= 400) {
-            Log::warning('livewire.upload.response.error', [
+            Log::channel('uploads')->error('livewire.upload.response.error', [
                 'status' => $response->getStatusCode(),
                 'content_length' => $request->server('CONTENT_LENGTH'),
                 'upload_max_filesize' => ini_get('upload_max_filesize'),

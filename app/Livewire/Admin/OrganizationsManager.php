@@ -4,6 +4,8 @@ namespace App\Livewire\Admin;
 
 use App\Models\AuditLog;
 use App\Models\Organisation;
+use App\Livewire\Concerns\LogsFileUploads;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -12,7 +14,10 @@ use Livewire\WithPagination;
 #[Layout('layouts.admin')]
 class OrganizationsManager extends Component
 {
-    use WithFileUploads, WithPagination;
+    use LogsFileUploads;
+    use ValidatesOnlyChangedOnEdit;
+    use WithFileUploads;
+    use WithPagination;
 
     public $search = '';
 

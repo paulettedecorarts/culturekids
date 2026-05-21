@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Song;
 use App\Models\Tribe;
 use App\Services\AudioUploadService;
@@ -13,7 +15,9 @@ use Livewire\WithFileUploads;
 
 class SongDetailPage extends Component
 {
+    use LogsFileUploads;
     use UsesPortalContext;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public ?Song $song = null;

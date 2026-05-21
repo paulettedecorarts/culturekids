@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Culture;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\CultureActivity;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class CultureActivityEditor extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?CultureActivity $activity = null;
     public bool $isEdit = false;

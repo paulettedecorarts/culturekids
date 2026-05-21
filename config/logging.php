@@ -58,6 +58,14 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        /** Always logs upload diagnostics (not affected by LOG_LEVEL=error in production). */
+        'uploads' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/uploads.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

@@ -3,7 +3,9 @@
 namespace App\Livewire\Admin;
 
 use App\Jobs\ProcessComicStoryMedia;
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\ComicPanel;
@@ -17,7 +19,9 @@ use Livewire\WithFileUploads;
 
 class StoryForm extends Component
 {
+    use LogsFileUploads;
     use UsesPortalContext;
+    use ValidatesOnlyChangedOnEdit;
     use WithFileUploads;
 
     public bool $editing = false;
@@ -48,17 +52,20 @@ class StoryForm extends Component
 
     public bool $isSaving = false;
 
-    protected $rules = [
-        'tribe_id' => 'required|exists:tribes,id',
-        'title' => 'required|min:3|max:255',
-        'description' => 'nullable|max:1000',
-        'age_min' => 'required|integer|min:2|max:5',
-        'age_max' => 'required|integer|min:3|max:6',
-        'star_points' => 'required|integer|min:1|max:100',
-        'status' => 'required|in:draft,review,published',
-        'cover_image' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
-        'panel_files.*' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
-    ];
+    protected function rules(): array
+    {
+        return [
+            'tribe_id' => 'required|exists:tribes,id',
+            'title' => 'required|min:3|max:255',
+            'description' => 'nullable|max:1000',
+            'age_min' => 'required|integer|min:2|max:5',
+            'age_max' => 'required|integer|min:3|max:6',
+            'star_points' => 'required|integer|min:1|max:100',
+            'status' => 'required|in:draft,review,published',
+            'cover_image' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
+            'panel_files.*' => 'nullable|file|max:51200|mimes:jpg,jpeg,png,webp,pdf',
+        ];
+    }
 
     public function mount(?int $id = null): void
     {
@@ -116,6 +123,7 @@ class StoryForm extends Component
                 $coverPath = $this->existing_cover;
                 if ($this->cover_image) {
                     $coverPath = $this->cover_image->store('comics/covers', 'public');
+                    $this->logUploadStore('cover_image', $coverPath);
 
                     if ($this->editing && $this->existing_cover) {
                         Storage::disk('public')->delete($this->existing_cover);
@@ -160,6 +168,7 @@ class StoryForm extends Component
                     $items = [];
                     foreach ($this->panel_files as $panelFile) {
                         $storedPath = $panelFile->store('comics/panels', 'public');
+                        $this->logUploadStore('panel_files', $storedPath);
                         $ext = strtolower($panelFile->getClientOriginalExtension());
                         $items[] = [
                             'path' => $storedPath,
@@ -209,6 +218,7 @@ class StoryForm extends Component
                 session()->flash('message', $message);
             });
         } catch (\Throwable $e) {
+            $this->logUploadEvent('story.save.failed', 'save', null, $e);
             $this->isSaving = false;
             throw $e;
         }

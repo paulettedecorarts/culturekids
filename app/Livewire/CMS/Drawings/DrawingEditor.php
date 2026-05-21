@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Drawings;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Drawing;
 use App\Models\Tribe;
 use Livewire\Attributes\Computed;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class DrawingEditor extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Drawing $drawing = null;
     public bool $isEdit = false;

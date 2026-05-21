@@ -2,7 +2,9 @@
 
 namespace App\Livewire\CMS\Mazes;
 
+use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
+use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Maze;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class MazeEditor extends Component
 {
-    use UsesPortalContext, WithFileUploads;
+    use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
     public ?Maze $maze = null;
     public bool $isEdit = false;
