@@ -80,7 +80,8 @@ return [
             '3gp', '3g2', 'gsm', 'awb', 'dvf', 'mmf', 'nmf', 'nsf', 'spx',
         ],
         'max_upload_time' => 600, // 10 minutes for large files
-        'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
+        // Do not scan/delete all temp files on every upload finish (very slow at scale). Use livewire:clean-temp-uploads.
+        'cleanup' => false,
     ],
 
     /*

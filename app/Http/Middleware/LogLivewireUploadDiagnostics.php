@@ -23,8 +23,6 @@ class LogLivewireUploadDiagnostics
             'post_max_size' => ini_get('post_max_size'),
             'max_file_uploads' => ini_get('max_file_uploads'),
             'files_meta' => $filesMeta,
-            'has_valid_signature' => $request->hasValidSignature(),
-            'user_id' => auth()->id(),
             'ip' => $request->ip(),
         ]);
 
@@ -48,7 +46,6 @@ class LogLivewireUploadDiagnostics
                 'upload_max_filesize' => ini_get('upload_max_filesize'),
                 'post_max_size' => ini_get('post_max_size'),
                 'files_meta' => $filesMeta,
-                'has_valid_signature' => $request->hasValidSignature(),
                 'response_content' => method_exists($response, 'getContent') ? $response->getContent() : null,
                 'user_id' => auth()->id(),
             ]);

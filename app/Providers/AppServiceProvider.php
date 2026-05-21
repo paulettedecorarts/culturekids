@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Livewire\Features\SupportFileUploads\FileUploadController;
 use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
@@ -101,6 +102,9 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureLivewire(): void
     {
+        // Signed POST /livewire/upload-file does not need session, CSRF, or Redis — only the signature.
+        FileUploadController::$defaultMiddleware = [];
+
         Livewire::componentHook(\App\Livewire\Hooks\AbsolutePaginationPath::class);
         Livewire::componentHook(\App\Livewire\Hooks\LogsFileUploadsHook::class);
     }

@@ -41,6 +41,7 @@ php artisan route:clear 2>/dev/null || true
 php artisan view:clear 2>/dev/null || true
 
 echo "[5/5] Rebuilding caches..."
+php artisan livewire:clean-temp-uploads 2>/dev/null || true
 php artisan package:discover --ansi && echo "      ✅ Packages discovered." || { echo "      ❌ Package discover failed."; exit 1; }
 php artisan config:cache && echo "      ✅ Config cached." || { echo "      ❌ Config cache failed."; exit 1; }
 php artisan route:cache && echo "      ✅ Routes cached." || echo "      ⚠️  Route cache skipped."
