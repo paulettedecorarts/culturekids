@@ -14,7 +14,7 @@ class LogsFileUploadsHook extends ComponentHook
         return ! in_array(WithFileUploads::class, class_uses_recursive($this->component));
     }
 
-    public function callUpdate($propertyName, $fullPath, $newValue): void
+    public function update($propertyName, $fullPath, $newValue): void
     {
         if (! $this->looksLikeUploadProperty($propertyName, $newValue)) {
             return;
@@ -43,7 +43,7 @@ class LogsFileUploadsHook extends ComponentHook
         Log::channel('uploads')->info('livewire.hook.update', $payload);
     }
 
-    public function callException($e, $stopPropagation): void
+    public function exception($e, $stopPropagation): void
     {
         if (! in_array(WithFileUploads::class, class_uses_recursive($this->component))) {
             return;
