@@ -5,33 +5,45 @@ wait_for_mysql() {
     host="${DB_HOST:-mysql}"
     port="${DB_PORT:-3306}"
     user="${DB_USERNAME:-paulette}"
+    db="${DB_DATABASE:-paulette}"
     pass="${DB_PASSWORD:?DB_PASSWORD is not set}"
 
-    echo "Waiting for MySQL at ${host}:${port}..."
+    echo "Waiting for MySQL at ${host}:${port} (database: ${db}, user: ${user})..."
+
+    if ! getent ahostsv4 "${host}" >/dev/null 2>&1; then
+        echo "      ❌ Cannot resolve hostname '${host}'."
+        echo "      Deploy the full stack: docker compose up -d (app + mysql + redis)."
+        echo "      Coolify: use Docker Compose deployment, not Dockerfile-only for the app."
+        exit 1
+    fi
+
     attempt=0
-    max_attempts=60
+    max_attempts=90
+    last_error=""
 
     while [ "$attempt" -lt "$max_attempts" ]; do
-        if php -r "
-            try {
-                new PDO(
-                    'mysql:host=' . getenv('DB_HOST') . ';port=' . (getenv('DB_PORT') ?: '3306'),
-                    getenv('DB_USERNAME'),
-                    getenv('DB_PASSWORD')
-                );
-                exit(0);
-            } catch (Throwable \$e) {
-                exit(1);
-            }
-        " 2>/dev/null; then
+        if MYSQL_PWD="${pass}" mysql \
+            -h"${host}" \
+            -P"${port}" \
+            -u"${user}" \
+            "${db}" \
+            -e "SELECT 1" \
+            >/dev/null 2> /tmp/mysql-wait.err
+        then
             echo "      ✅ MySQL is ready."
             return 0
         fi
+        last_error=$(tail -n 1 /tmp/mysql-wait.err 2>/dev/null || echo "unknown error")
         attempt=$((attempt + 1))
+        if [ $((attempt % 5)) -eq 0 ]; then
+            echo "      … attempt ${attempt}/${max_attempts}: ${last_error}"
+        fi
         sleep 2
     done
 
-    echo "      ❌ MySQL not reachable after ${max_attempts} attempts."
+    echo "      ❌ MySQL not ready after ${max_attempts} attempts."
+    echo "      Last error: ${last_error}"
+    echo "      If you changed DB passwords, reset the volume: docker compose down -v"
     exit 1
 }
 
