@@ -1,6 +1,42 @@
 #!/bin/sh
 set -e
 
+wait_for_mysql() {
+    host="${DB_HOST:-mysql}"
+    port="${DB_PORT:-3306}"
+    user="${DB_USERNAME:-paulette}"
+    pass="${DB_PASSWORD:?DB_PASSWORD is not set}"
+
+    echo "Waiting for MySQL at ${host}:${port}..."
+    attempt=0
+    max_attempts=60
+
+    while [ "$attempt" -lt "$max_attempts" ]; do
+        if php -r "
+            try {
+                new PDO(
+                    'mysql:host=' . getenv('DB_HOST') . ';port=' . (getenv('DB_PORT') ?: '3306'),
+                    getenv('DB_USERNAME'),
+                    getenv('DB_PASSWORD')
+                );
+                exit(0);
+            } catch (Throwable \$e) {
+                exit(1);
+            }
+        " 2>/dev/null; then
+            echo "      ✅ MySQL is ready."
+            return 0
+        fi
+        attempt=$((attempt + 1))
+        sleep 2
+    done
+
+    echo "      ❌ MySQL not reachable after ${max_attempts} attempts."
+    exit 1
+}
+
+wait_for_mysql
+
 echo "[1/5] Running migrations..."
 php artisan migrate --force && echo "      ✅ Migrations done." || { echo "      ❌ Migrations failed."; exit 1; }
 
