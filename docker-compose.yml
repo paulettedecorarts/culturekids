@@ -20,7 +20,7 @@ services:
     environment:
       APP_NAME: "Paulette Culture Kids"
       APP_ENV: production
-      APP_DEBUG: "false"
+      APP_DEBUG: "true"
       APP_KEY: "base64:k3T6SGc/Lh1cSsYYjTqjAlXcPykicgi0XEK8mcxjwIc="
       APP_URL: "https://pualatte.kwatagig.com"
       APP_LOCALE: en

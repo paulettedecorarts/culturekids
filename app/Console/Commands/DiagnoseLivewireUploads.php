@@ -63,7 +63,14 @@ class DiagnoseLivewireUploads extends Command
         $route = Route::getRoutes()->getByName('livewire.upload-file');
         $this->line('Route livewire.upload-file: '.($route ? 'registered' : 'MISSING'));
         if ($route) {
-            $this->line('  Controller: '.$route->getActionName());
+            $this->line('  Route action: '.$route->getActionName());
+        }
+
+        try {
+            $resolved = app(\Livewire\Features\SupportFileUploads\FileUploadController::class);
+            $this->line('  Container resolves to: '.$resolved::class);
+        } catch (\Throwable $e) {
+            $this->error('  Container resolve failed: '.$e->getMessage());
         }
 
         $this->newLine();
