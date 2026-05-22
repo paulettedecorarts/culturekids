@@ -54,7 +54,7 @@
         <div class="sa-table-head" style="grid-template-columns:64px 2fr 1fr 1fr 1fr 120px minmax(180px, auto)">
             <span></span>
             <span>Title</span>
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Language</span>
             <span>Type</span>
             <span>Duration</span>

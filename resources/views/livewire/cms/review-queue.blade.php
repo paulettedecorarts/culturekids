@@ -29,7 +29,7 @@
         <input
             type="search"
             wire:model.live.debounce.300ms="search"
-            placeholder="Search by title, type, tribe, or status…"
+            placeholder="Search by title, type, {{ strtolower(heritage('people')) }}, or status…"
             class="review-queue-filters__search"
             aria-label="{{ __('Search queue') }}"
         >
@@ -41,8 +41,8 @@
             @endforeach
         </select>
 
-        <select wire:model.live="tribeFilter" class="review-queue-filters__select" aria-label="{{ __('Filter by tribe') }}">
-            <option value="">{{ __('All tribes') }}</option>
+        <select wire:model.live="tribeFilter" class="review-queue-filters__select" aria-label="{{ heritage('filter_by_people') }}">
+            <option value="">{{ heritage('all_peoples') }}</option>
             @foreach($tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
@@ -100,7 +100,7 @@
         <div class="cms-table-header review-queue-table-grid">
             <span>{{ __('Type') }}</span>
             <span>{{ __('Title') }}</span>
-            <span>{{ __('Tribe') }}</span>
+            <span>{{ heritage('people') }}</span>
             <span>{{ __('Updated') }}</span>
             <span>{{ __('Status') }}</span>
             <span>{{ __('Actions') }}</span>
@@ -109,7 +109,7 @@
             <div class="cms-table-row review-queue-table-grid" style="cursor:default;">
                 <span class="review-queue-type" data-label="{{ __('Type') }}">{{ $item['type_label'] }}</span>
                 <span class="review-queue-title" data-label="{{ __('Title') }}">{{ $item['title'] }}</span>
-                <span class="review-queue-muted" data-label="{{ __('Tribe') }}">{{ $item['tribe_name'] ?? '—' }}</span>
+                <span class="review-queue-muted" data-label="{{ heritage('people') }}">{{ $item['tribe_name'] ?? '—' }}</span>
                 <span class="review-queue-muted" data-label="{{ __('Updated') }}">{{ $item['updated_at']?->diffForHumans() }}</span>
                 <span class="review-queue-status" data-label="{{ __('Status') }}">{{ ucfirst($item['status'] ?? 'published') }}</span>
                 <span class="review-queue-actions" data-label="{{ __('Actions') }}">

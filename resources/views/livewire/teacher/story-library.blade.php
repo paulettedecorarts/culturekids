@@ -78,7 +78,7 @@
                         <span class="th-library-card__type">{{ $tag }}</span>
                     </div>
                     <div class="th-library-card__body">
-                        <p class="th-library-card__tribe">{{ $item['tribe_name'] ?? __('Tribe') }}</p>
+                        <p class="th-library-card__tribe">{{ $item['tribe_name'] ?? heritage('people') }}</p>
                         <h3 class="th-library-card__title">{{ $item['title'] }}</h3>
                         <p class="th-library-card__meta">
                             @if ($item['age_min'] !== null && $item['age_max'] !== null)

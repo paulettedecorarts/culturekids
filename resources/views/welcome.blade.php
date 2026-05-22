@@ -1,21 +1,42 @@
+@php
+    $l = $landing ?? [];
+    $primary = $l['primary_color'] ?? '#C44B2B';
+    $secondary = $l['secondary_color'] ?? '#1E2D4A';
+    $accent = $l['accent_color'] ?? '#F2CB5A';
+    $heroStart = $l['hero_bg_start'] ?? '#FFF8F0';
+    $heroEnd = $l['hero_bg_end'] ?? '#E8F4FC';
+    $fontHeading = $l['font_heading'] ?? 'Baloo 2';
+    $fontBody = $l['font_body'] ?? 'Inter';
+    $headline = trim(($l['hero_headline'] ?? 'Bring').' '.($l['hero_highlight'] ?? "Africa's Stories").' '.($l['hero_headline_suffix'] ?? 'to Life'));
+    $fontsQuery = urlencode($fontHeading.'|'.$fontBody);
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Paulette Culture Kids') }}</title>
+    <title>{{ $seoTitle ?? config('app.name') }}</title>
+    @if (!empty($seoDescription))
+        <meta name="description" content="{{ $seoDescription }}">
+    @endif
 
     @include('layouts.partials.brand-head')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family={{ $fontsQuery }}:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     @include('layouts.partials.portal-theme-vars')
 
     <style>
         :root {
-            --font-landing: 'Inter', system-ui, sans-serif;
+            --font-landing: '{{ $fontBody }}', system-ui, sans-serif;
+            --font-landing-display: '{{ $fontHeading }}', system-ui, sans-serif;
+            --landing-primary: {{ $primary }};
+            --landing-secondary: {{ $secondary }};
+            --landing-accent: {{ $accent }};
+            --landing-hero-start: {{ $heroStart }};
+            --landing-hero-end: {{ $heroEnd }};
         }
         body { margin: 0; }
     </style>
@@ -35,7 +56,7 @@
                     <span></span><span></span><span></span>
                 </button>
                 <ul class="landing-nav__links" id="landing-nav-menu">
-                    <li><a href="#tribes" class="landing-nav__link">Tribes</a></li>
+                    <li><a href="#peoples" class="landing-nav__link">{{ heritage('people_plural') }}</a></li>
                     <li><a href="#stories" class="landing-nav__link">Stories</a></li>
                     <li><a href="#schools" class="landing-nav__link">For Schools</a></li>
                     <li><a href="#pricing" class="landing-nav__link">Pricing</a></li>
@@ -46,23 +67,54 @@
         </div>
     </header>
 
-    <section class="landing-hero" aria-labelledby="hero-title">
-        <div class="landing__container">
-            <h1 id="hero-title" class="landing-hero__title">
-                Bring <span class="landing-hero__highlight">Africa's Stories</span> to Life
-            </h1>
-            <p class="landing-hero__subtitle">
-                Interactive cultural comics, songs, and language learning for children ages 2–6 across 65+ Ugandan tribes.
-            </p>
-            <div class="landing-hero__actions">
-                <a href="{{ route('register') }}" class="landing-btn landing-btn--primary landing-btn--hero-primary">
-                    <span class="landing-btn__icon" aria-hidden="true">🚀</span>
-                    Start Free Trial
-                </a>
-                <a href="#download" class="landing-btn landing-btn--hero-secondary">
-                    <span class="landing-btn__icon" aria-hidden="true">📱</span>
-                    Download App
-                </a>
+    <section class="landing-hero landing-hero--split" aria-labelledby="hero-title">
+        <div class="landing__container landing-hero__grid">
+            <div class="landing-hero__copy">
+                <h1 id="hero-title" class="landing-hero__title">
+                    {{ $l['hero_headline'] ?? 'Bring' }}
+                    <span class="landing-hero__highlight">{{ $l['hero_highlight'] ?? "Africa's Stories" }}</span>
+                    {{ $l['hero_headline_suffix'] ?? 'to Life' }}
+                </h1>
+                <p class="landing-hero__subtitle">
+                    {{ $l['hero_subtitle'] ?? 'Interactive cultural comics, songs, and language learning for children ages 2–6 — celebrating Uganda\'s peoples and heritage.' }}
+                </p>
+                <div class="landing-hero__actions">
+                    <a href="{{ route('register') }}" class="landing-btn landing-btn--primary landing-btn--hero-primary">
+                        <span class="landing-btn__icon" aria-hidden="true">🚀</span>
+                        Start Free Trial
+                    </a>
+                    <a href="#download" class="landing-btn landing-btn--hero-secondary">
+                        <span class="landing-btn__icon" aria-hidden="true">📱</span>
+                        Download App
+                    </a>
+                </div>
+            </div>
+            <div class="landing-hero__visual" aria-hidden="false">
+                @if ($heroImageUrl ?? null)
+                    <img
+                        src="{{ $heroImageUrl }}"
+                        alt="{{ $heroComic?->title ? 'Comic: '.$heroComic->title : 'Paulette Culture Kids hero illustration' }}"
+                        class="landing-hero__image"
+                        width="520"
+                        height="520"
+                        loading="eager"
+                        decoding="async"
+                    >
+                @else
+                    <div class="landing-hero__placeholder">
+                        <x-brand-logo variant="mark" class="landing-hero__placeholder-logo" />
+                        <p>Stories that celebrate {{ strtolower(heritage('ugandan_peoples')) }}</p>
+                    </div>
+                @endif
+                @if ($heroComic ?? null)
+                    <p class="landing-hero__comic-caption">
+                        <span aria-hidden="true">📖</span>
+                        {{ $heroComic->title }}
+                        @if ($heroComic->tribe)
+                            · {{ $heroComic->tribe->name }}
+                        @endif
+                    </p>
+                @endif
             </div>
         </div>
     </section>
@@ -78,7 +130,7 @@
                     </svg>
                 </div>
                 <h2 class="landing-feature__title">Cultural Comics</h2>
-                <p class="landing-feature__desc">Age-adaptive stories from 65+ Ugandan tribes with audio read-aloud</p>
+                <p class="landing-feature__desc">Age-adaptive stories from {{ $peoplesCount ?? 65 }}+ {{ strtolower(heritage('ugandan_peoples')) }} with audio read-aloud</p>
             </article>
             <article class="landing-feature">
                 <div class="landing-feature__icon" aria-hidden="true">
@@ -89,7 +141,7 @@
                     </svg>
                 </div>
                 <h2 class="landing-feature__title">Songs &amp; Language</h2>
-                <p class="landing-feature__desc">Traditional songs and vocabulary in authentic tribal languages</p>
+                <p class="landing-feature__desc">Traditional songs and vocabulary in {{ heritage('local_languages') }}</p>
             </article>
             <article class="landing-feature">
                 <div class="landing-feature__icon" aria-hidden="true">
@@ -105,38 +157,27 @@
         </div>
     </section>
 
-    <section class="landing-tribes" id="tribes" aria-labelledby="tribes-heading">
+    <section class="landing-tribes" id="peoples" aria-labelledby="peoples-heading">
         <div class="landing-tribes__inner">
-            <h2 id="tribes-heading" class="landing-tribes__title">Explore 65+ Ugandan Tribes</h2>
+            <h2 id="peoples-heading" class="landing-tribes__title">{{ $peoplesSectionTitle ?? heritage('explore_peoples_count', ['count' => $peoplesCount ?? 65]) }}</h2>
             <div class="landing-tribes__row">
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--buganda" aria-hidden="true">👑</span>
-                    Buganda
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--acholi" aria-hidden="true">🏹</span>
-                    Acholi
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--basoga" aria-hidden="true">🌊</span>
-                    Basoga
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--iteso" aria-hidden="true">🌾</span>
-                    Iteso
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--banyankole" aria-hidden="true">🐄</span>
-                    Banyankole
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip">
-                    <span class="landing-tribe-chip__dot landing-tribe-chip__dot--alur" aria-hidden="true">🎵</span>
-                    Alur
-                </a>
-                <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--more">
-                    <span class="landing-tribe-chip__dot" aria-hidden="true">⭐</span>
-                    + 59 more →
-                </a>
+                @forelse ($featuredPeoples ?? [] as $person)
+                    <a href="{{ route('login') }}" class="landing-tribe-chip">
+                        <span class="landing-tribe-chip__dot" aria-hidden="true">{{ $person->hero_emoji ?: '🌍' }}</span>
+                        {{ $person->name }}
+                    </a>
+                @empty
+                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">👑</span> Buganda</a>
+                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">🏹</span> Acholi</a>
+                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">🌊</span> Basoga</a>
+                @endforelse
+                @php $shown = ($featuredPeoples ?? collect())->count(); $more = max(0, ($peoplesCount ?? 65) - $shown); @endphp
+                @if ($more > 0)
+                    <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--more">
+                        <span class="landing-tribe-chip__dot" aria-hidden="true">⭐</span>
+                        + {{ $more }} more →
+                    </a>
+                @endif
             </div>
         </div>
     </section>
@@ -146,7 +187,7 @@
             <span class="landing-section__label">Stories</span>
             <h2 id="stories-heading" class="landing-section__title">Comic story packs children love</h2>
             <p class="landing-section__lead">
-                Age-banded adventures (2–3, 3–4, 4–5, 5–6) with panel-by-panel audio, heritage vocabulary, and tribe-specific heroes — ready for classroom or home.
+                Age-banded adventures (2–3, 3–4, 4–5, 5–6) with panel-by-panel audio, heritage vocabulary, and {{ heritage('people_specific') }} {{ heritage('heritage_heroes') }} — ready for classroom or home.
             </p>
             <div class="landing-stories__grid">
                 <article class="landing-story-card">
@@ -159,12 +200,12 @@
                     <span class="landing-story-card__emoji" aria-hidden="true">🥁</span>
                     <h3 class="landing-story-card__title">Drums of Acholi</h3>
                     <p class="landing-story-card__meta">Acholi · Ages 4–5</p>
-                    <p class="landing-story-card__desc">Rhythm, community, and northern heritage — interactive panels plus song tie-ins from the tribe library.</p>
+                    <p class="landing-story-card__desc">Rhythm, community, and northern heritage — interactive panels plus song tie-ins from the {{ strtolower(heritage('people_library')) }}.</p>
                 </article>
                 <article class="landing-story-card">
                     <span class="landing-story-card__emoji" aria-hidden="true">🦁</span>
                     <h3 class="landing-story-card__title">Savanna Friends</h3>
-                    <p class="landing-story-card__meta">Mixed tribes · Ages 2–3</p>
+                    <p class="landing-story-card__meta">{{ heritage('mixed_peoples') }} · Ages 2–3</p>
                     <p class="landing-story-card__desc">Short, audio-first episodes for early learners with large touch targets and simple cultural greetings.</p>
                 </article>
             </div>
@@ -251,7 +292,7 @@
                     <p class="landing-price-card__price">Custom <span>/ year</span></p>
                     <p class="landing-price-card__note">Per organisation · modular add-ons</p>
                     <ul class="landing-price-card__features">
-                        <li>Full tribe &amp; story catalogue</li>
+                        <li>{{ heritage('full_catalogue') }}</li>
                         <li>Org admin &amp; teacher portals</li>
                         <li>Review queue &amp; approvals</li>
                         <li>Offline bundles &amp; kiosk mode</li>
@@ -281,7 +322,7 @@
             <span class="landing-section__label">Mobile app</span>
             <h2 id="download-heading" class="landing-section__title">Download the Culture Kids app</h2>
             <p class="landing-section__lead" style="margin-left:auto; margin-right:auto">
-                Stories, songs, and activities on phones and tablets — works offline after you download your tribe bundles.
+                Stories, songs, and activities on phones and tablets — works offline after you download your {{ strtolower(heritage('people_bundles')) }}.
             </p>
             <div class="landing-download__stores">
                 <a href="{{ route('register') }}" class="landing-download__store landing-download__store--apple" aria-label="Download on the App Store">
@@ -302,9 +343,9 @@
 
     <section class="landing-cta" id="cta" aria-labelledby="cta-title">
         <div class="landing__container">
-            <h2 id="cta-title" class="landing-cta__title">Ready to start your child's cultural journey?</h2>
+            <h2 id="cta-title" class="landing-cta__title">{{ $l['cta_title'] ?? "Ready to start your child's cultural journey?" }}</h2>
             <p class="landing-cta__subtitle">
-                Join 2,847 children learning about their heritage through stories and songs
+                {{ $l['cta_subtitle'] ?? 'Join thousands of children learning about their heritage through stories and songs.' }}
             </p>
             <a href="{{ route('register') }}" class="landing-btn landing-btn--primary landing-btn--cta">Create Free Account</a>
         </div>

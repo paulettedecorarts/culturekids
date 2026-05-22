@@ -44,7 +44,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="act-label">Tribe</label>
+                    <label class="act-label">{{ heritage('people') }}</label>
                     <select wire:model.number="tribe_id" class="act-input">
                         <option value="">Select tribe</option>
                         @foreach($this->tribes as $tribe)
@@ -284,7 +284,7 @@
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
                 <div class="act-stat"><span>Title</span><strong>{{ $activity->title }}</strong></div>
                 <div class="act-stat"><span>Type</span><strong>{{ str_replace('_', ' ', $activity->type) }}</strong></div>
-                <div class="act-stat"><span>Tribe</span><strong>{{ $activity->tribe->name }}</strong></div>
+                <div class="act-stat"><span>{{ heritage('people') }}</span><strong>{{ $activity->tribe->name }}</strong></div>
                 <div class="act-stat"><span>Age range</span><strong>
                     @php
                         $ar = $activity->age_range;

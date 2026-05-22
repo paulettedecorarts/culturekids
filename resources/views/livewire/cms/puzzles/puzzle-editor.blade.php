@@ -21,7 +21,7 @@
                     @error('title') <div class="pz-error">{{ $message }}</div> @enderror
                 </div>
                 <div>
-                    <label class="pz-label">Tribe</label>
+                    <label class="pz-label">{{ heritage('people') }}</label>
                     <select wire:model.live="tribe_id" class="pz-input">
                         <option value="">Select tribe</option>
                         @foreach($this->tribes as $tribe)

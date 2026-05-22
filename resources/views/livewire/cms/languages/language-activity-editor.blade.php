@@ -141,9 +141,9 @@
                     @error('title') <div class="le-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="le-field">
-                    <label class="le-label">Tribe <span style="color:#ff8c8c">*</span></label>
+                    <label class="le-label">{{ heritage('people') }} <span style="color:#ff8c8c">*</span></label>
                     <select wire:model.number="tribe_id" class="le-input" required>
-                        <option value="">Select Tribe</option>
+                        <option value="">{{ heritage('people') }}</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
                         @endforeach

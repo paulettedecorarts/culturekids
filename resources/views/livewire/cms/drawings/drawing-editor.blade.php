@@ -31,9 +31,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Tribe</label>
+                    <label class="form-label">{{ heritage('people') }}</label>
                     <select wire:model.number="tribe_id" class="form-select" required>
-                        <option value="">Select Tribe</option>
+                        <option value="">{{ heritage('people') }}</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
                         @endforeach

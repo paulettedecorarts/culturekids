@@ -13,6 +13,7 @@ use App\Livewire\Admin\AssetsManager;
 use App\Livewire\Admin\AuditLogs;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\ImpersonateUser;
+use App\Livewire\Admin\LandingPageEditor;
 use App\Livewire\Admin\LanguageDetailPage;
 use App\Livewire\Admin\LanguagesManager;
 use App\Livewire\Admin\ModuleToggles;
@@ -65,15 +66,17 @@ use App\Livewire\Teacher\StoryLibrary;
 use App\Livewire\Teacher\TeacherStoryReader;
 use App\Livewire\Teacher\TribesExplorer;
 use App\Livewire\Teacher\Worksheets;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', LandingPageController::class)->name('home');
 
 // Super Admin Routes
 Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', Dashboard::class)->name('dashboard');
+    Route::get('landing-page', LandingPageEditor::class)->name('landing-page');
     Route::get('users', UserManagement::class)->name('users');
     Route::get('users/create', UserForm::class)->name('users.create');
     Route::get('users/{user}', UserDetail::class)->name('users.detail');

@@ -2,7 +2,7 @@
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <div>
             <div class="sa-page-title">Puzzles</div>
-            <div class="sa-breadcrumb">Tribe-linked puzzle activities · independent module</div>
+            <div class="sa-breadcrumb">{{ heritage('people') }}-linked puzzle activities · independent module</div>
         </div>
         <a href="{{ route($routePrefix . '.puzzles.create') }}" class="btn btn-primary btn-sm" style="text-decoration:none">+ Add puzzle</a>
     </div>
@@ -34,7 +34,7 @@
     <div style="display:flex;gap:var(--sp-3);margin-bottom:var(--sp-4);flex-wrap:wrap">
         <input wire:model.live.debounce.300ms="search" placeholder="Search puzzles…" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none;flex:1;min-width:180px">
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
-            <option value="">All Tribes</option>
+            <option value="">{{ heritage('all_peoples') }}</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
@@ -49,7 +49,7 @@
     <div class="sa-table-wrap">
         <div class="sa-table-head puzzle-table-grid">
             <span>Puzzle</span>
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Status</span>
             <span>Age</span>
             <span>Actions</span>

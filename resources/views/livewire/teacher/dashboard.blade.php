@@ -76,7 +76,7 @@
                     <thead>
                         <tr style="background:#FDFBFA; border-bottom:1px solid var(--cream-mid); font-size:10px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1.5px">
                             <th style="padding:16px 24px">{{ __('Lesson') }}</th>
-                            <th style="padding:16px 24px">{{ __('Tribe') }}</th>
+                            <th style="padding:16px 24px">{{ heritage('people') }}</th>
                             <th style="padding:16px 24px">{{ __('When') }}</th>
                             <th style="padding:16px 24px">{{ __('Status') }}</th>
                             <th style="padding:16px 24px; text-align:right">{{ __('Actions') }}</th>

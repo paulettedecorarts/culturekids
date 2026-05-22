@@ -51,9 +51,9 @@
                     @error('title') <div class="sd-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="sd-field">
-                    <label class="sd-label">Tribe <span style="color:#ff8c8c">*</span></label>
+                    <label class="sd-label">{{ heritage('people') }} <span style="color:#ff8c8c">*</span></label>
                     <select wire:model.number="tribe_id" class="sd-input" required>
-                        <option value="">Select Tribe</option>
+                        <option value="">{{ heritage('people') }}</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
                         @endforeach

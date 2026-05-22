@@ -3,7 +3,7 @@
         <div>
             <a href="{{ route($this->portalContentListRoute($routePrefix . '.drawings')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Drawings') }}</a>
             <div class="sa-page-title">{{ $drawing->title }}</div>
-            <div class="sa-breadcrumb">{{ $drawing->drawing_type_display }} • {{ $drawing->tribe->name ?? 'Unknown Tribe' }}</div>
+            <div class="sa-breadcrumb">{{ $drawing->drawing_type_display }} • {{ $drawing->tribe->name ?? 'Unknown {{ heritage('people') }}' }}</div>
         </div>
         @if($this->portalCanEditContent())
             <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">

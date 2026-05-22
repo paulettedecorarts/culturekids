@@ -25,7 +25,7 @@
                 <div class="act-label" style="margin-bottom:var(--sp-3)">Maze Details</div>
                 <div style="display:flex;flex-direction:column;gap:var(--sp-2)">
                     @foreach([
-                        ['Tribe', $maze->tribe->name ?? 'N/A'],
+                        [heritage('people'), $maze->tribe->name ?? 'N/A'],
                         ['Type', $maze->maze_type_label],
                         ['Difficulty', $maze->difficulty_label],
                         ['Age Range', $maze->age_range],

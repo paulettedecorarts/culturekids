@@ -51,7 +51,7 @@
         </select>
 
         <select wire:model.live="tribeFilter" style="padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text);font-family:var(--font-admin);font-size:12px;outline:none">
-            <option value="">All Tribes</option>
+            <option value="">{{ heritage('all_peoples') }}</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
@@ -70,7 +70,7 @@
         <div class="sa-table-head" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:var(--sp-3);padding:12px 16px;background:var(--cms-surface-raised);border-radius:8px;font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.5px">
             <span>Activity</span>
             <span>Type</span>
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Status</span>
             <span>Words</span>
             <span>Actions</span>

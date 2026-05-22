@@ -3,12 +3,12 @@
         <div style="display:flex; align-items:center; gap:20px">
             <a href="{{ route($routePrefix . '.tribes') }}" class="btn" style="background: var(--cms-surface-raised); color:var(--cms-text); width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; text-decoration:none; border: 1px solid var(--cms-border)">←</a>
             <div>
-                <h1 class="sa-page-title">{{ $editing ? 'Update Heritage Record' : 'Register New Tribe' }}</h1>
+                <h1 class="sa-page-title">{{ $editing ? 'Update heritage record' : 'Register new '.strtolower(heritage('people')) }}</h1>
                 <div class="sa-breadcrumb">Culture Management · Heritage Portfolio</div>
             </div>
         </div>
         <x-livewire-submit-button type="button" wire:click="save" target="save" :loading="$editing ? __('Updating…') : __('Saving…')">
-            {{ $editing ? 'Synchronize Record' : 'Commit New Tribe' }}
+            {{ $editing ? 'Synchronize record' : 'Commit new '.strtolower(heritage('people')) }}
         </x-livewire-submit-button>
     </div>
 
@@ -20,7 +20,7 @@
                 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px">
                     <div style="grid-column: span 2">
-                        <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Official Tribe Name</label>
+                        <label style="display:block; font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px">Official {{ heritage('people') }} name</label>
                         <input wire:model="name" type="text" placeholder="e.g. Baganda, Acholi, Banyankole" style="width:100%; background:var(--cms-input-bg); border: 1px solid var(--cms-border); border-radius:16px; padding:18px; color:var(--cms-text); font-family:var(--font-admin)">
                         @error('name') <div style="color:var(--clay-red); font-size:11px; font-weight:700; margin-top:8px">{{ $message }}</div> @enderror
                     </div>
@@ -94,7 +94,7 @@
         <!-- Sidebar Panel: Roster Preview -->
         <div style="display:flex; flex-direction:column; gap:32px">
             <div style="background:var(--cms-surface-raised); border:1px solid var(--cms-border); border-radius:40px; padding:40px; text-align:center; position:sticky; top:20px">
-                <h3 style="font-family:var(--font-display); font-size:18px; color:var(--cms-text-muted); margin-bottom:32px; letter-spacing:1px; text-transform:uppercase">Tribe Preview</h3>
+                <h3 style="font-family:var(--font-display); font-size:18px; color:var(--cms-text-muted); margin-bottom:32px; letter-spacing:1px; text-transform:uppercase">{{ heritage('people') }} preview</h3>
                 
                 <div style="background:{{ $color ?? '#7C3AED' }}; border-radius:32px; padding:40px; box-shadow:0 32px 64px {{ ($color ?? '#7C3AED').'40' }}; position:relative; overflow:hidden">
                     <div style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.2), transparent); pointer-events:none"></div>
@@ -103,7 +103,7 @@
                         {{ $hero_emoji ?: '🗺️' }}
                     </div>
                     
-                    <h4 style="font-family:var(--font-display); font-size:28px; color:var(--cms-text); margin-bottom:8px">{{ $name ?: 'New Tribe' }}</h4>
+                    <h4 style="font-family:var(--font-display); font-size:28px; color:var(--cms-text); margin-bottom:8px">{{ $name ?: 'New '.heritage('people') }}</h4>
                     <div style="font-size:13px; font-weight:800; color: var(--cms-text-muted); letter-spacing:1px; text-transform:uppercase">{{ $region ?: 'Region Unset' }}</div>
                     
                     <div style="margin-top:32px; padding-top:32px; border-top:1px solid var(--cms-border)">

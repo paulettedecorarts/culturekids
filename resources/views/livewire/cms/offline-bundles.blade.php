@@ -88,7 +88,7 @@
         <div class="sa-table-head offline-bundles-head" style="grid-template-columns:120px 2fr 1fr minmax(120px, 1.2fr) 120px">
             <span>{{ __('Type') }}</span>
             <span>{{ __('Title') }}</span>
-            <span>{{ __('Tribe') }}</span>
+            <span>{{ heritage('people') }}</span>
             <span>{{ __('Status') }}</span>
             <span>{{ __('Actions') }}</span>
         </div>
@@ -104,7 +104,7 @@
                     <div style="font-weight:700;color:var(--cms-text);font-size:14px">{{ $item['title'] }}</div>
                     <div style="font-size:10px;color:var(--cms-text-muted);font-family:monospace">#{{ $item['content_id'] }}</div>
                 </div>
-                <span data-label="{{ __('Tribe') }}" style="font-size:12px;color:var(--cms-text-muted)">{{ $item['tribe_name'] ?? '—' }}</span>
+                <span data-label="{{ heritage('people') }}" style="font-size:12px;color:var(--cms-text-muted)">{{ $item['tribe_name'] ?? '—' }}</span>
                 <div class="offline-bundles-status-cell" data-label="{{ __('Status') }}">
                     <span class="ob-status-pill {{ $statusClasses[$item['status']] ?? 'ob-status--pending' }}">
                         @if(in_array($item['status'], ['queued', 'building'], true))

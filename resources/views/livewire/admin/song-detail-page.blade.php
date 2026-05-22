@@ -42,7 +42,7 @@
                     @error('title') <div style="font-size:10px;color:#ff8c8c">{{ $message }}</div> @enderror
                 </div>
                 <div>
-                    <label style="font-size:11px;color:var(--cms-text-muted)">Tribe</label>
+                    <label style="font-size:11px;color:var(--cms-text-muted)">{{ heritage('people') }}</label>
                     <select wire:model.number="tribe_id" style="width:100%;padding:9px;border-radius:8px;border:1px solid var(--cms-input-border);background:var(--cms-input-bg);color:var(--cms-text)">
                         <option value="">Select tribe</option>
                         @foreach($this->tribes as $tribe)

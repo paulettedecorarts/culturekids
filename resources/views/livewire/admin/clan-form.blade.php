@@ -41,9 +41,9 @@
                     @error('name') <div class="cf-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="cf-field">
-                    <label class="cf-label">Tribe <span style="color:#ff8c8c">*</span></label>
+                    <label class="cf-label">{{ heritage('people') }} <span style="color:#ff8c8c">*</span></label>
                     <select wire:model.number="tribe_id" class="cf-input" required>
-                        <option value="">Select Tribe</option>
+                        <option value="">{{ heritage('people') }}</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
                         @endforeach

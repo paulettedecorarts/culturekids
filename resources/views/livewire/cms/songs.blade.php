@@ -28,7 +28,7 @@
     <div class="cms-asset-table">
         <div class="cms-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
             <span>Song Title</span>
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Language</span>
             <span>Duration</span>
             <span>Actions</span>

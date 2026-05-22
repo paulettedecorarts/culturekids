@@ -46,7 +46,7 @@
                             <div style="flex:1; min-width:200px">
                                 <div style="font-weight:800; font-size:16px; color:var(--ink)">{{ $comic->title }}</div>
                                 <div style="font-size:12px; font-weight:700; color:var(--stone); margin-top:4px">
-                                    {{ $comic->tribe?->name ?? __('Tribe') }} · {{ $comic->age_range }} · {{ $comic->panels_count }} {{ __('panels') }}
+                                    {{ $comic->tribe?->name ?? heritage('people') }} · {{ $comic->age_range }} · {{ $comic->panels_count }} {{ __('panels') }}
                                 </div>
                             </div>
                             <div style="display:flex; gap:8px; flex-wrap:wrap">
@@ -87,7 +87,7 @@
                             <div style="flex:1; min-width:200px">
                                 <div style="font-weight:800; font-size:16px; color:var(--ink)">{{ $activity->title }}</div>
                                 <div style="font-size:12px; font-weight:700; color:var(--stone); margin-top:4px">
-                                    {{ $activity->tribe?->name ?? __('Tribe') }}
+                                    {{ $activity->tribe?->name ?? heritage('people') }}
                                     <span style="text-transform:capitalize"> · {{ str_replace('_', ' ', $activity->type) }}</span>
                                     @if ($activity->age_range)
                                         · {{ $activity->age_range }}

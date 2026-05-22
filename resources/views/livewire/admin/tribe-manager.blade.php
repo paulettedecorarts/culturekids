@@ -1,10 +1,10 @@
 <div class="sa-tribe-manager-view">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-8)">
         <div>
-            <h1 class="sa-page-title">Heritage Tribes</h1>
+            <h1 class="sa-page-title">{{ heritage('people_of_uganda') }}</h1>
             <div class="sa-breadcrumb">Culture Management · Ancestral Registry</div>
         </div>
-        <a href="{{ route($routePrefix . '.tribes.create') }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">+ Register New Tribe</a>
+        <a href="{{ route($routePrefix . '.tribes.create') }}" class="btn btn-primary" style="padding:12px 28px; border-radius:14px; font-weight:800; font-size:13px; box-shadow: 0 8px 24px rgba(196,75,43,0.3); text-decoration:none">+ Register {{ heritage('people') }}</a>
     </div>
 
     @if (session()->has('message'))
@@ -20,7 +20,7 @@
             <input 
                 type="text" 
                 wire:model.live.debounce.300ms="search" 
-                placeholder="Search tribes by name or region..." 
+                placeholder="Search {{ strtolower(heritage('ugandan_peoples')) }} by name or region..." 
                 style="width:100%; background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:16px; padding:16px 16px 16px 52px; color:var(--cms-text); font-family:var(--font-admin); font-size:13px; outline:none;"
             >
         </div>
@@ -29,7 +29,7 @@
     <!-- Tribes Grid/Table -->
     <div style="background:var(--cms-surface); border:1px solid var(--cms-border); border-radius:32px; overflow:hidden">
         <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr minmax(140px, auto); padding:24px 32px; background:var(--cms-surface); border-bottom:1px solid var(--cms-border-subtle); font-size:11px; font-weight:800; color:var(--cms-text-muted); text-transform:uppercase; letter-spacing:1px">
-            <span>Tribe Identity</span>
+            <span>{{ heritage('people') }} identity</span>
             <span>Ancestral Region</span>
             <span>Guardian Hero</span>
             <span>Greeting</span>

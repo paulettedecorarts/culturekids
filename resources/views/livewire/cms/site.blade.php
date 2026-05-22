@@ -49,7 +49,7 @@
                             <textarea wire:model.live="mission_text" rows="6" placeholder="Your organization's story..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Featured Tribes (displayed on home)</label>
+                            <label>{{ heritage('featured_peoples') }} (displayed on home)</label>
                             <div class="tribe-selector">
                                 @foreach($tribes as $tribe)
                                     <button type="button" class="tribe-chip {{ in_array($tribe->id, $featured_tribe_ids, true) ? 'checked' : '' }}" wire:click="toggleFeaturedTribe({{ $tribe->id }})">
@@ -119,7 +119,7 @@
                     <div class="mock-section-label">Our Mission</div>
                     <p>{{ $mission_text }}</p>
                     
-                    <div class="mock-section-label">Explore Our Tribes</div>
+                    <div class="mock-section-label">{{ heritage('explore_peoples') }}</div>
                     <div class="mock-grid">
                         @forelse($featuredTribes->take(4) as $tribe)
                             <div class="mock-card">{{ $tribe->hero_emoji ?: '🌍' }} {{ $tribe->name }}</div>

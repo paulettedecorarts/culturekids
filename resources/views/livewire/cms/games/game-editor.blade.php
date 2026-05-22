@@ -89,9 +89,9 @@
                     @error('title') <div class="ge-error">{{ $message }}</div> @enderror
                 </div>
                 <div class="ge-field">
-                    <label class="ge-label">Tribe <span style="color:#ff8c8c">*</span></label>
+                    <label class="ge-label">{{ heritage('people') }} <span style="color:#ff8c8c">*</span></label>
                     <select wire:model.number="tribe_id" class="ge-input" required>
-                        <option value="">Select Tribe</option>
+                        <option value="">{{ heritage('people') }}</option>
                         @foreach($this->tribes as $tribe)
                             <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
                         @endforeach

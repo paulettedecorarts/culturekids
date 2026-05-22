@@ -55,7 +55,7 @@ HTML;
 
         <div class="th-nav-section"><span class="th-nav-section-text">{{ __('Content') }}</span></div>
         {!! $thNavLink(route('teacher.library'), '📚', __('Library'), request()->routeIs('teacher.library', 'teacher.library.*', 'teacher.stories.*')) !!}
-        {!! $thNavLink(route('teacher.tribes'), '🌍', __('Tribes Explorer'), request()->routeIs('teacher.tribes')) !!}
+        {!! $thNavLink(route('teacher.tribes'), '🌍', heritage('peoples_explorer'), request()->routeIs('teacher.tribes')) !!}
         {!! $thNavLink(route('teacher.print-center'), '🖨️', __('Print Center'), request()->routeIs('teacher.print-center')) !!}
         {!! $thNavLink(route('teacher.worksheets'), '📖', __('Worksheets'), request()->routeIs('teacher.worksheets')) !!}
     </nav>

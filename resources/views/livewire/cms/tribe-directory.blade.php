@@ -1,12 +1,12 @@
 <div>
     <div class="cms-header">
         <div>
-            <h1 class="cms-page-title">Tribe Directory</h1>
-            <div class="cms-breadcrumb">Platform · Tribes · All</div>
+            <h1 class="cms-page-title">{{ heritage('people_directory') }}</h1>
+            <div class="cms-breadcrumb">Platform · {{ heritage('people_plural') }} · All</div>
         </div>
         <div style="display:flex; gap:12px">
             <button class="btn btn-ghost btn-sm">Filter</button>
-            <button class="btn btn-primary btn-sm">+ Add Tribe</button>
+            <button class="btn btn-primary btn-sm">+ Add {{ heritage('people') }}</button>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
 
     <div class="cms-asset-table">
         <div class="cms-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr 90px">
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Language</span>
             <span>Region</span>
             <span>Comics</span>

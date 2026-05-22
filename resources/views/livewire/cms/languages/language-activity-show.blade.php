@@ -26,7 +26,7 @@
                 <div class="act-label" style="margin-bottom:var(--sp-3)">Activity Details</div>
                 <div style="display:flex;flex-direction:column;gap:var(--sp-2)">
                     @foreach([
-                        ['Tribe', $activity->tribe->name ?? 'N/A'],
+                        [heritage('people'), $activity->tribe->name ?? 'N/A'],
                         ['Language', strtoupper($activity->language_code)],
                         ['Type', $activity->activity_type_label],
                         ['Difficulty', ucfirst($activity->difficulty_level)],

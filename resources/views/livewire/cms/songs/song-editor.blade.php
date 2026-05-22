@@ -24,7 +24,7 @@
                 </div>
 
                 <div>
-                    <label class="song-label">Tribe <span style="color:#ff8c8c">*</span></label>
+                    <label class="song-label">{{ heritage('people') }} <span style="color:#ff8c8c">*</span></label>
                     <select wire:model.number="tribe_id" class="song-input">
                         <option value="">Select a tribe</option>
                         @foreach($this->tribes as $tribe)

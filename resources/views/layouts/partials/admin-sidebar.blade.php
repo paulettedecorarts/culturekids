@@ -48,6 +48,7 @@ HTML;
         {!! $saNavLink(route('admin.modules'), '🧩', 'Module Toggles', request()->routeIs('admin.modules')) !!}
         {!! $saNavLink(route('admin.permissions'), '🔑', 'Permissions', request()->routeIs('admin.permissions')) !!}
         {!! $saNavLink(route('admin.themes'), '🎨', 'Themes', request()->routeIs('admin.themes')) !!}
+        {!! $saNavLink(route('admin.landing-page'), '🏠', 'Homepage', request()->routeIs('admin.landing-page')) !!}
         {!! $saNavLink(route('admin.analytics'), '📈', 'Analytics', request()->routeIs('admin.analytics')) !!}
 
         <div class="sa-nav-section"><span class="sa-nav-section-text">Content</span></div>
@@ -67,7 +68,7 @@ HTML;
         {!! $saNavLink(route('admin.assets'), '🖼', 'Assets', request()->routeIs('admin.assets*')) !!}
         {!! $saNavLink(route('admin.translations'), '🌐', 'Translations', request()->routeIs('admin.translations*')) !!}
         {!! $saNavLink(route('admin.age-categories'), '🌱', 'Age Categories', request()->routeIs('admin.age-categories*')) !!}
-        {!! $saNavLink(route('admin.tribe-registry'), '🌍', 'Tribe Directory', request()->routeIs('admin.tribe-registry*')) !!}
+        {!! $saNavLink(route('admin.tribe-registry'), '🌍', heritage('people_directory'), request()->routeIs('admin.tribe-registry*')) !!}
         {!! $saNavLink(route('admin.clans'), '🌳', 'Clan Registry', request()->routeIs('admin.clans*')) !!}
         {!! $saNavLink(route('admin.languages'), '🗣', 'Languages', request()->routeIs('admin.languages*')) !!}
 

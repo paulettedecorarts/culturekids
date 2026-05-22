@@ -30,7 +30,7 @@
                                 @error('title') <div class="story-form-error">{{ $message }}</div> @enderror
                             </div>
                             <div class="story-form-field story-form-field-tribe">
-                                <label class="story-form-label">Tribe</label>
+                                <label class="story-form-label">{{ heritage('people') }}</label>
                                 <select wire:model.number="tribe_id" class="story-form-input story-form-select">
                                     <option value="">Select tribe</option>
                                     @foreach($tribes as $tribe)

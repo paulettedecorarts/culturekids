@@ -55,7 +55,7 @@ HTML;
 
         @if($isEditor || $isSuper)
             <div class="cms-nav-section"><span class="cms-nav-section-text">Content Production</span></div>
-            {!! $cmsNavLink(route('cms.editor.tribes'), '🌍', 'Tribe Directory', request()->routeIs('cms.editor.tribes*')) !!}
+            {!! $cmsNavLink(route('cms.editor.tribes'), '🌍', heritage('people_directory'), request()->routeIs('cms.editor.tribes*')) !!}
             {!! $cmsNavLink(route('cms.editor.clans'), '🌳', 'Clan Registry', request()->routeIs('cms.editor.clans*')) !!}
             {!! $cmsNavLink(route('cms.editor.story-packs'), '📋', 'Story Packs', request()->routeIs('cms.editor.story-packs*')) !!}
             {!! $cmsNavLink(route('cms.editor.songs'), '🎵', 'Songs', request()->routeIs('cms.editor.songs*')) !!}

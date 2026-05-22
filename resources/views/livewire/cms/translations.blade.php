@@ -32,7 +32,7 @@
 
     <div class="cms-asset-table">
         <div class="cms-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 100px">
-            <span>Tribe Context</span>
+            <span>{{ heritage('people') }} Context</span>
             <span>Primary Lang</span>
             <span>Alt Lang</span>
             <span>Completeness</span>

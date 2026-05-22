@@ -4,7 +4,7 @@
             <div class="sa-page-title">{{ $flashcardsPortal ? 'Flashcards' : 'Activities' }}</div>
             <div class="sa-breadcrumb">
                 @if($flashcardsPortal)
-                    Vocab flashcards · tribe-linked (per product spec)
+                    Vocab flashcards · {{ heritage('people') }}-linked (per product spec)
                 @else
                     Puzzles, worksheets, games, vocab packs — flashcards use the Flashcards nav
                 @endif
@@ -63,7 +63,7 @@
             <option value="culture">Culture</option>
         </select>
         <select wire:model.live="tribeFilter" class="act-filter">
-            <option value="">All Tribes</option>
+            <option value="">{{ heritage('all_peoples') }}</option>
             @foreach($this->tribes as $tribe)
                 <option value="{{ $tribe->id }}">{{ $tribe->name }}</option>
             @endforeach
@@ -79,7 +79,7 @@
         <div class="sa-table-head act-table-grid">
             <span>Activity</span>
             <span>Type</span>
-            <span>Tribe</span>
+            <span>{{ heritage('people') }}</span>
             <span>Status</span>
             <span>Age</span>
             <span>Actions</span>

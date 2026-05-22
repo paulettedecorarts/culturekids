@@ -38,7 +38,7 @@
                 <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--cms-text-muted);">{{ $item['type_label'] }}</span>
                 <span>
                     <div style="font-weight:700">{{ $item['title'] }}</div>
-                    <div style="font-size:11px; color:var(--cms-text-muted)">Tribe: {{ $item['tribe'] ?? '—' }} · By {{ $item['approved_by'] }}</div>
+                    <div style="font-size:11px; color:var(--cms-text-muted)">{{ heritage('people') }}: {{ $item['tribe'] ?? '—' }} · By {{ $item['approved_by'] }}</div>
                 </span>
                 <span style="font-size:12px; color:var(--cms-text-muted)">{{ $item['approved_at']?->diffForHumans() }}</span>
                 @if($item['view_url'])

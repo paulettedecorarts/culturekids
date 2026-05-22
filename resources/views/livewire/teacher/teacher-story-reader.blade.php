@@ -3,7 +3,7 @@
         <div>
             <h1 class="page-title" style="font-size:26px">{{ $comic->title }}</h1>
             <div class="breadcrumb">
-                {{ $comic->tribe?->name ?? __('Tribe') }} · {{ $comic->age_range }} · {{ $comic->panels->count() }} {{ __('panels') }}
+                {{ $comic->tribe?->name ?? heritage('people') }} · {{ $comic->age_range }} · {{ $comic->panels->count() }} {{ __('panels') }}
             </div>
         </div>
         <div class="th-header-actions">

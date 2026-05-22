@@ -1,10 +1,10 @@
 <div class="tribes-explorer">
     <div class="header">
         <div>
-            <h1 class="page-title">{{ __('Tribes explorer') }}</h1>
-            <div class="breadcrumb">{{ __('Content · Heritage by tribe') }}</div>
+            <h1 class="page-title">{{ heritage('peoples_explorer') }}</h1>
+            <div class="breadcrumb">{{ __('Content') }} · {{ heritage('people_of_uganda') }}</div>
             <p style="margin-top:12px; font-size:14px; font-weight:600; color:var(--stone); max-width:560px; line-height:1.5">
-                {{ __('Tribes listed here match content your org admin approved from the Review Queue. Counts show how many approved items you have per activity type.') }}
+                {{ heritage('ugandan_peoples') }} listed here match content your org admin approved from the Review Queue. Counts show how many approved items you have per activity type.
             </p>
         </div>
     </div>
@@ -13,7 +13,7 @@
         <input
             type="search"
             wire:model.live.debounce.300ms="search"
-            placeholder="{{ __('Search tribes, languages, regions…') }}"
+            placeholder="{{ __('Search') }} {{ strtolower(heritage('ugandan_peoples')) }}, languages, regions…"
             class="th-input th-input--search"
             style="max-width:400px;"
         >
@@ -43,7 +43,7 @@
 
     @if ($tribes->isEmpty())
         <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:24px; padding:32px; text-align:center; font-weight:600; color:#92400E;">
-            {{ __('No tribes match these filters.') }}
+            {{ __('No results match these filters.') }}
         </div>
     @else
         <div class="th-tribe-grid">
