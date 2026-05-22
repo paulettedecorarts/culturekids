@@ -3,192 +3,176 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Paulette Culture Kids</title>
-    
-    <!-- Google Fonts -->
+    <title>{{ config('app.name', 'Paulette Culture Kids') }}</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Bricolage+Grotesque:wght@700;800&family=DM+Serif+Display:ital@0;1&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    @include('layouts.partials.portal-theme-vars')
+
     <style>
         :root {
-            --clay-red:#C44B2B; --clay-red-light:#E06444; 
-            --sunfire:#E8872A; --sunfire-pale:#FDF0DE;
-            --savanna-gold:#D4A017;
-            --indigo-night:#1E2D4A; --sky-dusk:#2E4D8A;
-            --ink:#1A1208; --stone:#9C8875;
-            --cream:#FAF6F0; --cream-mid:#EDE0CE; --white:#FFFFFF;
-            
-            --font-display:'Baloo 2', cursive;
-            --font-admin:'Bricolage Grotesque', sans-serif;
-            --font-editorial:'DM Serif Display', serif;
-            
-            --r-xl:40px;
+            --font-landing: 'Inter', system-ui, sans-serif;
         }
-
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body { background: var(--white); color: var(--ink); font-family: var(--font-admin); overflow-x: hidden; line-height: 1.5; }
-
-        /* HERO SECTION */
-        .hero {
-            min-height: 95vh; background: var(--indigo-night); position: relative;
-            display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 100px 0;
-        }
-
-        /* Pure CSS Diamond Texture (The sharp grid) */
-        .hero::before {
-            content:''; position:absolute; inset:0; opacity:0.12; z-index: 1;
-            background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)),
-                        linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2));
-            background-size: 80px 80px; background-position: 0 0, 40px 40px;
-        }
-
-        /* Light Leaks / Accents */
-        .hero-accent { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; z-index: 2; pointer-events: none; }
-        .hero-accent-1 { width: 500px; height: 500px; background: var(--clay-red); top: -150px; right: -100px; }
-        .hero-accent-2 { width: 400px; height: 400px; background: var(--savanna-gold); bottom: -100px; left: -100px; }
-
-        .hero-inner {
-            position: relative; z-index: 5; max-width: 1200px; margin: 0 auto; padding: 0 40px;
-            display: grid; grid-template-columns: 1fr 420px; gap: 80px; align-items: center;
-        }
-
-        .hero-tagline { 
-            color: var(--clay-red); font-size: 11px; font-weight: 800; letter-spacing: 2.5px; 
-            text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; 
-        }
-        .hero-tagline::before { content: ''; width: 24px; height: 3px; background: var(--clay-red); border-radius: 4px; }
-
-        .hero-headline {
-            font-family: var(--font-display); font-size: 72px; font-weight: 800; line-height: 1.05; 
-            color: #fff; margin-bottom: 32px; letter-spacing: -0.5px;
-        }
-        .hero-headline em { font-style: normal; color: var(--clay-red); display: block; }
-
-        .hero-body { font-size: 19px; color: rgba(255,255,255,0.95); line-height: 1.6; margin-bottom: 48px; max-width: 520px; font-weight: 700; }
-
-        .hero-pills { display: grid; grid-template-columns: auto auto auto; gap: 12px; width: fit-content; margin-bottom: 60px; }
-        .hero-pill { background: rgba(255,255,255,.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.12); padding: 10px 20px; border-radius: 99px; color: #fff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .btn { display: inline-flex; align-items: center; gap: 12px; padding: 20px 48px; border-radius: 20px; font-size: 16px; font-weight: 800; text-decoration: none; transition: transform 0.2s; }
-        .btn-primary { background: var(--clay-red); color: #fff; box-shadow: 0 8px 32px rgba(196,75,43,.4); }
-        .btn-outline { border: 2.5px solid rgba(255,255,255,.2); color: #fff; }
-        .btn:hover { transform: scale(1.02); }
-
-        /* PHONE MOCKUP */
-        .hero-phone-wrap { position: relative; }
-        .hero-phone { 
-            width: 300px; aspect-ratio: 9/19; background: #000; border-radius: 54px; 
-            padding: 12px; border: 8px solid #222; box-shadow: 0 40px 100px rgba(0,0,0,.6); 
-            position: relative; z-index: 10;
-        }
-        .phone-screen { background: var(--white); height: 100%; border-radius: 36px; overflow: hidden; display: flex; flex-direction: column; }
-        .phone-header { background: var(--clay-red); padding: 18px 20px; color: #fff; font-family: var(--font-display); font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
-        .phone-content { padding: 24px; }
-        .phone-greeting { font-weight: 800; font-size: 14px; color: var(--clay-red); margin-bottom: 20px; }
-        .phone-label { font-size: 10px; font-weight: 800; color: var(--stone); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-        .phone-card { background: var(--cream); height: 74px; border-radius: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
-        .phone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .phone-tile { aspect-ratio: 1; border-radius: 10px; background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
-        .floating { position: absolute; padding: 12px 24px; border-radius: 99px; font-size: 12px; font-weight: 800; color: #fff; box-shadow: 0 12px 32px rgba(0,0,0,.3); z-index: 20; white-space: nowrap; }
-        .float-1 { background: var(--savanna-gold); top: 120px; right: -60px; }
-        .float-2 { background: #2D5438; bottom: 100px; left: -80px; display: flex; align-items: center; gap: 10px; }
-
-        /* VILLAGE SECTION */
-        .page-wrap { max-width: 1200px; margin: 0 auto; padding: 120px 40px; text-align: center; }
-        .section-label { color: var(--clay-red); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 16px; display: block; }
-        .section-title { font-family: var(--font-editorial); font-size: 48px; font-style: italic; color: var(--ink); margin-bottom: 80px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .card { background: #fff; border-radius: 40px; padding: 60px 40px; border: 1px solid var(--cream-mid); box-shadow: 0 8px 32px rgba(26,18,8,.04); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-10px); }
-        .card-icon { font-size: 48px; margin-bottom: 32px; display: block; }
-        .card-title { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 16px; }
-        .card-body { font-size: 14px; color: var(--stone); line-height: 1.6; font-weight: 700; }
+        body { margin: 0; }
     </style>
+    <style>{!! file_get_contents(resource_path('css/landing.css')) !!}</style>
 </head>
 <body>
-    <div class="hero">
-        <div class="hero-accent hero-accent-1"></div>
-        <div class="hero-accent hero-accent-2"></div>
-        <div class="hero-inner">
-            <div>
-                <p class="hero-tagline">Cultural Learning Platform · Uganda</p>
-                <h1 class="hero-headline">Stories woven<em>into every child.</em></h1>
-                <p class="hero-body">Paulette Culture Kids brings 65+ Ugandan tribes to life through comics, songs, flashcards and interactive stories — for children ages 2-6 and their families.</p>
-                
-                <div class="hero-pills">
-                    <div class="hero-pill">65+ Uganda Tribes</div>
-                    <div class="hero-pill">Luganda - English - Swahili</div>
-                    <div class="hero-pill">Offline-First</div>
-                    <div class="hero-pill">Child - Teacher - Parent</div>
-                    <div class="hero-pill">CMS + Super Admin</div>
-                    <div class="hero-pill">Kiosk / Museum Mode</div>
-                </div>
+<div class="landing">
+    <header class="landing-header" id="landing-header">
+        <div class="landing__container landing-header__inner">
+            <a href="/" class="landing-logo" aria-label="{{ config('app.name') }} home">
+                <span class="landing-logo__globe" aria-hidden="true">🌍</span>
+                <span class="landing-logo__text">
+                    <span class="landing-logo__orange">Paulette</span>
+                    <span class="landing-logo__navy"> Culture </span>
+                    <span class="landing-logo__orange">Kids</span>
+                </span>
+            </a>
 
-                <div style="display:flex; gap:20px">
-                    <a href="{{ route('teacher.dashboard') }}" class="btn btn-primary">▶ Explore Demo</a>
-                    <a href="{{ route('login') }}" class="btn btn-outline">Sign In →</a>
-                </div>
-            </div>
+            <nav class="landing-nav" aria-label="Main">
+                <button type="button" class="landing-nav__toggle" aria-expanded="false" aria-controls="landing-nav-menu" id="landing-nav-toggle" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="landing-nav__links" id="landing-nav-menu">
+                    <li><a href="#tribes" class="landing-nav__link">Tribes</a></li>
+                    <li><a href="#features" class="landing-nav__link">Stories</a></li>
+                    <li><a href="#schools" class="landing-nav__link">For Schools</a></li>
+                    <li><a href="#pricing" class="landing-nav__link">Pricing</a></li>
+                    <li><a href="{{ route('login') }}" class="landing-nav__link">Login</a></li>
+                </ul>
+                <a href="{{ route('register') }}" class="landing-btn landing-btn--primary">Start Free Trial</a>
+            </nav>
+        </div>
+    </header>
 
-            <div class="hero-phone-wrap">
-                <div class="floating float-1">🔵 65 Ugandan Tribes</div>
-                <div class="floating float-2">
-                    <span style="background:var(--sunfire); width:12px; height:12px; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:8px">📴</span>
-                    Works Offline
-                </div>
-                <div class="hero-phone">
-                    <div class="phone-screen">
-                        <div class="phone-header">
-                            <span>Paulette</span>
-                            <div style="width:24px; height:24px; background:rgba(255,255,255,0.2); border-radius:50%"></div>
-                        </div>
-                        <div class="phone-content">
-                            <p class="phone-greeting">Mwasuze mutya, Aisha! 🦁</p>
-                            <p class="phone-label">Continue Reading</p>
-                            <div class="phone-card">🐇</div>
-                            <div class="phone-card" style="margin-bottom:24px">🥁</div>
-                            <p class="phone-label">Activities</p>
-                            <div class="phone-grid">
-                                <div class="phone-tile">📚</div>
-                                <div class="phone-tile">🎵</div>
-                                <div class="phone-tile">🧩</div>
-                                <div class="phone-tile">🖍️</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <section class="landing-hero" aria-labelledby="hero-title">
+        <div class="landing__container">
+            <h1 id="hero-title" class="landing-hero__title">
+                Bring <span class="landing-hero__highlight">Africa's Stories</span> to Life
+            </h1>
+            <p class="landing-hero__subtitle">
+                Interactive cultural comics, songs, and language learning for children ages 2–6 across 65+ Ugandan tribes.
+            </p>
+            <div class="landing-hero__actions">
+                <a href="{{ route('register') }}" class="landing-btn landing-btn--primary landing-btn--hero-primary">
+                    <span class="landing-btn__icon" aria-hidden="true">🚀</span>
+                    Start Free Trial
+                </a>
+                <a href="#download" class="landing-btn landing-btn--hero-secondary">
+                    <span class="landing-btn__icon" aria-hidden="true">📱</span>
+                    Download App
+                </a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="page-wrap">
-        <span class="section-label">Why Paulette Culture Kids</span>
-        <h2 class="section-title">Built for every role in the village</h2>
-        
-        <div class="grid-3">
-            <div class="card">
-                <span class="card-icon">🌍</span>
-                <h3 class="card-title">65+ Uganda Tribes</h3>
-                <p class="card-body">Every tribe with its language, comics, songs and vocabulary — mapped, accurate, and growing.</p>
-            </div>
-            <div class="card">
-                <span class="card-icon">📴</span>
-                <h3 class="card-title">Offline First</h3>
-                <p class="card-body">Download story packs, songs and flashcards for rural classrooms. Sync when reconnected.</p>
-            </div>
-            <div class="card">
-                <span class="card-icon">🎭</span>
-                <h3 class="card-title">Every Role, One Platform</h3>
-                <p class="card-body">Children, parents, teachers and admins — all have purpose-built, culturally rich dashboards.</p>
-            </div>
+    <section class="landing-features" id="features" aria-labelledby="features-heading">
+        <div class="landing-features__grid">
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 6h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z" fill="#B8D4F0"/>
+                        <path d="M12 14h24v3H12v-3zm0 8h20v2H12v-2zm0 6h16v2H12v-2z" fill="#5B9BD5"/>
+                        <path d="M28 32l8 6V14l-8 6v12z" fill="#2E6DB4"/>
+                    </svg>
+                </div>
+                <h2 id="features-heading" class="landing-feature__title">Cultural Comics</h2>
+                <p class="landing-feature__desc">Age-adaptive stories from 65+ Ugandan tribes with audio read-aloud</p>
+            </article>
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="28" r="14" fill="#D4B8F0"/>
+                        <path d="M24 8v32M16 16c4-6 16-6 16 0M14 24c-2 4 20 4 20 0" stroke="#7B4BB8" stroke-width="3" stroke-linecap="round"/>
+                        <ellipse cx="24" cy="30" rx="6" ry="4" fill="#9B6FD4"/>
+                    </svg>
+                </div>
+                <h2 class="landing-feature__title">Songs &amp; Language</h2>
+                <p class="landing-feature__desc">Traditional songs and vocabulary in authentic tribal languages</p>
+            </article>
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 32L38 10l4 8-32 22-4-8z" fill="#7EB8E8"/>
+                        <path d="M38 10l4 8-8 4-4-8 8-4z" fill="#4A90D9"/>
+                        <path d="M10 36l-4-4 6-2 2 6z" fill="#2E6DB4"/>
+                    </svg>
+                </div>
+                <h2 class="landing-feature__title">Works Offline</h2>
+                <p class="landing-feature__desc">Download content bundles for full offline use in low-connectivity areas</p>
+            </article>
         </div>
+    </section>
 
-        <div style="margin-top:80px">
-            <a href="{{ route('login') }}" class="btn btn-primary" style="padding:22px 64px; border-radius:24px; font-size:18px">Start the Demo →</a>
+    <section class="landing-tribes" id="tribes" aria-labelledby="tribes-heading">
+        <div class="landing-tribes__inner">
+        <h2 id="tribes-heading" class="landing-tribes__title">Explore 65+ Ugandan Tribes</h2>
+        <div class="landing-tribes__row">
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--buganda" aria-hidden="true">👑</span>
+                Buganda
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--acholi" aria-hidden="true">🏹</span>
+                Acholi
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--basoga" aria-hidden="true">🌊</span>
+                Basoga
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--iteso" aria-hidden="true">🌾</span>
+                Iteso
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--banyankole" aria-hidden="true">🐄</span>
+                Banyankole
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip">
+                <span class="landing-tribe-chip__dot landing-tribe-chip__dot--alur" aria-hidden="true">🎵</span>
+                Alur
+            </a>
+            <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--more">
+                <span class="landing-tribe-chip__dot" aria-hidden="true">⭐</span>
+                + 59 more →
+            </a>
         </div>
-    </div>
+        </div>
+    </section>
+
+    <section class="landing-cta" id="schools" aria-labelledby="cta-title">
+        <div class="landing__container">
+            <h2 id="cta-title" class="landing-cta__title">Ready to start your child's cultural journey?</h2>
+            <p class="landing-cta__subtitle">
+                Join 2,847 children learning about their heritage through stories and songs
+            </p>
+            <a href="{{ route('register') }}" class="landing-btn landing-btn--primary landing-btn--cta">Create Free Account</a>
+        </div>
+    </section>
+
+    <section id="pricing" class="landing-cta" style="display:none" aria-hidden="true"></section>
+    <section id="download" style="position:absolute;visibility:hidden;height:0" aria-hidden="true"></section>
+</div>
+
+<script>
+    (function () {
+        var header = document.getElementById('landing-header');
+        var toggle = document.getElementById('landing-nav-toggle');
+        if (!header || !toggle) return;
+        toggle.addEventListener('click', function () {
+            var open = header.classList.toggle('landing-header--open');
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.querySelectorAll('.landing-nav__link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                header.classList.remove('landing-header--open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    })();
+</script>
 </body>
 </html>

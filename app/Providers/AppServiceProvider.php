@@ -106,7 +106,7 @@ class AppServiceProvider extends ServiceProvider
             'layouts.guest',
         ];
 
-        View::composer($layouts, PortalThemeComposer::class);
+        View::composer(array_merge($layouts, ['welcome']), PortalThemeComposer::class);
     }
 
     /**
