@@ -1,0 +1,87 @@
+/* Paulette Comics brand mark — shared across portals */
+
+.brand-logo {
+    display: block;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.brand-logo--full {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 56px;
+}
+
+.brand-logo--compact {
+    max-height: 44px;
+}
+
+.brand-logo--mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: left center;
+    background: #000;
+}
+
+/* Sidebars (admin, CMS, teacher) */
+.sa-sidebar-mark .brand-logo--mark,
+.cms-sidebar-mark .brand-logo--mark,
+.th-sidebar-mark .brand-logo--mark,
+.sa-sidebar-mark img,
+.cms-sidebar-mark img,
+.th-sidebar-mark img {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: left center;
+    background: #000;
+}
+
+.sa-sidebar-mark,
+.cms-sidebar-mark,
+.th-sidebar-mark {
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+    border: none;
+    font-size: 0;
+    line-height: 0;
+}
+
+.cms-sidebar-mark {
+    background: #000;
+}
+
+/* Guest auth card */
+.guest-logo .brand-logo--full {
+    margin: 0 auto;
+    max-height: 72px;
+}
+
+.guest-logo--image {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.guest-logo__sub {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--stone, #6b5d4d);
+    font-weight: 600;
+}
+
+/* Marketing landing */
+.landing-logo .brand-logo--full {
+    max-height: 48px;
+    width: auto;
+}
+
+@media (max-width: 767px) {
+    .landing-logo .brand-logo--full {
+        max-height: 40px;
+    }
+}

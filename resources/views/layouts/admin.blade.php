@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Paulette Culture Kids') }} · Super Admin</title>
 
+    @include('layouts.partials.brand-head')
+
     <script>
         (function () {
             var key = 'sa-theme';
@@ -33,6 +35,7 @@
     @stack('styles')
 
     <style>{!! file_get_contents(resource_path('css/admin-content.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/brand-logo.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/admin-shell.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
 

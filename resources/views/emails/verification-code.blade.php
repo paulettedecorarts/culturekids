@@ -32,9 +32,12 @@
             font-size: 28px;
             font-weight: 800;
         }
-        .header .emoji {
-            font-size: 48px;
-            margin-bottom: 16px;
+        .header .brand-logo {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 16px;
+            display: block;
         }
         .content {
             padding: 40px 30px;
@@ -112,7 +115,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="emoji">👪</div>
+            <img src="{{ url('images/brand/paulette-comics-logo.png') }}" alt="{{ config('brand.name') }}" class="brand-logo" width="220">
             <h1>Verify Your Account</h1>
         </div>
         
@@ -148,7 +151,7 @@
         
         <div class="footer">
             <p>This code will expire in 15 minutes.</p>
-            <p class="brand">Paulette Culture Kids</p>
+            <p class="brand">{{ config('brand.name') }}</p>
             <p>Discover Uganda's Heritage Heroes 🌍</p>
         </div>
     </div>

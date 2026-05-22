@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('Teacher Hub') }} · {{ config('app.name', 'Paulette Culture Kids') }}</title>
 
+    @include('layouts.partials.brand-head')
+
     <script>
         (function () {
             var theme = localStorage.getItem('th-theme');
@@ -52,6 +54,7 @@
         }
     </style>
     <style>{!! file_get_contents(resource_path('css/teacher-shell.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/brand-logo.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/teacher-content.css')) !!}</style>
 </head>
 <body class="th-body">

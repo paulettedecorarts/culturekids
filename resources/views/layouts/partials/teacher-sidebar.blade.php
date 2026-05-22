@@ -19,8 +19,10 @@ HTML;
     :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
 >
     <div class="th-sidebar-head">
-        <a href="{{ route('teacher.dashboard') }}" class="th-sidebar-brand" title="{{ __('Teacher Hub') }}">
-            <span class="th-sidebar-mark" aria-hidden="true">📚</span>
+        <a href="{{ route('teacher.dashboard') }}" class="th-sidebar-brand" title="{{ config('brand.name') }}">
+            <span class="th-sidebar-mark" aria-hidden="true">
+                <x-brand-logo variant="mark" />
+            </span>
             <div class="th-sidebar-brand-text">
                 {{ __('Teacher Hub') }}
                 <span>{{ auth()->user()->name ?? __('Teacher') }}</span>

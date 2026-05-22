@@ -7,6 +7,9 @@
 
         <title>{{ config('app.name', 'Paulette Culture Kids') }}</title>
 
+        @include('layouts.partials.brand-head')
+        <style>{!! file_get_contents(resource_path('css/brand-logo.css')) !!}</style>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -352,15 +355,15 @@
             <div class="orb orb-secondary"></div>
 
             <div @class(['guest-card', 'guest-card--register' => request()->routeIs('register')])>
-                <div class="guest-logo">
-                    <div class="logo-text">Paulette Culture Kids</div>
-                    <div class="logo-sub">
+                <div class="guest-logo guest-logo--image">
+                    <x-brand-logo variant="full" />
+                    <p class="guest-logo__sub">
                         @if (request()->routeIs('password.reset'))
-                            Set your password
+                            {{ __('Set your password') }}
                         @else
-                            {{ $title ?? 'Welcome Back' }}
+                            {{ $title ?? __('Welcome back') }}
                         @endif
-                    </div>
+                    </p>
                 </div>
 
                 {{ $slot }}

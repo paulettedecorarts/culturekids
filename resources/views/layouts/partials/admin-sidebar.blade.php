@@ -18,8 +18,10 @@ HTML;
     :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
 >
     <div class="sa-sidebar-head">
-        <a href="{{ route('admin.dashboard') }}" class="sa-sidebar-brand" title="Super Admin">
-            <span class="sa-sidebar-mark" aria-hidden="true">⚡</span>
+        <a href="{{ route('admin.dashboard') }}" class="sa-sidebar-brand" title="{{ config('brand.name') }}">
+            <span class="sa-sidebar-mark" aria-hidden="true">
+                <x-brand-logo variant="mark" />
+            </span>
             <div class="sa-sidebar-brand-text">
                 Super Admin
                 <span>Paulette Culture Kids</span>

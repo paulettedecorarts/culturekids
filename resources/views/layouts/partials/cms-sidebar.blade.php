@@ -18,8 +18,10 @@ HTML;
     :aria-expanded="((isMobile && sidebarOpen) || (!isMobile && !sidebarCollapsed)).toString()"
 >
     <div class="cms-sidebar-head">
-        <a href="{{ ($isEditor || $isSuper) ? route('cms.editor.dashboard') : route('cms.admin.dashboard') }}" class="cms-sidebar-brand" title="Paulette CMS">
-            <span class="cms-sidebar-mark" aria-hidden="true">P</span>
+        <a href="{{ ($isEditor || $isSuper) ? route('cms.editor.dashboard') : route('cms.admin.dashboard') }}" class="cms-sidebar-brand" title="{{ config('brand.name') }}">
+            <span class="cms-sidebar-mark" aria-hidden="true">
+                <x-brand-logo variant="mark" />
+            </span>
             <div class="cms-sidebar-brand-text">
                 Paulette CMS
                 <span>

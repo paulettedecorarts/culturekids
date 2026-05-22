@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Paulette Culture Kids') }}</title>
 
+    @include('layouts.partials.brand-head')
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,18 +20,14 @@
         body { margin: 0; }
     </style>
     <style>{!! file_get_contents(resource_path('css/landing.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/brand-logo.css')) !!}</style>
 </head>
 <body>
 <div class="landing">
     <header class="landing-header" id="landing-header">
         <div class="landing__container landing-header__inner">
-            <a href="/" class="landing-logo" aria-label="{{ config('app.name') }} home">
-                <span class="landing-logo__globe" aria-hidden="true">🌍</span>
-                <span class="landing-logo__text">
-                    <span class="landing-logo__orange">Paulette</span>
-                    <span class="landing-logo__navy"> Culture </span>
-                    <span class="landing-logo__orange">Kids</span>
-                </span>
+            <a href="/" class="landing-logo" aria-label="{{ config('brand.name') }} home">
+                <x-brand-logo variant="full" />
             </a>
 
             <nav class="landing-nav" aria-label="Main">

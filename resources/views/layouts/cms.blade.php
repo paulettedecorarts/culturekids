@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Paulette CMS · Editor Dashboard</title>
 
+    @include('layouts.partials.brand-head')
+
     <script>
         (function () {
             var key = 'cms-editor-theme';
@@ -37,6 +39,7 @@
     <style>{!! file_get_contents(resource_path('css/cms-shell.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/cms-editor-responsive.css')) !!}</style>
+    <style>{!! file_get_contents(resource_path('css/brand-logo.css')) !!}</style>
 
     @include('layouts.partials.portal-theme-vars')
 
