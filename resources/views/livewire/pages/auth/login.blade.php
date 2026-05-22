@@ -135,24 +135,6 @@ new #[Layout('layouts.guest')] class extends Component
             </div>
         @endif
 
-        <div style="margin-bottom:24px;">
-            <p style="font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--stone); margin-bottom:12px">Choose your role</p>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
-                <div style="text-align:center; padding:12px 8px; border-radius:16px; border:2px solid var(--cream-mid); cursor:pointer; background:var(--cream); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--clay-red)';" onmouseout="this.style.borderColor='var(--cream-mid)';">
-                     <div style="font-size:24px; margin-bottom:4px">👧</div>
-                     <div style="font-size:10px; font-weight:700; color:var(--ink)">Child</div>
-                </div>
-                <div style="text-align:center; padding:12px 8px; border-radius:16px; border:2px solid var(--clay-red); cursor:pointer; background:rgba(196,75,43,.05); transition:all 0.2s;">
-                     <div style="font-size:24px; margin-bottom:4px">👪</div>
-                     <div style="font-size:10px; font-weight:700; color:var(--clay-red)">Parent</div>
-                </div>
-                <div style="text-align:center; padding:12px 8px; border-radius:16px; border:2px solid var(--cream-mid); cursor:pointer; background:var(--cream); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--clay-red)';" onmouseout="this.style.borderColor='var(--cream-mid)';">
-                     <div style="font-size:24px; margin-bottom:4px">👩‍🏫</div>
-                     <div style="font-size:10px; font-weight:700; color:var(--ink)">Teacher</div>
-                </div>
-            </div>
-        </div>
-
         <form wire:submit="login">
             <div class="input-group">
                 <label class="input-label" for="email">Email</label>
@@ -160,16 +142,20 @@ new #[Layout('layouts.guest')] class extends Component
                 @error('form.email') <div class="input-error">{{ $message }}</div> @enderror
             </div>
 
-            <div class="input-group">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <label class="input-label" for="password" style="margin-bottom:0">Password</label>
+            <x-guest.password-input
+                id="password"
+                label="Password"
+                wire:model="form.password"
+                error="form.password"
+                autocomplete="current-password"
+                required
+            >
+                <x-slot:labelExtra>
                     @if (Route::has('password.request'))
                         <a class="auth-link" style="font-size:11px" href="{{ route('password.request') }}" wire:navigate>Forgot?</a>
                     @endif
-                </div>
-                <input wire:model="form.password" id="password" class="form-input" type="password" name="password" required autocomplete="current-password" />
-                @error('form.password') <div class="input-error">{{ $message }}</div> @enderror
-            </div>
+                </x-slot:labelExtra>
+            </x-guest.password-input>
 
             <div style="margin-bottom:24px; display:flex; align-items:center;">
                 <input wire:model="form.remember" id="remember" type="checkbox" style="accent-color:var(--clay-red); width:16px; height:16px;">

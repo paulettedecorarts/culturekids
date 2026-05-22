@@ -147,6 +147,44 @@
 
             .form-input:focus { border-color: var(--clay-red); }
 
+            .password-field__label-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+
+            .password-field {
+                position: relative;
+            }
+
+            .password-field__input {
+                padding-right: 52px;
+            }
+
+            .password-field__toggle {
+                position: absolute;
+                right: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 4px;
+                border: none;
+                background: transparent;
+                color: var(--stone);
+                cursor: pointer;
+                border-radius: 9999px;
+                transition: color var(--dur-fast);
+            }
+
+            .password-field__toggle:hover {
+                color: var(--clay-red);
+            }
+
+            [x-cloak] { display: none !important; }
+
             .btn-primary {
                 width: 100%;
                 background: var(--clay-red);

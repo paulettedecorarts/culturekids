@@ -71,17 +71,23 @@ new #[Layout('layouts.guest')] class extends Component
             @error('email') <div class="input-error">{{ $message }}</div> @enderror
         </div>
 
-        <div class="input-group">
-            <label class="input-label" for="password">Password</label>
-            <input wire:model="password" id="password" class="form-input" type="password" name="password" required autocomplete="new-password" />
-            @error('password') <div class="input-error">{{ $message }}</div> @enderror
-        </div>
+        <x-guest.password-input
+            id="password"
+            label="Password"
+            wire:model="password"
+            error="password"
+            autocomplete="new-password"
+            required
+        />
 
-        <div class="input-group">
-            <label class="input-label" for="password_confirmation">Confirm Password</label>
-            <input wire:model="password_confirmation" id="password_confirmation" class="form-input" type="password" name="password_confirmation" required autocomplete="new-password" />
-            @error('password_confirmation') <div class="input-error">{{ $message }}</div> @enderror
-        </div>
+        <x-guest.password-input
+            id="password_confirmation"
+            label="Confirm Password"
+            wire:model="password_confirmation"
+            error="password_confirmation"
+            autocomplete="new-password"
+            required
+        />
 
         <div class="span-full">
             <button type="submit" class="btn-primary">Create School Account →</button>

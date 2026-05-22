@@ -131,9 +131,9 @@
                             $songId = $metadata['legacy_song_id'] ?? null;
                         @endphp
                         @if($songId)
-                            <a href="{{ route($routePrefix . '.songs.activities.show', $songId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalSongActivityShowUrl($songId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'drawing_kit')
                         @php
@@ -141,9 +141,9 @@
                             $drawingId = $metadata['legacy_drawing_id'] ?? null;
                         @endphp
                         @if($drawingId)
-                            <a href="{{ route($routePrefix . '.drawings.show', $drawingId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('drawings', $drawingId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'vocab_pack')
                         @php
@@ -151,9 +151,9 @@
                             $langActivityId = $metadata['legacy_language_activity_id'] ?? null;
                         @endphp
                         @if($langActivityId)
-                            <a href="{{ route($routePrefix . '.language-activities.show', $langActivityId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('language-activities', $langActivityId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'game')
                         @php
@@ -161,9 +161,9 @@
                             $gameId = $metadata['legacy_game_id'] ?? null;
                         @endphp
                         @if($gameId)
-                            <a href="{{ route($routePrefix . '.games.show', $gameId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('games', $gameId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'maze')
                         @php
@@ -171,9 +171,9 @@
                             $mazeId = $metadata['legacy_maze_id'] ?? null;
                         @endphp
                         @if($mazeId)
-                            <a href="{{ route($routePrefix . '.mazes.show', $mazeId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('mazes', $mazeId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'spot_difference')
                         @php
@@ -181,9 +181,9 @@
                             $sdId = $metadata['legacy_spot_difference_id'] ?? null;
                         @endphp
                         @if($sdId)
-                            <a href="{{ route($routePrefix . '.spot-differences.show', $sdId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('spot-differences', $sdId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'word_search')
                         @php
@@ -191,9 +191,9 @@
                             $wsId = $metadata['legacy_word_search_id'] ?? null;
                         @endphp
                         @if($wsId)
-                            <a href="{{ route($routePrefix . '.word-searches.show', $wsId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('word-searches', $wsId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'story')
                         @php
@@ -201,9 +201,9 @@
                             $comicId = $metadata['comic_id'] ?? null;
                         @endphp
                         @if($comicId)
-                            <a href="{{ route($routePrefix . '.' . $comicsRouteBase . '.detail', $comicId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalStoryShowUrl($comicId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
                     @elseif($activity->type === 'culture')
                         @php
@@ -211,19 +211,12 @@
                             $cultureId = $metadata['legacy_culture_activity_id'] ?? null;
                         @endphp
                         @if($cultureId)
-                            <a href="{{ route($routePrefix . '.culture-activities.show', $cultureId) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalLegacyShowUrl('culture-activities', $cultureId) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @else
-                            <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                            <a href="{{ $this->portalActivityDetailUrl($activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                         @endif
-                    @elseif($routePrefix === 'cms.admin')
-                        @php
-                            $adminDetailRoute = $activity->type === 'flashcard'
-                                ? 'cms.admin.flashcards.show'
-                                : 'cms.admin.activities.show';
-                        @endphp
-                        <a href="{{ route($adminDetailRoute, $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @else
-                        <a href="{{ route($routePrefix . '.activities.detail', $activity->id) }}" class="sa-table-action sa-table-action--accent">Details</a>
+                        <a href="{{ $this->portalActivityDetailUrl($activity->id, $activity->type) }}" class="sa-table-action sa-table-action--accent">Details</a>
                     @endif
                 </div>
             </div>

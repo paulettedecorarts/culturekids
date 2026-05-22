@@ -117,4 +117,46 @@ trait UsesPortalContext
 
         return $this->portalCanEditContent() ? $manageLabel : 'Approved Content';
     }
+
+    /**
+     * Detail URL for a legacy content module (games, mazes, drawings, etc.).
+     */
+    public function portalLegacyShowUrl(string $segment, int|string $id): string
+    {
+        if ($this->isOrgAdminPortal()) {
+            return route('cms.admin.approved-content.'.$segment.'.show', $id);
+        }
+
+        return route($this->portalRoutePrefix().'.'.$segment.'.show', $id);
+    }
+
+    public function portalSongActivityShowUrl(int|string $id): string
+    {
+        if ($this->isOrgAdminPortal()) {
+            return route('cms.admin.approved-content.songs.show', $id);
+        }
+
+        return route($this->portalRoutePrefix().'.songs.activities.show', $id);
+    }
+
+    public function portalStoryShowUrl(int|string $id): string
+    {
+        if ($this->isOrgAdminPortal()) {
+            return route('cms.admin.approved-content.stories.show', $id);
+        }
+
+        return route($this->portalRoutePrefix().'.'.$this->portalComicsRouteBase().'.detail', $id);
+    }
+
+    public function portalActivityDetailUrl(int|string $activityId, string $type = ''): string
+    {
+        if ($this->isOrgAdminPortal()) {
+            return route(
+                $type === 'flashcard' ? 'cms.admin.flashcards.show' : 'cms.admin.activities.show',
+                $activityId
+            );
+        }
+
+        return route($this->portalRoutePrefix().'.activities.detail', $activityId);
+    }
 }

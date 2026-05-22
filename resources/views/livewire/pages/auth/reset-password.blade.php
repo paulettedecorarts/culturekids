@@ -103,38 +103,24 @@ new #[Layout('layouts.guest')] class extends Component
             </div>
         @enderror
 
-        <div class="input-group">
-            <label class="input-label" for="password">{{ __('Password') }}</label>
-            <input
-                wire:model="password"
-                id="password"
-                class="form-input"
-                type="password"
-                name="password"
-                required
-                @if($emailLockedFromInvite) autofocus @endif
-                autocomplete="new-password"
-            >
-            @error('password')
-                <div class="input-error">{{ $message }}</div>
-            @enderror
-        </div>
+        <x-guest.password-input
+            id="password"
+            :label="__('Password')"
+            wire:model="password"
+            error="password"
+            autocomplete="new-password"
+            :autofocus="$emailLockedFromInvite"
+            required
+        />
 
-        <div class="input-group">
-            <label class="input-label" for="password_confirmation">{{ __('Confirm password') }}</label>
-            <input
-                wire:model="password_confirmation"
-                id="password_confirmation"
-                class="form-input"
-                type="password"
-                name="password_confirmation"
-                required
-                autocomplete="new-password"
-            >
-            @error('password_confirmation')
-                <div class="input-error">{{ $message }}</div>
-            @enderror
-        </div>
+        <x-guest.password-input
+            id="password_confirmation"
+            :label="__('Confirm password')"
+            wire:model="password_confirmation"
+            error="password_confirmation"
+            autocomplete="new-password"
+            required
+        />
 
         <button type="submit" class="btn-primary" style="margin-top: 8px;">
             {{ __('Save password and continue') }}
