@@ -7,6 +7,7 @@ use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\AuditLog;
 use App\Models\Organisation;
 use App\Models\Theme;
+use App\Services\WebPortalThemeService;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -184,6 +185,8 @@ class ThemesManager extends Component
 
         $this->showModal = false;
         $this->resetForm();
+
+        $this->broadcastPortalThemeCssVars();
     }
 
     public function delete($id)
@@ -251,6 +254,18 @@ class ThemesManager extends Component
 
         $orgName = $theme->org_id ? $theme->organisation->name : 'Global';
         session()->flash('message', "'{$theme->name}' set as default theme for {$orgName}.");
+
+        $this->broadcastPortalThemeCssVars();
+    }
+
+    /**
+     * Push resolved portal colours to the active layout (admin / CMS) without a full reload.
+     */
+    protected function broadcastPortalThemeCssVars(): void
+    {
+        $resolved = app(WebPortalThemeService::class)->forRequest(auth()->user());
+
+        $this->dispatch('portal-theme-updated', cssVars: $resolved['css_variables_light'], cssVarsLight: $resolved['css_variables_light'], cssVarsDark: $resolved['css_variables_dark']);
     }
 
     /**

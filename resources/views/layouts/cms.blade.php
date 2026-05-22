@@ -38,17 +38,11 @@
     <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/cms-editor-responsive.css')) !!}</style>
 
+    @include('layouts.partials.portal-theme-vars')
+
     <style>
         :root {
-            --clay-red:#C44B2B; --clay-red-light:#E06444; --clay-red-dark:#9A3218;
-            --sunfire:#E8872A; --sunfire-light:#F2A84E; --sunfire-pale:#FDF0DE;
-            --savanna-gold:#D4A017;
-            --banana-green:#4A7C59; --banana-mid:#6FA882; --leaf-pale:#EBF5EE;
             --indigo-night:#1E2D4A; --sky-dusk:#2E4D8A;
-            --ink:#1A1208; --ink-light:#6B5544;
-            --stone:#9C8875;
-            --cream:#FAF6F0; --cream-warm:#F5EDE0; --cream-mid:#EDE0CE;
-            --white:#FFFFFF;
 
             --font-display:'Baloo 2', cursive;
             --font-child:'Nunito', sans-serif;
@@ -64,41 +58,41 @@
         /* Main content theme tokens (sidebar stays dark — option A) */
         [data-cms-theme="light"] {
             --muted: var(--stone);
-            --cms-bg:#F8F5F2;
-            --cms-surface:#FFFFFF;
-            --cms-surface-raised:#FAF6F0;
-            --cms-surface-hover:#F5EDE0;
-            --cms-text:var(--ink);
-            --cms-text-muted:var(--stone);
-            --cms-border:var(--cream-mid);
-            --cms-border-subtle:var(--cream-warm);
-            --cms-input-bg:#FFFFFF;
-            --cms-input-border:rgba(26,18,8,.12);
-            --cms-shadow:0 4px 20px rgba(26,18,8,.04);
-            --cms-table-head:rgba(245,237,224,.9);
-            --cms-row-hover:var(--cream);
-            --cms-ghost-border:var(--cream-mid);
-            --cms-ghost-text:var(--ink-light);
+            --cms-bg: var(--cream);
+            --cms-surface: var(--white);
+            --cms-surface-raised: var(--cream-warm);
+            --cms-surface-hover: var(--cream-warm);
+            --cms-text: var(--ink);
+            --cms-text-muted: var(--stone);
+            --cms-border: var(--cream-mid);
+            --cms-border-subtle: var(--cream-warm);
+            --cms-input-bg: var(--white);
+            --cms-input-border: rgba(26,18,8,.12);
+            --cms-shadow: 0 4px 20px rgba(26,18,8,.04);
+            --cms-table-head: var(--cream-warm);
+            --cms-row-hover: var(--cream);
+            --cms-ghost-border: var(--cream-mid);
+            --cms-ghost-text: var(--ink-light);
             color-scheme: light;
         }
 
         [data-cms-theme="dark"] {
-            --muted: rgba(255,255,255,.45);
-            --cms-bg:#111827;
-            --cms-surface:rgba(255,255,255,.04);
-            --cms-surface-raised:rgba(255,255,255,.06);
-            --cms-surface-hover:rgba(255,255,255,.03);
-            --cms-text:#FFFFFF;
-            --cms-text-muted:rgba(255,255,255,.4);
-            --cms-border:rgba(255,255,255,.08);
-            --cms-border-subtle:rgba(255,255,255,.05);
-            --cms-input-bg:#1a2744;
-            --cms-input-border:rgba(255,255,255,.12);
-            --cms-shadow:none;
-            --cms-table-head:rgba(255,255,255,.05);
-            --cms-row-hover:rgba(255,255,255,.03);
-            --cms-ghost-border:rgba(255,255,255,.2);
-            --cms-ghost-text:rgba(255,255,255,.7);
+            --muted: var(--stone);
+            --cms-bg: var(--cream);
+            --cms-surface: var(--white);
+            --cms-surface-raised: var(--cream-warm);
+            --cms-surface-hover: var(--cream-mid);
+            --cms-text: var(--ink);
+            --cms-text-muted: var(--stone);
+            --cms-border: var(--cream-mid);
+            --cms-border-subtle: var(--cream-warm);
+            --cms-input-bg: var(--cream-warm);
+            --cms-input-border: rgba(255,255,255,.12);
+            --cms-shadow: none;
+            --cms-table-head: var(--cream-warm);
+            --cms-row-hover: var(--cream-mid);
+            --cms-ghost-border: rgba(255,255,255,.2);
+            --cms-ghost-text: var(--ink-light);
             color-scheme: dark;
         }
 

@@ -36,16 +36,11 @@
     <style>{!! file_get_contents(resource_path('css/admin-shell.css')) !!}</style>
     <style>{!! file_get_contents(resource_path('css/portal-responsive.css')) !!}</style>
 
+    @include('layouts.partials.portal-theme-vars')
+
     <style>
         :root {
-            --clay-red:#C44B2B; --clay-red-light:#E06444; --clay-red-dark:#9A3218;
-            --sunfire:#E8872A; --sunfire-light:#F2A84E; --sunfire-pale:#FDF0DE;
-            --savanna-gold:#D4A017; --savanna-light:#F2CB5A;
-            --banana-green:#4A7C59; --banana-mid:#6FA882; --banana-light:#B8D9C6;
             --indigo-night:#1E2D4A; --sky-dusk:#2E4D8A;
-            --ink:#1A1208; --ink-light:#6B5544;
-            --stone:#9C8875;
-            --cream:#FAF6F0; --cream-warm:#F5EDE0; --cream-mid:#EDE0CE;
 
             --font-display:'Baloo 2', cursive;
             --font-child:'Nunito', sans-serif;
@@ -61,40 +56,40 @@
         }
 
         [data-sa-theme="light"] {
-            --sa-bg:#F8F5F2;
-            --sa-surface:#FFFFFF;
-            --sa-surface-raised:#FAF6F0;
-            --sa-surface-hover:#F5EDE0;
-            --sa-text:var(--ink);
-            --sa-text-muted:var(--stone);
-            --sa-border:var(--cream-mid);
-            --sa-border-subtle:var(--cream-warm);
-            --sa-input-bg:#FFFFFF;
-            --sa-input-border:rgba(26,18,8,.12);
-            --sa-shadow:0 4px 20px rgba(26,18,8,.04);
-            --sa-table-head:rgba(245,237,224,.9);
-            --sa-row-hover:var(--cream);
-            --sa-ghost-border:var(--cream-mid);
-            --sa-ghost-text:var(--ink-light);
+            --sa-bg: var(--cream);
+            --sa-surface: var(--white);
+            --sa-surface-raised: var(--cream-warm);
+            --sa-surface-hover: var(--cream-warm);
+            --sa-text: var(--ink);
+            --sa-text-muted: var(--stone);
+            --sa-border: var(--cream-mid);
+            --sa-border-subtle: var(--cream-warm);
+            --sa-input-bg: var(--white);
+            --sa-input-border: rgba(26,18,8,.12);
+            --sa-shadow: 0 4px 20px rgba(26,18,8,.04);
+            --sa-table-head: var(--cream-warm);
+            --sa-row-hover: var(--cream);
+            --sa-ghost-border: var(--cream-mid);
+            --sa-ghost-text: var(--ink-light);
             color-scheme: light;
         }
 
         [data-sa-theme="dark"] {
-            --sa-bg:#111827;
-            --sa-surface:rgba(255,255,255,.04);
-            --sa-surface-raised:rgba(255,255,255,.06);
-            --sa-surface-hover:rgba(255,255,255,.03);
-            --sa-text:#FFFFFF;
-            --sa-text-muted:rgba(255,255,255,.4);
-            --sa-border:rgba(255,255,255,.08);
-            --sa-border-subtle:rgba(255,255,255,.05);
-            --sa-input-bg:#1a2744;
-            --sa-input-border:rgba(255,255,255,.12);
-            --sa-shadow:none;
-            --sa-table-head:rgba(255,255,255,.05);
-            --sa-row-hover:rgba(255,255,255,.03);
-            --sa-ghost-border:rgba(255,255,255,.2);
-            --sa-ghost-text:rgba(255,255,255,.7);
+            --sa-bg: var(--cream);
+            --sa-surface: var(--white);
+            --sa-surface-raised: var(--cream-warm);
+            --sa-surface-hover: var(--cream-mid);
+            --sa-text: var(--ink);
+            --sa-text-muted: var(--stone);
+            --sa-border: var(--cream-mid);
+            --sa-border-subtle: var(--cream-warm);
+            --sa-input-bg: var(--cream-warm);
+            --sa-input-border: rgba(255,255,255,.12);
+            --sa-shadow: none;
+            --sa-table-head: var(--cream-warm);
+            --sa-row-hover: var(--cream-mid);
+            --sa-ghost-border: rgba(255,255,255,.2);
+            --sa-ghost-text: var(--ink-light);
             color-scheme: dark;
         }
 

@@ -13,18 +13,11 @@
         <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
         <!-- Styles -->
+        @include('layouts.partials.portal-theme-vars')
         <style>
             :root {
-                --clay-red:#C44B2B; --clay-red-light:#E06444; --clay-red-dark:#9A3218;
-                --sunfire:#E8872A; --sunfire-light:#F2A84E; --sunfire-pale:#FDF0DE;
-                --savanna-gold:#D4A017;
-                --banana-green:#4A7C59;
                 --indigo-night:#1E2D4A;
-                --ink:#1A1208;
-                --stone:#9C8875;
-                --cream:#FAF6F0; --cream-mid:#EDE0CE;
-                --white:#FFFFFF;
-                
+
                 --font-display:'Baloo 2', cursive;
                 --font-child:'Nunito', sans-serif;
                 --font-admin:'Bricolage Grotesque', sans-serif;

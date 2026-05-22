@@ -31,22 +31,12 @@
     @livewireStyles
     @stack('styles')
 
+    @include('layouts.partials.portal-theme-vars')
+
     <style>
         :root {
             --indigo-night: #1e2d4a;
             --sky-dusk: #2e4d8a;
-            --clay-red: #c44b2b;
-            --clay-red-light: #e06444;
-            --sunfire: #e8872a;
-            --sunfire-pale: #fdf0de;
-            --savanna-gold: #d4a017;
-            --ink: #1a1208;
-            --ink-light: #6b5544;
-            --stone: #9c8875;
-            --cream: #faf6f0;
-            --cream-warm: #f5ede0;
-            --cream-mid: #ede0ce;
-            --white: #ffffff;
             --font-display: 'Baloo 2', cursive;
             --font-child: 'Nunito', sans-serif;
             --font-admin: 'Bricolage Grotesque', sans-serif;

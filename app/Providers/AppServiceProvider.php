@@ -12,10 +12,12 @@ use App\Services\Push\LogPushGateway;
 use App\Services\Push\PushGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
+use App\View\Composers\PortalThemeComposer;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Livewire\FileUploadController as AppFileUploadController;
@@ -50,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->configureDefaults();
         $this->configurePagination();
+        $this->configurePortalThemeComposer();
         $this->configureBladeLayouts();
         $this->configureLivewire();
         $this->ensureLivewireTemporaryUploadDirectoryExists();
@@ -92,6 +95,18 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('vendor.pagination.portal');
         Paginator::defaultSimpleView('vendor.pagination.portal');
+    }
+
+    protected function configurePortalThemeComposer(): void
+    {
+        $layouts = [
+            'layouts.admin',
+            'layouts.cms',
+            'layouts.teacher',
+            'layouts.guest',
+        ];
+
+        View::composer($layouts, PortalThemeComposer::class);
     }
 
     /**
