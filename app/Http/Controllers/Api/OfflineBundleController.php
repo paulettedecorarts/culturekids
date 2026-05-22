@@ -12,6 +12,7 @@ use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
 use App\Services\OrganisationModuleResolver;
+use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -154,13 +155,18 @@ class OfflineBundleController extends Controller
                 ], $this->bundleFields($bundle, null, null, OrganisationContentDecision::TYPE_SONG, (int) $song->id));
             }),
             'activities' => $activities->map(function ($activity) {
-                $contentType = $this->activityContentType((string) $activity->type);
-                $bundle = $contentType ? $this->bundleRecord($contentType, (int) $activity->id) : null;
+                $identity = ActivityOfflineBundleIdentity::resolve($activity);
+                $contentType = $identity['content_type'] ?? null;
+                $bundleContentId = $identity['content_id'] ?? null;
+                $bundle = $contentType && $bundleContentId
+                    ? $this->bundleRecord($contentType, $bundleContentId)
+                    : null;
 
                 return array_merge([
                     'id' => $activity->id,
                     'type' => $activity->type,
                     'content_type' => $contentType,
+                    'bundle_content_id' => $bundleContentId,
                     'title' => $activity->title,
                     'description' => $activity->description,
                     'age_range' => $activity->age_range,
@@ -182,7 +188,7 @@ class OfflineBundleController extends Controller
                                 : null,
                         ];
                     }),
-                ], $this->bundleFields($bundle, null, null, $contentType, (int) $activity->id));
+                ], $this->bundleFields($bundle, null, null, $contentType, $bundleContentId));
             }),
             'stats' => [
                 'comics_count' => $comics->count(),
@@ -489,15 +495,6 @@ class OfflineBundleController extends Controller
                 ? url("/api/v1/offline/content/{$contentType}/{$contentId}/download")
                 : null,
         ];
-    }
-
-    private function activityContentType(string $activityType): ?string
-    {
-        return match ($activityType) {
-            'flashcard' => OrganisationContentDecision::TYPE_FLASHCARD,
-            'puzzle' => OrganisationContentDecision::TYPE_PUZZLE,
-            default => null,
-        };
     }
 
     private function assertContentModule(Request $request, string $contentType): void

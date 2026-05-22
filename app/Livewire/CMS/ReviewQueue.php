@@ -50,6 +50,48 @@ class ReviewQueue extends Component
         session()->flash('message', "{$label} '{$title}' rejected for your organisation.");
     }
 
+    /**
+     * Approve every item matching the current queue filters (all pages, not only this page).
+     */
+    public function approveAll(): void
+    {
+        $orgId = $this->organisationId();
+        $userId = auth()->id();
+        if (! $orgId || ! $userId) {
+            return;
+        }
+
+        $service = app(OrganisationContentReviewService::class);
+        $pendingFiltered = $this->applyReviewQueueFilters(
+            $service->pendingForOrganisation($orgId)
+        );
+
+        $approved = 0;
+
+        foreach ($pendingFiltered as $item) {
+            if ($service->approve($orgId, $userId, $item['content_type'], (int) $item['id'])) {
+                $approved++;
+            }
+        }
+
+        $this->resetPage();
+
+        if ($approved === 0) {
+            session()->flash('message', __('No items could be approved. Check your filters and try again.'));
+
+            return;
+        }
+
+        session()->flash(
+            'message',
+            trans_choice(
+                '{1} :count item approved for your organisation.|[2,*] :count items approved for your organisation.',
+                $approved,
+                ['count' => $approved]
+            )
+        );
+    }
+
     private function organisationId(): ?int
     {
         $id = auth()->user()?->organisation_id;

@@ -221,4 +221,67 @@ class OrgAdminReviewQueueScopeTest extends TestCase
             ->assertSee('Zulu Story Beta')
             ->assertDontSee('Ashanti Story Alpha');
     }
+
+    public function test_approve_all_approves_every_filtered_queue_item(): void
+    {
+        $this->seed(RoleSeeder::class);
+
+        $t = $this->tribe();
+
+        $org = Organisation::create([
+            'name' => 'Bulk Approve Org',
+            'code' => 'bulk-'.uniqid(),
+            'plan' => 'school',
+            'status' => 'active',
+        ]);
+
+        $story = Comic::create([
+            'org_id' => null,
+            'tribe_id' => $t->id,
+            'title' => 'Bulk Story',
+            'description' => null,
+            'age_min' => 2,
+            'age_max' => 4,
+            'status' => 'review',
+        ]);
+
+        $song = Song::create([
+            'org_id' => null,
+            'tribe_id' => $t->id,
+            'title' => 'Bulk Song',
+            'description' => null,
+            'language' => 'en',
+            'song_type' => 'heritage',
+            'lyrics' => null,
+            'audio_path' => null,
+            'cover_image_path' => null,
+            'duration_seconds' => null,
+            'age_min' => 2,
+            'age_max' => 4,
+            'star_points' => 10,
+            'status' => 'review',
+            'metadata' => null,
+        ]);
+
+        $admin = User::factory()->create(['organisation_id' => $org->id]);
+        $admin->assignRole('org_admin');
+
+        $this->actingAs($admin);
+
+        Livewire::test(ReviewQueue::class)
+            ->assertViewHas('filteredTotal', 2)
+            ->call('approveAll')
+            ->assertSessionHas('message');
+
+        $this->assertDatabaseHas('organisation_comic_decisions', [
+            'organisation_id' => $org->id,
+            'comic_id' => $story->id,
+            'decision' => 'approved',
+        ]);
+        $this->assertDatabaseHas('organisation_song_decisions', [
+            'organisation_id' => $org->id,
+            'song_id' => $song->id,
+            'decision' => 'approved',
+        ]);
+    }
 }

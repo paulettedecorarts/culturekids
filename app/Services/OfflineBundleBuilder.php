@@ -44,8 +44,8 @@ class OfflineBundleBuilder
             OrganisationContentDecision::TYPE_SONG => $this->buildSong($contentId),
             OrganisationContentDecision::TYPE_FLASHCARD => $this->buildActivity($contentId, 'flashcard'),
             OrganisationContentDecision::TYPE_PUZZLE => $this->buildActivity($contentId, 'puzzle'),
-            OrganisationContentDecision::TYPE_DRAWING => $this->buildDrawing($contentId, 'drawing'),
-            OrganisationContentDecision::TYPE_COLOURING => $this->buildDrawing($contentId, 'coloring'),
+            OrganisationContentDecision::TYPE_DRAWING => $this->buildDrawing($contentId, colouring: false),
+            OrganisationContentDecision::TYPE_COLOURING => $this->buildDrawing($contentId, colouring: true),
             OrganisationContentDecision::TYPE_LANGUAGE => $this->buildLanguage($contentId),
             OrganisationContentDecision::TYPE_GAME => $this->buildGame($contentId),
             OrganisationContentDecision::TYPE_MAZE => $this->buildMaze($contentId),
@@ -214,13 +214,9 @@ class OfflineBundleBuilder
         ), null);
     }
 
-    private function buildDrawing(int $drawingId, string $drawingType): array
+    private function buildDrawing(int $drawingId, bool $colouring): array
     {
-        $drawing = Drawing::query()
-            ->whereKey($drawingId)
-            ->where('drawing_type', $drawingType)
-            ->where('status', 'published')
-            ->firstOrFail();
+        $drawing = $this->findPublishedDrawing($drawingId, $colouring);
 
         $drawing->loadMissing('tribe:id,name');
 
@@ -229,7 +225,7 @@ class OfflineBundleBuilder
             $drawing->preview_path,
         ]));
 
-        $contentType = $drawingType === 'coloring'
+        $contentType = $colouring
             ? OrganisationContentDecision::TYPE_COLOURING
             : OrganisationContentDecision::TYPE_DRAWING;
 
@@ -253,7 +249,18 @@ class OfflineBundleBuilder
 
         $activity->loadMissing(['tribe:id,name', 'words']);
 
-        $paths = $this->assetCollector->collect($activity->toArray(), array_filter([$activity->audio_path]));
+        $explicitWordPaths = $activity->words
+            ->flatMap(fn ($word) => array_filter([
+                $word->image_path,
+                $word->audio_path,
+            ]))
+            ->values()
+            ->all();
+
+        $paths = $this->assetCollector->collect(
+            $activity->toArray(),
+            array_filter(array_merge([$activity->audio_path], $explicitWordPaths))
+        );
         $writer = $this->createWriter(OrganisationContentDecision::TYPE_LANGUAGE, $activityId, null);
         $assetMap = $writer->addStorageAssets($paths);
 
@@ -377,6 +384,24 @@ class OfflineBundleBuilder
             $assetMap,
             ['culture_activity' => $this->withBundleRefs($item->toArray(), $assetMap)]
         ), null);
+    }
+
+    private function findPublishedDrawing(int $drawingId, bool $colouring): Drawing
+    {
+        $query = Drawing::query()
+            ->whereKey($drawingId)
+            ->where('status', 'published');
+
+        if ($colouring) {
+            $query->where('drawing_type', 'coloring');
+        } else {
+            $query->where(function ($inner) {
+                $inner->whereNull('drawing_type')
+                    ->orWhere('drawing_type', '!=', 'coloring');
+            });
+        }
+
+        return $query->firstOrFail();
     }
 
     private function createWriter(string $contentType, int $contentId, ?int $orgId): OfflineBundleZipWriter

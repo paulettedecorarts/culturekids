@@ -76,10 +76,24 @@
             @else
                 {{ __(':total items in queue', ['total' => $pendingTotal]) }}
             @endif
+            <span wire:loading wire:target="search,typeFilter,tribeFilter,statusFilter,sortBy,clearFilters" class="review-queue-results-bar__loading">
+                {{ __('Updating…') }}
+            </span>
         </span>
-        <span wire:loading wire:target="search,typeFilter,tribeFilter,statusFilter,sortBy,clearFilters" class="review-queue-results-bar__loading">
-            {{ __('Updating…') }}
-        </span>
+        @if($filteredTotal > 0)
+            <button
+                type="button"
+                class="btn btn-primary btn-sm review-queue-approve-all"
+                wire:click="approveAll"
+                wire:confirm="{{ __('Approve all :count items currently in this queue? This cannot be undone.', ['count' => $filteredTotal]) }}"
+                wire:loading.attr="disabled"
+                wire:target="approveAll"
+                wire:loading.class="opacity-50 cursor-not-allowed"
+            >
+                <span wire:loading.remove wire:target="approveAll">{{ __('Approve all (:count)', ['count' => $filteredTotal]) }}</span>
+                <span wire:loading wire:target="approveAll">{{ __('Approving all…') }}</span>
+            </button>
+        @endif
     </div>
 
     <div class="cms-asset-table">
@@ -200,8 +214,15 @@
         }
 
         .review-queue-results-bar__loading {
+            display: inline-block;
+            margin-left: 8px;
             font-size: 11px;
             opacity: 0.8;
+        }
+
+        .review-queue-approve-all {
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .review-queue-table-grid {

@@ -26,12 +26,6 @@ class OfflineBundleAssetCollector
 
     private function walk(mixed $value): void
     {
-        if (is_string($value)) {
-            $this->addPath($value);
-
-            return;
-        }
-
         if (! is_array($value)) {
             return;
         }
@@ -39,8 +33,9 @@ class OfflineBundleAssetCollector
         foreach ($value as $key => $child) {
             if (is_string($key) && $this->keySuggestsAsset($key) && is_string($child)) {
                 $this->addPath($child);
+            } elseif (is_array($child)) {
+                $this->walk($child);
             }
-            $this->walk($child);
         }
     }
 
@@ -59,10 +54,20 @@ class OfflineBundleAssetCollector
         }
 
         $path = ltrim($path, '/');
-        if (str_contains($path, '..')) {
+        if (str_contains($path, '..') || ! $this->looksLikeStoragePath($path)) {
             return;
         }
 
         $this->paths[] = $path;
+    }
+
+    private function looksLikeStoragePath(string $path): bool
+    {
+        if (! preg_match('/^[a-zA-Z0-9._\-\/]+$/', $path)) {
+            return false;
+        }
+
+        // Require a file extension so folder paths (e.g. culture/maps) are never zipped.
+        return preg_match('/\.[a-zA-Z0-9]{2,5}$/', basename($path)) === 1;
     }
 }

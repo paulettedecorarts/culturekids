@@ -3,6 +3,7 @@
 namespace App\Support\OfflineBundle;
 
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\CorruptedPathDetected;
 use ZipArchive;
 
 class OfflineBundleZipWriter
@@ -37,7 +38,20 @@ class OfflineBundleZipWriter
         $added = [];
 
         foreach ($storagePaths as $storagePath) {
-            if (isset($this->pathMap[$storagePath]) || ! $disk->exists($storagePath)) {
+            if (isset($this->pathMap[$storagePath])) {
+                continue;
+            }
+
+            try {
+                if (! $disk->exists($storagePath)) {
+                    continue;
+                }
+
+                $fullPath = realpath($disk->path($storagePath));
+                if ($fullPath === false || ! is_file($fullPath)) {
+                    continue;
+                }
+            } catch (CorruptedPathDetected) {
                 continue;
             }
 
@@ -48,7 +62,9 @@ class OfflineBundleZipWriter
                 $entry = $prefix.'/'.pathinfo($storagePath, PATHINFO_FILENAME).'-'.$counter.'.'.pathinfo($storagePath, PATHINFO_EXTENSION);
             }
 
-            $this->zip->addFile($disk->path($storagePath), $entry);
+            if (! $this->zip->addFile($fullPath, $entry)) {
+                continue;
+            }
             $this->pathMap[$storagePath] = $entry;
             $added[$storagePath] = $entry;
             $this->assetCount++;
@@ -67,7 +83,9 @@ class OfflineBundleZipWriter
 
     public function close(): int
     {
-        $this->zip->close();
+        if (! @$this->zip->close()) {
+            throw new \RuntimeException('Could not finalize offline bundle archive.');
+        }
 
         return $this->assetCount;
     }

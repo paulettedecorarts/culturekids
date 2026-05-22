@@ -67,7 +67,7 @@ class BuildOfflineBundle implements ShouldQueue
                 'content_id' => $this->contentId,
                 'error' => $e->getMessage(),
             ]);
-            throw $e;
+            // Do not rethrow — approval/catalog must succeed even if bundle build fails.
         }
     }
 
