@@ -9,7 +9,11 @@ class ProfilePage extends Component
 {
     public function render()
     {
-        return view('livewire.profile.profile-page')
-            ->layout(PortalHome::layoutFor(auth()->user()));
+        $user = auth()->user();
+        $user?->load('roles');
+
+        return view('livewire.profile.profile-page', [
+            'user' => $user,
+        ])->layout(PortalHome::layoutFor($user));
     }
 }
