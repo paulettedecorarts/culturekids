@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\Tribe;
 use App\Services\PlatformLandingService;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -41,6 +42,11 @@ class LandingPageEditor extends Component
     public ?string $seo_title = null;
     public ?string $seo_description = null;
 
+    public string $pricing_section_title = '';
+    public string $pricing_section_lead = '';
+    /** @var list<array<string, mixed>> */
+    public array $pricing_plans = [];
+
     public function mount(PlatformLandingService $landing): void
     {
         $this->fillFrom($landing->draft());
@@ -70,14 +76,100 @@ class LandingPageEditor extends Component
             'cta_subtitle' => ['nullable', 'string', 'max:400'],
             'seo_title' => ['nullable', 'string', 'max:180'],
             'seo_description' => ['nullable', 'string', 'max:400'],
+            'pricing_section_title' => ['nullable', 'string', 'max:200'],
+            'pricing_section_lead' => ['nullable', 'string', 'max:600'],
+            'pricing_plans' => ['array'],
+            'pricing_plans.*.name' => ['nullable', 'string', 'max:80'],
+            'pricing_plans.*.price_display' => ['nullable', 'string', 'max:80'],
+            'pricing_plans.*.price_suffix' => ['nullable', 'string', 'max:40'],
+            'pricing_plans.*.note' => ['nullable', 'string', 'max:200'],
+            'pricing_plans.*.features_text' => ['nullable', 'string', 'max:2000'],
+            'pricing_plans.*.badge' => ['nullable', 'string', 'max:60'],
+            'pricing_plans.*.cta_label' => ['nullable', 'string', 'max:80'],
+            'pricing_plans.*.cta_href' => ['nullable', 'string', 'max:500'],
+            'pricing_plans.*.cta_style' => ['nullable', 'in:primary,outline'],
         ];
+    }
+
+    public function addPricingPlan(): void
+    {
+        $maxOrder = collect($this->pricing_plans)->max('sort_order') ?? -1;
+        $this->pricing_plans[] = [
+            'id' => 'plan-'.Str::uuid(),
+            'name' => 'New plan',
+            'price_display' => '',
+            'price_suffix' => '',
+            'note' => '',
+            'features_text' => '',
+            'is_featured' => false,
+            'badge' => '',
+            'cta_label' => 'Get started',
+            'cta_href' => '',
+            'cta_style' => 'outline',
+            'sort_order' => $maxOrder + 1,
+            'is_visible' => true,
+        ];
+    }
+
+    public function removePricingPlan(string $planId): void
+    {
+        $this->pricing_plans = array_values(array_filter(
+            $this->pricing_plans,
+            fn (array $plan) => (string) ($plan['id'] ?? '') !== $planId
+        ));
+        $this->reindexPricingPlans();
+    }
+
+    public function movePricingPlanUp(string $planId): void
+    {
+        $this->swapPricingPlan($planId, -1);
+    }
+
+    public function movePricingPlanDown(string $planId): void
+    {
+        $this->swapPricingPlan($planId, 1);
+    }
+
+    public function setFeaturedPricingPlan(string $planId): void
+    {
+        foreach ($this->pricing_plans as $i => $plan) {
+            $this->pricing_plans[$i]['is_featured'] = (string) ($plan['id'] ?? '') === $planId;
+        }
+    }
+
+    protected function swapPricingPlan(string $planId, int $direction): void
+    {
+        $index = collect($this->pricing_plans)->search(
+            fn (array $plan) => (string) ($plan['id'] ?? '') === $planId
+        );
+
+        if ($index === false) {
+            return;
+        }
+
+        $target = $index + $direction;
+        if ($target < 0 || $target >= count($this->pricing_plans)) {
+            return;
+        }
+
+        $plans = $this->pricing_plans;
+        [$plans[$index], $plans[$target]] = [$plans[$target], $plans[$index]];
+        $this->pricing_plans = $plans;
+        $this->reindexPricingPlans();
+    }
+
+    protected function reindexPricingPlans(): void
+    {
+        foreach ($this->pricing_plans as $i => $plan) {
+            $this->pricing_plans[$i]['sort_order'] = $i;
+        }
     }
 
     public function saveDraft(PlatformLandingService $landing): void
     {
         $this->validate();
         $this->persistUpload();
-        $landing->saveDraft($this->payload());
+        $landing->saveDraft($this->payload($landing));
         session()->flash('message', 'Landing page draft saved.');
     }
 
@@ -85,7 +177,7 @@ class LandingPageEditor extends Component
     {
         $this->validate();
         $this->persistUpload();
-        $landing->saveDraft($this->payload());
+        $landing->saveDraft($this->payload($landing));
         $landing->publish((int) auth()->id());
         AuditLog::record('PUBLISH_LANDING', 'platform/landing', []);
         session()->flash('message', 'Landing page published live.');
@@ -123,7 +215,7 @@ class LandingPageEditor extends Component
     /**
      * @return array<string, mixed>
      */
-    protected function payload(): array
+    protected function payload(PlatformLandingService $landing): array
     {
         return [
             'hero_headline' => $this->hero_headline,
@@ -146,6 +238,9 @@ class LandingPageEditor extends Component
             'cta_subtitle' => $this->cta_subtitle,
             'seo_title' => $this->seo_title,
             'seo_description' => $this->seo_description,
+            'pricing_section_title' => $this->pricing_section_title,
+            'pricing_section_lead' => $this->pricing_section_lead,
+            'pricing_plans' => $landing->normalizePricingPlans($this->pricing_plans),
         ];
     }
 
@@ -174,19 +269,45 @@ class LandingPageEditor extends Component
         $this->cta_subtitle = (string) ($data['cta_subtitle'] ?? '');
         $this->seo_title = $data['seo_title'] ?? null;
         $this->seo_description = $data['seo_description'] ?? null;
+        $this->pricing_section_title = (string) ($data['pricing_section_title'] ?? 'Plans that scale with you');
+        $this->pricing_section_lead = (string) ($data['pricing_section_lead'] ?? 'From families exploring at home to districts rolling out culturally grounded learning — start free and upgrade when you are ready.');
+        $this->pricing_plans = $this->plansForEditor(
+            is_array($data['pricing_plans'] ?? null) && $data['pricing_plans'] !== []
+                ? $data['pricing_plans']
+                : app(PlatformLandingService::class)->defaultPricingPlans()
+        );
         $this->hero_image_upload = null;
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $plans
+     * @return list<array<string, mixed>>
+     */
+    protected function plansForEditor(array $plans): array
+    {
+        return collect($plans)
+            ->sortBy('sort_order')
+            ->values()
+            ->map(function (array $plan) {
+                $features = $plan['features'] ?? [];
+
+                return array_merge($plan, [
+                    'features_text' => is_array($features) ? implode("\n", $features) : '',
+                    'badge' => $plan['badge'] ?? '',
+                    'is_visible' => (bool) ($plan['is_visible'] ?? true),
+                    'is_featured' => (bool) ($plan['is_featured'] ?? false),
+                ]);
+            })
+            ->all();
     }
 
     public function render(PlatformLandingService $landing)
     {
-        $preview = $landing->viewData();
-        $preview['landing'] = array_merge($preview['landing'], $this->payload());
-
         return view('livewire.admin.landing-page-editor', [
             'comics' => Comic::query()->published()->orderBy('title')->get(['id', 'title']),
             'peoples' => Tribe::query()->orderBy('name')->get(['id', 'name', 'hero_emoji']),
             'previewUrl' => url('/'),
-            'heroPreviewUrl' => $landing->viewData()['heroImageUrl'] ?? null,
+            'previewPlans' => $landing->visiblePricingPlans(array_merge($landing->draft(), $this->payload($landing))),
         ])->layout('layouts.admin');
     }
 }

@@ -266,56 +266,47 @@
         </div>
     </section>
 
+    @if (!empty($pricingPlans))
     <section class="landing-section landing-section--white" id="pricing" aria-labelledby="pricing-heading">
         <div class="landing-section__inner">
             <span class="landing-section__label">Pricing</span>
-            <h2 id="pricing-heading" class="landing-section__title">Plans that scale with you</h2>
-            <p class="landing-section__lead">
-                From families exploring at home to districts rolling out culturally grounded learning — start free and upgrade when you are ready.
-            </p>
-            <div class="landing-pricing__grid">
-                <article class="landing-price-card">
-                    <h3 class="landing-price-card__name">Free</h3>
-                    <p class="landing-price-card__price">$0</p>
-                    <p class="landing-price-card__note">For parents &amp; trial classrooms</p>
-                    <ul class="landing-price-card__features">
-                        <li>Sample story packs &amp; songs</li>
-                        <li>One child profile</li>
-                        <li>Platform default branding</li>
-                        <li>Community support</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="landing-btn landing-btn--outline-dark">Get started</a>
-                </article>
-                <article class="landing-price-card landing-price-card--featured">
-                    <span class="landing-price-card__badge">Most popular</span>
-                    <h3 class="landing-price-card__name">School</h3>
-                    <p class="landing-price-card__price">Custom <span>/ year</span></p>
-                    <p class="landing-price-card__note">Per organisation · modular add-ons</p>
-                    <ul class="landing-price-card__features">
-                        <li>{{ heritage('full_catalogue') }}</li>
-                        <li>Org admin &amp; teacher portals</li>
-                        <li>Review queue &amp; approvals</li>
-                        <li>Offline bundles &amp; kiosk mode</li>
-                        <li>Custom themes &amp; modules</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="landing-btn landing-btn--primary">Start free trial</a>
-                </article>
-                <article class="landing-price-card">
-                    <h3 class="landing-price-card__name">Enterprise</h3>
-                    <p class="landing-price-card__price">Let's talk</p>
-                    <p class="landing-price-card__note">Districts, NGOs &amp; multi-site rollouts</p>
-                    <ul class="landing-price-card__features">
-                        <li>Everything in School</li>
-                        <li>Multi-organisation management</li>
-                        <li>Priority onboarding &amp; training</li>
-                        <li>SLA &amp; dedicated support</li>
-                        <li>API &amp; integration options</li>
-                    </ul>
-                    <a href="{{ route('register') }}" class="landing-btn landing-btn--outline-dark">Contact sales</a>
-                </article>
+            <h2 id="pricing-heading" class="landing-section__title">{{ $pricingSectionTitle ?? 'Plans that scale with you' }}</h2>
+            @if (!empty($pricingSectionLead))
+                <p class="landing-section__lead">{{ $pricingSectionLead }}</p>
+            @endif
+            <div class="landing-pricing__grid landing-pricing__grid--{{ min(count($pricingPlans), 4) }}">
+                @foreach ($pricingPlans as $plan)
+                    <article class="landing-price-card {{ !empty($plan['is_featured']) ? 'landing-price-card--featured' : '' }}">
+                        @if (!empty($plan['badge']))
+                            <span class="landing-price-card__badge">{{ $plan['badge'] }}</span>
+                        @endif
+                        <h3 class="landing-price-card__name">{{ $plan['name'] }}</h3>
+                        <p class="landing-price-card__price">
+                            {{ $plan['price_display'] }}
+                            @if (!empty($plan['price_suffix']))
+                                <span>{{ $plan['price_suffix'] }}</span>
+                            @endif
+                        </p>
+                        @if (!empty($plan['note']))
+                            <p class="landing-price-card__note">{{ $plan['note'] }}</p>
+                        @endif
+                        @if (!empty($plan['features']))
+                            <ul class="landing-price-card__features">
+                                @foreach ($plan['features'] as $feature)
+                                    <li>{{ $feature }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                        <a
+                            href="{{ $plan['cta_url'] ?? route('register') }}"
+                            class="landing-btn {{ ($plan['cta_style'] ?? 'outline') === 'primary' ? 'landing-btn--primary' : 'landing-btn--outline-dark' }}"
+                        >{{ $plan['cta_label'] ?? 'Get started' }}</a>
+                    </article>
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     <section class="landing-section landing-section--navy landing-download" id="download" aria-labelledby="download-heading">
         <div class="landing-section__inner">
