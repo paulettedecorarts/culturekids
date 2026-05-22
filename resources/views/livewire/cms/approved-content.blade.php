@@ -1,22 +1,29 @@
 <div>
     <div class="cms-header">
         <div>
-            <h1 class="cms-page-title">Approved Content</h1>
-            <div class="cms-breadcrumb">Management · {{ $organization }} · Published Library</div>
+            <h1 class="cms-page-title">{{ $pageTitle }}</h1>
+            <div class="cms-breadcrumb">
+                Management · {{ $organization }} · Published Library
+                @if($contentType)
+                    · {{ $typeLabel }}
+                @endif
+            </div>
         </div>
     </div>
 
     <div class="cms-stats-row" style="grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));">
         <div class="cms-stat">
             <div class="cms-stat-val">{{ $approvedTotal }}</div>
-            <div class="cms-stat-label">Total Approved</div>
+            <div class="cms-stat-label">{{ $contentType ? 'Approved '.$typeLabel : 'Total Approved' }}</div>
         </div>
-        @foreach($typeLabels as $typeKey => $typeLabel)
-            <div class="cms-stat">
-                <div class="cms-stat-val">{{ $countsByType[$typeKey] ?? 0 }}</div>
-                <div class="cms-stat-label">{{ $typeLabel }}</div>
-            </div>
-        @endforeach
+        @if(! $contentType)
+            @foreach($typeLabels as $typeKey => $typeLabel)
+                <div class="cms-stat">
+                    <div class="cms-stat-val">{{ $countsByType[$typeKey] ?? 0 }}</div>
+                    <div class="cms-stat-label">{{ $typeLabel }}</div>
+                </div>
+            @endforeach
+        @endif
     </div>
 
     <div class="cms-asset-table">
@@ -42,7 +49,11 @@
             </div>
         @empty
             <div style="padding:24px; color:var(--cms-text-muted); font-weight:700; text-align:center;">
-                No approved content yet across any activity type.
+                @if($contentType)
+                    No approved {{ strtolower($typeLabel) }} yet.
+                @else
+                    No approved content yet across any activity type.
+                @endif
             </div>
         @endforelse
     </div>

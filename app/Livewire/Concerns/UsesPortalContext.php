@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Concerns;
 
+use App\Support\CmsAdminContentNav;
+
 /**
  * Portal-aware routing for admin modules reused under /cms/editor and /cms/admin.
  *
@@ -90,8 +92,13 @@ trait UsesPortalContext
             return 'teacher.library';
         }
 
-        if (request()->routeIs('cms.admin.flashcards.show', 'cms.admin.approved-content.flashcards.show')) {
-            return 'cms.admin.flashcards';
+        if ($this->isOrgAdminPortal()) {
+            foreach (CmsAdminContentNav::items() as $item) {
+                $route = 'cms.admin.'.$item['route'];
+                if (request()->routeIs($route, $route.'.*', 'cms.admin.approved-content.'.$item['route'].'.show')) {
+                    return $route;
+                }
+            }
         }
 
         if (request()->routeIs('cms.admin.activities.show')) {
@@ -107,8 +114,13 @@ trait UsesPortalContext
             return 'Library';
         }
 
-        if (request()->routeIs('cms.admin.flashcards.show', 'cms.admin.approved-content.flashcards.show')) {
-            return 'Flashcards';
+        if ($this->isOrgAdminPortal()) {
+            foreach (CmsAdminContentNav::items() as $item) {
+                $route = 'cms.admin.'.$item['route'];
+                if (request()->routeIs($route, $route.'.*', 'cms.admin.approved-content.'.$item['route'].'.show')) {
+                    return $item['label'];
+                }
+            }
         }
 
         if (request()->routeIs('cms.admin.activities.show')) {

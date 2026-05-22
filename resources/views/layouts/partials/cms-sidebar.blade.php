@@ -70,16 +70,24 @@ HTML;
         @if($isAdmin || $isSuper)
             <div class="cms-nav-section"><span class="cms-nav-section-text">Management</span></div>
             {!! $cmsNavLink(route('cms.admin.review'), '✅', 'Review Queue', request()->routeIs('cms.admin.review')) !!}
-            {!! $cmsNavLink(route('cms.admin.approved-content'), '📚', 'Approved Content', request()->routeIs('cms.admin.approved-content*')) !!}
+            {!! $cmsNavLink(route('cms.admin.approved-content'), '📚', 'Approved Content', request()->routeIs('cms.admin.approved-content')) !!}
             @if($isAdmin && ! ($isEditor ?? false))
-                {!! $cmsNavLink(route('cms.admin.activities'), '🎯', 'Activities', request()->routeIs('cms.admin.activities*')) !!}
-                {!! $cmsNavLink(route('cms.admin.flashcards'), '🃏', 'Flashcards', request()->routeIs('cms.admin.flashcards*')) !!}
+                {!! $cmsNavLink(route('cms.admin.themes'), '🎨', 'Themes', request()->routeIs('cms.admin.themes')) !!}
+                {!! $cmsNavLink(route('cms.admin.organizations'), '🏫', 'Organizations', request()->routeIs('cms.admin.organizations')) !!}
+                {!! $cmsNavLink(route('cms.admin.people'), '👥', 'Teachers & children', request()->routeIs('cms.admin.people')) !!}
+                {!! $cmsNavLink(route('cms.admin.classrooms'), '🎓', 'Classrooms', request()->routeIs('cms.admin.classrooms')) !!}
+                {!! $cmsNavLink(route('cms.admin.analytics'), '📈', 'Analytics', request()->routeIs('cms.admin.analytics')) !!}
+
+                <div class="cms-nav-section"><span class="cms-nav-section-text">Published Library</span></div>
+                @foreach(\App\Support\CmsAdminContentNav::items() as $item)
+                    {!! $cmsNavLink(
+                        route('cms.admin.'.$item['route']),
+                        $item['icon'],
+                        $item['label'],
+                        request()->routeIs('cms.admin.'.$item['route'])
+                    ) !!}
+                @endforeach
             @endif
-            {!! $cmsNavLink(route('cms.admin.themes'), '🎨', 'Themes', request()->routeIs('cms.admin.themes')) !!}
-            {!! $cmsNavLink(route('cms.admin.organizations'), '🏫', 'Organizations', request()->routeIs('cms.admin.organizations')) !!}
-            {!! $cmsNavLink(route('cms.admin.people'), '👥', 'Teachers & children', request()->routeIs('cms.admin.people')) !!}
-            {!! $cmsNavLink(route('cms.admin.classrooms'), '🎓', 'Classrooms', request()->routeIs('cms.admin.classrooms')) !!}
-            {!! $cmsNavLink(route('cms.admin.analytics'), '📈', 'Analytics', request()->routeIs('cms.admin.analytics')) !!}
         @endif
     </nav>
 
