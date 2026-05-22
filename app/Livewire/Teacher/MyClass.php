@@ -5,18 +5,11 @@ namespace App\Livewire\Teacher;
 use App\Models\Classroom;
 use App\Support\TeacherActiveClassroom;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.teacher')]
 class MyClass extends Component
 {
-    #[On('teacher-classroom-changed')]
-    public function onClassroomChanged(): void
-    {
-        //
-    }
-
     public function render()
     {
         $user = auth()->user();

@@ -4,7 +4,6 @@ namespace App\Livewire\Teacher;
 
 use App\Support\TeacherActiveClassroom;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.teacher')]
@@ -24,7 +23,6 @@ class MainDashboard extends Component
         $this->refreshDashboard();
     }
 
-    #[On('teacher-classroom-changed')]
     public function refreshDashboard(): void
     {
         $user = auth()->user();

@@ -22,7 +22,7 @@ class ResendRegistrationVerificationController extends Controller
             ->where('email', strtolower($validated['email']))
             ->first();
 
-        if ($user && ! $user->hasVerifiedEmail()) {
+        if ($user && $user->requiresEmailVerification() && ! $user->hasVerifiedEmail()) {
             session([
                 'pending_verification_user_id' => $user->id,
                 'pending_verification_remember' => false,

@@ -40,7 +40,7 @@ HTML;
     </div>
 
     <div class="th-classroom-switcher">
-        @livewire('teacher.classroom-switcher')
+        @include('layouts.partials.teacher-classroom-switcher')
     </div>
 
     <nav class="th-sidebar-nav" aria-label="{{ __('Teacher navigation') }}">

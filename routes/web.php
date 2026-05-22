@@ -304,6 +304,7 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
 // Teacher Hub (Classroom Context)
 // Super Admin must impersonate a teacher user to access these routes.
 Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::post('/classroom/switch', [\App\Http\Controllers\Teacher\TeacherClassroomController::class, 'switch'])->name('classroom.switch');
     Route::get('/dashboard', MainDashboard::class)->name('dashboard');
     Route::get('/lessons', App\Livewire\Teacher\Dashboard::class)->name('lessons');
     Route::get('/my-class', MyClass::class)->name('my-class');

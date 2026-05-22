@@ -68,6 +68,7 @@ class RegistrationTest extends TestCase
             'email' => 'pending@school.test',
             'password' => bcrypt('password'),
         ]);
+        $user->assignRole('org_admin');
 
         Volt::test('pages.auth.login')
             ->set('form.email', 'pending@school.test')
@@ -104,6 +105,24 @@ class RegistrationTest extends TestCase
             ->assertHasNoErrors();
 
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_super_admin_can_login_without_email_verification(): void
+    {
+        $user = User::factory()->unverified()->create([
+            'email' => 'admin@culturekids.test',
+            'password' => bcrypt('password'),
+        ]);
+        $user->assignRole('super_admin');
+
+        Volt::test('pages.auth.login')
+            ->set('form.email', 'admin@culturekids.test')
+            ->set('form.password', 'password')
+            ->call('login')
+            ->assertSet('showUnverifiedDialog', false)
+            ->assertHasNoErrors();
+
         $this->assertAuthenticatedAs($user);
     }
 }

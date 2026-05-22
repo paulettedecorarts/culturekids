@@ -91,10 +91,34 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Only school org admins who self-register must verify email before sign-in.
+     */
+    public function requiresEmailVerification(): bool
+    {
+        return $this->hasRole('org_admin');
+    }
+
+    /**
+     * In-app roles (super admin, CMS editor) and invited users are verified by default.
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        if (! $this->requiresEmailVerification()) {
+            return true;
+        }
+
+        return $this->email_verified_at !== null;
+    }
+
+    /**
      * Send a 6-digit verification code email (web + mobile), not a signed link.
      */
     public function sendEmailVerificationNotification(): void
     {
+        if (! $this->requiresEmailVerification()) {
+            return;
+        }
+
         app(SendEmailVerificationCode::class)->send($this);
     }
 }

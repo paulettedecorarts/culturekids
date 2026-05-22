@@ -24,6 +24,7 @@ class EmailVerificationTest extends TestCase
     public function test_verify_email_code_screen_can_be_rendered(): void
     {
         $user = User::factory()->unverified()->create();
+        $user->assignRole('org_admin');
 
         $response = $this->withSession([
             'pending_verification_user_id' => $user->id,
@@ -38,6 +39,7 @@ class EmailVerificationTest extends TestCase
     public function test_email_can_be_verified_with_code_without_prior_login(): void
     {
         $user = User::factory()->unverified()->create();
+        $user->assignRole('org_admin');
 
         Event::fake();
 
@@ -57,6 +59,7 @@ class EmailVerificationTest extends TestCase
     public function test_invalid_code_is_rejected(): void
     {
         $user = User::factory()->unverified()->create();
+        $user->assignRole('org_admin');
 
         VerificationCode::createForUser($user);
 
@@ -91,6 +94,16 @@ class EmailVerificationTest extends TestCase
 
         $this->actingAs($user)
             ->get(route('cms.admin.dashboard'))
+            ->assertOk();
+    }
+
+    public function test_unverified_super_admin_can_access_admin_dashboard(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $user->assignRole('super_admin');
+
+        $this->actingAs($user)
+            ->get(route('admin.dashboard'))
             ->assertOk();
     }
 }

@@ -107,6 +107,7 @@ class AppServiceProvider extends ServiceProvider
         ];
 
         View::composer(array_merge($layouts, ['welcome']), PortalThemeComposer::class);
+        View::composer('layouts.partials.teacher-sidebar', \App\View\Composers\TeacherSidebarComposer::class);
     }
 
     /**

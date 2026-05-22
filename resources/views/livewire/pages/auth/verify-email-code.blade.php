@@ -19,7 +19,7 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $user = $this->pendingUser();
 
-        if (! $user) {
+        if (! $user || ! $user->requiresEmailVerification()) {
             $this->redirect(route('login', absolute: false), navigate: true);
 
             return;
