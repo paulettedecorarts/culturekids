@@ -21,6 +21,16 @@ use Illuminate\Support\Collection;
 
 class TeacherApprovedCatalogService
 {
+    /** @var Collection<int, array<string, mixed>>|null */
+    private ?Collection $itemsForCache = null;
+
+    private ?int $itemsForCacheUserId = null;
+
+    /** @var array<int, list<array{type: string, label: string, count: int}>>|null */
+    private ?array $countsByTribeCache = null;
+
+    private ?int $countsByTribeCacheUserId = null;
+
     /**
      * @return Collection<int, array{
      *     content_type: string,
@@ -38,15 +48,20 @@ class TeacherApprovedCatalogService
      */
     public function itemsFor(User $user): Collection
     {
+        if ($this->itemsForCache !== null && $this->itemsForCacheUserId === (int) $user->id) {
+            return $this->itemsForCache;
+        }
+
         $org = $user->organisation;
         if (! $org) {
-            return collect();
+            return $this->rememberItemsFor($user, collect());
         }
 
         $items = collect();
         $moduleResolver = app(OrganisationModuleResolver::class);
+        $orgId = (int) $org->id;
 
-        if ($moduleResolver->isContentTypeAllowedForOrganisation((int) $org->id, OrganisationContentDecision::TYPE_STORY)) {
+        if ($moduleResolver->isContentTypeAllowedForOrganisation($orgId, OrganisationContentDecision::TYPE_STORY)) {
             TeacherCatalogScope::comicsQueryFor($user)
                 ->withCount('panels')
                 ->with('tribe:id,name,hero_emoji')
@@ -69,7 +84,7 @@ class TeacherApprovedCatalogService
                 });
         }
 
-        if ($moduleResolver->isContentTypeAllowedForOrganisation((int) $org->id, OrganisationContentDecision::TYPE_SONG)) {
+        if ($moduleResolver->isContentTypeAllowedForOrganisation($orgId, OrganisationContentDecision::TYPE_SONG)) {
             TeacherCatalogScope::songsQueryFor($user)
                 ->with('tribe:id,name,hero_emoji')
                 ->get(['id', 'title', 'tribe_id', 'age_min', 'age_max'])
@@ -91,22 +106,15 @@ class TeacherApprovedCatalogService
                 });
         }
 
-        OrganisationContentDecision::query()
-            ->where('organisation_id', $org->id)
-            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
-            ->whereNotIn('content_type', [
-                OrganisationContentDecision::TYPE_STORY,
-                OrganisationContentDecision::TYPE_SONG,
-            ])
-            ->get()
-            ->map(fn (OrganisationContentDecision $decision) => $this->hydrateDecisionItem($decision))
-            ->filter()
-            ->each(fn (array $row) => $items->push($row));
+        $this->appendDecisionCatalogItems($items, $orgId, $moduleResolver);
 
-        return $moduleResolver
-            ->filterReviewItemsForOrganisation($items, (int) $org->id)
-            ->unique(fn (array $row) => $row['content_type'].':'.$row['id'])
-            ->values();
+        return $this->rememberItemsFor(
+            $user,
+            $moduleResolver
+                ->filterReviewItemsForOrganisation($items, $orgId)
+                ->unique(fn (array $row) => $row['content_type'].':'.$row['id'])
+                ->values()
+        );
     }
 
     /**
@@ -114,35 +122,73 @@ class TeacherApprovedCatalogService
      */
     public function countsByTribe(User $user): array
     {
-        $grouped = [];
+        if ($this->countsByTribeCache !== null && $this->countsByTribeCacheUserId === (int) $user->id) {
+            return $this->countsByTribeCache;
+        }
 
-        foreach ($this->itemsFor($user) as $item) {
-            $tribeId = $item['tribe_id'] ?? null;
-            if (! $tribeId) {
+        $org = $user->organisation;
+        if (! $org) {
+            return $this->rememberCountsByTribe($user, []);
+        }
+
+        $grouped = [];
+        $moduleResolver = app(OrganisationModuleResolver::class);
+        $orgId = (int) $org->id;
+
+        if ($moduleResolver->isContentTypeAllowedForOrganisation($orgId, OrganisationContentDecision::TYPE_STORY)) {
+            $this->mergeTribeTypeCounts(
+                $grouped,
+                OrganisationContentDecision::TYPE_STORY,
+                TeacherCatalogScope::comicsQueryFor($user)
+                    ->reorder()
+                    ->whereNotNull('tribe_id')
+                    ->selectRaw('tribe_id, count(*) as aggregate')
+                    ->groupBy('tribe_id')
+                    ->pluck('aggregate', 'tribe_id')
+            );
+        }
+
+        if ($moduleResolver->isContentTypeAllowedForOrganisation($orgId, OrganisationContentDecision::TYPE_SONG)) {
+            $this->mergeTribeTypeCounts(
+                $grouped,
+                OrganisationContentDecision::TYPE_SONG,
+                TeacherCatalogScope::songsQueryFor($user)
+                    ->reorder()
+                    ->whereNotNull('tribe_id')
+                    ->selectRaw('tribe_id, count(*) as aggregate')
+                    ->groupBy('tribe_id')
+                    ->pluck('aggregate', 'tribe_id')
+            );
+        }
+
+        $decisionsByType = OrganisationContentDecision::query()
+            ->where('organisation_id', $orgId)
+            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
+            ->whereNotIn('content_type', [
+                OrganisationContentDecision::TYPE_STORY,
+                OrganisationContentDecision::TYPE_SONG,
+            ])
+            ->get(['content_type', 'content_id'])
+            ->groupBy('content_type');
+
+        foreach ($decisionsByType as $contentType => $decisions) {
+            if (! $moduleResolver->isContentTypeAllowedForOrganisation($orgId, (string) $contentType)) {
                 continue;
             }
 
-            $type = $item['content_type'];
-            $grouped[$tribeId][$type] = ($grouped[$tribeId][$type] ?? 0) + 1;
-        }
-
-        $out = [];
-        foreach ($grouped as $tribeId => $byType) {
-            $rows = [];
-            foreach (OrganisationContentDecision::ALL_TYPES as $type) {
-                if (! isset($byType[$type])) {
-                    continue;
-                }
-                $rows[] = [
-                    'type' => $type,
-                    'label' => OrganisationContentDecision::labelFor($type),
-                    'count' => $byType[$type],
-                ];
+            $ids = $decisions->pluck('content_id')->map(fn ($id) => (int) $id)->all();
+            if ($ids === []) {
+                continue;
             }
-            $out[$tribeId] = $rows;
+
+            $this->mergeTribeTypeCounts(
+                $grouped,
+                (string) $contentType,
+                $this->publishedTribeCountsForContentType((string) $contentType, $ids)
+            );
         }
 
-        return $out;
+        return $this->rememberCountsByTribe($user, $this->formatGroupedCounts($grouped));
     }
 
     /**
@@ -150,13 +196,7 @@ class TeacherApprovedCatalogService
      */
     public function tribeIdsFor(User $user): array
     {
-        return $this->itemsFor($user)
-            ->pluck('tribe_id')
-            ->filter()
-            ->unique()
-            ->map(fn ($id) => (int) $id)
-            ->values()
-            ->all();
+        return array_map('intval', array_keys($this->countsByTribe($user)));
     }
 
     /**
@@ -180,11 +220,15 @@ class TeacherApprovedCatalogService
      */
     public function contentTypesPresent(User $user): array
     {
-        return $this->itemsFor($user)
-            ->pluck('content_type')
-            ->unique()
-            ->values()
-            ->all();
+        $present = [];
+
+        foreach ($this->countsByTribe($user) as $rows) {
+            foreach ($rows as $row) {
+                $present[$row['type']] = true;
+            }
+        }
+
+        return array_keys($present);
     }
 
     public function userCanViewItem(User $user, string $contentType, int $contentId): bool
@@ -194,157 +238,342 @@ class TeacherApprovedCatalogService
         );
     }
 
-    /** @return ?array<string, mixed> */
-    private function hydrateDecisionItem(OrganisationContentDecision $decision): ?array
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     */
+    private function appendDecisionCatalogItems(Collection $items, int $orgId, OrganisationModuleResolver $moduleResolver): void
     {
-        return match ($decision->content_type) {
-            OrganisationContentDecision::TYPE_FLASHCARD,
-            OrganisationContentDecision::TYPE_PUZZLE => $this->hydrateActivity($decision),
-            OrganisationContentDecision::TYPE_DRAWING,
-            OrganisationContentDecision::TYPE_COLOURING => $this->hydrateDrawing($decision),
-            OrganisationContentDecision::TYPE_LANGUAGE => $this->hydrateLanguage($decision),
-            OrganisationContentDecision::TYPE_GAME => $this->hydrateSimple($decision, Game::class, OrganisationContentDecision::TYPE_GAME),
-            OrganisationContentDecision::TYPE_MAZE => $this->hydrateSimple($decision, Maze::class, OrganisationContentDecision::TYPE_MAZE),
-            OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => $this->hydrateSimple($decision, SpotDifference::class, OrganisationContentDecision::TYPE_SPOT_DIFFERENCE),
-            OrganisationContentDecision::TYPE_WORD_SEARCH => $this->hydrateSimple($decision, WordSearch::class, OrganisationContentDecision::TYPE_WORD_SEARCH),
-            OrganisationContentDecision::TYPE_CULTURE => $this->hydrateSimple($decision, CultureActivity::class, OrganisationContentDecision::TYPE_CULTURE),
-            default => null,
-        };
-    }
+        $decisionsByType = OrganisationContentDecision::query()
+            ->where('organisation_id', $orgId)
+            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
+            ->whereNotIn('content_type', [
+                OrganisationContentDecision::TYPE_STORY,
+                OrganisationContentDecision::TYPE_SONG,
+            ])
+            ->get()
+            ->groupBy('content_type');
 
-    /** @return ?array<string, mixed> */
-    private function hydrateActivity(OrganisationContentDecision $decision): ?array
-    {
-        $activity = Activity::query()
-            ->with('tribe:id,name,hero_emoji')
-            ->find($decision->content_id);
+        foreach ($decisionsByType as $contentType => $decisions) {
+            if (! $moduleResolver->isContentTypeAllowedForOrganisation($orgId, (string) $contentType)) {
+                continue;
+            }
 
-        if (! $activity || ! $activity->is_published) {
-            return null;
+            $ids = $decisions->pluck('content_id')->map(fn ($id) => (int) $id)->all();
+            if ($ids === []) {
+                continue;
+            }
+
+            match ((string) $contentType) {
+                OrganisationContentDecision::TYPE_FLASHCARD => $this->appendActivities($items, $ids, OrganisationContentDecision::TYPE_FLASHCARD, 'flashcard'),
+                OrganisationContentDecision::TYPE_PUZZLE => $this->appendActivities($items, $ids, OrganisationContentDecision::TYPE_PUZZLE, 'puzzle'),
+                OrganisationContentDecision::TYPE_DRAWING => $this->appendDrawings($items, $ids, colouring: false),
+                OrganisationContentDecision::TYPE_COLOURING => $this->appendDrawings($items, $ids, colouring: true),
+                OrganisationContentDecision::TYPE_LANGUAGE => $this->appendLanguageActivities($items, $ids),
+                OrganisationContentDecision::TYPE_GAME => $this->appendSimpleModels($items, $ids, Game::class, OrganisationContentDecision::TYPE_GAME),
+                OrganisationContentDecision::TYPE_MAZE => $this->appendSimpleModels($items, $ids, Maze::class, OrganisationContentDecision::TYPE_MAZE),
+                OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => $this->appendSimpleModels($items, $ids, SpotDifference::class, OrganisationContentDecision::TYPE_SPOT_DIFFERENCE),
+                OrganisationContentDecision::TYPE_WORD_SEARCH => $this->appendSimpleModels($items, $ids, WordSearch::class, OrganisationContentDecision::TYPE_WORD_SEARCH),
+                OrganisationContentDecision::TYPE_CULTURE => $this->appendSimpleModels($items, $ids, CultureActivity::class, OrganisationContentDecision::TYPE_CULTURE),
+                default => null,
+            };
         }
-
-        $viewUrl = match ($decision->content_type) {
-            OrganisationContentDecision::TYPE_FLASHCARD => route('teacher.library.flashcards.show', $activity->id),
-            OrganisationContentDecision::TYPE_PUZZLE => route('teacher.library.puzzles.show', $activity->id),
-            default => null,
-        };
-
-        return $this->catalogPayload(
-            $decision->content_type,
-            (int) $activity->id,
-            $activity->title,
-            $activity->tribe_id ? (int) $activity->tribe_id : null,
-            $activity->tribe?->name,
-            $activity->tribe?->hero_emoji,
-            null,
-            null,
-            $activity->age_range,
-            $viewUrl
-        );
-    }
-
-    /** @return ?array<string, mixed> */
-    private function hydrateDrawing(OrganisationContentDecision $decision): ?array
-    {
-        $drawing = Drawing::query()
-            ->with('tribe:id,name,hero_emoji')
-            ->find($decision->content_id);
-
-        if (! $drawing || $drawing->status !== 'published') {
-            return null;
-        }
-
-        if ($decision->content_type === OrganisationContentDecision::TYPE_COLOURING
-            && $drawing->drawing_type !== 'coloring') {
-            return null;
-        }
-
-        if ($decision->content_type === OrganisationContentDecision::TYPE_DRAWING
-            && $drawing->drawing_type === 'coloring') {
-            return null;
-        }
-
-        $viewRoute = $decision->content_type === OrganisationContentDecision::TYPE_COLOURING
-            ? 'teacher.library.colouring.show'
-            : 'teacher.library.drawings.show';
-
-        return $this->catalogPayload(
-            $decision->content_type,
-            (int) $drawing->id,
-            $drawing->title,
-            $drawing->tribe_id ? (int) $drawing->tribe_id : null,
-            $drawing->tribe?->name,
-            $drawing->tribe?->hero_emoji,
-            null,
-            null,
-            null,
-            route($viewRoute, $drawing->id)
-        );
-    }
-
-    /** @return ?array<string, mixed> */
-    private function hydrateLanguage(OrganisationContentDecision $decision): ?array
-    {
-        $activity = LanguageActivity::query()
-            ->with('tribe:id,name,hero_emoji')
-            ->find($decision->content_id);
-
-        if (! $activity || $activity->status !== 'published') {
-            return null;
-        }
-
-        return $this->catalogPayload(
-            $decision->content_type,
-            (int) $activity->id,
-            $activity->title,
-            $activity->tribe_id ? (int) $activity->tribe_id : null,
-            $activity->tribe?->name,
-            $activity->tribe?->hero_emoji,
-            null,
-            null,
-            null,
-            route('teacher.library.language-activities.show', $activity->id)
-        );
     }
 
     /**
-     * @param  class-string  $modelClass
-     * @return ?array<string, mixed>
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @param  list<int>  $ids
      */
-    private function hydrateSimple(
-        OrganisationContentDecision $decision,
-        string $modelClass,
-        string $contentType
-    ): ?array {
-        $item = $modelClass::query()
+    private function appendActivities(Collection $items, array $ids, string $contentType, string $activityType): void
+    {
+        Activity::query()
+            ->whereIn('id', $ids)
+            ->where('type', $activityType)
+            ->where('is_published', true)
             ->with('tribe:id,name,hero_emoji')
-            ->find($decision->content_id);
+            ->get(['id', 'title', 'tribe_id', 'age_range'])
+            ->each(function (Activity $activity) use ($items, $contentType): void {
+                $viewUrl = match ($contentType) {
+                    OrganisationContentDecision::TYPE_FLASHCARD => route('teacher.library.flashcards.show', $activity->id),
+                    OrganisationContentDecision::TYPE_PUZZLE => route('teacher.library.puzzles.show', $activity->id),
+                    default => null,
+                };
 
-        if (! $item || $item->status !== 'published') {
-            return null;
+                $items->push($this->catalogPayload(
+                    $contentType,
+                    (int) $activity->id,
+                    $activity->title,
+                    $activity->tribe_id ? (int) $activity->tribe_id : null,
+                    $activity->tribe?->name,
+                    $activity->tribe?->hero_emoji,
+                    null,
+                    null,
+                    $activity->age_range,
+                    $viewUrl
+                ));
+            });
+    }
+
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @param  list<int>  $ids
+     */
+    private function appendDrawings(Collection $items, array $ids, bool $colouring): void
+    {
+        $contentType = $colouring
+            ? OrganisationContentDecision::TYPE_COLOURING
+            : OrganisationContentDecision::TYPE_DRAWING;
+
+        $query = Drawing::query()
+            ->whereIn('id', $ids)
+            ->where('status', 'published')
+            ->with('tribe:id,name,hero_emoji');
+
+        if ($colouring) {
+            $query->where('drawing_type', 'coloring');
+        } else {
+            $query->where(function ($inner) {
+                $inner->whereNull('drawing_type')
+                    ->orWhere('drawing_type', '!=', 'coloring');
+            });
         }
 
-        $viewUrl = match ($contentType) {
-            OrganisationContentDecision::TYPE_GAME => route('teacher.library.games.show', $item->id),
-            OrganisationContentDecision::TYPE_MAZE => route('teacher.library.mazes.show', $item->id),
-            OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => route('teacher.library.spot-differences.show', $item->id),
-            OrganisationContentDecision::TYPE_WORD_SEARCH => route('teacher.library.word-searches.show', $item->id),
-            OrganisationContentDecision::TYPE_CULTURE => route('teacher.library.culture-activities.show', $item->id),
-            default => null,
-        };
+        $viewRoute = $colouring
+            ? 'teacher.library.colouring.show'
+            : 'teacher.library.drawings.show';
 
-        return $this->catalogPayload(
-            $contentType,
-            (int) $item->id,
-            $item->title,
-            $item->tribe_id ? (int) $item->tribe_id : null,
-            $item->tribe?->name,
-            $item->tribe?->hero_emoji,
-            null,
-            null,
-            null,
-            $viewUrl
-        );
+        $query
+            ->get(['id', 'title', 'tribe_id'])
+            ->each(function (Drawing $drawing) use ($items, $contentType, $viewRoute): void {
+                $items->push($this->catalogPayload(
+                    $contentType,
+                    (int) $drawing->id,
+                    $drawing->title,
+                    $drawing->tribe_id ? (int) $drawing->tribe_id : null,
+                    $drawing->tribe?->name,
+                    $drawing->tribe?->hero_emoji,
+                    null,
+                    null,
+                    null,
+                    route($viewRoute, $drawing->id)
+                ));
+            });
+    }
+
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @param  list<int>  $ids
+     */
+    private function appendLanguageActivities(Collection $items, array $ids): void
+    {
+        LanguageActivity::query()
+            ->whereIn('id', $ids)
+            ->where('status', 'published')
+            ->with('tribe:id,name,hero_emoji')
+            ->get(['id', 'title', 'tribe_id'])
+            ->each(function (LanguageActivity $activity) use ($items): void {
+                $items->push($this->catalogPayload(
+                    OrganisationContentDecision::TYPE_LANGUAGE,
+                    (int) $activity->id,
+                    $activity->title,
+                    $activity->tribe_id ? (int) $activity->tribe_id : null,
+                    $activity->tribe?->name,
+                    $activity->tribe?->hero_emoji,
+                    null,
+                    null,
+                    null,
+                    route('teacher.library.language-activities.show', $activity->id)
+                ));
+            });
+    }
+
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @param  list<int>  $ids
+     * @param  class-string  $modelClass
+     */
+    private function appendSimpleModels(Collection $items, array $ids, string $modelClass, string $contentType): void
+    {
+        $modelClass::query()
+            ->whereIn('id', $ids)
+            ->where('status', 'published')
+            ->with('tribe:id,name,hero_emoji')
+            ->get(['id', 'title', 'tribe_id'])
+            ->each(function ($item) use ($items, $contentType): void {
+                $viewUrl = match ($contentType) {
+                    OrganisationContentDecision::TYPE_GAME => route('teacher.library.games.show', $item->id),
+                    OrganisationContentDecision::TYPE_MAZE => route('teacher.library.mazes.show', $item->id),
+                    OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => route('teacher.library.spot-differences.show', $item->id),
+                    OrganisationContentDecision::TYPE_WORD_SEARCH => route('teacher.library.word-searches.show', $item->id),
+                    OrganisationContentDecision::TYPE_CULTURE => route('teacher.library.culture-activities.show', $item->id),
+                    default => null,
+                };
+
+                $items->push($this->catalogPayload(
+                    $contentType,
+                    (int) $item->id,
+                    $item->title,
+                    $item->tribe_id ? (int) $item->tribe_id : null,
+                    $item->tribe?->name,
+                    $item->tribe?->hero_emoji,
+                    null,
+                    null,
+                    null,
+                    $viewUrl
+                ));
+            });
+    }
+
+    /**
+     * @param  array<int, array<string, int>>  $grouped
+     * @param  \Illuminate\Support\Collection<int|string, int|string>  $counts
+     */
+    private function mergeTribeTypeCounts(array &$grouped, string $contentType, $counts): void
+    {
+        foreach ($counts as $tribeId => $count) {
+            if (! $tribeId) {
+                continue;
+            }
+
+            $grouped[(int) $tribeId][$contentType] = ($grouped[(int) $tribeId][$contentType] ?? 0) + (int) $count;
+        }
+    }
+
+    /**
+     * @param  list<int>  $ids
+     * @return \Illuminate\Support\Collection<int|string, int|string>
+     */
+    private function publishedTribeCountsForContentType(string $contentType, array $ids)
+    {
+        return match ($contentType) {
+            OrganisationContentDecision::TYPE_FLASHCARD => Activity::query()
+                ->whereIn('id', $ids)
+                ->where('type', 'flashcard')
+                ->where('is_published', true)
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_PUZZLE => Activity::query()
+                ->whereIn('id', $ids)
+                ->where('type', 'puzzle')
+                ->where('is_published', true)
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_DRAWING => Drawing::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->where(function ($inner) {
+                    $inner->whereNull('drawing_type')
+                        ->orWhere('drawing_type', '!=', 'coloring');
+                })
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_COLOURING => Drawing::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->where('drawing_type', 'coloring')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_LANGUAGE => LanguageActivity::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_GAME => Game::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_MAZE => Maze::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_SPOT_DIFFERENCE => SpotDifference::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_WORD_SEARCH => WordSearch::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            OrganisationContentDecision::TYPE_CULTURE => CultureActivity::query()
+                ->whereIn('id', $ids)
+                ->where('status', 'published')
+                ->whereNotNull('tribe_id')
+                ->selectRaw('tribe_id, count(*) as aggregate')
+                ->groupBy('tribe_id')
+                ->pluck('aggregate', 'tribe_id'),
+            default => collect(),
+        };
+    }
+
+    /**
+     * @param  array<int, array<string, int>>  $grouped
+     * @return array<int, list<array{type: string, label: string, count: int}>>
+     */
+    private function formatGroupedCounts(array $grouped): array
+    {
+        $out = [];
+
+        foreach ($grouped as $tribeId => $byType) {
+            $rows = [];
+            foreach (OrganisationContentDecision::ALL_TYPES as $type) {
+                if (! isset($byType[$type])) {
+                    continue;
+                }
+                $rows[] = [
+                    'type' => $type,
+                    'label' => OrganisationContentDecision::labelFor($type),
+                    'count' => $byType[$type],
+                ];
+            }
+            $out[$tribeId] = $rows;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  Collection<int, array<string, mixed>>  $items
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function rememberItemsFor(User $user, Collection $items): Collection
+    {
+        $this->itemsForCacheUserId = (int) $user->id;
+        $this->itemsForCache = $items;
+
+        return $items;
+    }
+
+    /**
+     * @param  array<int, list<array{type: string, label: string, count: int}>>  $counts
+     * @return array<int, list<array{type: string, label: string, count: int}>>
+     */
+    private function rememberCountsByTribe(User $user, array $counts): array
+    {
+        $this->countsByTribeCacheUserId = (int) $user->id;
+        $this->countsByTribeCache = $counts;
+
+        return $counts;
     }
 
     /** @return array<string, mixed> */

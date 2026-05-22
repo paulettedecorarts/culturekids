@@ -3,8 +3,8 @@
 namespace App\Livewire\Teacher;
 
 use App\Models\OrganisationContentDecision;
+use App\Models\Tribe;
 use App\Services\TeacherApprovedCatalogService;
-use App\Support\TeacherCatalogScope;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -50,20 +50,23 @@ class TribesExplorer extends Component
         $user = auth()->user();
         $catalog = app(TeacherApprovedCatalogService::class);
         $countsByTribe = $catalog->countsByTribe($user);
+        $tribeIds = array_map('intval', array_keys($countsByTribe));
 
-        $query = TeacherCatalogScope::tribesQueryFor($user);
+        $query = $tribeIds === []
+            ? Tribe::query()->whereRaw('0 = 1')
+            : Tribe::query()->whereIn('id', $tribeIds)->orderBy('name');
 
         if ($this->type !== '' && in_array($this->type, OrganisationContentDecision::ALL_TYPES, true)) {
-            $tribeIds = [];
+            $filteredIds = [];
             foreach ($countsByTribe as $tribeId => $rows) {
                 foreach ($rows as $row) {
                     if ($row['type'] === $this->type) {
-                        $tribeIds[] = $tribeId;
+                        $filteredIds[] = (int) $tribeId;
                         break;
                     }
                 }
             }
-            $query->whereIn('id', $tribeIds !== [] ? $tribeIds : [0]);
+            $query->whereIn('id', $filteredIds !== [] ? $filteredIds : [0]);
         }
 
         if ($this->search !== '') {
@@ -82,17 +85,26 @@ class TribesExplorer extends Component
 
         $tribes = $query->paginate(24);
 
-        $regions = TeacherCatalogScope::tribesQueryFor($user)
-            ->reorder()
-            ->whereNotNull('region')
-            ->where('region', '!=', '')
-            ->select('region')
-            ->distinct()
-            ->orderBy('region')
-            ->pluck('region');
+        $regions = $tribeIds === []
+            ? collect()
+            : Tribe::query()
+                ->whereIn('id', $tribeIds)
+                ->whereNotNull('region')
+                ->where('region', '!=', '')
+                ->select('region')
+                ->distinct()
+                ->orderBy('region')
+                ->pluck('region');
+
+        $presentTypes = [];
+        foreach ($countsByTribe as $rows) {
+            foreach ($rows as $row) {
+                $presentTypes[$row['type']] = true;
+            }
+        }
 
         $typeOptions = collect(OrganisationContentDecision::ALL_TYPES)
-            ->filter(fn (string $t) => in_array($t, $catalog->contentTypesPresent($user), true))
+            ->filter(fn (string $t) => isset($presentTypes[$t]))
             ->mapWithKeys(fn (string $t) => [$t => OrganisationContentDecision::labelFor($t)])
             ->all();
 
