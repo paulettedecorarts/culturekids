@@ -383,6 +383,398 @@
     width: min(100%, 360px);
 }
 
+/* —— Section shell (Stories, Schools, Pricing, Download) —— */
+.landing-section {
+    padding: clamp(56px, 10vw, 88px) var(--landing-gutter);
+}
+
+.landing-section--white {
+    background: #ffffff;
+}
+
+.landing-section--beige {
+    background: var(--landing-beige);
+}
+
+.landing-section--navy {
+    background: var(--landing-navy-deep);
+    color: #ffffff;
+}
+
+.landing-section__inner {
+    max-width: var(--landing-container);
+    margin: 0 auto;
+}
+
+.landing-section__label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--clay-red, #c8502e);
+    margin-bottom: 12px;
+}
+
+.landing-section--navy .landing-section__label {
+    color: var(--landing-highlight);
+}
+
+.landing-section__title {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--landing-navy-deep);
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.landing-section--navy .landing-section__title {
+    color: #ffffff;
+}
+
+.landing-section__lead {
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--landing-text-muted);
+    margin: 0 0 40px;
+    max-width: 640px;
+    line-height: 1.55;
+}
+
+.landing-section--navy .landing-section__lead {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Stories */
+.landing-stories__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.landing-story-card {
+    background: var(--landing-beige);
+    border-radius: 20px;
+    padding: 28px 24px;
+    border: 1px solid rgba(26, 43, 72, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.landing-story-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(26, 43, 72, 0.1);
+}
+
+.landing-story-card__emoji {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.landing-story-card__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--landing-navy-deep);
+    margin: 0 0 8px;
+}
+
+.landing-story-card__meta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--clay-red, #c8502e);
+    margin: 0 0 10px;
+}
+
+.landing-story-card__desc {
+    font-size: 14px;
+    color: var(--landing-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* For Schools */
+.landing-schools__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+.landing-schools__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.landing-schools__item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.landing-schools__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(26, 43, 72, 0.06);
+}
+
+.landing-schools__item-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--landing-navy-deep);
+    margin: 0 0 4px;
+}
+
+.landing-schools__item-desc {
+    font-size: 14px;
+    color: var(--landing-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.landing-schools__panel {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(26, 43, 72, 0.08);
+    border: 1px solid rgba(26, 43, 72, 0.06);
+}
+
+.landing-schools__panel-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--landing-navy-deep);
+    margin: 0 0 20px;
+}
+
+.landing-schools__stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--landing-beige);
+    font-size: 14px;
+}
+
+.landing-schools__stat:last-child {
+    border-bottom: none;
+}
+
+.landing-schools__stat strong {
+    color: var(--landing-navy-deep);
+}
+
+/* Pricing */
+.landing-pricing__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.landing-price-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px 28px;
+    border: 1px solid rgba(26, 43, 72, 0.08);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(26, 43, 72, 0.05);
+}
+
+.landing-price-card--featured {
+    border: 2px solid var(--clay-red, #c8502e);
+    box-shadow: 0 12px 40px rgba(200, 80, 46, 0.15);
+    position: relative;
+}
+
+.landing-price-card__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--clay-red, #c8502e);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.landing-price-card__name {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--landing-text-muted);
+    margin: 0 0 8px;
+}
+
+.landing-price-card__price {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--landing-navy-deep);
+    margin: 0 0 4px;
+}
+
+.landing-price-card__price span {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--landing-text-muted);
+}
+
+.landing-price-card__note {
+    font-size: 13px;
+    color: var(--landing-text-muted);
+    margin: 0 0 24px;
+}
+
+.landing-price-card__features {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    text-align: left;
+    flex: 1;
+}
+
+.landing-price-card__features li {
+    font-size: 14px;
+    color: var(--landing-text);
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    line-height: 1.4;
+}
+
+.landing-price-card__features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--banana-green, #4a7c59);
+    font-weight: 700;
+}
+
+.landing-price-card .landing-btn {
+    width: 100%;
+}
+
+.landing-btn--outline-dark {
+    background: transparent;
+    color: var(--landing-navy-deep);
+    border: 2px solid rgba(26, 43, 72, 0.15);
+    padding: 12px 24px;
+    border-radius: var(--landing-radius-pill);
+}
+
+.landing-btn--outline-dark:hover {
+    border-color: var(--landing-navy-deep);
+    background: rgba(26, 43, 72, 0.04);
+}
+
+/* Download */
+.landing-download {
+    text-align: center;
+}
+
+.landing-download__stores {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.landing-download__store {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.landing-download__store:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.landing-download__store-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+}
+
+.landing-store-icon {
+    display: block;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.landing-store-icon--apple {
+    color: #ffffff;
+}
+
+.landing-store-icon--google-play {
+    width: 24px;
+    height: 26px;
+}
+
+.landing-download__store-text {
+    line-height: 1.2;
+}
+
+.landing-section__cta-row {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+}
+
+.landing-section--white .landing-section__cta-row {
+    justify-content: flex-start;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.landing-hero,
+.landing-features,
+.landing-tribes,
+.landing-section[id] {
+    scroll-margin-top: 80px;
+}
+
+.landing-nav__link.is-active {
+    color: var(--landing-navy-deep);
+    font-weight: 600;
+}
+
 /* —— Responsive —— */
 
 /* Tablet: tighten desktop nav before hamburger */
@@ -418,9 +810,45 @@
         margin-left: auto;
         margin-right: auto;
     }
+
+    .landing-stories__grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: none;
+    }
+
+    .landing-stories__grid .landing-story-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-pricing__grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: none;
+    }
+
+    .landing-pricing__grid .landing-price-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (max-width: 992px) {
+    .landing-stories__grid,
+    .landing-pricing__grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-schools__grid {
+        grid-template-columns: 1fr;
+    }
+
     .landing-header__inner {
         flex-wrap: wrap;
         position: relative;
