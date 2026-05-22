@@ -3,58 +3,94 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use App\Models\VerificationCode;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\URL;
+use Livewire\Volt\Volt;
 use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_email_verification_screen_can_be_rendered(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(RoleSeeder::class);
+    }
+
+    public function test_verify_email_code_screen_can_be_rendered(): void
     {
         $user = User::factory()->unverified()->create();
 
-        $response = $this->actingAs($user)->get('/verify-email');
+        $response = $this->withSession([
+            'pending_verification_user_id' => $user->id,
+        ])->get('/verify-email-code');
 
         $response
-            ->assertSeeVolt('pages.auth.verify-email')
-            ->assertStatus(200);
+            ->assertSeeVolt('pages.auth.verify-email-code')
+            ->assertStatus(200)
+            ->assertSee('Enter verification code');
     }
 
-    public function test_email_can_be_verified(): void
+    public function test_email_can_be_verified_with_code_without_prior_login(): void
     {
         $user = User::factory()->unverified()->create();
 
         Event::fake();
 
-        $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
-        );
+        $code = VerificationCode::createForUser($user);
 
-        $response = $this->actingAs($user)->get($verificationUrl);
+        Volt::test('pages.auth.verify-email-code')
+            ->withSession(['pending_verification_user_id' => $user->id])
+            ->set('code', $code->code)
+            ->call('verifyCode')
+            ->assertHasNoErrors();
 
         Event::assertDispatched(Verified::class);
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+        $this->assertAuthenticatedAs($user);
     }
 
-    public function test_email_is_not_verified_with_invalid_hash(): void
+    public function test_invalid_code_is_rejected(): void
     {
         $user = User::factory()->unverified()->create();
 
-        $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1('wrong-email')]
-        );
+        VerificationCode::createForUser($user);
 
-        $this->actingAs($user)->get($verificationUrl);
+        Volt::test('pages.auth.verify-email-code')
+            ->withSession(['pending_verification_user_id' => $user->id])
+            ->set('code', '000000')
+            ->call('verifyCode')
+            ->assertHasErrors('code');
 
         $this->assertFalse($user->fresh()->hasVerifiedEmail());
+        $this->assertGuest();
+    }
+
+    public function test_authenticated_unverified_user_is_redirected_to_code_entry(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $user->assignRole('org_admin');
+
+        $this->actingAs($user)
+            ->get(route('cms.admin.dashboard'))
+            ->assertRedirect(route('verification.notice'));
+
+        $this->actingAs($user)
+            ->get(route('verification.notice'))
+            ->assertRedirect(route('verification.enter-code'));
+    }
+
+    public function test_verified_org_admin_can_access_dashboard(): void
+    {
+        $user = User::factory()->create();
+        $user->assignRole('org_admin');
+
+        $this->actingAs($user)
+            ->get(route('cms.admin.dashboard'))
+            ->assertOk();
     }
 }

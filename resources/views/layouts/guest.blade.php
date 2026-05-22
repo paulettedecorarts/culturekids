@@ -55,11 +55,47 @@
                 max-width: 440px;
                 background: #FFFFFF;
                 border-radius: var(--r-xl);
-                padding: 48px;
+                padding: 40px;
                 box-shadow: var(--shadow-xl);
                 position: relative;
                 z-index: 10;
                 color: var(--ink);
+            }
+
+            /* School registration — wider card, equal padding, two-column form */
+            .guest-card--register {
+                max-width: 680px;
+                padding: 40px;
+            }
+
+            .guest-card--register .guest-logo {
+                margin-bottom: 24px;
+            }
+
+            .guest-card--register .guest-lead {
+                margin: 0 0 24px;
+            }
+
+            .register-form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                column-gap: 28px;
+                row-gap: 0;
+            }
+
+            .register-form-grid > * {
+                min-width: 0;
+            }
+
+            .register-form-grid .span-full {
+                grid-column: 1 / -1;
+            }
+
+            @media (max-width: 640px) {
+                .register-form-grid {
+                    grid-template-columns: minmax(0, 1fr);
+                    column-gap: 0;
+                }
             }
 
             .guest-logo {
@@ -94,7 +130,10 @@
             }
 
             .form-input {
+                display: block;
                 width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
                 padding: 12px 20px;
                 border-radius: var(--r-full);
                 border: 2px solid var(--cream-mid);
@@ -150,6 +189,123 @@
                 font-weight: 600;
                 margin: -8px 0 28px;
             }
+
+            .verify-banner {
+                margin-bottom: 20px;
+                padding: 12px 16px;
+                border-radius: 16px;
+                font-size: 13px;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .verify-banner--success {
+                background: rgba(46, 125, 50, 0.1);
+                color: #2e7d32;
+            }
+
+            .verify-resend-form {
+                margin-top: 8px;
+            }
+
+            .btn-primary--outline {
+                background: #FFFFFF;
+                color: var(--clay-red);
+                border: 2px solid var(--clay-red);
+                box-shadow: none;
+            }
+
+            .btn-primary--outline:active {
+                transform: translateY(1px);
+            }
+
+            .login-status {
+                margin-bottom: 20px;
+                padding: 12px 16px;
+                border-radius: 16px;
+                font-size: 13px;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .login-status--success {
+                background: rgba(46, 125, 50, 0.1);
+                color: #2e7d32;
+            }
+
+            .login-status--info {
+                background: rgba(30, 45, 74, 0.08);
+                color: var(--ink);
+            }
+
+            .code-input {
+                letter-spacing: 0.35em;
+                text-align: center;
+                font-size: 20px;
+                font-weight: 800;
+            }
+
+            .guest-toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                max-width: min(420px, calc(100vw - 32px));
+                padding: 12px 18px;
+                border-radius: 9999px;
+                font-size: 13px;
+                font-weight: 700;
+                text-align: center;
+                box-shadow: var(--shadow-xl);
+            }
+
+            .guest-toast--warning { background: #F59E0B; color: #1A1208; }
+            .guest-toast--success { background: #10B981; color: #fff; }
+            .guest-toast--info { background: #FFFFFF; color: var(--ink); }
+
+            .guest-modal-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 90;
+                background: rgba(30, 45, 74, 0.55);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            }
+
+            .guest-modal {
+                width: 100%;
+                max-width: 400px;
+                background: #FFFFFF;
+                border-radius: 24px;
+                padding: 28px;
+                color: var(--ink);
+                box-shadow: var(--shadow-xl);
+            }
+
+            .guest-modal-title {
+                margin: 0 0 12px;
+                font-family: var(--font-child);
+                font-size: 18px;
+                font-weight: 800;
+                color: var(--clay-red);
+            }
+
+            .guest-modal-text {
+                margin: 0 0 20px;
+                font-size: 14px;
+                line-height: 1.55;
+                color: var(--stone);
+                font-weight: 600;
+            }
+
+            .guest-modal-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
         </style>
     </head>
     <body>
@@ -157,7 +313,7 @@
             <div class="orb orb-primary"></div>
             <div class="orb orb-secondary"></div>
 
-            <div class="guest-card">
+            <div @class(['guest-card', 'guest-card--register' => request()->routeIs('register')])>
                 <div class="guest-logo">
                     <div class="logo-text">Paulette Culture Kids</div>
                     <div class="logo-sub">

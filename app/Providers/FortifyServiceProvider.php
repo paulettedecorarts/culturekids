@@ -40,7 +40,11 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             $user = \App\Models\User::where('email', $request->email)->first();
 
-            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            if (
+                $user
+                && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)
+                && $user->hasVerifiedEmail()
+            ) {
                 return $user;
             }
         });

@@ -1,25 +1,33 @@
-<x-layouts::auth :title="__('Register')">
+<x-layouts::auth :title="__('Register your school')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+        <x-auth-header :title="__('Register your school')" :description="__('Create your organisation account. You will be the school administrator.')" />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
             @csrf
-            <!-- Name -->
             <flux:input
-                name="name"
-                :label="__('Name')"
-                :value="old('name')"
+                name="organisation_name"
+                :label="__('Organisation name')"
+                :value="old('organisation_name')"
                 type="text"
                 required
                 autofocus
-                autocomplete="name"
-                :placeholder="__('Full name')"
+                autocomplete="organization"
+                :placeholder="__('Your school or organisation')"
             />
 
-            <!-- Email Address -->
+            <flux:input
+                name="admin_name"
+                :label="__('Administrator name')"
+                :value="old('admin_name')"
+                type="text"
+                required
+                autocomplete="name"
+                :placeholder="__('Full name of the contact person')"
+            />
+
             <flux:input
                 name="email"
                 :label="__('Email address')"
@@ -30,7 +38,6 @@
                 placeholder="email@example.com"
             />
 
-            <!-- Password -->
             <flux:input
                 name="password"
                 :label="__('Password')"
@@ -41,7 +48,6 @@
                 viewable
             />
 
-            <!-- Confirm Password -->
             <flux:input
                 name="password_confirmation"
                 :label="__('Confirm password')"
@@ -54,7 +60,7 @@
 
             <div class="flex items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
-                    {{ __('Create account') }}
+                    {{ __('Create school account') }}
                 </flux:button>
             </div>
         </form>

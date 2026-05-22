@@ -144,7 +144,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registration is handled by Livewire Volt (school org signup); Fortify POST /register is disabled.
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([

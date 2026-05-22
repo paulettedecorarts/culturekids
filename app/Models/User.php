@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Actions\Auth\SendEmailVerificationCode;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -19,7 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'organisation_id'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
@@ -87,5 +88,13 @@ class User extends Authenticatable
     public function childClassrooms(): BelongsToMany
     {
         return $this->belongsToMany(Classroom::class)->withTimestamps();
+    }
+
+    /**
+     * Send a 6-digit verification code email (web + mobile), not a signed link.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        app(SendEmailVerificationCode::class)->send($this);
     }
 }
