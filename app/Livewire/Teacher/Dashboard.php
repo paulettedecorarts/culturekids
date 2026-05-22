@@ -7,8 +7,10 @@ use App\Models\Classroom;
 use App\Models\Comic;
 use App\Models\LessonPlan;
 use App\Models\Song;
+use App\Models\OrganisationContentDecision;
 use App\Support\TeacherActiveClassroom;
 use App\Support\TeacherCatalogScope;
+use App\Support\TeacherLessonContentTypes;
 use App\Support\TeacherPrintScope;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +29,7 @@ class Dashboard extends Component
 
     public bool $showCreateModal = false;
 
-    public string $content_kind = 'comic';
+    public string $content_kind = OrganisationContentDecision::TYPE_STORY;
 
     public ?int $selected_comic_id = null;
 
@@ -70,23 +72,15 @@ class Dashboard extends Component
 
     public function updatedContentKind(string $value): void
     {
-        // Clear the opposite selection when switching content type
-        if ($value === 'comic') {
-            $this->selected_activity_id = null;
-            $this->selected_song_id = null;
-        } elseif ($value === 'activity') {
-            $this->selected_comic_id = null;
-            $this->selected_song_id = null;
-        } else {
-            $this->selected_comic_id = null;
-            $this->selected_activity_id = null;
-        }
+        $this->selected_comic_id = null;
+        $this->selected_song_id = null;
+        $this->selected_activity_id = null;
     }
 
     public function openCreateModal(): void
     {
         $this->resetValidation();
-        $this->content_kind = 'comic';
+        $this->content_kind = OrganisationContentDecision::TYPE_STORY;
         $this->selected_comic_id = null;
         $this->selected_activity_id = null;
         $this->selected_song_id = null;
@@ -129,17 +123,17 @@ class Dashboard extends Component
         try {
             Log::info('Starting validation...');
             $rules = [
-                'content_kind' => 'required|in:comic,activity,song',
+                'content_kind' => 'required|in:'.implode(',', TeacherLessonContentTypes::allowedContentTypes()),
                 'form_scheduled_on' => 'required|date',
                 'form_notes' => 'nullable|string|max:2000',
             ];
 
-            if ($this->content_kind === 'comic') {
+            if (TeacherLessonContentTypes::usesComicPicker($this->content_kind)) {
                 $rules['selected_comic_id'] = 'required|exists:comics,id';
-            } elseif ($this->content_kind === 'activity') {
-                $rules['selected_activity_id'] = 'required|exists:activities,id';
-            } else {
+            } elseif (TeacherLessonContentTypes::usesSongPicker($this->content_kind)) {
                 $rules['selected_song_id'] = 'required|exists:songs,id';
+            } else {
+                $rules['selected_activity_id'] = 'required|exists:activities,id';
             }
 
             $validated = $this->validate($rules, [], [
@@ -151,7 +145,7 @@ class Dashboard extends Component
             throw $e;
         }
 
-        if ($this->content_kind === 'comic') {
+        if (TeacherLessonContentTypes::usesComicPicker($this->content_kind)) {
             Log::info('Resolving comic model...');
             $comic = Comic::query()->findOrFail((int) $this->selected_comic_id);
             Log::info('Checking comic scope...');
@@ -164,7 +158,7 @@ class Dashboard extends Component
             }
             $lessonableId = $comic->id;
             $lessonableType = Comic::class;
-        } elseif ($this->content_kind === 'song') {
+        } elseif (TeacherLessonContentTypes::usesSongPicker($this->content_kind)) {
             Log::info('Resolving song model...');
             $song = Song::query()->findOrFail((int) $this->selected_song_id);
             Log::info('Checking song scope...');
@@ -188,7 +182,7 @@ class Dashboard extends Component
             }
 
             Log::info('Checking activity scope...');
-            $scopeQuery = TeacherPrintScope::activitiesQueryFor($user)->where('activities.id', $activity->id);
+            $scopeQuery = $this->activitiesQueryForContentKind($user)->where('activities.id', $activity->id);
             Log::info('Scope query generated.', ['sql' => $scopeQuery->toSql(), 'bindings' => $scopeQuery->getBindings()]);
             
             if (! $scopeQuery->exists()) {
@@ -265,6 +259,30 @@ class Dashboard extends Component
         session()->flash('message', __('Lesson removed.'));
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder<Activity>
+     */
+    private function activitiesQueryForContentKind(\App\Models\User $user): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = TeacherPrintScope::activitiesQueryFor($user);
+
+        $activityType = TeacherLessonContentTypes::activityTypeForContentType($this->content_kind);
+        if ($activityType !== null) {
+            $query->where('type', $activityType);
+        }
+
+        if ($this->content_kind === OrganisationContentDecision::TYPE_DRAWING) {
+            $query->where(function ($inner) {
+                $inner->whereNull('metadata->drawing_type')
+                    ->orWhere('metadata->drawing_type', '!=', 'coloring');
+            });
+        } elseif ($this->content_kind === OrganisationContentDecision::TYPE_COLOURING) {
+            $query->where('metadata->drawing_type', 'coloring');
+        }
+
+        return $query;
+    }
+
     private function authorizeClassroom(Classroom $classroom): void
     {
         $user = auth()->user();
@@ -317,8 +335,10 @@ class Dashboard extends Component
         $comicOptions = collect();
         $activityOptions = collect();
         $songOptions = collect();
+        $contentTypeOptions = [];
 
         if ($user && $activeClassroom) {
+            $contentTypeOptions = TeacherLessonContentTypes::optionsFor($user);
             $lessonPlans = LessonPlan::query()
                 ->where('classroom_id', $activeClassroom->id)
                 ->whereBetween('scheduled_on', [$weekStart->toDateString(), $weekEnd->toDateString()])
@@ -337,9 +357,17 @@ class Dashboard extends Component
             $stats[1]['val'] = (string) $activeClassroom->children()->count();
 
             $comicOptions = TeacherCatalogScope::comicsQueryFor($user)->limit(300)->get(['id', 'title', 'tribe_id']);
-            $activityOptions = TeacherPrintScope::activitiesQueryFor($user)->limit(300)->get(['id', 'title', 'type', 'tribe_id']);
             $songOptions = TeacherCatalogScope::songsQueryFor($user)->limit(300)->get(['id', 'title', 'tribe_id']);
+
+            if (TeacherLessonContentTypes::usesActivityPicker($this->content_kind)) {
+                $activityOptions = $this->activitiesQueryForContentKind($user)
+                    ->limit(300)
+                    ->get(['id', 'title', 'type', 'tribe_id']);
+            }
         }
+
+        $selectedContentLabel = collect($contentTypeOptions)
+            ->firstWhere('type', $this->content_kind)['label'] ?? OrganisationContentDecision::labelFor($this->content_kind);
 
         return view('livewire.teacher.dashboard', [
             'lessonPlans' => $lessonPlans,
@@ -351,6 +379,8 @@ class Dashboard extends Component
             'comicOptions' => $comicOptions,
             'activityOptions' => $activityOptions,
             'songOptions' => $songOptions,
+            'contentTypeOptions' => $contentTypeOptions,
+            'selectedContentLabel' => $selectedContentLabel,
         ]);
     }
 }

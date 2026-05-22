@@ -74,7 +74,7 @@ class TeacherLessonPlansTest extends TestCase
 
         Livewire::test(Dashboard::class)
             ->set('activeClassroomId', $room->id)
-            ->set('content_kind', 'comic')
+            ->set('content_kind', 'story')
             ->set('selected_comic_id', $comic->id)
             ->set('form_scheduled_on', $day)
             ->set('form_notes', 'Introduce characters')

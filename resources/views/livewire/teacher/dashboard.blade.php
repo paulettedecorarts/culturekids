@@ -161,13 +161,13 @@
                     <div>
                         <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Content type') }}</label>
                         <select wire:model.live="content_kind" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
-                            <option value="comic">{{ __('Story / comic') }}</option>
-                            <option value="song">{{ __('Song') }}</option>
-                            <option value="activity">{{ __('Activity') }}</option>
+                            @foreach ($contentTypeOptions as $option)
+                                <option value="{{ $option['type'] }}">{{ $option['icon'] }} {{ __($option['label']) }}</option>
+                            @endforeach
                         </select>
                     </div>
 
-                    @if ($content_kind === 'comic')
+                    @if ($content_kind === \App\Models\OrganisationContentDecision::TYPE_STORY)
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Story') }}</label>
                             <select wire:model.live="selected_comic_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
@@ -178,7 +178,7 @@
                             </select>
                             @error('selected_comic_id') <div style="color:#b91c1c; font-size:12px; margin-top:4px">{{ $message }}</div> @enderror
                         </div>
-                    @elseif ($content_kind === 'song')
+                    @elseif ($content_kind === \App\Models\OrganisationContentDecision::TYPE_SONG)
                         <div>
                             <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Song') }}</label>
                             <select wire:model.live="selected_song_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
@@ -191,11 +191,11 @@
                         </div>
                     @else
                         <div>
-                            <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ __('Activity') }}</label>
+                            <label style="font-size:11px; font-weight:800; color:var(--stone); text-transform:uppercase;">{{ $selectedContentLabel }}</label>
                             <select wire:model.live="selected_activity_id" class="th-select" style="width:100%; margin-top:6px; padding:12px; border-radius:12px; font-size:14px;">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($activityOptions as $ao)
-                                    <option value="{{ $ao->id }}">{{ $ao->title }} ({{ $ao->type }})</option>
+                                    <option value="{{ $ao->id }}">{{ $ao->title }}</option>
                                 @endforeach
                             </select>
                             @error('selected_activity_id') <div style="color:#b91c1c; font-size:12px; margin-top:4px">{{ $message }}</div> @enderror
