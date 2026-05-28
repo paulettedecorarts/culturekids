@@ -64,12 +64,11 @@ services:
       FILESYSTEM_DISK: local
 
       MAIL_MAILER: smtp
-      MAIL_SCHEME: ssl
+      MAIL_ENCRYPTION: ssl
       MAIL_HOST: server72.web-hosting.com
       MAIL_PORT: "465"
       MAIL_USERNAME: info@yilibapro.com
       MAIL_PASSWORD: "Mirinda@123"
-      MAIL_ENCRYPTION: ssl
       MAIL_FROM_ADDRESS: info@yilibapro.com
       MAIL_FROM_NAME: "Paulette Culture Kids"
 

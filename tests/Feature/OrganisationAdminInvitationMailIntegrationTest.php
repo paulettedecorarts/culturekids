@@ -39,7 +39,7 @@ class OrganisationAdminInvitationMailIntegrationTest extends TestCase
             'mail.mailers.smtp.port' => env('MAIL_PORT', 2525),
             'mail.mailers.smtp.username' => env('MAIL_USERNAME'),
             'mail.mailers.smtp.password' => env('MAIL_PASSWORD'),
-            'mail.mailers.smtp.scheme' => env('MAIL_SCHEME'),
+            'mail.mailers.smtp.encryption' => env('MAIL_ENCRYPTION', 'tls'),
         ]);
     }
 
