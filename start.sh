@@ -62,5 +62,8 @@ QUEUE_PID=$!
 trap "echo -e '\n🛑 Stopping services...'; kill $QUEUE_PID; exit" SIGINT SIGTERM
 
 # 7. Start Web Server
-echo "🚀 Starting Web Server..."
-php -d upload_max_filesize=8192M -d post_max_size=8192M -d max_file_uploads=50 -d max_execution_time=0 -d max_input_time=600 -d memory_limit=512M artisan serve
+echo "🚀 Starting Web Server on all interfaces (0.0.0.0)..."
+IP_ADDR=$(hostname -I | awk '{print $1}')
+echo "📡 Server accessible at: http://$IP_ADDR:8000"
+
+php -d upload_max_filesize=8192M -d post_max_size=8192M -d max_file_uploads=50 -d max_execution_time=0 -d max_input_time=600 -d memory_limit=512M artisan serve --host=0.0.0.0 --port=8000

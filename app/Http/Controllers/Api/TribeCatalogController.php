@@ -12,9 +12,18 @@ class TribeCatalogController extends Controller
     public function index(Request $request): JsonResponse
     {
         $user = $request->user()->loadMissing('organisation');
+        $search = $request->query('search');
 
         $query = Tribe::query()
             ->orderBy('name');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('hero_name', 'like', "%{$search}%")
+                  ->orWhere('region', 'like', "%{$search}%");
+            });
+        }
 
         $org = $user->organisation;
         if ($org) {

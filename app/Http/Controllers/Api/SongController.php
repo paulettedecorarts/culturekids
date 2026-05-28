@@ -18,11 +18,24 @@ class SongController extends Controller
     {
         $this->assertModule($request, 'songs');
         $user = $request->user();
+        $tribeId = $request->query('tribe_id');
+        $search = $request->query('search');
         
         $query = Song::query()
             ->with(['tribe:id,name,hero_emoji,hero_icon,color'])
             ->where('status', 'published')
             ->orderBy('created_at', 'desc');
+
+        if ($tribeId) {
+            $query->where('tribe_id', $tribeId);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
         // Scope to organization if user belongs to one
         if ($user->organisation_id) {
@@ -118,12 +131,20 @@ class SongController extends Controller
     {
         $this->assertModule($request, 'songs');
         $user = $request->user();
+        $search = $request->query('search');
         
         $query = Song::query()
             ->with(['tribe:id,name,hero_emoji,hero_icon,color'])
             ->where('tribe_id', $tribeId)
             ->where('status', 'published')
             ->orderBy('created_at', 'desc');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
         // Scope to organization
         if ($user->organisation_id) {

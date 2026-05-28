@@ -20,12 +20,25 @@ class ActivityController extends Controller
      */
     public function index(Request $request)
     {
-        $type = $request->query('type'); // flashcard or puzzle
+        $type = $request->query('type'); // flashcard, puzzle, game, etc.
+        $tribeId = $request->query('tribe_id');
+        $search = $request->query('search');
         
         $query = Activity::query()
             ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('title');
+
+        if ($tribeId) {
+            $query->where('tribe_id', $tribeId);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
         $resolver = app(OrganisationModuleResolver::class);
 
@@ -62,21 +75,36 @@ class ActivityController extends Controller
     public function getTribeActivities(Request $request, $tribeId)
     {
         $tribe = Tribe::findOrFail($tribeId);
+        $search = $request->query('search');
+        $type = $request->query('type');
         
+        $query = Activity::where('tribe_id', $tribeId)
+            ->where('is_published', true)
+            ->orderBy('type')
+            ->orderBy('title');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
         $resolver = app(OrganisationModuleResolver::class);
 
         $activities = $resolver->filterActivitiesForUser(
-            Activity::where('tribe_id', $tribeId)
-                ->orderBy('type')
-                ->orderBy('title')
-                ->get([
-                    'id',
-                    'title',
-                    'type',
-                    'age_range',
-                    'star_points',
-                    'description',
-                ]),
+            $query->get([
+                'id',
+                'title',
+                'type',
+                'age_range',
+                'star_points',
+                'description',
+            ]),
             $request->user()
         )->map(function ($activity) {
                 return [

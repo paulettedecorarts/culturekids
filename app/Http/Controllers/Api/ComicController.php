@@ -21,11 +21,24 @@ class ComicController extends Controller
     {
         $this->assertModule($request, 'stories');
         $user = $request->user();
+        $tribeId = $request->query('tribe_id');
+        $search = $request->query('search');
         
         $query = Comic::query()
             ->with(['tribe:id,name,hero_emoji,hero_icon,color', 'panels'])
             ->published()
             ->orderBy('created_at', 'desc');
+
+        if ($tribeId) {
+            $query->where('tribe_id', $tribeId);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
         // Scope to organization if user belongs to one
         if ($user->organisation_id) {
@@ -139,12 +152,20 @@ class ComicController extends Controller
     {
         $this->assertModule($request, 'stories');
         $user = $request->user();
+        $search = $request->query('search');
         
         $query = Comic::query()
             ->with(['tribe:id,name,hero_emoji,hero_icon,color'])
             ->where('tribe_id', $tribeId)
             ->published()
             ->orderBy('created_at', 'desc');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
 
         // Scope to organization
         if ($user->organisation_id) {
