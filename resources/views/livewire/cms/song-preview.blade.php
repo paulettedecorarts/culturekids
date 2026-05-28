@@ -2,7 +2,7 @@
     <div class="cms-header">
         <div>
             <h1 class="cms-page-title">{{ $song->title }}</h1>
-            <div class="cms-breadcrumb">Song Details · {{ $song->tribe?->name ?? 'No {{ heritage('people') }}' }} · {{ $song->age_range }}</div>
+            <div class="cms-breadcrumb">Song Details · {{ $song->tribe?->name ?? 'No '.heritage('people') }} · {{ $song->age_range }}</div>
         </div>
         <a class="btn btn-ghost btn-sm" href="{{ route(request()->routeIs('teacher.library.*') ? 'teacher.library' : 'cms.admin.approved-content') }}" wire:navigate style="text-decoration:none;">← {{ request()->routeIs('teacher.library.*') ? __('Library') : __('Approved Content') }}</a>
     </div>

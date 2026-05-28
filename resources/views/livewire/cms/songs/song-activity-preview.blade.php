@@ -27,7 +27,7 @@
             @endif
             <div class="song-info">
                 <h1 class="song-title">{{ $song->title }}</h1>
-                <p class="song-subtitle">{{ ucfirst($song->activity_type) }} • {{ $song->tribe->name ?? 'Unknown {{ heritage('people') }}' }}</p>
+                <p class="song-subtitle">{{ ucfirst($song->activity_type) }} • {{ $song->tribe->name ?? 'Unknown '.heritage('people') }}</p>
             </div>
             <div class="star-display">
                 @for($i = 1; $i <= 5; $i++)

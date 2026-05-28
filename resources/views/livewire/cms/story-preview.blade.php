@@ -2,7 +2,7 @@
     <div class="cms-header">
         <div>
             <h1 class="cms-page-title">{{ $comic->title }}</h1>
-            <div class="cms-breadcrumb">Story Details · {{ $comic->tribe?->name ?? 'No {{ heritage('people') }}' }} · {{ $comic->age_range }}</div>
+            <div class="cms-breadcrumb">Story Details · {{ $comic->tribe?->name ?? 'No '.heritage('people') }} · {{ $comic->age_range }}</div>
         </div>
         <a class="btn btn-ghost btn-sm" href="{{ route('cms.admin.approved-content') }}" style="text-decoration:none;">← Back to Approved Content</a>
     </div>
