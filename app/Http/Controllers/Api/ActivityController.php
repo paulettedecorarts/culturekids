@@ -26,6 +26,7 @@ class ActivityController extends Controller
         $type = $request->query('type'); // flashcard, puzzle, game, etc.
         $tribeId = $request->query('tribe_id');
         $search = $request->query('search');
+        $user = $request->user();
         
         $query = Activity::query()
             ->with('tribe:id,name,hero_emoji,hero_icon,color')
@@ -51,8 +52,8 @@ class ActivityController extends Controller
         }
 
         $activities = $this->scopeActivitiesForUser(
-            $resolver->filterActivitiesForUser($query->get(), $request->user()),
-            $request->user()
+            $resolver->filterActivitiesForUser($query->get(), $user),
+            $user
         )
             ->map(function ($activity) {
                 return [
