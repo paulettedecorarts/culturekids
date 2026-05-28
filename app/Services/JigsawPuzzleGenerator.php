@@ -32,11 +32,6 @@ class JigsawPuzzleGenerator
             throw new RuntimeException('Uploaded image not found: '.$relativeUploadPath);
         }
 
-        [$rows, $cols] = $this->gridDimensions($pieceCount);
-        if ($rows * $cols !== $pieceCount) {
-            throw new RuntimeException('Invalid piece count: '.$pieceCount);
-        }
-
         $absoluteUpload = $disk->path($relativeUploadPath);
         $image = $this->loadImage($absoluteUpload);
         if ($image === false) {
@@ -46,6 +41,12 @@ class JigsawPuzzleGenerator
         $srcW = imagesx($image);
         $srcH = imagesy($image);
         [$image, $srcW, $srcH] = $this->maybeDownscale($image, $srcW, $srcH);
+
+        [$rows, $cols] = $this->gridDimensions($pieceCount, $srcW, $srcH);
+        if ($rows * $cols !== $pieceCount) {
+            imagedestroy($image);
+            throw new RuntimeException('Invalid piece count: '.$pieceCount);
+        }
 
         $baseDir = 'jigsaw-puzzles/'.$activityId;
         $disk->makeDirectory($baseDir);
@@ -107,13 +108,59 @@ class JigsawPuzzleGenerator
     }
 
     /**
-     * @return array{0: int, 1: int} rows, cols where rows * cols === $n
+     * Pick rows × cols === $n. When $width and $height are set, choose the factor pair whose
+     * board aspect (cols / rows) best matches the source image so tiles are roughly square.
+     *
+     * @return array{0: int, 1: int} rows, cols
      */
-    public function gridDimensions(int $n): array
+    public function gridDimensions(int $n, ?int $width = null, ?int $height = null): array
     {
         if ($n < 1) {
             return [1, 1];
         }
+
+        $pairs = $this->factorPairs($n);
+
+        if ($width !== null && $height !== null && $width > 0 && $height > 0) {
+            $target = $width / $height;
+
+            $best = $pairs[0];
+            $bestDiff = PHP_FLOAT_MAX;
+            foreach ($pairs as [$rows, $cols]) {
+                $diff = abs(($cols / $rows) - $target);
+                if ($diff < $bestDiff) {
+                    $bestDiff = $diff;
+                    $best = [$rows, $cols];
+                }
+            }
+
+            return $best;
+        }
+
+        return $this->defaultGridDimensions($n);
+    }
+
+    /**
+     * @return list<array{0: int, 1: int}>
+     */
+    protected function factorPairs(int $n): array
+    {
+        $pairs = [];
+        $sqrt = (int) floor(sqrt($n));
+        for ($r = 1; $r <= $sqrt; $r++) {
+            if ($n % $r === 0) {
+                $pairs[] = [(int) $r, (int) ($n / $r)];
+            }
+        }
+
+        return $pairs;
+    }
+
+    /**
+     * @return array{0: int, 1: int}
+     */
+    protected function defaultGridDimensions(int $n): array
+    {
         $sqrt = (int) floor(sqrt($n));
         for ($r = $sqrt; $r >= 1; $r--) {
             if ($n % $r === 0) {

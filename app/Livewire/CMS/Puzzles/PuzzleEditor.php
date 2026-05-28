@@ -135,7 +135,12 @@ class PuzzleEditor extends Component
         if ($n < 4 || $n > 400) {
             return null;
         }
-        [$rows, $cols] = app(JigsawPuzzleGenerator::class)->gridDimensions($n);
+        $generator = app(JigsawPuzzleGenerator::class);
+        $width = (int) data_get($this->activity?->metadata, 'puzzle.width', 0);
+        $height = (int) data_get($this->activity?->metadata, 'puzzle.height', 0);
+        [$rows, $cols] = ($width > 0 && $height > 0)
+            ? $generator->gridDimensions($n, $width, $height)
+            : $generator->gridDimensions($n);
 
         return ['rows' => $rows, 'cols' => $cols];
     }
