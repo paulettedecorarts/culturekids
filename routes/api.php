@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChildProfileController;
 use App\Http\Controllers\Api\ComicController;
 use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\ContentProgressController;
 use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
 use App\Http\Controllers\Api\OrganisationModuleController;
@@ -61,7 +62,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/child-profiles/{id}', [ChildProfileController::class, 'update']);
     Route::delete('/child-profiles/{id}', [ChildProfileController::class, 'destroy']);
     
-    // Progress & Sync
+    // Progress & Sync (unified across all 12 content types)
+    Route::get('/progress/content', [ContentProgressController::class, 'show']);
+    Route::put('/progress/content', [ContentProgressController::class, 'upsert']);
+    Route::post('/progress/content/complete', [ContentProgressController::class, 'complete']);
     Route::post('/progress/events', [ProgressController::class, 'recordEvents']);
     Route::get('/progress/child/{childId}', [ProgressController::class, 'getChildProgress']);
     Route::get('/progress/user', [ProgressController::class, 'getUserProgress']);

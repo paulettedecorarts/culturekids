@@ -4,14 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
+use App\Models\ChildProfile;
 use App\Models\ReadingProgress;
 use App\Models\Comic;
+use App\Services\ChildContentProgressService;
+use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ReadingProgressController extends Controller
 {
     use ChecksOrganisationModules;
+
+    public function __construct(
+        private readonly ChildContentProgressService $progressService,
+    ) {}
 
     /**
      * Update reading progress for a comic
@@ -23,6 +30,7 @@ class ReadingProgressController extends Controller
         $validator = Validator::make($request->all(), [
             'comic_id' => 'required|integer',
             'current_page' => 'required|integer|min:0',
+            'child_profile_id' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -38,7 +46,30 @@ class ReadingProgressController extends Controller
         
         $totalPages = $comic->panels()->count();
 
-        // Update or create progress
+        if ($request->filled('child_profile_id')) {
+            $child = ChildProfile::query()
+                ->where('id', $request->input('child_profile_id'))
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            $unified = $this->progressService->upsertSession(
+                $user,
+                $child,
+                ContentProgressType::STORY,
+                (int) $request->comic_id,
+                (int) $request->current_page,
+                $totalPages,
+            );
+
+            return response()->json([
+                'progress' => $unified,
+                'current_page' => $unified['current_position'],
+                'total_pages' => $unified['total_positions'],
+                'percentage' => $unified['percentage'],
+            ]);
+        }
+
+        // Legacy: account-level reading progress (no child profile)
         $progress = ReadingProgress::updateOrCreate(
             [
                 'user_id' => $user->id,

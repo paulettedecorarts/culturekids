@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
+use App\Models\ChildProfile;
 use App\Models\Comic;
 use App\Models\ReadingProgress;
+use App\Services\ChildContentProgressService;
+use App\Support\ContentProgressType;
 use App\Support\PanelVocabTagSerializer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +16,10 @@ use Illuminate\Support\Facades\Validator;
 class ComicController extends Controller
 {
     use ChecksOrganisationModules;
+
+    public function __construct(
+        private readonly ChildContentProgressService $progressService,
+    ) {}
     /**
      * Get all published comics/stories
      * Scoped to user's organization or public comics
@@ -214,10 +221,37 @@ class ComicController extends Controller
         if (!$comic) {
             return response()->json(['error' => 'Comic not found'], 404);
         }
+
+        if ($request->filled('child_profile_id')) {
+            $child = ChildProfile::query()
+                ->where('id', $request->input('child_profile_id'))
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            $idempotencyKey = $request->input(
+                'idempotency_key',
+                "{$child->id}-story-{$id}-".now()->timestamp,
+            );
+
+            $result = $this->progressService->complete(
+                $user,
+                $child,
+                ContentProgressType::STORY,
+                (int) $id,
+                $idempotencyKey,
+            );
+
+            return response()->json([
+                'message' => 'Story completed!',
+                'stars_earned' => $result['stars_earned'],
+                'progress' => $result,
+                'new_badges' => [],
+            ]);
+        }
         
         $totalPages = $comic->panels()->count();
 
-        // Update reading progress to completed
+        // Legacy: account-level reading progress (no child profile)
         $progress = ReadingProgress::updateOrCreate(
             [
                 'user_id' => $user->id,

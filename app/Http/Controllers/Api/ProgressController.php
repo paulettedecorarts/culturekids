@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\ChildProfile;
 use App\Models\ProgressEvent;
 use App\Models\ReadingProgress;
+use App\Services\ChildContentProgressService;
+use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class ProgressController extends Controller
 {
+    public function __construct(
+        private readonly ChildContentProgressService $progressService,
+    ) {}
     /**
      * Record progress events (mark activities as done)
      */
@@ -34,42 +40,44 @@ class ProgressController extends Controller
         $skipped = [];
 
         foreach ($request->events as $event) {
-            // Verify child belongs to authenticated user
             $child = ChildProfile::where('id', $event['child_profile_id'])
                 ->where('user_id', $user->id)
                 ->first();
 
-            if (!$child) {
+            if (! $child) {
                 $skipped[] = $event['idempotency_key'];
                 continue;
             }
 
-            // Check if event already exists (idempotency)
-            $exists = ProgressEvent::where('idempotency_key', $event['idempotency_key'])->exists();
-            
-            if ($exists) {
+            $activity = Activity::find($event['activity_id']);
+            if (! $activity) {
                 $skipped[] = $event['idempotency_key'];
                 continue;
             }
 
-            // Get the activity to determine stars earned
-            $activity = \App\Models\Activity::find($event['activity_id']);
-            $starsEarned = $activity?->stars ?? 10;
+            $contentType = $activity->type;
+            if (! in_array($contentType, ContentProgressType::ALL, true)) {
+                $skipped[] = $event['idempotency_key'];
+                continue;
+            }
 
-            // Create progress event
-            $progressEvent = ProgressEvent::create([
-                'child_profile_id' => $event['child_profile_id'],
-                'activity_id' => $event['activity_id'],
-                'stars_earned' => $starsEarned,
-                'idempotency_key' => $event['idempotency_key'],
-                'completed_at' => $event['completed_at'],
-                'synced_at' => now(),
-            ]);
+            try {
+                $result = $this->progressService->complete(
+                    $user,
+                    $child,
+                    $contentType,
+                    (int) $event['activity_id'],
+                    $event['idempotency_key'],
+                );
 
-            // Update child's total stars
-            $child->increment('total_stars', $starsEarned);
-
-            $recorded[] = $event['idempotency_key'];
+                if (! ($result['already_recorded'] ?? false)) {
+                    $recorded[] = $event['idempotency_key'];
+                } else {
+                    $skipped[] = $event['idempotency_key'];
+                }
+            } catch (\Throwable) {
+                $skipped[] = $event['idempotency_key'];
+            }
         }
 
         return response()->json([
