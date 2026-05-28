@@ -21,6 +21,85 @@ class OfflineBundleController extends Controller
 {
     use ChecksOrganisationModules;
     /**
+     * Apply org-owned-or-approved scope for comics.
+     */
+    private function scopeComicsForUser($query, $user)
+    {
+        if ($user->organisation_id) {
+            $approvedComicIds = $user->organisation?->approvedComicIds() ?? [];
+            $query->where(function ($q) use ($approvedComicIds, $user) {
+                if ($approvedComicIds !== []) {
+                    $q->whereIn('id', $approvedComicIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
+            });
+        } else {
+            $query->whereNull('org_id');
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply org-owned-or-approved scope for songs.
+     */
+    private function scopeSongsForUser($query, $user)
+    {
+        if ($user->organisation_id) {
+            $approvedSongIds = $user->organisation?->approvedSongIds() ?? [];
+            $query->where(function ($q) use ($approvedSongIds, $user) {
+                if ($approvedSongIds !== []) {
+                    $q->whereIn('id', $approvedSongIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
+            });
+        } else {
+            $query->whereNull('org_id');
+        }
+
+        return $query;
+    }
+
+    /**
+     * Apply org-owned-or-approved scope for activities.
+     */
+    private function scopeActivitiesForUser($query, $user)
+    {
+        if (! $user->organisation_id) {
+            return $query->whereHas('tribe', function ($q) {
+                $q->whereNull('org_id');
+            });
+        }
+
+        $approved = OrganisationContentDecision::query()
+            ->where('organisation_id', (int) $user->organisation_id)
+            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
+            ->get(['content_type', 'content_id'])
+            ->mapWithKeys(fn ($row) => [(string) $row->content_type.':'.(int) $row->content_id => true]);
+
+        return $query
+            ->with('tribe:id,org_id')
+            ->get()
+            ->filter(function (Activity $activity) use ($user, $approved) {
+                $tribeOrgId = $activity->tribe?->org_id;
+                if ($tribeOrgId && (int) $tribeOrgId === (int) $user->organisation_id) {
+                    return true;
+                }
+
+                if ($tribeOrgId && (int) $tribeOrgId !== (int) $user->organisation_id) {
+                    return false;
+                }
+
+                $identity = ActivityOfflineBundleIdentity::resolve($activity);
+                if (! $identity) {
+                    return false;
+                }
+
+                return $approved->has($identity['content_type'].':'.$identity['content_id']);
+            })
+            ->values();
+    }
+    /**
      * Get bundle manifest for a tribe (all content metadata)
      * This returns metadata only - actual assets are downloaded separately
      */
@@ -32,24 +111,30 @@ class OfflineBundleController extends Controller
         $user = $request->user();
 
         // Get all published comics for this tribe
-        $comics = $resolver->filterComicsForUser(Comic::where('tribe_id', $tribeId)
+        $comics = $resolver->filterComicsForUser($this->scopeComicsForUser(
+            Comic::where('tribe_id', $tribeId)
             ->where('status', 'published')
             ->with([
                 'panels:id,comic_id,order_index,image_path,audio_url,caption',
                 'panels.vocabTags:id,panel_id,word,translation,phonetic,x_position,y_position,width,height',
-            ])
-            ->get(), $user);
+            ]),
+            $user
+        )->get(), $user);
 
         // Get all published songs for this tribe
-        $songs = $resolver->filterSongsForUser(Song::where('tribe_id', $tribeId)
-            ->where('status', 'published')
-            ->get(), $user);
+        $songs = $resolver->filterSongsForUser($this->scopeSongsForUser(
+            Song::where('tribe_id', $tribeId)
+            ->where('status', 'published'),
+            $user
+        )->get(), $user);
 
         // Get all published activities for this tribe
-        $activities = $resolver->filterActivitiesForUser(Activity::where('tribe_id', $tribeId)
+        $activities = $resolver->filterActivitiesForUser($this->scopeActivitiesForUser(
+            Activity::where('tribe_id', $tribeId)
             ->where('is_published', true)
-            ->with('flashcardSlides')
-            ->get(), $user);
+            ->with('flashcardSlides', 'tribe:id,org_id'),
+            $user
+        ), $user);
 
         // Calculate total bundle size
         $totalSize = 0;
@@ -255,14 +340,18 @@ class OfflineBundleController extends Controller
         $resolver = app(OrganisationModuleResolver::class);
         $user = $request->user();
 
-        $comics = $resolver->filterComicsForUser(Comic::where('tribe_id', $tribeId)
+        $comics = $resolver->filterComicsForUser($this->scopeComicsForUser(
+            Comic::where('tribe_id', $tribeId)
             ->where('status', 'published')
-            ->with('panels')
-            ->get(), $user);
+            ->with('panels'),
+            $user
+        )->get(), $user);
 
-        $songs = $resolver->filterSongsForUser(Song::where('tribe_id', $tribeId)
-            ->where('status', 'published')
-            ->get(), $user);
+        $songs = $resolver->filterSongsForUser($this->scopeSongsForUser(
+            Song::where('tribe_id', $tribeId)
+            ->where('status', 'published'),
+            $user
+        )->get(), $user);
 
         $assets = [
             'comics' => [],
@@ -452,16 +541,16 @@ class OfflineBundleController extends Controller
         }
 
         // Get comics from downloaded tribes
-        $comics = $resolver->filterComicsForUser(Comic::whereIn('tribe_id', $downloadedTribeIds)
+        $comicsQuery = $this->scopeComicsForUser(Comic::whereIn('tribe_id', $downloadedTribeIds)
             ->where('status', 'published')
-            ->with('tribe:id,name,icon,color')
-            ->get(), $user);
+            ->with('tribe:id,name,icon,color'), $user);
+        $comics = $resolver->filterComicsForUser($comicsQuery->get(), $user);
 
         // Get songs from downloaded tribes
-        $songs = $resolver->filterSongsForUser(Song::whereIn('tribe_id', $downloadedTribeIds)
+        $songsQuery = $this->scopeSongsForUser(Song::whereIn('tribe_id', $downloadedTribeIds)
             ->where('status', 'published')
-            ->with('tribe:id,name,icon,color')
-            ->get(), $user);
+            ->with('tribe:id,name,icon,color'), $user);
+        $songs = $resolver->filterSongsForUser($songsQuery->get(), $user);
 
         // Get tribe info
         $tribes = Tribe::whereIn('id', $downloadedTribeIds)->get();

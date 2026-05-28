@@ -6,9 +6,12 @@ use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\LanguageActivity;
+use App\Models\OrganisationContentDecision;
 use App\Models\Tribe;
 use App\Services\OrganisationModuleResolver;
+use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
 use App\Support\LanguageActivityApiSerializer;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -25,7 +28,7 @@ class ActivityController extends Controller
         $search = $request->query('search');
         
         $query = Activity::query()
-            ->with('tribe:id,name,hero_emoji,hero_icon,color')
+            ->with('tribe:id,name,hero_emoji,hero_icon,color,org_id')
             ->where('is_published', true)
             ->orderBy('title');
 
@@ -47,7 +50,10 @@ class ActivityController extends Controller
             $query->where('type', $type);
         }
 
-        $activities = $resolver->filterActivitiesForUser($query->get(), $request->user())
+        $activities = $this->scopeActivitiesForUser(
+            $resolver->filterActivitiesForUser($query->get(), $request->user()),
+            $request->user()
+        )
             ->map(function ($activity) {
                 return [
                     'id' => $activity->id,
@@ -79,6 +85,7 @@ class ActivityController extends Controller
         $type = $request->query('type');
         
         $query = Activity::where('tribe_id', $tribeId)
+            ->with('tribe:id,name,hero_emoji,hero_icon,color,org_id')
             ->where('is_published', true)
             ->orderBy('type')
             ->orderBy('title');
@@ -96,9 +103,10 @@ class ActivityController extends Controller
 
         $resolver = app(OrganisationModuleResolver::class);
 
-        $activities = $resolver->filterActivitiesForUser(
+        $activities = $this->scopeActivitiesForUser($resolver->filterActivitiesForUser(
             $query->get([
                 'id',
+                'tribe_id',
                 'title',
                 'type',
                 'age_range',
@@ -106,7 +114,7 @@ class ActivityController extends Controller
                 'description',
             ]),
             $request->user()
-        )->map(function ($activity) {
+        ), $request->user())->map(function ($activity) {
                 return [
                     'id' => $activity->id,
                     'title' => $activity->title,
@@ -139,7 +147,7 @@ class ActivityController extends Controller
         $user = $request->user();
         
         $activity = Activity::with([
-            'tribe:id,name,color,hero_emoji,hero_icon',
+            'tribe:id,name,color,hero_emoji,hero_icon,org_id',
             'flashcardSlides' => function ($q) {
                 $q->orderBy('order_index');
             }
@@ -147,12 +155,8 @@ class ActivityController extends Controller
 
         app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $activity->type);
 
-        // Check organization access
-        if ($user->organisation_id && $activity->tribe) {
-            if ($activity->tribe->org_id && $activity->tribe->org_id !== $user->organisation_id) {
-                abort(403, 'Unauthorized');
-            }
-        } elseif (!$user->organisation_id && $activity->tribe && $activity->tribe->org_id) {
+        // Check organization + approval access.
+        if (! $this->scopeActivitiesForUser(collect([$activity]), $user)->isNotEmpty()) {
             abort(403, 'Unauthorized');
         }
 
@@ -205,5 +209,48 @@ class ActivityController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * @param  Collection<int, Activity>  $activities
+     * @return Collection<int, Activity>
+     */
+    private function scopeActivitiesForUser(Collection $activities, $user): Collection
+    {
+        if (! $user?->organisation_id) {
+            return $activities->filter(function (Activity $activity) {
+                $tribeOrgId = $activity->tribe?->org_id;
+
+                return ! $tribeOrgId;
+            })->values();
+        }
+
+        $approved = OrganisationContentDecision::query()
+            ->where('organisation_id', (int) $user->organisation_id)
+            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
+            ->get(['content_type', 'content_id'])
+            ->mapWithKeys(function ($row) {
+                return [(string) $row->content_type.':'.(int) $row->content_id => true];
+            });
+
+        return $activities->filter(function (Activity $activity) use ($user, $approved) {
+            $tribeOrgId = $activity->tribe?->org_id;
+            if ($tribeOrgId && (int) $tribeOrgId === (int) $user->organisation_id) {
+                return true;
+            }
+
+            if ($tribeOrgId && (int) $tribeOrgId !== (int) $user->organisation_id) {
+                return false;
+            }
+
+            $identity = ActivityOfflineBundleIdentity::resolve($activity);
+            if (! $identity) {
+                return false;
+            }
+
+            $key = $identity['content_type'].':'.$identity['content_id'];
+
+            return $approved->has($key);
+        })->values();
     }
 }

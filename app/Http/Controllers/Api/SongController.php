@@ -37,11 +37,15 @@ class SongController extends Controller
             });
         }
 
-        // Scope to organization if user belongs to one
+        // Scope to organization if user belongs to one.
+        // Org users can see school-owned songs plus shared songs explicitly approved for their organisation.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id'); // Include public songs
+            $approvedIds = $user->organisation?->approvedSongIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             // B2C users only see public songs
@@ -88,11 +92,14 @@ class SongController extends Controller
             ->where('id', $id)
             ->where('status', 'published');
 
-        // Scope to organization
+        // Scope to organization.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id');
+            $approvedIds = $user->organisation?->approvedSongIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             $query->whereNull('org_id');
@@ -146,11 +153,14 @@ class SongController extends Controller
             });
         }
 
-        // Scope to organization
+        // Scope to organization.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id');
+            $approvedIds = $user->organisation?->approvedSongIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             $query->whereNull('org_id');

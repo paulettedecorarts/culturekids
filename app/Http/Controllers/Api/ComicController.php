@@ -40,11 +40,15 @@ class ComicController extends Controller
             });
         }
 
-        // Scope to organization if user belongs to one
+        // Scope to organization if user belongs to one.
+        // Org users can see school-owned stories plus shared stories explicitly approved for their organisation.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id'); // Include public comics
+            $approvedIds = $user->organisation?->approvedComicIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             // B2C users only see public comics
@@ -103,11 +107,14 @@ class ComicController extends Controller
             ->where('id', $id)
             ->published();
 
-        // Scope to organization
+        // Scope to organization.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id');
+            $approvedIds = $user->organisation?->approvedComicIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             $query->whereNull('org_id');
@@ -167,11 +174,14 @@ class ComicController extends Controller
             });
         }
 
-        // Scope to organization
+        // Scope to organization.
         if ($user->organisation_id) {
-            $query->where(function ($q) use ($user) {
-                $q->where('org_id', $user->organisation_id)
-                  ->orWhereNull('org_id');
+            $approvedIds = $user->organisation?->approvedComicIds() ?? [];
+            $query->where(function ($q) use ($user, $approvedIds) {
+                if ($approvedIds !== []) {
+                    $q->whereIn('id', $approvedIds);
+                }
+                $q->orWhere('org_id', $user->organisation_id);
             });
         } else {
             $query->whereNull('org_id');
