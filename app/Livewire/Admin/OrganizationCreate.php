@@ -110,7 +110,7 @@ class OrganizationCreate extends Component
             });
         } catch (\Throwable $e) {
             report($e);
-            $this->addError('admin_email', __('Organisation could not be created. Check that mail is configured and try again.'));
+            $this->addError('admin_email', $e->getMessage());
 
             return;
         }

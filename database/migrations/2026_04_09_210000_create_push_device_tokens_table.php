@@ -22,7 +22,12 @@ return new class extends Migration
 
             $table->index(['organisation_id', 'is_active']);
             $table->index(['user_id', 'is_active']);
-            $table->index([DB::raw('token(768)')], 'push_device_tokens_token_index');
+            
+            if (config('database.default') !== 'sqlite') {
+                $table->index([DB::raw('token(768)')], 'push_device_tokens_token_index');
+            } else {
+                $table->index(['token'], 'push_device_tokens_token_index');
+            }
         });
     }
 

@@ -57,15 +57,20 @@ class OrganisationAdminInvitationMailIntegrationTest extends TestCase
 
         $adminEmail = 'org-invite-integration-'.uniqid('', true).'@example.test';
 
-        Livewire::test(OrganizationCreate::class)
+        $test = Livewire::test(OrganizationCreate::class)
             ->set('name', 'Mail integration school')
             ->set('code', 'mail-int-'.uniqid())
             ->set('plan', 'school')
             ->set('status', 'active')
             ->set('admin_name', 'Integration Admin')
             ->set('admin_email', $adminEmail)
-            ->call('save')
-            ->assertHasNoErrors();
+            ->call('save');
+
+        if ($test->errors()->has('admin_email')) {
+            fwrite(STDERR, print_r($test->errors()->get('admin_email'), true));
+        }
+
+        $test->assertHasNoErrors();
 
         $admin = User::where('email', $adminEmail)->first();
         $this->assertNotNull($admin);
