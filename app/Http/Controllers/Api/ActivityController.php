@@ -155,11 +155,6 @@ class ActivityController extends Controller
 
         app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $activity->type);
 
-        // Check organization + approval access.
-        if (! $this->scopeActivitiesForUser(collect([$activity]), $user)->isNotEmpty()) {
-            abort(403, 'Unauthorized');
-        }
-
         $response = [
             'id' => $activity->id,
             'title' => $activity->title,
