@@ -28,7 +28,7 @@ class ActivityController extends Controller
         $search = $request->query('search');
         
         $query = Activity::query()
-            ->with('tribe:id,name,hero_emoji,hero_icon,color,org_id')
+            ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('title');
 
@@ -85,7 +85,7 @@ class ActivityController extends Controller
         $type = $request->query('type');
         
         $query = Activity::where('tribe_id', $tribeId)
-            ->with('tribe:id,name,hero_emoji,hero_icon,color,org_id')
+            ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('type')
             ->orderBy('title');
@@ -147,7 +147,7 @@ class ActivityController extends Controller
         $user = $request->user();
         
         $activity = Activity::with([
-            'tribe:id,name,color,hero_emoji,hero_icon,org_id',
+            'tribe:id,name,color,hero_emoji,hero_icon',
             'flashcardSlides' => function ($q) {
                 $q->orderBy('order_index');
             }
@@ -218,11 +218,7 @@ class ActivityController extends Controller
     private function scopeActivitiesForUser(Collection $activities, $user): Collection
     {
         if (! $user?->organisation_id) {
-            return $activities->filter(function (Activity $activity) {
-                $tribeOrgId = $activity->tribe?->org_id;
-
-                return ! $tribeOrgId;
-            })->values();
+            return $activities->values();
         }
 
         $approved = OrganisationContentDecision::query()
@@ -234,15 +230,6 @@ class ActivityController extends Controller
             });
 
         return $activities->filter(function (Activity $activity) use ($user, $approved) {
-            $tribeOrgId = $activity->tribe?->org_id;
-            if ($tribeOrgId && (int) $tribeOrgId === (int) $user->organisation_id) {
-                return true;
-            }
-
-            if ($tribeOrgId && (int) $tribeOrgId !== (int) $user->organisation_id) {
-                return false;
-            }
-
             $identity = ActivityOfflineBundleIdentity::resolve($activity);
             if (! $identity) {
                 return false;

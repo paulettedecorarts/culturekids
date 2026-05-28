@@ -65,10 +65,9 @@ class OfflineBundleController extends Controller
      */
     private function scopeActivitiesForUser($query, $user)
     {
+        $activities = $query->get();
         if (! $user->organisation_id) {
-            return $query->whereHas('tribe', function ($q) {
-                $q->whereNull('org_id');
-            });
+            return $activities->values();
         }
 
         $approved = OrganisationContentDecision::query()
@@ -77,19 +76,8 @@ class OfflineBundleController extends Controller
             ->get(['content_type', 'content_id'])
             ->mapWithKeys(fn ($row) => [(string) $row->content_type.':'.(int) $row->content_id => true]);
 
-        return $query
-            ->with('tribe:id,org_id')
-            ->get()
-            ->filter(function (Activity $activity) use ($user, $approved) {
-                $tribeOrgId = $activity->tribe?->org_id;
-                if ($tribeOrgId && (int) $tribeOrgId === (int) $user->organisation_id) {
-                    return true;
-                }
-
-                if ($tribeOrgId && (int) $tribeOrgId !== (int) $user->organisation_id) {
-                    return false;
-                }
-
+        return $activities
+            ->filter(function (Activity $activity) use ($approved) {
                 $identity = ActivityOfflineBundleIdentity::resolve($activity);
                 if (! $identity) {
                     return false;
@@ -132,7 +120,7 @@ class OfflineBundleController extends Controller
         $activities = $resolver->filterActivitiesForUser($this->scopeActivitiesForUser(
             Activity::where('tribe_id', $tribeId)
             ->where('is_published', true)
-            ->with('flashcardSlides', 'tribe:id,org_id'),
+            ->with('flashcardSlides'),
             $user
         ), $user);
 
