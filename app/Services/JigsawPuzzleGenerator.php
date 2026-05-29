@@ -11,14 +11,42 @@ use RuntimeException;
  */
 class JigsawPuzzleGenerator
 {
+    public const ORIENTATION_PORTRAIT = 'portrait';
+
+    public const ORIENTATION_LANDSCAPE = 'landscape';
+
+    public const ORIENTATION_SQUARE = 'square';
+
+    public const ORIENTATION_CHOICES = [
+        self::ORIENTATION_PORTRAIT,
+        self::ORIENTATION_LANDSCAPE,
+        self::ORIENTATION_SQUARE,
+    ];
+
     protected const MAX_SOURCE_EDGE = 1400;
+
+    public static function normalizeOrientation(?string $orientation): ?string
+    {
+        if ($orientation === null || $orientation === '') {
+            return null;
+        }
+
+        $value = strtolower(trim($orientation));
+
+        return in_array($value, self::ORIENTATION_CHOICES, true) ? $value : null;
+    }
 
     /**
      * Loads the image at the given public-disk path, normalizes to source.png, slices into N tiles.
      *
-     * @return array{rows: int, cols: int, piece_paths: list<string>, width: int, height: int, source_path: string}
+     * @return array{rows: int, cols: int, piece_paths: list<string>, width: int, height: int, source_path: string, orientation: string}
      */
-    public function generateFromStoredFile(string $relativeUploadPath, int $activityId, int $pieceCount): array
+    public function generateFromStoredFile(
+        string $relativeUploadPath,
+        int $activityId,
+        int $pieceCount,
+        ?string $orientation = null
+    ): array {
     {
         if (! extension_loaded('gd')) {
             throw new RuntimeException('PHP GD extension is required to generate puzzle pieces.');
@@ -42,7 +70,10 @@ class JigsawPuzzleGenerator
         $srcH = imagesy($image);
         [$image, $srcW, $srcH] = $this->maybeDownscale($image, $srcW, $srcH);
 
-        [$rows, $cols] = $this->gridDimensions($pieceCount, $srcW, $srcH);
+        $orientation = self::normalizeOrientation($orientation)
+            ?? $this->inferOrientationFromDimensions($srcW, $srcH);
+
+        [$rows, $cols] = $this->gridDimensions($pieceCount, $orientation, $srcW, $srcH);
         if ($rows * $cols !== $pieceCount) {
             imagedestroy($image);
             throw new RuntimeException('Invalid piece count: '.$pieceCount);
@@ -104,40 +135,110 @@ class JigsawPuzzleGenerator
             'width' => $srcW,
             'height' => $srcH,
             'source_path' => $canonicalSource,
+            'orientation' => $orientation,
         ];
     }
 
+    public function inferOrientationFromDimensions(int $width, int $height): string
+    {
+        if ($width > $height * 1.05) {
+            return self::ORIENTATION_LANDSCAPE;
+        }
+        if ($height > $width * 1.05) {
+            return self::ORIENTATION_PORTRAIT;
+        }
+
+        return self::ORIENTATION_SQUARE;
+    }
+
     /**
-     * Pick rows × cols === $n. When $width and $height are set, choose the factor pair whose
-     * board aspect (cols / rows) best matches the source image so tiles are roughly square.
+     * Pick rows × cols === $n.
+     * Portrait → more rows than cols; landscape → more cols than rows; square → closest to N×N.
+     * Without explicit orientation, uses image dimensions when available.
      *
      * @return array{0: int, 1: int} rows, cols
      */
-    public function gridDimensions(int $n, ?int $width = null, ?int $height = null): array
-    {
+    public function gridDimensions(
+        int $n,
+        ?string $orientation = null,
+        ?int $width = null,
+        ?int $height = null
+    ): array {
         if ($n < 1) {
             return [1, 1];
         }
 
-        $pairs = $this->factorPairs($n);
+        $orientation = self::normalizeOrientation($orientation);
+        if ($orientation === null && $width !== null && $height !== null && $width > 0 && $height > 0) {
+            $orientation = $this->inferOrientationFromDimensions($width, $height);
+        }
 
-        if ($width !== null && $height !== null && $width > 0 && $height > 0) {
-            $target = $width / $height;
-
-            $best = $pairs[0];
-            $bestDiff = PHP_FLOAT_MAX;
-            foreach ($pairs as [$rows, $cols]) {
-                $diff = abs(($cols / $rows) - $target);
-                if ($diff < $bestDiff) {
-                    $bestDiff = $diff;
-                    $best = [$rows, $cols];
-                }
-            }
-
-            return $best;
+        if ($orientation !== null) {
+            return $this->gridDimensionsForOrientation($n, $orientation);
         }
 
         return $this->defaultGridDimensions($n);
+    }
+
+    /**
+     * @return array{0: int, 1: int}
+     */
+    public function gridDimensionsForOrientation(int $n, string $orientation): array
+    {
+        $orientation = self::normalizeOrientation($orientation) ?? self::ORIENTATION_SQUARE;
+        $pairs = $this->factorPairs($n);
+
+        if ($orientation === self::ORIENTATION_PORTRAIT) {
+            return $this->pickPair($pairs, fn (int $rows, int $cols): bool => $rows >= $cols, fn (int $rows, int $cols): float => $rows / max(1, $cols));
+        }
+
+        if ($orientation === self::ORIENTATION_LANDSCAPE) {
+            return $this->pickPair($pairs, fn (int $rows, int $cols): bool => $cols >= $rows, fn (int $rows, int $cols): float => $cols / max(1, $rows));
+        }
+
+        return $this->pickSquarePair($pairs);
+    }
+
+    /**
+     * @param  list<array{0: int, 1: int}>  $pairs
+     * @return array{0: int, 1: int}
+     */
+    protected function pickPair(array $pairs, callable $filter, callable $score): array
+    {
+        $eligible = array_values(array_filter($pairs, fn (array $pair): bool => $filter($pair[0], $pair[1])));
+        if ($eligible === []) {
+            usort($pairs, fn (array $a, array $b): int => $score($b[0], $b[1]) <=> $score($a[0], $a[1]));
+
+            return $pairs[0];
+        }
+
+        usort($eligible, function (array $a, array $b) use ($score): int {
+            $scoreB = $score($b[0], $b[1]);
+            $scoreA = $score($a[0], $a[1]);
+
+            return $scoreB <=> $scoreA;
+        });
+
+        return $eligible[0];
+    }
+
+    /**
+     * @param  list<array{0: int, 1: int}>  $pairs
+     * @return array{0: int, 1: int}
+     */
+    protected function pickSquarePair(array $pairs): array
+    {
+        $best = $pairs[0];
+        $bestDiff = PHP_FLOAT_MAX;
+        foreach ($pairs as [$rows, $cols]) {
+            $diff = abs($rows - $cols);
+            if ($diff < $bestDiff) {
+                $bestDiff = $diff;
+                $best = [$rows, $cols];
+            }
+        }
+
+        return $best;
     }
 
     /**
@@ -149,7 +250,11 @@ class JigsawPuzzleGenerator
         $sqrt = (int) floor(sqrt($n));
         for ($r = 1; $r <= $sqrt; $r++) {
             if ($n % $r === 0) {
-                $pairs[] = [(int) $r, (int) ($n / $r)];
+                $cols = (int) ($n / $r);
+                $pairs[] = [(int) $r, $cols];
+                if ($r !== $cols) {
+                    $pairs[] = [$cols, $r];
+                }
             }
         }
 

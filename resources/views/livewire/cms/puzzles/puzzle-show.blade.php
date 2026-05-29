@@ -3,6 +3,7 @@
     $puzzleDiff = data_get($m, 'puzzle.difficulty');
     $pieces = data_get($m, 'puzzle.pieces');
     $grid = data_get($m, 'puzzle.grid');
+    $orientation = data_get($m, 'puzzle.orientation');
     $sourcePath = data_get($m, 'puzzle.source_image');
     $piecePaths = data_get($m, 'puzzle.piece_paths', []) ?: [];
     $tag = data_get($m, 'tag');
@@ -38,6 +39,8 @@
         .pz-preview-empty { font-size:11px; color:var(--cms-text-muted); margin:8px 0 12px; }
         .pz-preview-badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
         .pz-badge { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; padding:4px 10px; border-radius:999px; background:rgba(212,160,23,.15); color:#F2CB5A; border:1px solid rgba(212,160,23,.35); }
+        .pz-regen-card .pz-input { width:100%; padding:9px; border-radius:8px; border:1px solid var(--cms-input-border); background:var(--cms-input-bg); color:var(--cms-text); font-family:var(--font-admin); font-size:12px; }
+        .pz-regen-card .pz-error { font-size:10px; color:#ff8c8c; margin-top:4px; }
         @media (max-width: 960px) {
             .puzzle-show-page > div[style*="grid-template-columns"] { grid-template-columns: 1fr; }
         }
@@ -130,6 +133,9 @@
                 @if($grid && is_array($grid))
                     <div class="pz-stat"><span>Grid</span><strong>{{ data_get($grid, 'rows') }} × {{ data_get($grid, 'cols') }}</strong></div>
                 @endif
+                @if($orientation)
+                    <div class="pz-stat"><span>Orientation</span><strong>{{ ucfirst($orientation) }}</strong></div>
+                @endif
                 @if($tag)
                     <div class="pz-stat"><span>Topic tag</span><strong>{{ $tag }}</strong></div>
                 @endif
@@ -171,6 +177,10 @@
             </div>
         </div>
     </div>
+
+    @if($this->portalCanEditContent() && $sourcePath)
+        @include('livewire.cms.puzzles.partials.regenerate-tiles')
+    @endif
 
     @if($playGridOk)
         <div class="pz-play-section" wire:ignore>

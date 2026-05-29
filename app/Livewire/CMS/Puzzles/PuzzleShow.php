@@ -2,6 +2,7 @@
 
 namespace App\Livewire\CMS\Puzzles;
 
+use App\Livewire\Concerns\RegeneratesPuzzleTiles;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Models\Activity;
 use App\Models\AgeProfile;
@@ -11,6 +12,7 @@ use Livewire\Component;
 
 class PuzzleShow extends Component
 {
+    use RegeneratesPuzzleTiles;
     use UsesPortalContext;
 
     public Activity $activity;
@@ -21,6 +23,8 @@ class PuzzleShow extends Component
             ->with('tribe')
             ->where('type', 'puzzle')
             ->findOrFail($id);
+
+        $this->mountRegenerateDefaults($this->activity);
     }
 
     #[Computed]

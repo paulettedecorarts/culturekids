@@ -94,8 +94,22 @@
                         <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Between 4 and 400. Preview grid updates as you type.</p>
                         @error('puzzle_pieces') <div class="pz-error">{{ $message }}</div> @enderror
                     </div>
+                    <div>
+                        <label class="pz-label">Board orientation <span style="color:#ff8c8c">*</span></label>
+                        <select wire:model.live="puzzle_orientation" class="pz-input">
+                            <option value="portrait">Portrait (more rows)</option>
+                            <option value="landscape">Landscape (more columns)</option>
+                            <option value="square">Square grid</option>
+                        </select>
+                        <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Controls row/column layout for tiles on save and in the app.</p>
+                        @error('puzzle_orientation') <div class="pz-error">{{ $message }}</div> @enderror
+                    </div>
                 </div>
             </div>
+
+            @if($isEdit && $hasPuzzleSource)
+                @include('livewire.cms.puzzles.partials.regenerate-tiles')
+            @endif
 
             <div style="margin-top:14px">
                 <label class="pz-label">Description</label>
@@ -132,7 +146,7 @@
             </div>
         </div>
 
-        <aside class="pz-live-preview-card" wire:key="pz-preview-{{ $puzzle_pieces }}-{{ $puzzle_image ? 'tmp' : ($hasPuzzleSource ? 'saved' : 'empty') }}">
+        <aside class="pz-live-preview-card" wire:key="pz-preview-{{ $puzzle_pieces }}-{{ $puzzle_orientation }}-{{ $puzzle_image ? 'tmp' : ($hasPuzzleSource ? 'saved' : 'empty') }}">
             <div class="pz-lp-title">Live preview</div>
             <p class="pz-lp-sub">Cut lines match the grid that will be generated on save (rectangular tiles).</p>
             <div class="pz-lp-meta">

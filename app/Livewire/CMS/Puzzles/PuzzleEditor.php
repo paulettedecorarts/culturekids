@@ -3,6 +3,7 @@
 namespace App\Livewire\CMS\Puzzles;
 
 use App\Livewire\Concerns\CoercesNumericFormFields;
+use App\Livewire\Concerns\RegeneratesPuzzleTiles;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
@@ -22,6 +23,7 @@ use Livewire\WithFileUploads;
 class PuzzleEditor extends Component
 {
     use CoercesNumericFormFields;
+    use RegeneratesPuzzleTiles;
     use LogsFileUploads;
     use UsesPortalContext;
     use ValidatesOnlyChangedOnEdit;
@@ -49,6 +51,8 @@ class PuzzleEditor extends Component
 
     public ?int $puzzle_pieces = null;
 
+    public string $puzzle_orientation = JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+
     /** @var mixed */
     public $puzzle_image = null;
 
@@ -57,8 +61,10 @@ class PuzzleEditor extends Component
         if ($id !== null) {
             $this->activity = Activity::query()->where('type', 'puzzle')->findOrFail($id);
             $this->fillFromActivity($this->activity);
+            $this->mountRegenerateDefaults($this->activity);
         } else {
             $this->puzzle_pieces = 12;
+            $this->puzzle_orientation = JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
         }
     }
 
@@ -98,6 +104,7 @@ class PuzzleEditor extends Component
             'learning_difficulty' => ['nullable', 'string', 'max:40', Rule::in($difficultyChoices)],
             'puzzle_difficulty' => ['nullable', 'string', 'max:40', Rule::in($puzzleDiffChoices)],
             'puzzle_pieces' => ['required', 'integer', 'min:4', 'max:400'],
+            'puzzle_orientation' => ['required', 'string', Rule::in(JigsawPuzzleGenerator::ORIENTATION_CHOICES)],
             'puzzle_image' => [
                 Rule::requiredIf(! $hasExistingSource),
                 'nullable',
@@ -136,11 +143,9 @@ class PuzzleEditor extends Component
             return null;
         }
         $generator = app(JigsawPuzzleGenerator::class);
-        $width = (int) data_get($this->activity?->metadata, 'puzzle.width', 0);
-        $height = (int) data_get($this->activity?->metadata, 'puzzle.height', 0);
-        [$rows, $cols] = ($width > 0 && $height > 0)
-            ? $generator->gridDimensions($n, $width, $height)
-            : $generator->gridDimensions($n);
+        $orientation = JigsawPuzzleGenerator::normalizeOrientation($this->puzzle_orientation)
+            ?? JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+        [$rows, $cols] = $generator->gridDimensions($n, $orientation);
 
         return ['rows' => $rows, 'cols' => $cols];
     }
@@ -159,6 +164,24 @@ class PuzzleEditor extends Component
         $this->learning_difficulty = data_get($metadata, 'difficulty');
         $this->puzzle_difficulty = data_get($metadata, 'puzzle.difficulty');
         $this->puzzle_pieces = data_get($metadata, 'puzzle.pieces');
+        $this->puzzle_orientation = JigsawPuzzleGenerator::normalizeOrientation(
+            data_get($metadata, 'puzzle.orientation')
+        ) ?? $this->inferOrientationFromPuzzleMeta(data_get($metadata, 'puzzle', []) ?: []);
+        $this->regen_orientation = $this->puzzle_orientation;
+        $this->regen_pieces = max(4, (int) ($this->puzzle_pieces ?? 12));
+    }
+
+    public function updatedPuzzlePieces($value): void
+    {
+        $this->regen_pieces = max(4, (int) $value);
+    }
+
+    public function updatedPuzzleOrientation($value): void
+    {
+        $normalized = JigsawPuzzleGenerator::normalizeOrientation(is_string($value) ? $value : null);
+        if ($normalized !== null) {
+            $this->regen_orientation = $normalized;
+        }
     }
 
     public function removePuzzleImage(): void
@@ -227,15 +250,20 @@ class PuzzleEditor extends Component
             }
 
             $generator = app(JigsawPuzzleGenerator::class);
+            $orientation = JigsawPuzzleGenerator::normalizeOrientation($validated['puzzle_orientation'])
+                ?? JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+
             $gen = $generator->generateFromStoredFile(
                 $uploadRelative,
                 $id,
-                (int) $validated['puzzle_pieces']
+                (int) $validated['puzzle_pieces'],
+                $orientation
             );
 
             $puzzleMeta = [
                 'difficulty' => $validated['puzzle_difficulty'],
                 'pieces' => (int) $validated['puzzle_pieces'],
+                'orientation' => $gen['orientation'],
                 'source_image' => $gen['source_path'],
                 'grid' => ['rows' => $gen['rows'], 'cols' => $gen['cols']],
                 'width' => $gen['width'],
