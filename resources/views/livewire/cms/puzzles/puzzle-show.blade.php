@@ -183,7 +183,7 @@
     @endif
 
     @if($playGridOk)
-        <div class="pz-play-section" wire:ignore>
+        <div class="pz-play-section" wire:key="pz-play-{{ $activity->id }}-{{ count($piecePaths) }}-{{ $playRows }}-{{ $playCols }}">
             <div class="pz-play-head">
                 <div>
                     <div class="pz-play-title">Try this puzzle</div>
@@ -230,6 +230,13 @@
             .replace(/&/g, '&amp;')
             .replace(/"/g, '&quot;')
             .replace(/</g, '&lt;');
+    }
+
+    function resetPuzzlePlay() {
+        var root = document.querySelector('.pz-play-section');
+        if (root) {
+            root.removeAttribute('data-pz-inited');
+        }
     }
 
     function initPuzzlePlay() {
@@ -371,6 +378,7 @@
         initPuzzlePlay();
     }
     document.addEventListener('livewire:navigated', function () {
+        resetPuzzlePlay();
         initPuzzlePlay();
     });
 })();

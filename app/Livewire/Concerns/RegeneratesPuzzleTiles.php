@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Concerns;
 
+use App\Livewire\CMS\Puzzles\PuzzleShow;
 use App\Models\Activity;
 use App\Services\JigsawPuzzleGenerator;
 use Illuminate\Support\Facades\Storage;
@@ -128,6 +129,13 @@ trait RegeneratesPuzzleTiles
         $this->activity->update(['metadata' => $metadata]);
         $this->activity->refresh();
 
+        if (property_exists($this, 'puzzle_pieces')) {
+            $this->puzzle_pieces = $this->regen_pieces;
+        }
+        if (property_exists($this, 'puzzle_orientation')) {
+            $this->puzzle_orientation = $orientation;
+        }
+
         session()->flash('message', sprintf(
             'Tiles regenerated: %d pieces in a %d×%d grid (%s).',
             $this->regen_pieces,
@@ -135,5 +143,13 @@ trait RegeneratesPuzzleTiles
             $gen['cols'],
             $orientation
         ));
+
+        if ($this instanceof PuzzleShow) {
+            return $this->redirectRoute(
+                $this->portalRouteName('puzzles.show'),
+                ['id' => $this->activity->id],
+                navigate: true
+            );
+        }
     }
 }

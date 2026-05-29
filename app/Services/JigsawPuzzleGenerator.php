@@ -47,7 +47,6 @@ class JigsawPuzzleGenerator
         int $pieceCount,
         ?string $orientation = null
     ): array {
-    {
         if (! extension_loaded('gd')) {
             throw new RuntimeException('PHP GD extension is required to generate puzzle pieces.');
         }
