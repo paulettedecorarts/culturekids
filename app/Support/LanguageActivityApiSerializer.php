@@ -32,6 +32,7 @@ final class LanguageActivityApiSerializer
                 'emoji' => $word->emoji,
                 'image_path' => self::publicUrl($word->image_path),
                 'audio_path' => self::publicUrl($word->audio_path),
+                'trace_path' => self::publicUrl($word->trace_path),
                 'is_correct_answer' => (bool) $word->is_correct_answer,
                 'is_fixed' => (bool) $word->is_fixed,
             ])->values()->all(),
