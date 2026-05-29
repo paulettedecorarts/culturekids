@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\MazeApiSerializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -115,6 +116,14 @@ class Maze extends Model
         return self::DIFFICULTIES[$this->difficulty_level] ?? ucfirst($this->difficulty_level);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function toPlayableArray(): array
+    {
+        return MazeApiSerializer::toArray($this);
+    }
+
     protected function syncLegacyActivity(): void
     {
         $metadata = array_merge($this->metadata ?? [], [
@@ -123,6 +132,7 @@ class Maze extends Model
             'maze_type'       => $this->maze_type,
             'grid_rows'       => $this->grid_rows,
             'grid_cols'       => $this->grid_cols,
+            'maze'            => $this->toPlayableArray(),
         ]);
 
         $query = DB::table('activities')
