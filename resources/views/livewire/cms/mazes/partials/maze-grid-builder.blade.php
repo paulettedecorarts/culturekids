@@ -86,6 +86,8 @@
         for (var r = 0; r < this.rows; r++) {
             for (var c = 0; c < this.cols; c++) this.grid[r][c] = WALL;
         }
+        this.grid[this.startPos.row][this.startPos.col] = PATH;
+        this.grid[this.endPos.row][this.endPos.col] = PATH;
         this.render();
     };
 

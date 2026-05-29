@@ -9,7 +9,7 @@ use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Jobs\SyncMazeLegacyActivity;
 use App\Models\Maze;
 use App\Models\Tribe;
-use Illuminate\Support\Facades\DB;
+use App\Support\MazePlayableGrid;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -269,61 +269,60 @@ class MazeEditor extends Component
     public function save(): void
     {
         $this->validate();
+        $this->ensureStartEndOnPath();
 
         Log::info('MazeEditor save', [
             'type' => $this->maze_type,
             'grid' => $this->grid_rows.'x'.$this->grid_cols,
         ]);
 
-        DB::transaction(function (): void {
-            $maze = $this->maze ?? new Maze;
+        $maze = $this->maze ?? new Maze;
 
-            $maze->fill([
-                'tribe_id' => $this->tribe_id,
-                'title' => $this->title,
-                'description' => $this->description,
-                'maze_type' => $this->maze_type,
-                'difficulty_level' => $this->difficulty_level,
-                'age_min' => $this->age_min,
-                'age_max' => $this->age_max,
-                'star_points' => $this->star_points,
-                'status' => $this->status,
-                'cultural_note' => $this->cultural_note,
-                'hero_character' => $this->hero_character ?: null,
-                'grid' => $this->grid,
-                'grid_rows' => $this->grid_rows,
-                'grid_cols' => $this->grid_cols,
-                'start_position' => $this->start_position,
-                'end_position' => $this->end_position,
-                'collectibles' => $this->collectibles ?: null,
-                'time_limit_seconds' => $this->time_limit_seconds ?: null,
-                'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
-            ]);
+        $maze->fill([
+            'tribe_id' => $this->tribe_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'maze_type' => $this->maze_type,
+            'difficulty_level' => $this->difficulty_level,
+            'age_min' => $this->age_min,
+            'age_max' => $this->age_max,
+            'star_points' => $this->star_points,
+            'status' => $this->status,
+            'cultural_note' => $this->cultural_note,
+            'hero_character' => $this->hero_character ?: null,
+            'grid' => $this->grid,
+            'grid_rows' => $this->grid_rows,
+            'grid_cols' => $this->grid_cols,
+            'start_position' => $this->start_position,
+            'end_position' => $this->end_position,
+            'collectibles' => $this->collectibles ?: null,
+            'time_limit_seconds' => $this->time_limit_seconds ?: null,
+            'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
+        ]);
 
-            if (! $maze->exists) {
-                $maze->saveQuietly();
-            }
+        if (! $maze->exists) {
+            $maze->saveQuietly();
+        }
 
-            foreach ([
-                'cover_image_file' => ['games/maze-covers', 'cover_image_path'],
-                'background_image_file' => ['games/maze-backgrounds', 'background_image_path'],
-            ] as $field => [$dir, $column]) {
-                if ($this->$field) {
-                    try {
-                        $path = $this->$field->storeAs(
-                            $dir,
-                            'maze_'.$maze->id.'_'.time().'.'.$this->$field->getClientOriginalExtension(),
-                            'public'
-                        );
-                        $maze->$column = $path;
-                    } catch (\Exception $e) {
-                    }
+        foreach ([
+            'cover_image_file' => ['games/maze-covers', 'cover_image_path'],
+            'background_image_file' => ['games/maze-backgrounds', 'background_image_path'],
+        ] as $field => [$dir, $column]) {
+            if ($this->$field) {
+                try {
+                    $path = $this->$field->storeAs(
+                        $dir,
+                        'maze_'.$maze->id.'_'.time().'.'.$this->$field->getClientOriginalExtension(),
+                        'public'
+                    );
+                    $maze->$column = $path;
+                } catch (\Exception $e) {
                 }
             }
+        }
 
-            $maze->saveQuietly();
-            $this->maze = $maze;
-        });
+        $maze->saveQuietly();
+        $this->maze = $maze;
 
         SyncMazeLegacyActivity::dispatch((int) $this->maze->id)->afterResponse();
 

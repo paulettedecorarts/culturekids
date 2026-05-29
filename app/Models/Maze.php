@@ -153,16 +153,6 @@ class Maze extends Model
         ]);
         unset($metadata['maze']);
 
-        $query = DB::table('activities')
-            ->where('type', 'maze')
-            ->where(function ($q): void {
-                $q->where('metadata->legacy_maze_id', $this->id)
-                  ->orWhere(function ($f): void {
-                      $f->where('tribe_id', $this->tribe_id)
-                        ->where('title', $this->title);
-                  });
-            });
-
         $payload = [
             'tribe_id'     => $this->tribe_id,
             'type'         => 'maze',
@@ -175,7 +165,20 @@ class Maze extends Model
             'updated_at'   => now(),
         ];
 
-        $existing = $query->orderByDesc('id')->first();
+        $existing = DB::table('activities')
+            ->where('type', 'maze')
+            ->where('metadata->legacy_maze_id', $this->id)
+            ->orderByDesc('id')
+            ->first();
+
+        if (! $existing) {
+            $existing = DB::table('activities')
+                ->where('type', 'maze')
+                ->where('tribe_id', $this->tribe_id)
+                ->where('title', $this->title)
+                ->orderByDesc('id')
+                ->first();
+        }
         if ($existing) {
             DB::table('activities')->where('id', $existing->id)->update($payload);
             return;

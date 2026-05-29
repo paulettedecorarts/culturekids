@@ -18,7 +18,11 @@ final class MazeApiSerializer
             'title' => $maze->title,
             'maze_type' => $maze->maze_type,
             'difficulty_level' => $maze->difficulty_level,
-            'grid' => $maze->grid,
+            'grid' => MazePlayableGrid::normalize(
+                $maze->grid ?? [],
+                $maze->start_position,
+                $maze->end_position
+            ),
             'grid_rows' => $maze->grid_rows,
             'grid_cols' => $maze->grid_cols,
             'start_position' => $maze->start_position,

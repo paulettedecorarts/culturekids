@@ -85,7 +85,7 @@
         var cfg = readCfg();
         if (!root || !cfg || root.getAttribute('data-mz-inited') === '1') return;
 
-        var grid = cfg.grid;
+        var grid = cfg.grid.map(function (row) { return row.slice(); });
         var rows = cfg.rows;
         var cols = cfg.cols;
         if (!grid || !grid.length) return;
@@ -94,6 +94,8 @@
 
         var start = cfg.start || { row: 0, col: 1 };
         var end = cfg.end || { row: rows - 1, col: cols - 1 };
+        if (grid[start.row] && grid[start.row][start.col] !== undefined) grid[start.row][start.col] = PATH;
+        if (grid[end.row] && grid[end.row][end.col] !== undefined) grid[end.row][end.col] = PATH;
         var collectibles = cfg.collectibles || [];
         var mazeType = cfg.mazeType || 'standard';
         var visibilityRadius = parseInt(cfg.visibilityRadius, 10) || 2;
@@ -138,16 +140,16 @@
             var html = '';
             for (var r = 0; r < rows; r++) {
                 for (var c = 0; c < cols; c++) {
-                    var wall = grid[r][c] === WALL;
-                    var visible = isVisible(r, c);
                     var isStart = r === start.row && c === start.col;
                     var isEnd = r === end.row && c === end.col;
                     var isPlayer = r === player.row && c === player.col;
+                    var wall = grid[r][c] === WALL && !isStart && !isEnd;
+                    var visible = isVisible(r, c);
                     var item = collectibles.find(function (col) {
                         return parseInt(col.row, 10) === r && parseInt(col.col, 10) === c && !collected[key(r, c)];
                     });
                     var cls = 'mz-play-cell ';
-                    if (!visible && !wall) cls += 'fog';
+                    if (!visible && !wall && !isStart && !isEnd) cls += 'fog';
                     else if (wall) cls += 'wall';
                     else cls += 'path';
                     var label = '';

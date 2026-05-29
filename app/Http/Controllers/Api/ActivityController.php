@@ -238,7 +238,16 @@ class ActivityController extends Controller
                 ->where('type', 'maze')
                 ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_maze_id')) AS UNSIGNED)"));
 
-            $maze = $legacyId > 0 ? Maze::query()->find($legacyId) : null;
+            $maze = $legacyId > 0
+                ? Maze::query()->select([
+                    'id', 'title', 'maze_type', 'difficulty_level',
+                    'grid', 'grid_rows', 'grid_cols',
+                    'start_position', 'end_position', 'collectibles',
+                    'time_limit_seconds', 'visibility_radius',
+                    'hero_character', 'cultural_note',
+                    'background_image_path', 'cover_image_path',
+                ])->find($legacyId)
+                : null;
 
             if ($maze && is_array($maze->grid) && $maze->grid !== []) {
                 $response['maze_data'] = ['maze' => MazeApiSerializer::toArray($maze)];
