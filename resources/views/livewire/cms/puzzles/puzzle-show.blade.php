@@ -97,7 +97,8 @@
     </style>
 @endpush
 
-<div class="puzzle-show-page">
+<div class="puzzle-show-page @if($this->puzzleTilesGenerating()) is-generating @endif">
+    @include('livewire.cms.puzzles.partials.generating-overlay')
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
             <a href="{{ route($this->portalContentListRoute($routePrefix . '.puzzles')) }}" wire:navigate class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← {{ $this->portalContentListLabel('Puzzles') }}</a>
@@ -115,11 +116,6 @@
     @if(session()->has('message'))
         <div style="background:rgba(74,124,89,.12);border:1px solid rgba(74,124,89,.35);color:var(--banana-light);padding:10px 14px;border-radius:10px;margin-bottom:var(--sp-4);font-size:12px;font-weight:700">
             {{ session('message') }}
-        </div>
-    @endif
-    @if(data_get($m, 'puzzle.generating'))
-        <div style="background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.35);color:#F2CB5A;padding:10px 14px;border-radius:10px;margin-bottom:var(--sp-4);font-size:12px;font-weight:700">
-            Tiles are generating… refresh in a few seconds.
         </div>
     @endif
     @if(data_get($m, 'puzzle.generation_error'))

@@ -2,7 +2,9 @@
     $regenGrid = $this->regenPreviewGrid();
 @endphp
 
-<div class="pz-regen-card" style="margin-top:var(--sp-5);padding:20px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:16px">
+@php $tilesGenerating = $this->puzzleTilesGenerating(); @endphp
+
+<div class="pz-regen-card" style="margin-top:var(--sp-5);padding:20px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:16px;@if($tilesGenerating) opacity:0.55;pointer-events:none; @endif">
     <div class="pz-regen-title" style="font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--cms-text-muted);margin-bottom:6px">
         Regenerate tiles
     </div>
@@ -46,7 +48,7 @@
         wire:click="regenerateTiles"
         wire:confirm="Regenerate all puzzle tiles from the source image? Current tiles will be replaced."
         wire:loading.attr="disabled"
-        @disabled(! $regenGrid)
+        @disabled(! $regenGrid || $tilesGenerating)
         class="btn btn-sm"
         style="background:rgba(212,160,23,.22);color:#F2CB5A;border:1px solid rgba(212,160,23,.45);padding:10px 18px;font-weight:700;opacity:{{ $regenGrid ? '1' : '0.5' }}"
     >

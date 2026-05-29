@@ -3,7 +3,6 @@
 namespace App\Livewire\Concerns;
 
 use App\Jobs\GenerateJigsawPuzzleTiles;
-use App\Livewire\CMS\Puzzles\PuzzleShow;
 use App\Models\Activity;
 use App\Services\JigsawPuzzleGenerator;
 use App\Services\PuzzleGenerationService;
@@ -76,6 +75,53 @@ trait RegeneratesPuzzleTiles
         }
     }
 
+    public function puzzleTilesGenerating(): bool
+    {
+        if (! property_exists($this, 'activity') || ! $this->activity instanceof Activity) {
+            return false;
+        }
+
+        return (bool) data_get($this->activity->metadata, 'puzzle.generating', false);
+    }
+
+    public function refreshPuzzleGenerationStatus(): void
+    {
+        if (! property_exists($this, 'activity') || ! $this->activity instanceof Activity) {
+            return;
+        }
+
+        if (! (bool) data_get($this->activity->metadata, 'puzzle.generating', false)) {
+            return;
+        }
+
+        $this->activity->refresh();
+
+        if ((bool) data_get($this->activity->metadata, 'puzzle.generating', false)) {
+            return;
+        }
+
+        $this->mountRegenerateDefaults($this->activity);
+
+        if (property_exists($this, 'puzzle_grid_rows')) {
+            $this->puzzle_grid_rows = (int) data_get($this->activity->metadata, 'puzzle.grid.rows', $this->regen_rows);
+        }
+        if (property_exists($this, 'puzzle_grid_cols')) {
+            $this->puzzle_grid_cols = (int) data_get($this->activity->metadata, 'puzzle.grid.cols', $this->regen_cols);
+        }
+
+        if (data_get($this->activity->metadata, 'puzzle.generation_error')) {
+            return;
+        }
+
+        $rows = (int) data_get($this->activity->metadata, 'puzzle.grid.rows', 0);
+        $cols = (int) data_get($this->activity->metadata, 'puzzle.grid.cols', 0);
+        $pieces = (int) data_get($this->activity->metadata, 'puzzle.pieces', 0);
+
+        session()->flash('message', $rows > 0 && $cols > 0
+            ? sprintf('Tiles ready: %d×%d grid (%d tiles).', $rows, $cols, $pieces)
+            : 'Puzzle tiles generated successfully.');
+    }
+
     public function regenerateTiles()
     {
         if (! property_exists($this, 'activity') || ! $this->activity instanceof Activity) {
@@ -83,6 +129,12 @@ trait RegeneratesPuzzleTiles
         }
 
         if (method_exists($this, 'portalCanEditContent') && ! $this->portalCanEditContent()) {
+            return;
+        }
+
+        if ($this->puzzleTilesGenerating()) {
+            session()->flash('message', 'Tiles are already generating. Please wait for the current run to finish.');
+
             return;
         }
 
@@ -102,22 +154,14 @@ trait RegeneratesPuzzleTiles
 
         // Always queue regenerate so the HTTP request returns before Cloudflare/proxy timeouts.
         $puzzleGeneration->markGenerating($this->activity, $rows, $cols);
+        $this->activity->refresh();
         GenerateJigsawPuzzleTiles::dispatch($this->activity->id, $sourcePath, $rows, $cols);
-        session()->flash('message', 'Generating '.$rows.'×'.$cols.' tiles in the background. Refresh this page in a few seconds.');
 
         if (property_exists($this, 'puzzle_grid_rows')) {
             $this->puzzle_grid_rows = $rows;
         }
         if (property_exists($this, 'puzzle_grid_cols')) {
             $this->puzzle_grid_cols = $cols;
-        }
-
-        if ($this instanceof PuzzleShow) {
-            return $this->redirectRoute(
-                $this->portalRouteName('puzzles.show'),
-                ['id' => $this->activity->id],
-                navigate: true
-            );
         }
     }
 }

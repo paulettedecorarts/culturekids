@@ -3,7 +3,10 @@
     $storedSrc = $hasPuzzleSource && $activity ? \Illuminate\Support\Facades\Storage::disk('public')->url(data_get($activity->metadata, 'puzzle.source_image')) : null;
 @endphp
 
-<div class="puzzle-editor-page">
+<div class="puzzle-editor-page @if($isEdit && $this->puzzleTilesGenerating()) is-generating @endif">
+    @if($isEdit && $activity)
+        @include('livewire.cms.puzzles.partials.generating-overlay')
+    @endif
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);gap:var(--sp-3);flex-wrap:wrap">
         <div>
             <a href="{{ $isEdit ? route($routePrefix . '.puzzles.show', $activity->id) : route($routePrefix . '.puzzles') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:8px;display:inline-block">← Back</a>

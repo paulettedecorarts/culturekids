@@ -314,7 +314,7 @@ class PuzzleEditor extends Component
         session()->flash(
             'message',
             $queued
-                ? 'Puzzle saved. Tiles are generating in the background — refresh the puzzle page in a few seconds.'
+                ? 'Puzzle saved. Tiles are generating — the page will update automatically when ready.'
                 : ($this->activity ? 'Puzzle updated and pieces generated.' : 'Puzzle created and pieces generated.')
         );
 
