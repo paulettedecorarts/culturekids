@@ -147,11 +147,9 @@ class JigsawPuzzleGenerator
                     imagedestroy($image);
                     throw new RuntimeException('Could not create tile image.');
                 }
-                imagealphablending($image, true);
-                imagesavealpha($image, true);
                 imagealphablending($tile, false);
                 imagesavealpha($tile, true);
-                imagecopyresampled($tile, $image, 0, 0, 0, 0, $w, $h, $x, $y, $w, $h);
+                imagecopy($tile, $image, 0, 0, $x, $y, $w, $h);
 
                 $name = $piecesDir.'/'.sprintf('%03d.png', $index);
                 imagepng($tile, $disk->path($name), self::PNG_COMPRESSION);

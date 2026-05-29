@@ -55,7 +55,7 @@ php artisan db:seed --class=SyncComicsToActivitiesSeeder --force
 
 # 5. Start Queue Worker in background
 echo "⚙️ Starting Queue Worker (background)..."
-php artisan queue:work --queue=default,media-processing,pdf-extraction,image-processing --tries=3 --timeout=300 &
+php artisan queue:work --queue=image-processing,default,media-processing,pdf-extraction --tries=2 --timeout=960 &
 QUEUE_PID=$!
 
 # Trap Ctrl+C to kill the background queue worker

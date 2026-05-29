@@ -17,7 +17,8 @@ class GenerateJigsawPuzzleTiles implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $timeout = 600;
+    /** Must be lower than queue worker --timeout and DB retry_after. */
+    public int $timeout = 900;
 
     public int $tries = 1;
 

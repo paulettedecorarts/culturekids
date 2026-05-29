@@ -2,19 +2,34 @@
 
 namespace App\Services;
 
+use App\Jobs\GenerateJigsawPuzzleTiles;
 use App\Models\Activity;
+use Illuminate\Foundation\Bus\PendingDispatch;
 
 class PuzzleGenerationService
 {
-    public const QUEUE_TILE_THRESHOLD = 36;
-
     public function __construct(
         protected JigsawPuzzleGenerator $generator
     ) {}
 
+    /**
+     * Tile slicing always runs in the background so HTTP/Livewire requests return immediately.
+     */
     public function shouldQueue(int $rows, int $cols): bool
     {
-        return $rows * $cols > self::QUEUE_TILE_THRESHOLD;
+        return true;
+    }
+
+    public function dispatchGeneration(Activity $activity, string $sourcePath, int $rows, int $cols): PendingDispatch
+    {
+        $this->markGenerating($activity, $rows, $cols);
+
+        return GenerateJigsawPuzzleTiles::dispatch(
+            $activity->id,
+            $sourcePath,
+            $rows,
+            $cols
+        )->afterResponse();
     }
 
     /**

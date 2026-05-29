@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Concerns;
 
-use App\Jobs\GenerateJigsawPuzzleTiles;
 use App\Models\Activity;
 use App\Services\JigsawPuzzleGenerator;
 use App\Services\PuzzleGenerationService;
@@ -150,12 +149,8 @@ trait RegeneratesPuzzleTiles
 
         $rows = $this->regen_rows;
         $cols = $this->regen_cols;
-        $puzzleGeneration = app(PuzzleGenerationService::class);
-
-        // Always queue regenerate so the HTTP request returns before Cloudflare/proxy timeouts.
-        $puzzleGeneration->markGenerating($this->activity, $rows, $cols);
+        app(PuzzleGenerationService::class)->dispatchGeneration($this->activity, $sourcePath, $rows, $cols);
         $this->activity->refresh();
-        GenerateJigsawPuzzleTiles::dispatch($this->activity->id, $sourcePath, $rows, $cols);
 
         if (property_exists($this, 'puzzle_grid_rows')) {
             $this->puzzle_grid_rows = $rows;

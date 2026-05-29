@@ -10,7 +10,6 @@ use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\Tribe;
-use App\Jobs\GenerateJigsawPuzzleTiles;
 use App\Services\JigsawPuzzleGenerator;
 use App\Services\PuzzleGenerationService;
 use Illuminate\Support\Arr;
@@ -264,35 +263,16 @@ class PuzzleEditor extends Component
         });
 
         $puzzleGeneration = app(PuzzleGenerationService::class);
+        $puzzleGeneration->dispatchGeneration($activity, $uploadRelative, $gridRows, $gridCols);
         $activity->refresh();
 
-        if ($puzzleGeneration->shouldQueue($gridRows, $gridCols)) {
-            $puzzleGeneration->markGenerating($activity, $gridRows, $gridCols);
-            GenerateJigsawPuzzleTiles::dispatch($activity->id, $uploadRelative, $gridRows, $gridCols);
-
-            $puzzleMeta = [
-                'difficulty' => $validated['puzzle_difficulty'],
-                'pieces' => $gridRows * $gridCols,
-                'source_image' => $uploadRelative,
-                'grid' => ['rows' => $gridRows, 'cols' => $gridCols],
-                'generating' => true,
-            ];
-        } else {
-            $gen = $puzzleGeneration->generateAndPersist($activity, $uploadRelative, $gridRows, $gridCols);
-            $activity->refresh();
-            $puzzleMeta = [
-                'difficulty' => $validated['puzzle_difficulty'],
-                'pieces' => $gen['pieces'],
-                'orientation' => $gen['orientation'],
-                'source_image' => $gen['source_path'],
-                'grid' => ['rows' => $gen['rows'], 'cols' => $gen['cols']],
-                'width' => $gen['width'],
-                'height' => $gen['height'],
-                'piece_paths' => $gen['piece_paths'],
-                'generated_at' => now()->toIso8601String(),
-                'generating' => false,
-            ];
-        }
+        $puzzleMeta = [
+            'difficulty' => $validated['puzzle_difficulty'],
+            'pieces' => $gridRows * $gridCols,
+            'source_image' => $uploadRelative,
+            'grid' => ['rows' => $gridRows, 'cols' => $gridCols],
+            'generating' => true,
+        ];
 
         $metadata = array_merge($this->orphanMetadata(), ['puzzle' => $puzzleMeta]);
 
@@ -310,12 +290,11 @@ class PuzzleEditor extends Component
 
         $activity->update(['metadata' => $metadata]);
 
-        $queued = app(PuzzleGenerationService::class)->shouldQueue($gridRows, $gridCols);
         session()->flash(
             'message',
-            $queued
+            $this->activity
                 ? 'Puzzle saved. Tiles are generating — the page will update automatically when ready.'
-                : ($this->activity ? 'Puzzle updated and pieces generated.' : 'Puzzle created and pieces generated.')
+                : 'Puzzle created. Tiles are generating — the page will update automatically when ready.'
         );
 
         return $this->redirectRoute($this->portalRouteName('puzzles.show'), ['id' => $activity->id], navigate: true);
