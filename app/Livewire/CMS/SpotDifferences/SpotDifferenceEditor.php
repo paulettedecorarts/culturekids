@@ -108,6 +108,40 @@ class SpotDifferenceEditor extends Component
         return Tribe::orderBy('name')->get();
     }
 
+    #[Computed]
+    public function previewImageAUrl(): ?string
+    {
+        if ($this->image_a_file) {
+            return $this->image_a_file->temporaryUrl();
+        }
+
+        if ($this->activity?->image_a_path) {
+            return asset('storage/'.$this->activity->image_a_path);
+        }
+
+        return null;
+    }
+
+    #[Computed]
+    public function previewImageBUrl(): ?string
+    {
+        if ($this->image_b_file) {
+            return $this->image_b_file->temporaryUrl();
+        }
+
+        if ($this->activity?->image_b_path) {
+            return asset('storage/'.$this->activity->image_b_path);
+        }
+
+        return null;
+    }
+
+    #[Computed]
+    public function canMarkZones(): bool
+    {
+        return $this->previewImageAUrl !== null && $this->previewImageBUrl !== null;
+    }
+
     public function addZone(): void
     {
         $this->zones[] = [
@@ -232,7 +266,7 @@ class SpotDifferenceEditor extends Component
         });
 
         session()->flash('message', $this->isEdit ? 'Activity updated!' : 'Activity created!');
-        $this->redirectRoute($this->portalRouteName('spot-differences.show'), ['id' => $this->activity->id], navigate: true);
+        $this->redirectRoute($this->portalRouteName('spot-differences.edit'), ['id' => $this->activity->id], navigate: true);
     }
 
     public function render()

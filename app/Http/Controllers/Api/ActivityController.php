@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
+use App\Models\SpotDifference;
 use App\Models\Tribe;
 use App\Services\OrganisationModuleResolver;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
 use App\Support\OrganisationActivityScope;
+use App\Support\SpotDifferenceApiSerializer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -256,6 +258,25 @@ class ActivityController extends Controller
 
             if ($maze && is_array($maze->grid) && $maze->grid !== []) {
                 $response['maze_data'] = ['maze' => MazeApiSerializer::toArray($maze)];
+            }
+        }
+
+        if ($activity->type === 'spot_difference') {
+            $legacyId = (int) DB::table('activities')
+                ->where('id', $id)
+                ->where('type', 'spot_difference')
+                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_spot_difference_id')) AS UNSIGNED)"));
+
+            $spotDifference = $legacyId > 0
+                ? SpotDifference::query()
+                    ->with('zones')
+                    ->find($legacyId)
+                : null;
+
+            if ($spotDifference && $spotDifference->image_a_path && $spotDifference->image_b_path) {
+                $response['spot_difference_data'] = [
+                    'spot_difference' => SpotDifferenceApiSerializer::toArray($spotDifference),
+                ];
             }
         }
 

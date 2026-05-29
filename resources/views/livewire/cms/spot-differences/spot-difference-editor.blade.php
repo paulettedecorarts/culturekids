@@ -15,12 +15,18 @@
     .sd-editor-page .sd-grid-5 { display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:16px; }
     .sd-editor-page .sd-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
     /* Image zone marker */
-    .sd-image-wrapper { position:relative;display:inline-block;cursor:crosshair;user-select:none; }
-    .sd-image-wrapper img { display:block;max-width:100%;border-radius:8px;border:1px solid var(--cms-border); }
-    .sd-zone-marker { position:absolute;border-radius:50%;border:3px solid #F2CB5A;background:rgba(212,160,23,.2);transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#F2CB5A; }
+    .sd-image-wrapper { position:relative;display:inline-block;cursor:crosshair;user-select:none;width:100%; }
+    .sd-image-wrapper img { display:block;width:100%;border-radius:8px;border:1px solid var(--cms-border); }
+    .sd-zone-marker { position:absolute;border-radius:50%;border:3px solid #F2CB5A;background:rgba(212,160,23,.2);transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#F2CB5A;z-index:2; }
+    .sd-comparison-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px; }
+    .sd-comparison-panel { background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:10px;padding:12px; }
+    .sd-comparison-label { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center; }
+    .sd-comparison-panel.mark-target { border-color:rgba(212,160,23,.45); }
+    .sd-comparison-panel.mark-target .sd-comparison-label { color:#F2CB5A; }
     @media (max-width:900px) {
         .sd-editor-page .sd-grid-4 { grid-template-columns:1fr 1fr; }
         .sd-editor-page .sd-grid-5 { grid-template-columns:1fr 1fr 1fr; }
+        .sd-comparison-grid { grid-template-columns:1fr; }
     }
     @media (max-width:600px) {
         .sd-editor-page .sd-grid-4,.sd-editor-page .sd-grid-5,.sd-editor-page .sd-grid-2 { grid-template-columns:1fr; }
@@ -115,13 +121,14 @@
             </div>
         </div>
 
-        {{-- ── Images ── --}}
-        <div class="sd-card">
-            <div class="sd-title">Scene Images</div>
+        {{-- ── Images + comparison grid + zones ── --}}
+        <div class="sd-card"
+             x-data="zoneMarker(@js($zones), @js($newZoneRadius))">
+            <div class="sd-title">Scene Images &amp; Difference Zones ({{ count($zones) }})</div>
             <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#60A5FA;font-weight:600;margin-bottom:4px">How to create the images</div>
                 <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
-                    Upload the <strong>same scene twice</strong> — Image A is the original, Image B has subtle differences (missing object, different colour, extra element, etc.). Both images should be the same dimensions.
+                    Upload the <strong>same scene twice</strong> — Image A is the original, Image B has the differences. Both should be the same size. Then click on <strong>Image B</strong> in the comparison grid to mark each difference.
                 </div>
             </div>
             <div class="sd-grid-2">
@@ -129,35 +136,18 @@
                     <label class="sd-label">Image A — Original <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
                     <input wire:model="image_a_file" type="file" class="sd-input" accept="image/*">
                     @error('image_a_file') <div class="sd-error">{{ $message }}</div> @enderror
-                    @if($activity && $activity->image_a_path)
-                        <img src="{{ asset('storage/' . $activity->image_a_path) }}" style="margin-top:8px;max-width:100%;border-radius:6px;border:1px solid var(--cms-border)">
-                    @endif
                 </div>
                 <div class="sd-field">
                     <label class="sd-label">Image B — With Differences <span style="color:var(--cms-text-muted);font-weight:400;text-transform:none;font-size:10px">max 10MB</span></label>
                     <input wire:model="image_b_file" type="file" class="sd-input" accept="image/*">
                     @error('image_b_file') <div class="sd-error">{{ $message }}</div> @enderror
-                    @if($activity && $activity->image_b_path)
-                        <img src="{{ asset('storage/' . $activity->image_b_path) }}" style="margin-top:8px;max-width:100%;border-radius:6px;border:1px solid var(--cms-border)">
-                    @endif
                 </div>
             </div>
-        </div>
 
-        {{-- ── Difference Zones ── --}}
-        <div class="sd-card"
-             x-data="zoneMarker(@js($activity?->image_a_path), @js($zones), @js($newZoneRadius))">
-
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-                <div>
-                    <div class="sd-title" style="margin-bottom:4px">Difference Zones ({{ count($zones) }})</div>
-                    <div style="font-size:11px;color:var(--cms-text-muted)">
-                        @if($activity && $activity->image_a_path)
-                            Click on Image A to mark where each difference is located
-                        @else
-                            Save the activity with Image A first, then come back to mark zones
-                        @endif
-                    </div>
+            @if($this->canMarkZones)
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 12px;flex-wrap:wrap;gap:12px">
+                <div style="font-size:11px;color:var(--cms-text-muted)">
+                    🖱️ Click on <strong>Image B</strong> to place a difference marker (shown on both images)
                 </div>
                 <div style="display:flex;gap:8px;align-items:center">
                     <div class="sd-field" style="width:120px">
@@ -171,40 +161,40 @@
                 </div>
             </div>
 
-            {{-- Image with clickable zone markers --}}
-            @if($activity && $activity->image_a_path)
-            <div style="margin-bottom:20px">
-                <div style="font-size:11px;color:var(--cms-text-muted);margin-bottom:8px">
-                    🖱️ Click anywhere on the image to place a difference zone marker
-                </div>
-                <div class="sd-image-wrapper" x-ref="imageWrapper" x-on:click="handleImageClick($event)">
-                    <img src="{{ asset('storage/' . $activity->image_a_path) }}" x-ref="image" alt="Image A" style="max-width:100%;display:block;border-radius:8px;border:2px solid rgba(212,160,23,.3)">
-
-                    {{-- Render existing zones --}}
-                    @foreach($zones as $i => $zone)
-                    <div class="sd-zone-marker"
-                         style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%;width:calc({{ $zone['radius_percent'] * 2 }}% );height:calc({{ $zone['radius_percent'] * 2 }}%)">
-                        {{ $i + 1 }}
-                    </div>
-                    @endforeach
-
-                    {{-- Alpine-rendered new zone preview --}}
-                    <template x-if="previewZone">
+            <div class="sd-comparison-grid">
+                <div class="sd-comparison-panel">
+                    <div class="sd-comparison-label">Image A — Original</div>
+                    <div class="sd-image-wrapper">
+                        <img src="{{ $this->previewImageAUrl }}" alt="Image A">
+                        @foreach($zones as $i => $zone)
                         <div class="sd-zone-marker"
-                             :style="`left:${previewZone.x}%;top:${previewZone.y}%;width:calc(${radius * 2}%);height:calc(${radius * 2}%);border-color:#60A5FA;background:rgba(59,130,246,.2);color:#60A5FA`">
-                            +
+                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%;width:calc({{ $zone['radius_percent'] * 2 }}%);height:calc({{ $zone['radius_percent'] * 2 }}%)">
+                            {{ $i + 1 }}
                         </div>
-                    </template>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="sd-comparison-panel mark-target">
+                    <div class="sd-comparison-label">Image B — Tap here to mark ✦</div>
+                    <div class="sd-image-wrapper" x-ref="imageWrapper" x-on:click="handleImageClick($event)">
+                        <img src="{{ $this->previewImageBUrl }}" x-ref="image" alt="Image B">
+                        @foreach($zones as $i => $zone)
+                        <div class="sd-zone-marker"
+                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%;width:calc({{ $zone['radius_percent'] * 2 }}%);height:calc({{ $zone['radius_percent'] * 2 }}%)">
+                            {{ $i + 1 }}
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
             @else
-            <div style="padding:32px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px;margin-bottom:20px">
-                Upload and save Image A first to enable zone marking
+            <div style="padding:32px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px;margin-top:20px">
+                Attach both Image A and Image B above to show the comparison grid and mark differences.
             </div>
             @endif
 
             {{-- Manual zone entry --}}
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin:20px 0 16px">
                 <div class="sd-field">
                     <label class="sd-label" style="font-size:10px">X Position (%)</label>
                     <input wire:model="newZoneX" type="number" class="sd-input" min="0" max="100" step="0.1" placeholder="50">
@@ -239,7 +229,7 @@
             </div>
             @empty
             <div style="padding:20px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
-                No zones marked yet. Click on the image or use the form above.
+                No zones marked yet. Click on Image B in the comparison grid or use the form above.
             </div>
             @endforelse
         </div>
@@ -255,9 +245,8 @@
 
     <script>
     document.addEventListener('alpine:init', () => {
-        Alpine.data('zoneMarker', (imagePath, initialZones, initialRadius) => ({
+        Alpine.data('zoneMarker', (initialZones, initialRadius) => ({
             zones: initialZones || [],
-            previewZone: null,
 
             get radius() {
                 return parseFloat(document.querySelector('[wire\\:model="newZoneRadius"]')?.value || initialRadius || 5);
@@ -271,19 +260,6 @@
                 const y = ((e.clientY - rect.top) / rect.height) * 100;
                 @this.call('addZoneFromClick', Math.round(x * 100) / 100, Math.round(y * 100) / 100);
             },
-
-            handleMouseMove(e) {
-                const img = this.$refs.image;
-                if (!img) return;
-                const rect = img.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                if (x >= 0 && x <= 100 && y >= 0 && y <= 100) {
-                    this.previewZone = { x, y };
-                } else {
-                    this.previewZone = null;
-                }
-            }
         }));
     });
     </script>
