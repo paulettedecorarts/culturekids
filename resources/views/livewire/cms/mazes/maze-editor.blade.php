@@ -46,7 +46,7 @@
         </div>
     @endif
 
-    <form wire:submit="save">
+    <form id="maze-editor-form" onsubmit="return false;">
 
         {{-- ── SECTION 1: Basic Info ── --}}
         <div class="me-card">
@@ -219,22 +219,22 @@
         </div>
         @endif
 
-        {{-- ── SECTION 3: Grid Builder (Livewire — reliable with wire:navigate) ── --}}
-        <div class="me-card" wire:key="maze-grid-builder-{{ $grid_rows }}-{{ $grid_cols }}">
-
+        {{-- ── SECTION 3: Grid Builder ── --}}
+        <div class="me-card" wire:key="maze-grid-builder-wrap-{{ $grid_rows }}-{{ $grid_cols }}">
             <div class="me-section-title">Maze Grid Builder</div>
 
             <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap">
                 <div class="me-field" style="width:100px">
                     <label class="me-label">Rows</label>
-                    <input wire:model="grid_rows" type="number" class="me-input" min="5" max="20" wire:change="resizeGrid">
+                    <input id="maze-grid-rows-input" wire:model="grid_rows" type="number" class="me-input" min="5" max="20">
                 </div>
                 <div class="me-field" style="width:100px">
                     <label class="me-label">Cols</label>
-                    <input wire:model="grid_cols" type="number" class="me-input" min="5" max="20" wire:change="resizeGrid">
+                    <input id="maze-grid-cols-input" wire:model="grid_cols" type="number" class="me-input" min="5" max="20">
                 </div>
-                <button type="button" wire:click="fillAllWalls" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Fill All Walls</button>
-                <button type="button" wire:click="clearAllWalls" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Clear All Walls</button>
+                <button type="button" onclick="mazeGridBuilderApplySize()" style="padding:9px 16px;border-radius:8px;background:rgba(212,160,23,.18);color:#F2CB5A;border:1px solid rgba(212,160,23,.35);cursor:pointer;font-size:12px;font-weight:600">Apply size</button>
+                <button type="button" onclick="mazeGridBuilderFillWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Fill All Walls</button>
+                <button type="button" onclick="mazeGridBuilderClearWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Clear All Walls</button>
             </div>
 
             <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
@@ -244,64 +244,30 @@
                 <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(196,75,43,.6)"></div> 🔴 End</div>
             </div>
 
-            <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-                <button type="button" wire:click="setGridMode('toggle')"
+            <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="maze-grid-mode-buttons">
+                <button type="button" onclick="mazeGridBuilderSetMode('toggle')" data-mode="toggle"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'toggle' ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     ✏️ Draw/Erase Walls
                 </button>
-                <button type="button" wire:click="setGridMode('start')"
+                <button type="button" onclick="mazeGridBuilderSetMode('start')" data-mode="start"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'start' ? 'background:rgba(74,124,89,.4);color:#6FA882;border-color:rgba(74,124,89,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     🟢 Set Start
                 </button>
-                <button type="button" wire:click="setGridMode('end')"
+                <button type="button" onclick="mazeGridBuilderSetMode('end')" data-mode="end"
                     style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'end' ? 'background:rgba(196,75,43,.4);color:#E06444;border-color:rgba(196,75,43,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     🔴 Set End
                 </button>
             </div>
 
-            <div style="overflow-x:auto;padding-bottom:8px">
-                @if(count($grid) > 0)
-                    <div class="maze-grid" style="grid-template-columns:repeat({{ $grid_cols }}, 28px)">
-                        @for($r = 0; $r < $grid_rows; $r++)
-                            @for($c = 0; $c < $grid_cols; $c++)
-                                @php
-                                    $cell = (int) ($grid[$r][$c] ?? 0);
-                                    $isStart = ($start_position['row'] ?? -1) === $r && ($start_position['col'] ?? -1) === $c;
-                                    $isEnd = ($end_position['row'] ?? -1) === $r && ($end_position['col'] ?? -1) === $c;
-                                    $collectibleHere = collect($collectibles)->first(fn ($col) => (int) ($col['row'] ?? -1) === $r && (int) ($col['col'] ?? -1) === $c);
-                                    $cellClass = $isStart ? 'start' : ($isEnd ? 'end' : ($collectibleHere ? 'collectible' : ($cell === 1 ? 'wall' : 'path')));
-                                @endphp
-                                <button type="button"
-                                    wire:click="handleCellClick({{ $r }}, {{ $c }})"
-                                    wire:loading.attr="disabled"
-                                    class="maze-cell {{ $cellClass }}"
-                                    title="Row {{ $r }}, Col {{ $c }}"
-                                    aria-label="Cell {{ $r }}, {{ $c }}">
-                                    @if($isStart)
-                                        🟢
-                                    @elseif($isEnd)
-                                        🔴
-                                    @elseif($collectibleHere)
-                                        {{ $collectibleHere['emoji'] ?? '💎' }}
-                                    @endif
-                                </button>
-                            @endfor
-                        @endfor
-                    </div>
-                @else
-                    <div style="padding:24px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
-                        Grid not initialized —
-                        <button type="button" wire:click="resizeGrid" style="background:none;border:none;color:#F2CB5A;cursor:pointer;font-weight:700;text-decoration:underline">click to build</button>
-                    </div>
-                @endif
-            </div>
-
-            <div style="margin-top:12px;font-size:11px;color:var(--cms-text-muted)">
-                Grid: {{ $grid_rows }}×{{ $grid_cols }} •
-                Start: ({{ $start_position['row'] ?? '—' }}, {{ $start_position['col'] ?? '—' }}) •
-                End: ({{ $end_position['row'] ?? '—' }}, {{ $end_position['col'] ?? '—' }}) •
-                Walls: {{ $this->wallCount() }}
-            </div>
+            @include('livewire.cms.mazes.partials.maze-grid-builder', [
+                'grid' => $grid,
+                'grid_rows' => $grid_rows,
+                'grid_cols' => $grid_cols,
+                'start_position' => $start_position,
+                'end_position' => $end_position,
+                'collectibles' => $collectibles,
+                'gridMode' => $gridMode,
+            ])
         </div>
 
         {{-- ── SECTION 4: Collectibles (for collect_items type) ── --}}
@@ -382,9 +348,44 @@
         {{-- Actions --}}
         <div style="display:flex;gap:12px;justify-content:flex-end;padding-bottom:40px">
             <a href="{{ route($routePrefix . '.mazes') }}" class="btn btn-ghost" style="text-decoration:none;padding:12px 28px;border-radius:12px;font-size:14px;font-weight:600">Cancel</a>
-            <button type="submit" class="btn btn-primary" style="padding:12px 32px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 8px 24px rgba(196,75,43,0.3)">
+            <button type="button" id="maze-editor-save-btn" class="btn btn-primary" style="padding:12px 32px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 8px 24px rgba(196,75,43,0.3)">
                 {{ $isEdit ? 'Update Maze' : 'Create Maze' }}
             </button>
         </div>
     </form>
+
+    @push('scripts')
+    <script>
+    (function () {
+        function findMazeEditorWire() {
+            var form = document.getElementById('maze-editor-form');
+            var host = form && form.closest('[wire\\:id]');
+            var id = host && host.getAttribute('wire:id');
+            return id && window.Livewire ? window.Livewire.find(id) : null;
+        }
+
+        function bindSave() {
+            var btn = document.getElementById('maze-editor-save-btn');
+            if (!btn || btn.getAttribute('data-bound') === '1') return;
+            btn.setAttribute('data-bound', '1');
+            btn.addEventListener('click', function () {
+                btn.disabled = true;
+                var done = function () { btn.disabled = false; };
+                var sync = window.mazeGridBuilderSyncBeforeSave ? window.mazeGridBuilderSyncBeforeSave() : Promise.resolve();
+                sync.then(function () {
+                    var wire = findMazeEditorWire();
+                    if (wire) return wire.call('save');
+                }).then(done).catch(done);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindSave);
+        } else {
+            bindSave();
+        }
+        document.addEventListener('livewire:navigated', bindSave);
+    })();
+    </script>
+    @endpush
 </div>

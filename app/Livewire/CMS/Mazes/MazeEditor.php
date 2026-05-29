@@ -6,6 +6,7 @@ use App\Livewire\Concerns\CoercesNumericFormFields;
 use App\Livewire\Concerns\LogsFileUploads;
 use App\Livewire\Concerns\UsesPortalContext;
 use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
+use App\Jobs\SyncMazeLegacyActivity;
 use App\Models\Maze;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\DB;
@@ -320,9 +321,11 @@ class MazeEditor extends Component
                 }
             }
 
-            $maze->save();
+            $maze->saveQuietly();
             $this->maze = $maze;
         });
+
+        SyncMazeLegacyActivity::dispatch((int) $this->maze->id)->afterResponse();
 
         session()->flash('message', $this->isEdit ? 'Maze updated!' : 'Maze created!');
         $this->redirectRoute($this->portalRouteName('mazes.show'), ['id' => $this->maze->id], navigate: true);

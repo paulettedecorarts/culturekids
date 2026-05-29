@@ -54,10 +54,10 @@
                 <div class="act-label" style="margin-bottom:var(--sp-3)">Statistics</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)">
                     @foreach([
-                        [$maze->attempts->count(), 'Attempts', '#60A5FA'],
-                        [$maze->attempts->where('completed', true)->count(), 'Completed', '#4A7C59'],
-                        [$maze->attempts->avg('time_spent_seconds') ? gmdate('i:s', $maze->attempts->avg('time_spent_seconds')) : '—', 'Avg Time', '#F2CB5A'],
-                        [$maze->attempts->avg('stars_earned') ? round($maze->attempts->avg('stars_earned'), 1) : '—', 'Avg Stars', '#9C88FF'],
+                        [$attemptStats['attempts'], 'Attempts', '#60A5FA'],
+                        [$attemptStats['completed'], 'Completed', '#4A7C59'],
+                        [$attemptStats['avg_time'] ?? '—', 'Avg Time', '#F2CB5A'],
+                        [$attemptStats['avg_stars'] ?? '—', 'Avg Stars', '#9C88FF'],
                     ] as [$val, $label, $color])
                     <div style="background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:8px;padding:var(--sp-2);text-align:center">
                         <div style="font-size:22px;font-weight:800;color:{{ $color }}">{{ $val }}</div>
@@ -127,4 +127,6 @@
         </div>
         @endif
     </div>
+
+    @include('livewire.cms.mazes.partials.maze-play', ['maze' => $maze])
 </div>

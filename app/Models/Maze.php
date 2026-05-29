@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SyncMazeLegacyActivity;
 use App\Support\MazeApiSerializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,20 +62,7 @@ class Maze extends Model
                 return;
             }
 
-            $mazeId = (int) $maze->id;
-            dispatch(function () use ($mazeId): void {
-                $fresh = self::query()->find($mazeId);
-                if (! $fresh) {
-                    return;
-                }
-
-                self::$syncingLegacyActivity = true;
-                try {
-                    $fresh->syncLegacyActivity();
-                } finally {
-                    self::$syncingLegacyActivity = false;
-                }
-            })->afterResponse();
+            SyncMazeLegacyActivity::dispatch((int) $maze->id)->afterResponse();
         });
 
         static::deleted(function (Maze $maze): void {
@@ -136,6 +124,20 @@ class Maze extends Model
     public function toPlayableArray(): array
     {
         return MazeApiSerializer::toArray($this);
+    }
+
+    public function syncLegacyActivityMirror(): void
+    {
+        if (self::$syncingLegacyActivity) {
+            return;
+        }
+
+        self::$syncingLegacyActivity = true;
+        try {
+            $this->syncLegacyActivity();
+        } finally {
+            self::$syncingLegacyActivity = false;
+        }
     }
 
     protected function syncLegacyActivity(): void
