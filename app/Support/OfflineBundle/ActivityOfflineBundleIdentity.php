@@ -4,6 +4,7 @@ namespace App\Support\OfflineBundle;
 
 use App\Models\Activity;
 use App\Models\OrganisationContentDecision;
+use App\Support\ActivityBundleMetadataExtract;
 
 /**
  * Maps legacy {@see Activity} rows to offline bundle keys (content_type + content_id).
