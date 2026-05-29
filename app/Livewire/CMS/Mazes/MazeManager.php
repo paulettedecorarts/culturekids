@@ -40,6 +40,10 @@ class MazeManager extends Component
     public function mazes()
     {
         return Maze::query()
+            ->select([
+                'id', 'tribe_id', 'title', 'description', 'maze_type', 'difficulty_level',
+                'status', 'star_points', 'grid_rows', 'grid_cols', 'created_at', 'updated_at',
+            ])
             ->with('tribe')
             ->withCount('attempts')
             ->when($this->search !== '', fn ($q) => $q->where(function ($inner) {

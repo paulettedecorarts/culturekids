@@ -12,7 +12,9 @@ use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
 use App\Services\OrganisationModuleResolver;
+use App\Support\ActivityBundleMetadataExtract;
 use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
+use App\Support\OrganisationActivityScope;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -61,31 +63,20 @@ class OfflineBundleController extends Controller
     }
 
     /**
-     * Apply org-owned-or-approved scope for activities.
+     * Apply org-owned-or-approved scope for activities (without loading full metadata JSON).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<Activity>  $query
      */
     private function scopeActivitiesForUser($query, $user)
     {
+        OrganisationActivityScope::withIdentityExtracts($query, $user);
+
         $activities = $query->get();
         if (! $user->organisation_id) {
             return $activities->values();
         }
 
-        $approved = OrganisationContentDecision::query()
-            ->where('organisation_id', (int) $user->organisation_id)
-            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
-            ->get(['content_type', 'content_id'])
-            ->mapWithKeys(fn ($row) => [(string) $row->content_type.':'.(int) $row->content_id => true]);
-
-        return $activities
-            ->filter(function (Activity $activity) use ($approved) {
-                $identity = ActivityOfflineBundleIdentity::resolve($activity);
-                if (! $identity) {
-                    return false;
-                }
-
-                return $approved->has($identity['content_type'].':'.$identity['content_id']);
-            })
-            ->values();
+        return OrganisationActivityScope::filterApproved($activities, $user);
     }
     /**
      * Get bundle manifest for a tribe (all content metadata)
@@ -120,6 +111,9 @@ class OfflineBundleController extends Controller
         $activities = $resolver->filterActivitiesForUser($this->scopeActivitiesForUser(
             Activity::where('tribe_id', $tribeId)
             ->where('is_published', true)
+            ->select([
+                'id', 'tribe_id', 'title', 'type', 'description', 'age_range', 'star_points', 'is_published',
+            ])
             ->with('flashcardSlides'),
             $user
         ), $user);
@@ -244,7 +238,7 @@ class OfflineBundleController extends Controller
                     'description' => $activity->description,
                     'age_range' => $activity->age_range,
                     'star_points' => $activity->star_points,
-                    'metadata' => $activity->metadata,
+                    'metadata' => ActivityBundleMetadataExtract::slimForOfflineBundle($activity),
                     'slides' => $activity->flashcardSlides->map(function ($slide) {
                         return [
                             'id' => $slide->id,

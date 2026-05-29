@@ -20,11 +20,16 @@ class PruneMazeActivityMetadata extends Command
             ->orderBy('id')
             ->each(function (Activity $activity) use (&$pruned): void {
                 $metadata = $activity->metadata;
-                if (! is_array($metadata) || ! array_key_exists('maze', $metadata)) {
+                if (! is_array($metadata)) {
                     return;
                 }
 
-                unset($metadata['maze']);
+                $hadBloat = array_key_exists('maze', $metadata) || array_key_exists('grid', $metadata);
+                if (! $hadBloat) {
+                    return;
+                }
+
+                unset($metadata['maze'], $metadata['grid']);
                 $activity->metadata = $metadata;
                 $activity->saveQuietly();
                 $pruned++;

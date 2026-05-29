@@ -69,7 +69,7 @@
                 </div>
                 <div class="me-field">
                     <label class="me-label">Maze Type <span style="color:#ff8c8c">*</span></label>
-                    <select wire:model.live="maze_type" class="me-input" required>
+                    <select wire:model="maze_type" class="me-input" required>
                         @foreach($mazeTypes as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach

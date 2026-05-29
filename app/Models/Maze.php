@@ -151,7 +151,7 @@ class Maze extends Model
             'grid_rows'       => $this->grid_rows,
             'grid_cols'       => $this->grid_cols,
         ]);
-        unset($metadata['maze']);
+        unset($metadata['maze'], $metadata['grid']);
 
         $payload = [
             'tribe_id'     => $this->tribe_id,

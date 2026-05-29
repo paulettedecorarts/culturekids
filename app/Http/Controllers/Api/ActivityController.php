@@ -7,13 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
-use App\Models\OrganisationContentDecision;
 use App\Models\Tribe;
 use App\Services\OrganisationModuleResolver;
-use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
-use Illuminate\Support\Collection;
+use App\Support\OrganisationActivityScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -43,10 +41,12 @@ class ActivityController extends Controller
         ];
 
         $query = Activity::query()
-            ->select($user?->organisation_id ? [...$listColumns, 'metadata'] : $listColumns)
+            ->select($listColumns)
             ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('title');
+
+        OrganisationActivityScope::withIdentityExtracts($query, $user);
 
         if ($tribeId) {
             $query->where('tribe_id', $tribeId);
@@ -66,9 +66,9 @@ class ActivityController extends Controller
             $query->where('type', $type);
         }
 
-        $activities = $this->scopeActivitiesForUser(
+        $activities = OrganisationActivityScope::filterApproved(
             $resolver->filterActivitiesForUser($query->get(), $user),
-            $user
+            $user,
         )
             ->map(function ($activity) {
                 return [
@@ -119,18 +119,23 @@ class ActivityController extends Controller
 
         $resolver = app(OrganisationModuleResolver::class);
 
-        $activities = $this->scopeActivitiesForUser($resolver->filterActivitiesForUser(
-            $query->get([
-                'id',
-                'tribe_id',
-                'title',
-                'type',
-                'age_range',
-                'star_points',
-                'description',
-            ]),
-            $request->user()
-        ), $request->user())->map(function ($activity) {
+        $listColumns = [
+            'id',
+            'tribe_id',
+            'title',
+            'type',
+            'age_range',
+            'star_points',
+            'description',
+        ];
+
+        $query->select($listColumns);
+        OrganisationActivityScope::withIdentityExtracts($query, $request->user());
+
+        $activities = OrganisationActivityScope::filterApproved(
+            $resolver->filterActivitiesForUser($query->get(), $request->user()),
+            $request->user(),
+        )->map(function ($activity) {
                 return [
                     'id' => $activity->id,
                     'title' => $activity->title,
@@ -266,35 +271,5 @@ class ActivityController extends Controller
         }
 
         return response()->json($response);
-    }
-
-    /**
-     * @param  Collection<int, Activity>  $activities
-     * @return Collection<int, Activity>
-     */
-    private function scopeActivitiesForUser(Collection $activities, $user): Collection
-    {
-        if (! $user?->organisation_id) {
-            return $activities->values();
-        }
-
-        $approved = OrganisationContentDecision::query()
-            ->where('organisation_id', (int) $user->organisation_id)
-            ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
-            ->get(['content_type', 'content_id'])
-            ->mapWithKeys(function ($row) {
-                return [(string) $row->content_type.':'.(int) $row->content_id => true];
-            });
-
-        return $activities->filter(function (Activity $activity) use ($user, $approved) {
-            $identity = ActivityOfflineBundleIdentity::resolve($activity);
-            if (! $identity) {
-                return false;
-            }
-
-            $key = $identity['content_type'].':'.$identity['content_id'];
-
-            return $approved->has($key);
-        })->values();
     }
 }

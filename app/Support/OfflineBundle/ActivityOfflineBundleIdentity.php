@@ -18,9 +18,7 @@ class ActivityOfflineBundleIdentity
      */
     public static function resolve(Activity $activity): ?array
     {
-        $metadata = is_array($activity->metadata)
-            ? $activity->metadata
-            : (json_decode((string) $activity->metadata, true) ?? []);
+        $metadata = ActivityBundleMetadataExtract::toMetadataArray($activity);
 
         return match ((string) $activity->type) {
             'flashcard' => self::pair(OrganisationContentDecision::TYPE_FLASHCARD, (int) $activity->id),

@@ -270,6 +270,11 @@ class MazeEditor extends Component
         ];
     }
 
+    protected function ensureStartEndOnPath(): void
+    {
+        MazePlayableGrid::applyMarkersToGrid($this->grid, $this->start_position, $this->end_position);
+    }
+
     public function save(): void
     {
         $this->validate();

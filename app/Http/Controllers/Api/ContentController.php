@@ -6,10 +6,9 @@ use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Comic;
-use App\Models\OrganisationContentDecision;
 use App\Models\Song;
 use App\Services\OrganisationModuleResolver;
-use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
+use App\Support\OrganisationActivityScope;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
@@ -128,10 +127,24 @@ class ContentController extends Controller
             );
         }
 
+        $listColumns = [
+            'id',
+            'tribe_id',
+            'title',
+            'type',
+            'age_range',
+            'star_points',
+            'description',
+            'is_published',
+        ];
+
         $query = Activity::query()
+            ->select($listColumns)
             ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('title');
+
+        OrganisationActivityScope::withIdentityExtracts($query, $user);
 
         if ($tribeId) {
             $query->where('tribe_id', $tribeId);
@@ -151,26 +164,10 @@ class ContentController extends Controller
             $query->where('type', $type);
         }
 
-        $approved = null;
-        if ($user?->organisation_id) {
-            $approved = OrganisationContentDecision::query()
-                ->where('organisation_id', (int) $user->organisation_id)
-                ->where('decision', OrganisationContentDecision::DECISION_APPROVED)
-                ->get(['content_type', 'content_id'])
-                ->mapWithKeys(fn ($row) => [(string) $row->content_type.':'.(int) $row->content_id => true]);
-        }
-
-        $activities = $resolver->filterActivitiesForUser($query->get(), $user)
-            ->filter(function (Activity $activity) use ($user, $approved) {
-                if (! $user?->organisation_id) {
-                    return true;
-                }
-                $identity = ActivityOfflineBundleIdentity::resolve($activity);
-                if (! $identity) {
-                    return false;
-                }
-                return $approved?->has($identity['content_type'].':'.$identity['content_id']) ?? false;
-            })
+        $activities = OrganisationActivityScope::filterApproved(
+            $resolver->filterActivitiesForUser($query->get(), $user),
+            $user,
+        )
             ->map(function (Activity $activity) {
                 return [
                     'id' => $activity->id,
