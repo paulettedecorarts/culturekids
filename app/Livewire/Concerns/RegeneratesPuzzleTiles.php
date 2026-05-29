@@ -6,73 +6,72 @@ use App\Livewire\CMS\Puzzles\PuzzleShow;
 use App\Models\Activity;
 use App\Services\JigsawPuzzleGenerator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 trait RegeneratesPuzzleTiles
 {
-    public string $regen_orientation = JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+    public int $regen_rows = 4;
 
-    public int $regen_pieces = 12;
+    public int $regen_cols = 3;
 
     public function mountRegenerateDefaults(Activity $activity): void
     {
         $puzzle = data_get($activity->metadata, 'puzzle', []);
-        $this->regen_pieces = max(4, (int) data_get($puzzle, 'pieces', 12));
-        $this->regen_orientation = JigsawPuzzleGenerator::normalizeOrientation(
-            data_get($puzzle, 'orientation')
-        ) ?? $this->inferOrientationFromPuzzleMeta($puzzle);
-    }
-
-    /**
-     * @param  array<string, mixed>  $puzzle
-     */
-    protected function inferOrientationFromPuzzleMeta(array $puzzle): string
-    {
-        $w = (int) data_get($puzzle, 'width', 0);
-        $h = (int) data_get($puzzle, 'height', 0);
-        if ($w > 0 && $h > 0) {
-            if ($w > $h * 1.05) {
-                return JigsawPuzzleGenerator::ORIENTATION_LANDSCAPE;
-            }
-            if ($h > $w * 1.05) {
-                return JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
-            }
-
-            return JigsawPuzzleGenerator::ORIENTATION_SQUARE;
-        }
-
         $rows = (int) data_get($puzzle, 'grid.rows', 0);
         $cols = (int) data_get($puzzle, 'grid.cols', 0);
-        if ($rows > 0 && $cols > 0) {
-            if ($rows > $cols) {
-                return JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
-            }
-            if ($cols > $rows) {
-                return JigsawPuzzleGenerator::ORIENTATION_LANDSCAPE;
-            }
 
-            return JigsawPuzzleGenerator::ORIENTATION_SQUARE;
+        if ($rows > 0 && $cols > 0) {
+            $this->regen_rows = $rows;
+            $this->regen_cols = $cols;
+
+            return;
         }
 
-        return JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+        $pieces = max(4, (int) data_get($puzzle, 'pieces', 12));
+        [$this->regen_rows, $this->regen_cols] = app(JigsawPuzzleGenerator::class)->defaultGridDimensions($pieces);
+    }
+
+    public function regenTileCount(): int
+    {
+        return max(0, $this->regen_rows) * max(0, $this->regen_cols);
     }
 
     /**
-     * @return array{rows: int, cols: int}|null
+     * @return array{rows: int, cols: int, pieces: int}|null
      */
     public function regenPreviewGrid(): ?array
     {
-        if ($this->regen_pieces < 4 || $this->regen_pieces > 400) {
+        $pieces = $this->regenTileCount();
+        if ($pieces < 4 || $pieces > 400 || $this->regen_rows < 1 || $this->regen_cols < 1) {
             return null;
         }
 
-        [$rows, $cols] = app(JigsawPuzzleGenerator::class)->gridDimensions(
-            $this->regen_pieces,
-            $this->regen_orientation
-        );
+        return [
+            'rows' => $this->regen_rows,
+            'cols' => $this->regen_cols,
+            'pieces' => $pieces,
+        ];
+    }
 
-        return ['rows' => $rows, 'cols' => $cols];
+    /**
+     * @return array<string, array<int, string>>
+     */
+    protected function regenGridValidationRules(): array
+    {
+        return [
+            'regen_rows' => ['required', 'integer', 'min:1', 'max:25'],
+            'regen_cols' => ['required', 'integer', 'min:1', 'max:25'],
+        ];
+    }
+
+    protected function assertRegenGridIsValid(): void
+    {
+        $pieces = $this->regenTileCount();
+        if ($pieces < 4 || $pieces > 400) {
+            throw ValidationException::withMessages([
+                'regen_rows' => ['Rows × columns must be between 4 and 400 tiles (currently '.$pieces.').'],
+            ]);
+        }
     }
 
     public function regenerateTiles()
@@ -85,27 +84,22 @@ trait RegeneratesPuzzleTiles
             return;
         }
 
-        $this->validate([
-            'regen_pieces' => ['required', 'integer', 'min:4', 'max:400'],
-            'regen_orientation' => ['required', 'string', Rule::in(JigsawPuzzleGenerator::ORIENTATION_CHOICES)],
-        ]);
+        $this->validate($this->regenGridValidationRules());
+        $this->assertRegenGridIsValid();
 
         $sourcePath = data_get($this->activity->metadata, 'puzzle.source_image');
         if (! is_string($sourcePath) || $sourcePath === '' || ! Storage::disk('public')->exists($sourcePath)) {
             throw ValidationException::withMessages([
-                'regen_pieces' => ['No source image found. Upload an image before regenerating tiles.'],
+                'regen_rows' => ['No source image found. Upload an image before regenerating tiles.'],
             ]);
         }
-
-        $orientation = JigsawPuzzleGenerator::normalizeOrientation($this->regen_orientation)
-            ?? JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
 
         $generator = app(JigsawPuzzleGenerator::class);
         $gen = $generator->generateFromStoredFile(
             $sourcePath,
             $this->activity->id,
-            $this->regen_pieces,
-            $orientation
+            $this->regen_rows,
+            $this->regen_cols
         );
 
         $existingPuzzle = data_get($this->activity->metadata, 'puzzle', []);
@@ -114,8 +108,8 @@ trait RegeneratesPuzzleTiles
         }
 
         $puzzleMeta = array_merge($existingPuzzle, [
-            'pieces' => $this->regen_pieces,
-            'orientation' => $orientation,
+            'pieces' => $gen['pieces'],
+            'orientation' => $gen['orientation'],
             'source_image' => $gen['source_path'],
             'grid' => ['rows' => $gen['rows'], 'cols' => $gen['cols']],
             'width' => $gen['width'],
@@ -129,19 +123,18 @@ trait RegeneratesPuzzleTiles
         $this->activity->update(['metadata' => $metadata]);
         $this->activity->refresh();
 
-        if (property_exists($this, 'puzzle_pieces')) {
-            $this->puzzle_pieces = $this->regen_pieces;
+        if (property_exists($this, 'puzzle_grid_rows')) {
+            $this->puzzle_grid_rows = $gen['rows'];
         }
-        if (property_exists($this, 'puzzle_orientation')) {
-            $this->puzzle_orientation = $orientation;
+        if (property_exists($this, 'puzzle_grid_cols')) {
+            $this->puzzle_grid_cols = $gen['cols'];
         }
 
         session()->flash('message', sprintf(
-            'Tiles regenerated: %d pieces in a %d×%d grid (%s).',
-            $this->regen_pieces,
+            'Tiles regenerated: %d×%d grid (%d tiles).',
             $gen['rows'],
             $gen['cols'],
-            $orientation
+            $gen['pieces']
         ));
 
         if ($this instanceof PuzzleShow) {

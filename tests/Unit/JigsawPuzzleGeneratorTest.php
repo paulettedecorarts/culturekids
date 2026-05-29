@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Services\JigsawPuzzleGenerator;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class JigsawPuzzleGeneratorTest extends TestCase
 {
@@ -32,5 +33,15 @@ class JigsawPuzzleGeneratorTest extends TestCase
         $this->assertSame([3, 4], $g->gridDimensions(12, JigsawPuzzleGenerator::ORIENTATION_LANDSCAPE));
         $this->assertSame([3, 4], $g->gridDimensions(12, JigsawPuzzleGenerator::ORIENTATION_SQUARE));
         $this->assertSame([10, 10], $g->gridDimensions(100, JigsawPuzzleGenerator::ORIENTATION_SQUARE));
+    }
+
+    public function test_validate_grid_and_infer_orientation(): void
+    {
+        $this->assertSame([4, 3], JigsawPuzzleGenerator::validateGrid(4, 3));
+        $this->assertSame(JigsawPuzzleGenerator::ORIENTATION_PORTRAIT, JigsawPuzzleGenerator::inferOrientationFromGrid(4, 3));
+        $this->assertSame(JigsawPuzzleGenerator::ORIENTATION_LANDSCAPE, JigsawPuzzleGenerator::inferOrientationFromGrid(3, 4));
+
+        $this->expectException(RuntimeException::class);
+        JigsawPuzzleGenerator::validateGrid(12, 1);
     }
 }

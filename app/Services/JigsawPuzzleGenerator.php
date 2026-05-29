@@ -36,23 +36,51 @@ class JigsawPuzzleGenerator
         return in_array($value, self::ORIENTATION_CHOICES, true) ? $value : null;
     }
 
+    public static function inferOrientationFromGrid(int $rows, int $cols): string
+    {
+        if ($rows > $cols) {
+            return self::ORIENTATION_PORTRAIT;
+        }
+        if ($cols > $rows) {
+            return self::ORIENTATION_LANDSCAPE;
+        }
+
+        return self::ORIENTATION_SQUARE;
+    }
+
     /**
-     * Loads the image at the given public-disk path, normalizes to source.png, slices into N tiles.
+     * @return array{0: int, 1: int} validated rows, cols
+     */
+    public static function validateGrid(int $rows, int $cols): array
+    {
+        $rows = max(1, $rows);
+        $cols = max(1, $cols);
+        $pieces = $rows * $cols;
+
+        if ($pieces < 4 || $pieces > 400) {
+            throw new RuntimeException('Grid must produce between 4 and 400 tiles (currently '.$pieces.').');
+        }
+
+        return [$rows, $cols];
+    }
+
+    /**
+     * Loads the image at the given public-disk path, normalizes to source.png, slices into a grid.
      *
-     * @return array{rows: int, cols: int, piece_paths: list<string>, width: int, height: int, source_path: string, orientation: string}
+     * @return array{rows: int, cols: int, piece_paths: list<string>, width: int, height: int, source_path: string, orientation: string, pieces: int}
      */
     public function generateFromStoredFile(
         string $relativeUploadPath,
         int $activityId,
-        int $pieceCount,
-        ?string $orientation = null
+        int $rows,
+        int $cols
     ): array {
         if (! extension_loaded('gd')) {
             throw new RuntimeException('PHP GD extension is required to generate puzzle pieces.');
         }
-        if ($pieceCount < 4 || $pieceCount > 400) {
-            throw new RuntimeException('Piece count must be between 4 and 400.');
-        }
+
+        [$rows, $cols] = self::validateGrid($rows, $cols);
+        $pieceCount = $rows * $cols;
 
         $disk = Storage::disk('public');
         if (! $disk->exists($relativeUploadPath)) {
@@ -69,14 +97,7 @@ class JigsawPuzzleGenerator
         $srcH = imagesy($image);
         [$image, $srcW, $srcH] = $this->maybeDownscale($image, $srcW, $srcH);
 
-        $orientation = self::normalizeOrientation($orientation)
-            ?? $this->inferOrientationFromDimensions($srcW, $srcH);
-
-        [$rows, $cols] = $this->gridDimensions($pieceCount, $orientation, $srcW, $srcH);
-        if ($rows * $cols !== $pieceCount) {
-            imagedestroy($image);
-            throw new RuntimeException('Invalid piece count: '.$pieceCount);
-        }
+        $orientation = self::inferOrientationFromGrid($rows, $cols);
 
         $baseDir = 'jigsaw-puzzles/'.$activityId;
         $disk->makeDirectory($baseDir);
@@ -130,6 +151,7 @@ class JigsawPuzzleGenerator
         return [
             'rows' => $rows,
             'cols' => $cols,
+            'pieces' => $pieceCount,
             'piece_paths' => $piecePaths,
             'width' => $srcW,
             'height' => $srcH,
@@ -263,7 +285,7 @@ class JigsawPuzzleGenerator
     /**
      * @return array{0: int, 1: int}
      */
-    protected function defaultGridDimensions(int $n): array
+    public function defaultGridDimensions(int $n): array
     {
         $sqrt = (int) floor(sqrt($n));
         for ($r = $sqrt; $r >= 1; $r--) {

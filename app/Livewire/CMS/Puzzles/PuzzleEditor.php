@@ -49,9 +49,9 @@ class PuzzleEditor extends Component
 
     public ?string $puzzle_difficulty = null;
 
-    public ?int $puzzle_pieces = null;
+    public int $puzzle_grid_rows = 4;
 
-    public string $puzzle_orientation = JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+    public int $puzzle_grid_cols = 3;
 
     /** @var mixed */
     public $puzzle_image = null;
@@ -63,8 +63,8 @@ class PuzzleEditor extends Component
             $this->fillFromActivity($this->activity);
             $this->mountRegenerateDefaults($this->activity);
         } else {
-            $this->puzzle_pieces = 12;
-            $this->puzzle_orientation = JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
+            $this->puzzle_grid_rows = 4;
+            $this->puzzle_grid_cols = 3;
         }
     }
 
@@ -103,8 +103,8 @@ class PuzzleEditor extends Component
             'content_tag' => ['nullable', 'string', 'max:120'],
             'learning_difficulty' => ['nullable', 'string', 'max:40', Rule::in($difficultyChoices)],
             'puzzle_difficulty' => ['nullable', 'string', 'max:40', Rule::in($puzzleDiffChoices)],
-            'puzzle_pieces' => ['required', 'integer', 'min:4', 'max:400'],
-            'puzzle_orientation' => ['required', 'string', Rule::in(JigsawPuzzleGenerator::ORIENTATION_CHOICES)],
+            'puzzle_grid_rows' => ['required', 'integer', 'min:1', 'max:25'],
+            'puzzle_grid_cols' => ['required', 'integer', 'min:1', 'max:25'],
             'puzzle_image' => [
                 Rule::requiredIf(! $hasExistingSource),
                 'nullable',
@@ -138,16 +138,16 @@ class PuzzleEditor extends Component
     #[Computed]
     public function previewGrid(): ?array
     {
-        $n = (int) ($this->puzzle_pieces ?? 0);
-        if ($n < 4 || $n > 400) {
+        $pieces = $this->puzzle_grid_rows * $this->puzzle_grid_cols;
+        if ($pieces < 4 || $pieces > 400 || $this->puzzle_grid_rows < 1 || $this->puzzle_grid_cols < 1) {
             return null;
         }
-        $generator = app(JigsawPuzzleGenerator::class);
-        $orientation = JigsawPuzzleGenerator::normalizeOrientation($this->puzzle_orientation)
-            ?? JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
-        [$rows, $cols] = $generator->gridDimensions($n, $orientation);
 
-        return ['rows' => $rows, 'cols' => $cols];
+        return [
+            'rows' => $this->puzzle_grid_rows,
+            'cols' => $this->puzzle_grid_cols,
+            'pieces' => $pieces,
+        ];
     }
 
     protected function fillFromActivity(Activity $activity): void
@@ -163,25 +163,27 @@ class PuzzleEditor extends Component
         $this->content_tag = data_get($metadata, 'tag');
         $this->learning_difficulty = data_get($metadata, 'difficulty');
         $this->puzzle_difficulty = data_get($metadata, 'puzzle.difficulty');
-        $this->puzzle_pieces = data_get($metadata, 'puzzle.pieces');
-        $this->puzzle_orientation = JigsawPuzzleGenerator::normalizeOrientation(
-            data_get($metadata, 'puzzle.orientation')
-        ) ?? $this->inferOrientationFromPuzzleMeta(data_get($metadata, 'puzzle', []) ?: []);
-        $this->regen_orientation = $this->puzzle_orientation;
-        $this->regen_pieces = max(4, (int) ($this->puzzle_pieces ?? 12));
-    }
-
-    public function updatedPuzzlePieces($value): void
-    {
-        $this->regen_pieces = max(4, (int) $value);
-    }
-
-    public function updatedPuzzleOrientation($value): void
-    {
-        $normalized = JigsawPuzzleGenerator::normalizeOrientation(is_string($value) ? $value : null);
-        if ($normalized !== null) {
-            $this->regen_orientation = $normalized;
+        $rows = (int) data_get($metadata, 'puzzle.grid.rows', 0);
+        $cols = (int) data_get($metadata, 'puzzle.grid.cols', 0);
+        if ($rows > 0 && $cols > 0) {
+            $this->puzzle_grid_rows = $rows;
+            $this->puzzle_grid_cols = $cols;
+        } else {
+            $pieces = max(4, (int) data_get($metadata, 'puzzle.pieces', 12));
+            [$this->puzzle_grid_rows, $this->puzzle_grid_cols] = app(JigsawPuzzleGenerator::class)->defaultGridDimensions($pieces);
         }
+        $this->regen_rows = $this->puzzle_grid_rows;
+        $this->regen_cols = $this->puzzle_grid_cols;
+    }
+
+    public function updatedPuzzleGridRows($value): void
+    {
+        $this->regen_rows = max(1, (int) $value);
+    }
+
+    public function updatedPuzzleGridCols($value): void
+    {
+        $this->regen_cols = max(1, (int) $value);
     }
 
     public function removePuzzleImage(): void
@@ -212,6 +214,15 @@ class PuzzleEditor extends Component
     public function save()
     {
         $validated = $this->validate();
+
+        $gridRows = (int) $validated['puzzle_grid_rows'];
+        $gridCols = (int) $validated['puzzle_grid_cols'];
+        $tileCount = $gridRows * $gridCols;
+        if ($tileCount < 4 || $tileCount > 400) {
+            throw ValidationException::withMessages([
+                'puzzle_grid_rows' => ['Rows × columns must be between 4 and 400 tiles (currently '.$tileCount.').'],
+            ]);
+        }
 
         $activity = $this->activity ?? new Activity;
 
@@ -250,19 +261,16 @@ class PuzzleEditor extends Component
             }
 
             $generator = app(JigsawPuzzleGenerator::class);
-            $orientation = JigsawPuzzleGenerator::normalizeOrientation($validated['puzzle_orientation'])
-                ?? JigsawPuzzleGenerator::ORIENTATION_PORTRAIT;
-
             $gen = $generator->generateFromStoredFile(
                 $uploadRelative,
                 $id,
-                (int) $validated['puzzle_pieces'],
-                $orientation
+                $gridRows,
+                $gridCols
             );
 
             $puzzleMeta = [
                 'difficulty' => $validated['puzzle_difficulty'],
-                'pieces' => (int) $validated['puzzle_pieces'],
+                'pieces' => $gen['pieces'],
                 'orientation' => $gen['orientation'],
                 'source_image' => $gen['source_path'],
                 'grid' => ['rows' => $gen['rows'], 'cols' => $gen['cols']],

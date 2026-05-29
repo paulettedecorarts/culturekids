@@ -89,20 +89,21 @@
                         @error('puzzle_difficulty') <div class="pz-error">{{ $message }}</div> @enderror
                     </div>
                     <div>
-                        <label class="pz-label">Number of pieces <span style="color:#ff8c8c">*</span></label>
-                        <input wire:model.live.debounce.300ms="puzzle_pieces" type="number" min="4" max="400" class="pz-input" placeholder="e.g. 12">
-                        <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Between 4 and 400. Preview grid updates as you type.</p>
-                        @error('puzzle_pieces') <div class="pz-error">{{ $message }}</div> @enderror
+                        <label class="pz-label">Grid rows <span style="color:#ff8c8c">*</span></label>
+                        <input wire:model.live.debounce.300ms="puzzle_grid_rows" type="number" min="1" max="25" class="pz-input" placeholder="e.g. 4">
+                        @error('puzzle_grid_rows') <div class="pz-error">{{ $message }}</div> @enderror
                     </div>
                     <div>
-                        <label class="pz-label">Board orientation <span style="color:#ff8c8c">*</span></label>
-                        <select wire:model.live="puzzle_orientation" class="pz-input">
-                            <option value="portrait">Portrait (more rows)</option>
-                            <option value="landscape">Landscape (more columns)</option>
-                            <option value="square">Square grid</option>
-                        </select>
-                        <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Controls row/column layout for tiles on save and in the app.</p>
-                        @error('puzzle_orientation') <div class="pz-error">{{ $message }}</div> @enderror
+                        <label class="pz-label">Grid columns <span style="color:#ff8c8c">*</span></label>
+                        <input wire:model.live.debounce.300ms="puzzle_grid_cols" type="number" min="1" max="25" class="pz-input" placeholder="e.g. 3">
+                        @error('puzzle_grid_cols') <div class="pz-error">{{ $message }}</div> @enderror
+                    </div>
+                    <div>
+                        <label class="pz-label">Total tiles</label>
+                        <div class="pz-input" style="display:flex;align-items:center;min-height:38px;background:var(--cms-surface-raised);font-weight:700">
+                            {{ $puzzle_grid_rows * $puzzle_grid_cols }}
+                        </div>
+                        <p style="font-size:10px;color:var(--cms-text-muted);margin:6px 0 0">Rows × columns (4–400). Portrait 12-piece example: 4×3.</p>
                     </div>
                 </div>
             </div>
@@ -146,7 +147,7 @@
             </div>
         </div>
 
-        <aside class="pz-live-preview-card" wire:key="pz-preview-{{ $puzzle_pieces }}-{{ $puzzle_orientation }}-{{ $puzzle_image ? 'tmp' : ($hasPuzzleSource ? 'saved' : 'empty') }}">
+        <aside class="pz-live-preview-card" wire:key="pz-preview-{{ $puzzle_grid_rows }}-{{ $puzzle_grid_cols }}-{{ $puzzle_image ? 'tmp' : ($hasPuzzleSource ? 'saved' : 'empty') }}">
             <div class="pz-lp-title">Live preview</div>
             <p class="pz-lp-sub">Cut lines match the grid that will be generated on save (rectangular tiles).</p>
             <div class="pz-lp-meta">
@@ -179,13 +180,11 @@
                 @if(filled($puzzle_difficulty))
                     <span class="pz-lp-badge">{{ ucfirst($puzzle_difficulty) }}</span>
                 @endif
-                @if($puzzle_pieces >= 4 && $puzzle_pieces <= 400)
-                    <span class="pz-lp-badge">{{ $puzzle_pieces }} pieces</span>
-                @endif
                 @if($previewGrid)
+                    <span class="pz-lp-badge">{{ $previewGrid['pieces'] }} tiles</span>
                     <span class="pz-lp-badge">{{ $previewGrid['rows'] }}×{{ $previewGrid['cols'] }} grid</span>
-                @elseif($puzzle_pieces)
-                    <span class="pz-lp-badge pz-lp-badge-muted">Adjust pieces (4–400)</span>
+                @else
+                    <span class="pz-lp-badge pz-lp-badge-muted">Set grid (4–400 tiles)</span>
                 @endif
             </div>
         </aside>
