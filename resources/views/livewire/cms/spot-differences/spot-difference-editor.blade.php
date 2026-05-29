@@ -14,10 +14,10 @@
     .sd-editor-page .sd-grid-4 { display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px; }
     .sd-editor-page .sd-grid-5 { display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:16px; }
     .sd-editor-page .sd-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
-    /* Image zone marker */
+    /* Pin markers on comparison images */
     .sd-image-wrapper { position:relative;display:inline-block;cursor:crosshair;user-select:none;width:100%; }
     .sd-image-wrapper img { display:block;width:100%;border-radius:8px;border:1px solid var(--cms-border); }
-    .sd-zone-marker { position:absolute;border-radius:50%;border:3px solid #F2CB5A;background:rgba(212,160,23,.2);transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#F2CB5A;z-index:2; }
+    .sd-pin-marker { position:absolute;width:28px;height:28px;border-radius:50%;border:2px solid #F2CB5A;background:rgba(212,160,23,.85);transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#1a1a1a;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.25); }
     .sd-comparison-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px; }
     .sd-comparison-panel { background:var(--cms-surface-raised);border:1px solid var(--cms-border);border-radius:10px;padding:12px; }
     .sd-comparison-label { font-size:11px;font-weight:700;color:var(--cms-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center; }
@@ -36,7 +36,7 @@
     <div style="margin-bottom:24px">
         <a href="{{ route($routePrefix . '.spot-differences') }}" class="btn btn-ghost btn-sm" style="text-decoration:none;margin-bottom:10px;display:inline-block">← Spot the Difference</a>
         <div class="sa-page-title">{{ $isEdit ? 'Edit Activity' : 'New Spot the Difference' }}</div>
-        <div class="sa-breadcrumb">{{ $isEdit ? 'Update activity details and difference zones' : 'Upload two images and mark the differences' }}</div>
+        <div class="sa-breadcrumb">{{ $isEdit ? 'Update activity details and difference pins' : 'Upload two images and mark the differences' }}</div>
     </div>
 
     @if(session()->has('message'))
@@ -122,13 +122,12 @@
         </div>
 
         {{-- ── Images + comparison grid + zones ── --}}
-        <div class="sd-card"
-             x-data="zoneMarker(@js($zones), @js($newZoneRadius))">
-            <div class="sd-title">Scene Images &amp; Difference Zones ({{ count($zones) }})</div>
+        <div class="sd-card" x-data="zoneMarker()">
+            <div class="sd-title">Scene Images &amp; Difference Pins ({{ count($zones) }})</div>
             <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:12px;margin-bottom:16px">
                 <div style="font-size:12px;color:#60A5FA;font-weight:600;margin-bottom:4px">How to create the images</div>
                 <div style="font-size:11px;color:var(--cms-text-muted);line-height:1.5">
-                    Upload the <strong>same scene twice</strong> — Image A is the original, Image B has the differences. Both should be the same size. Then click on <strong>Image B</strong> in the comparison grid to mark each difference.
+                    Upload the <strong>same scene twice</strong> — Image A is the original, Image B has the differences. Both should be the same size. Then click on <strong>Image B</strong> to drop a numbered pin for each difference.
                 </div>
             </div>
             <div class="sd-grid-2">
@@ -147,18 +146,14 @@
             @if($this->canMarkZones)
             <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 12px;flex-wrap:wrap;gap:12px">
                 <div style="font-size:11px;color:var(--cms-text-muted)">
-                    🖱️ Click on <strong>Image B</strong> to place a difference marker (shown on both images)
+                    Click on <strong>Image B</strong> to add a pin. Each pin marks one difference (shown on both images).
                 </div>
-                <div style="display:flex;gap:8px;align-items:center">
-                    <div class="sd-field" style="width:120px">
-                        <label class="sd-label" style="font-size:10px">Zone Radius (%)</label>
-                        <input wire:model="newZoneRadius" type="number" class="sd-input" min="2" max="20" step="0.5" style="padding:7px 10px">
-                    </div>
-                    <div class="sd-field" style="width:180px">
-                        <label class="sd-label" style="font-size:10px">Zone Label (optional)</label>
-                        <input wire:model="newZoneLabel" type="text" class="sd-input" placeholder="e.g. Missing bird" style="padding:7px 10px">
-                    </div>
-                </div>
+                @if(count($zones) > 0)
+                <button type="button" wire:click="undoLastZone"
+                        style="height:32px;padding:0 14px;border-radius:8px;background:var(--cms-surface-raised);color:var(--cms-text-muted);border:1px solid var(--cms-border);cursor:pointer;font-size:11px;font-weight:600;white-space:nowrap">
+                    ↩ Undo last pin
+                </button>
+                @endif
             </div>
 
             <div class="sd-comparison-grid">
@@ -167,20 +162,20 @@
                     <div class="sd-image-wrapper">
                         <img src="{{ $this->previewImageAUrl }}" alt="Image A">
                         @foreach($zones as $i => $zone)
-                        <div class="sd-zone-marker"
-                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%;width:calc({{ $zone['radius_percent'] * 2 }}%);height:calc({{ $zone['radius_percent'] * 2 }}%)">
+                        <div class="sd-pin-marker"
+                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%">
                             {{ $i + 1 }}
                         </div>
                         @endforeach
                     </div>
                 </div>
                 <div class="sd-comparison-panel mark-target">
-                    <div class="sd-comparison-label">Image B — Tap here to mark ✦</div>
+                    <div class="sd-comparison-label">Image B — Click here to add pins ✦</div>
                     <div class="sd-image-wrapper" x-ref="imageWrapper" x-on:click="handleImageClick($event)">
                         <img src="{{ $this->previewImageBUrl }}" x-ref="image" alt="Image B">
                         @foreach($zones as $i => $zone)
-                        <div class="sd-zone-marker"
-                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%;width:calc({{ $zone['radius_percent'] * 2 }}%);height:calc({{ $zone['radius_percent'] * 2 }}%)">
+                        <div class="sd-pin-marker"
+                             style="left:{{ $zone['x_percent'] }}%;top:{{ $zone['y_percent'] }}%">
                             {{ $i + 1 }}
                         </div>
                         @endforeach
@@ -189,47 +184,21 @@
             </div>
             @else
             <div style="padding:32px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px;margin-top:20px">
-                Attach both Image A and Image B above to show the comparison grid and mark differences.
+                Attach both Image A and Image B above to show the comparison grid and add pins.
             </div>
             @endif
 
-            {{-- Manual zone entry --}}
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin:20px 0 16px">
-                <div class="sd-field">
-                    <label class="sd-label" style="font-size:10px">X Position (%)</label>
-                    <input wire:model="newZoneX" type="number" class="sd-input" min="0" max="100" step="0.1" placeholder="50">
-                </div>
-                <div class="sd-field">
-                    <label class="sd-label" style="font-size:10px">Y Position (%)</label>
-                    <input wire:model="newZoneY" type="number" class="sd-input" min="0" max="100" step="0.1" placeholder="50">
-                </div>
-                <div class="sd-field">
-                    <label class="sd-label" style="font-size:10px">Label</label>
-                    <input wire:model="newZoneLabel" type="text" class="sd-input" placeholder="e.g. Missing bird">
-                </div>
-                <div class="sd-field">
-                    <label class="sd-label" style="font-size:10px;visibility:hidden">_</label>
-                    <button type="button" wire:click="addZone" style="height:36px;padding:0 16px;border-radius:8px;background:rgba(74,124,89,.2);color:#6FA882;border:1px solid rgba(74,124,89,.35);cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap">
-                        + Add Zone
-                    </button>
-                </div>
-            </div>
-
-            {{-- Zones list --}}
+            {{-- Pins list --}}
             @forelse($zones as $i => $zone)
-            <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 1fr auto;gap:10px;align-items:center;padding:8px 12px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-bottom:6px">
-                <div style="width:28px;height:28px;border-radius:50%;border:2px solid #F2CB5A;background:rgba(212,160,23,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#F2CB5A">{{ $i + 1 }}</div>
-                <div>
-                    <div style="color:var(--cms-text);font-size:12px;font-weight:600">{{ $zone['label'] ?: 'Zone '.($i+1) }}</div>
-                </div>
-                <div style="font-size:11px;color:var(--cms-text-muted)">X: {{ $zone['x_percent'] }}%</div>
-                <div style="font-size:11px;color:var(--cms-text-muted)">Y: {{ $zone['y_percent'] }}%</div>
-                <div style="font-size:11px;color:var(--cms-text-muted)">R: {{ $zone['radius_percent'] }}%</div>
-                <button type="button" wire:click="removeZone({{ $i }})" style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:18px;padding:0 4px">×</button>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cms-surface);border:1px solid var(--cms-border);border-radius:8px;margin-top:10px">
+                <div style="width:28px;height:28px;border-radius:50%;border:2px solid #F2CB5A;background:rgba(212,160,23,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#F2CB5A;flex-shrink:0">{{ $i + 1 }}</div>
+                <div style="flex:1;color:var(--cms-text);font-size:13px;font-weight:600">Difference {{ $i + 1 }}</div>
+                <button type="button" wire:click="removeZone({{ $i }})" title="Remove pin"
+                        style="background:none;border:none;color:var(--cms-text-muted);cursor:pointer;font-size:20px;line-height:1;padding:0 4px">×</button>
             </div>
             @empty
-            <div style="padding:20px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
-                No zones marked yet. Click on Image B in the comparison grid or use the form above.
+            <div style="padding:20px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px;margin-top:16px">
+                No pins yet. Click on Image B to mark each difference.
             </div>
             @endforelse
         </div>
@@ -245,13 +214,7 @@
 
     <script>
     document.addEventListener('alpine:init', () => {
-        Alpine.data('zoneMarker', (initialZones, initialRadius) => ({
-            zones: initialZones || [],
-
-            get radius() {
-                return parseFloat(document.querySelector('[wire\\:model="newZoneRadius"]')?.value || initialRadius || 5);
-            },
-
+        Alpine.data('zoneMarker', () => ({
             handleImageClick(e) {
                 const img = this.$refs.image;
                 if (!img) return;

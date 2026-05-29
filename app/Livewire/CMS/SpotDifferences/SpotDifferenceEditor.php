@@ -19,6 +19,9 @@ class SpotDifferenceEditor extends Component
     use CoercesNumericFormFields;
     use LogsFileUploads, UsesPortalContext, ValidatesOnlyChangedOnEdit, WithFileUploads;
 
+    /** Default tap target radius (% of image width) — hidden from CMS, used for mobile hit detection. */
+    public const DEFAULT_PIN_RADIUS = 7.0;
+
     public ?SpotDifference $activity = null;
 
     public bool $isEdit = false;
@@ -53,17 +56,8 @@ class SpotDifferenceEditor extends Component
 
     public $image_b_file = null;
 
-    // Difference zones (marked on the image)
+    // Difference pins (marked on Image B)
     public array $zones = [];
-
-    // New zone form
-    public float $newZoneX = 50.0;
-
-    public float $newZoneY = 50.0;
-
-    public float $newZoneRadius = 5.0;
-
-    public string $newZoneLabel = '';
 
     public function mount(?int $id = null): void
     {
@@ -92,14 +86,45 @@ class SpotDifferenceEditor extends Component
         $this->time_limit_seconds = $a->time_limit_seconds;
         $this->total_differences = $a->total_differences;
 
-        $this->zones = $a->zones->map(fn ($z) => [
-            'id' => $z->id,
-            'x_percent' => $z->x_percent,
-            'y_percent' => $z->y_percent,
-            'radius_percent' => $z->radius_percent,
-            'label' => $z->label ?? '',
-            'order_index' => $z->order_index,
-        ])->toArray();
+        $this->zones = $a->zones
+            ->sortBy('order_index')
+            ->values()
+            ->map(fn ($z, $i) => $this->formatZone([
+                'id' => $z->id,
+                'x_percent' => $z->x_percent,
+                'y_percent' => $z->y_percent,
+                'radius_percent' => $z->radius_percent,
+                'label' => $z->label,
+                'order_index' => $i,
+            ], $i))
+            ->toArray();
+    }
+
+    protected function formatZone(array $zone, int $index): array
+    {
+        return [
+            'id' => $zone['id'] ?? null,
+            'x_percent' => (float) $zone['x_percent'],
+            'y_percent' => (float) $zone['y_percent'],
+            'radius_percent' => self::DEFAULT_PIN_RADIUS,
+            'label' => $zone['label'] ?? $this->defaultPinLabel($index),
+            'order_index' => $index,
+        ];
+    }
+
+    protected function defaultPinLabel(int $index): string
+    {
+        return 'Difference '.($index + 1);
+    }
+
+    protected function reindexZones(): void
+    {
+        foreach ($this->zones as $i => &$zone) {
+            $zone['order_index'] = $i;
+            $zone['label'] = $this->defaultPinLabel($i);
+        }
+        unset($zone);
+        $this->total_differences = count($this->zones);
     }
 
     #[Computed]
@@ -142,42 +167,39 @@ class SpotDifferenceEditor extends Component
         return $this->previewImageAUrl !== null && $this->previewImageBUrl !== null;
     }
 
-    public function addZone(): void
-    {
-        $this->zones[] = [
-            'id' => null,
-            'x_percent' => $this->newZoneX,
-            'y_percent' => $this->newZoneY,
-            'radius_percent' => $this->newZoneRadius,
-            'label' => $this->newZoneLabel,
-            'order_index' => count($this->zones),
-        ];
-        $this->newZoneLabel = '';
-        $this->total_differences = count($this->zones);
-    }
-
     public function addZoneFromClick(float $x, float $y): void
     {
-        $this->zones[] = [
+        $index = count($this->zones);
+        $this->zones[] = $this->formatZone([
             'id' => null,
             'x_percent' => round($x, 2),
             'y_percent' => round($y, 2),
-            'radius_percent' => $this->newZoneRadius,
-            'label' => $this->newZoneLabel,
-            'order_index' => count($this->zones),
-        ];
-        $this->newZoneLabel = '';
+            'radius_percent' => self::DEFAULT_PIN_RADIUS,
+            'label' => null,
+            'order_index' => $index,
+        ], $index);
         $this->total_differences = count($this->zones);
+    }
+
+    public function undoLastZone(): void
+    {
+        if ($this->zones === []) {
+            return;
+        }
+
+        array_pop($this->zones);
+        $this->reindexZones();
     }
 
     public function removeZone(int $index): void
     {
+        if (! isset($this->zones[$index])) {
+            return;
+        }
+
         unset($this->zones[$index]);
         $this->zones = array_values($this->zones);
-        foreach ($this->zones as $i => &$z) {
-            $z['order_index'] = $i;
-        }
-        $this->total_differences = count($this->zones);
+        $this->reindexZones();
     }
 
     protected function rules(): array
@@ -255,8 +277,8 @@ class SpotDifferenceEditor extends Component
                     [
                         'x_percent' => $z['x_percent'],
                         'y_percent' => $z['y_percent'],
-                        'radius_percent' => $z['radius_percent'],
-                        'label' => $z['label'] ?: null,
+                        'radius_percent' => self::DEFAULT_PIN_RADIUS,
+                        'label' => $this->defaultPinLabel($i),
                         'order_index' => $i,
                     ]
                 );
