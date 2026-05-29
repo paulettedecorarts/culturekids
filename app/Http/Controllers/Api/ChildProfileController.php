@@ -113,8 +113,7 @@ class ChildProfileController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $profile = ChildProfile::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        $profile = ChildProfileAccess::findForUserOrFail($request->user(), (int) $id);
 
         return response()->json($profile);
     }
@@ -124,8 +123,7 @@ class ChildProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $profile = ChildProfile::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        $profile = ChildProfileAccess::findForUserOrFail($request->user(), (int) $id);
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
@@ -155,8 +153,12 @@ class ChildProfileController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $profile = ChildProfile::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        $profile = ChildProfileAccess::findForUserOrFail($request->user(), (int) $id);
+
+        // Only parents who own the profile may delete (not child login accounts).
+        if ((int) $profile->user_id !== (int) $request->user()->id) {
+            return response()->json(['message' => 'Only the parent account can delete this profile.'], 403);
+        }
 
         // Delete the child's user account if it exists
         if ($profile->child_user_id) {

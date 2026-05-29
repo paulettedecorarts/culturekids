@@ -306,9 +306,9 @@ class MazeEditor extends Component
             'end_position' => $this->end_position,
             'collectibles' => $this->collectibles ?: null,
             'time_limit_seconds' => $this->time_limit_seconds ?: null,
-                'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
-                'metadata' => $this->metadata ?: null,
-            ]);
+            'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
+            'metadata' => $this->metadata ?: null,
+        ]);
 
         if (! $maze->exists) {
             $maze->saveQuietly();

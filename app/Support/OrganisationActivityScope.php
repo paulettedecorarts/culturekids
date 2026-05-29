@@ -20,10 +20,7 @@ final class OrganisationActivityScope
      */
     public static function withIdentityExtracts(Builder $query, ?User $user): Builder
     {
-        if (! $user?->organisation_id) {
-            return $query;
-        }
-
+        // Always use JSON path extracts — cheap on DB, avoids loading multi-MB metadata blobs.
         return $query->addSelect(ActivityBundleMetadataExtract::selectExpressions());
     }
 
