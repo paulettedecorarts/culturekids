@@ -29,6 +29,11 @@ class PuzzleGenerationService
             $cols
         );
 
+        $expected = $rows * $cols;
+        if (count($gen['piece_paths']) !== $expected || count(array_unique($gen['piece_paths'])) !== $expected) {
+            throw new \RuntimeException('Generated tile paths are incomplete or duplicated.');
+        }
+
         $this->persistGeneration($activity, $gen);
 
         return $gen;
@@ -73,7 +78,9 @@ class PuzzleGenerationService
             'generating' => true,
             'grid' => ['rows' => $rows, 'cols' => $cols],
             'pieces' => $rows * $cols,
+            'piece_paths' => [],
         ]);
+        unset($puzzleMeta['generation_error']);
 
         $metadata = is_array($activity->metadata) ? $activity->metadata : [];
         $metadata['puzzle'] = $puzzleMeta;

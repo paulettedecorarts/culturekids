@@ -35,6 +35,40 @@ class JigsawPuzzleGeneratorTest extends TestCase
         $this->assertSame([10, 10], $g->gridDimensions(100, JigsawPuzzleGenerator::ORIENTATION_SQUARE));
     }
 
+    public function test_tile_bounds_cover_full_image_without_gaps(): void
+    {
+        $g = new JigsawPuzzleGenerator;
+        $ref = new \ReflectionClass($g);
+        $method = $ref->getMethod('tileBounds');
+        $method->setAccessible(true);
+
+        $srcW = 1000;
+        $srcH = 800;
+        $rows = 4;
+        $cols = 5;
+        for ($r = 0; $r < $rows; $r++) {
+            $rowWidth = 0;
+            for ($c = 0; $c < $cols; $c++) {
+                [$x, $y, $w, $h] = $method->invoke($g, $srcW, $srcH, $rows, $cols, $r, $c);
+                $rowWidth += $w;
+                if ($r === 0 && $c === 0) {
+                    $this->assertSame(0, $x);
+                    $this->assertSame(0, $y);
+                }
+            }
+            $this->assertSame($srcW, $rowWidth);
+        }
+
+        for ($c = 0; $c < $cols; $c++) {
+            $colHeight = 0;
+            for ($r = 0; $r < $rows; $r++) {
+                [, , , $h] = $method->invoke($g, $srcW, $srcH, $rows, $cols, $r, $c);
+                $colHeight += $h;
+            }
+            $this->assertSame($srcH, $colHeight);
+        }
+    }
+
     public function test_validate_grid_and_infer_orientation(): void
     {
         $this->assertSame([4, 3], JigsawPuzzleGenerator::validateGrid(4, 3));

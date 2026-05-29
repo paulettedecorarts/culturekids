@@ -107,21 +107,27 @@ class JigsawPuzzleGenerator
 
         $baseDir = 'jigsaw-puzzles/'.$activityId;
         $canonicalSource = $baseDir.'/source.png';
-        $piecesDir = $baseDir.'/pieces';
+        $piecesRoot = $baseDir.'/pieces';
 
         $disk->makeDirectory($baseDir);
-        $this->clearPiecesDirectory($disk, $piecesDir);
 
         $rewriteSource = $relativeUploadPath !== $canonicalSource;
         if ($rewriteSource) {
             imagealphablending($image, false);
             imagesavealpha($image, true);
             imagepng($image, $disk->path($canonicalSource), self::PNG_COMPRESSION);
+            imagedestroy($image);
+            $image = $this->loadImage($disk->path($canonicalSource));
+            if ($image === false) {
+                throw new RuntimeException('Could not reload normalized source image.');
+            }
+            $srcW = imagesx($image);
+            $srcH = imagesy($image);
         }
 
-        $pieceW = (int) floor($srcW / $cols);
-        $pieceH = (int) floor($srcH / $rows);
-
+        // Fresh folder per run so URLs change (avoids CDN/browser serving stale 001.png, etc.).
+        $this->wipePiecesRoot($disk, $piecesRoot);
+        $piecesDir = $piecesRoot.'/'.now()->format('YmdHis');
         $disk->makeDirectory($piecesDir);
 
         $piecePaths = [];
@@ -129,21 +135,23 @@ class JigsawPuzzleGenerator
         for ($r = 0; $r < $rows; $r++) {
             for ($c = 0; $c < $cols; $c++) {
                 $index++;
-                $x = $c * $pieceW;
-                $y = $r * $pieceH;
-                $w = ($c === $cols - 1) ? $srcW - $x : $pieceW;
-                $h = ($r === $rows - 1) ? $srcH - $y : $pieceH;
+                [$x, $y, $w, $h] = $this->tileBounds($srcW, $srcH, $rows, $cols, $r, $c);
+
+                if ($w < 1 || $h < 1) {
+                    imagedestroy($image);
+                    throw new RuntimeException('Invalid tile bounds for grid '.$rows.'×'.$cols.' on '.$srcW.'×'.$srcH.' image.');
+                }
 
                 $tile = imagecreatetruecolor($w, $h);
                 if ($tile === false) {
                     imagedestroy($image);
                     throw new RuntimeException('Could not create tile image.');
                 }
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
                 imagealphablending($tile, false);
                 imagesavealpha($tile, true);
-                $transparent = imagecolorallocatealpha($tile, 0, 0, 0, 127);
-                imagefill($tile, 0, 0, $transparent);
-                imagecopy($tile, $image, 0, 0, $x, $y, $w, $h);
+                imagecopyresampled($tile, $image, 0, 0, 0, 0, $w, $h, $x, $y, $w, $h);
 
                 $name = $piecesDir.'/'.sprintf('%03d.png', $index);
                 imagepng($tile, $disk->path($name), self::PNG_COMPRESSION);
@@ -153,6 +161,10 @@ class JigsawPuzzleGenerator
         }
 
         imagedestroy($image);
+
+        if (count($piecePaths) !== $pieceCount) {
+            throw new RuntimeException('Tile count mismatch after generation.');
+        }
 
         if ($rewriteSource && $relativeUploadPath !== $canonicalSource && $disk->exists($relativeUploadPath)) {
             $disk->delete($relativeUploadPath);
@@ -310,14 +322,25 @@ class JigsawPuzzleGenerator
     /**
      * @return resource|GdImage|false
      */
-    protected function clearPiecesDirectory($disk, string $piecesDir): void
+    /**
+     * Evenly divide the source image so every pixel is covered exactly once (no gaps/overlaps).
+     *
+     * @return array{0: int, 1: int, 2: int, 3: int}
+     */
+    protected function tileBounds(int $srcW, int $srcH, int $rows, int $cols, int $row, int $col): array
     {
-        if (! $disk->exists($piecesDir)) {
-            return;
-        }
+        $x = (int) round($col * $srcW / $cols);
+        $y = (int) round($row * $srcH / $rows);
+        $x2 = (int) round(($col + 1) * $srcW / $cols);
+        $y2 = (int) round(($row + 1) * $srcH / $rows);
 
-        foreach ($disk->files($piecesDir) as $file) {
-            $disk->delete($file);
+        return [$x, $y, max(1, $x2 - $x), max(1, $y2 - $y)];
+    }
+
+    protected function wipePiecesRoot($disk, string $piecesRoot): void
+    {
+        if ($disk->exists($piecesRoot)) {
+            $disk->deleteDirectory($piecesRoot);
         }
     }
 

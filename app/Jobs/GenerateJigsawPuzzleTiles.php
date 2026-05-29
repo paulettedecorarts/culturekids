@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -18,7 +19,17 @@ class GenerateJigsawPuzzleTiles implements ShouldQueue
 
     public int $timeout = 600;
 
-    public int $tries = 2;
+    public int $tries = 1;
+
+    /**
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping('puzzle-tiles-'.$this->activityId))->dontRelease(),
+        ];
+    }
 
     public function __construct(
         public int $activityId,
