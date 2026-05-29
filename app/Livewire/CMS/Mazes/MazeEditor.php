@@ -118,7 +118,26 @@ class MazeEditor extends Component
 
         if (empty($this->grid)) {
             $this->initGrid();
+        } else {
+            $this->normalizeGridDimensions();
         }
+    }
+
+    protected function normalizeGridDimensions(): void
+    {
+        $rows = max(5, min(20, (int) $this->grid_rows));
+        $cols = max(5, min(20, (int) $this->grid_cols));
+        $this->grid_rows = $rows;
+        $this->grid_cols = $cols;
+
+        $normalized = [];
+        for ($r = 0; $r < $rows; $r++) {
+            $normalized[$r] = [];
+            for ($c = 0; $c < $cols; $c++) {
+                $normalized[$r][$c] = (int) ($this->grid[$r][$c] ?? 1);
+            }
+        }
+        $this->grid = $normalized;
     }
 
     protected function initGrid(): void
@@ -153,13 +172,11 @@ class MazeEditor extends Component
     public function handleCellClick(int $row, int $col): void
     {
         if ($this->gridMode === 'start') {
-            if (($this->grid[$row][$col] ?? 1) === 0) {
-                $this->start_position = ['row' => $row, 'col' => $col];
-            }
+            $this->grid[$row][$col] = 0;
+            $this->start_position = ['row' => $row, 'col' => $col];
         } elseif ($this->gridMode === 'end') {
-            if (($this->grid[$row][$col] ?? 1) === 0) {
-                $this->end_position = ['row' => $row, 'col' => $col];
-            }
+            $this->grid[$row][$col] = 0;
+            $this->end_position = ['row' => $row, 'col' => $col];
         } else {
             // toggle mode — don't toggle start/end cells
             if (($row === $this->start_position['row'] && $col === $this->start_position['col']) ||
@@ -186,6 +203,23 @@ class MazeEditor extends Component
                 $this->grid[$r][$c] = 0;
             }
         }
+    }
+
+    public function wallCount(): int
+    {
+        $count = 0;
+        foreach ($this->grid as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            foreach ($row as $cell) {
+                if ((int) $cell === 1) {
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
     }
 
     public function addCollectible(): void

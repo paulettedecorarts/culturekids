@@ -219,31 +219,24 @@
         </div>
         @endif
 
-        {{-- ── SECTION 3: Grid Builder ── --}}
-        <div class="me-card" x-data="mazeBuilder(@js($grid), @js($grid_rows), @js($grid_cols), @js($start_position), @js($end_position), @js($collectibles))">
+        {{-- ── SECTION 3: Grid Builder (Livewire — reliable with wire:navigate) ── --}}
+        <div class="me-card" wire:key="maze-grid-builder-{{ $grid_rows }}-{{ $grid_cols }}">
 
             <div class="me-section-title">Maze Grid Builder</div>
 
-            {{-- Hidden inputs to sync back to Livewire on save --}}
-            <input type="hidden" name="grid_data" x-ref="gridInput">
-            <input type="hidden" name="start_data" x-ref="startInput">
-            <input type="hidden" name="end_data" x-ref="endInput">
-
-            {{-- Grid size controls --}}
             <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap">
                 <div class="me-field" style="width:100px">
                     <label class="me-label">Rows</label>
-                    <input wire:model="grid_rows" type="number" class="me-input" min="5" max="20" x-on:change="reinit($event.target.value, cols)">
+                    <input wire:model="grid_rows" type="number" class="me-input" min="5" max="20" wire:change="resizeGrid">
                 </div>
                 <div class="me-field" style="width:100px">
                     <label class="me-label">Cols</label>
-                    <input wire:model="grid_cols" type="number" class="me-input" min="5" max="20" x-on:change="reinit(rows, $event.target.value)">
+                    <input wire:model="grid_cols" type="number" class="me-input" min="5" max="20" wire:change="resizeGrid">
                 </div>
-                <button type="button" x-on:click="fillWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Fill All Walls</button>
-                <button type="button" x-on:click="clearWalls()" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Clear All Walls</button>
+                <button type="button" wire:click="fillAllWalls" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Fill All Walls</button>
+                <button type="button" wire:click="clearAllWalls" style="padding:9px 16px;border-radius:8px;background:var(--cms-input-bg);color:var(--cms-text-muted);border:1px solid var(--cms-input-border);cursor:pointer;font-size:12px">Clear All Walls</button>
             </div>
 
-            {{-- Legend --}}
             <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
                 <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:var(--cms-input-bg);border:1px solid var(--cms-border)"></div> Wall</div>
                 <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:var(--cms-surface-hover);border:1px solid var(--cms-border)"></div> Path</div>
@@ -251,200 +244,65 @@
                 <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--cms-text-muted)"><div style="width:16px;height:16px;border-radius:3px;background:rgba(196,75,43,.6)"></div> 🔴 End</div>
             </div>
 
-            {{-- Mode buttons --}}
             <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-                <button type="button" x-on:click="mode='toggle'"
-                    :style="mode==='toggle' ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
-                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
+                <button type="button" wire:click="setGridMode('toggle')"
+                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'toggle' ? 'background:rgba(212,160,23,.3);color:#F2CB5A;border-color:rgba(212,160,23,.5)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     ✏️ Draw/Erase Walls
                 </button>
-                <button type="button" x-on:click="mode='start'"
-                    :style="mode==='start' ? 'background:rgba(74,124,89,.4);color:#6FA882;border-color:rgba(74,124,89,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
-                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
+                <button type="button" wire:click="setGridMode('start')"
+                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'start' ? 'background:rgba(74,124,89,.4);color:#6FA882;border-color:rgba(74,124,89,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     🟢 Set Start
                 </button>
-                <button type="button" x-on:click="mode='end'"
-                    :style="mode==='end' ? 'background:rgba(196,75,43,.4);color:#E06444;border-color:rgba(196,75,43,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)'"
-                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer">
+                <button type="button" wire:click="setGridMode('end')"
+                    style="padding:7px 14px;border-radius:8px;border:1px solid;font-size:11px;font-weight:600;cursor:pointer;{{ $gridMode === 'end' ? 'background:rgba(196,75,43,.4);color:#E06444;border-color:rgba(196,75,43,.6)' : 'background:var(--cms-surface-raised);color:var(--cms-text-muted);border-color:var(--cms-border)' }}">
                     🔴 Set End
                 </button>
             </div>
 
-            {{-- Canvas grid --}}
             <div style="overflow-x:auto;padding-bottom:8px">
-                <canvas x-ref="canvas"
-                    x-on:click="handleClick($event)"
-                    x-on:mousemove="handleHover($event)"
-                    style="border-radius:8px;cursor:crosshair;display:block">
-                </canvas>
+                @if(count($grid) > 0)
+                    <div class="maze-grid" style="grid-template-columns:repeat({{ $grid_cols }}, 28px)">
+                        @for($r = 0; $r < $grid_rows; $r++)
+                            @for($c = 0; $c < $grid_cols; $c++)
+                                @php
+                                    $cell = (int) ($grid[$r][$c] ?? 0);
+                                    $isStart = ($start_position['row'] ?? -1) === $r && ($start_position['col'] ?? -1) === $c;
+                                    $isEnd = ($end_position['row'] ?? -1) === $r && ($end_position['col'] ?? -1) === $c;
+                                    $collectibleHere = collect($collectibles)->first(fn ($col) => (int) ($col['row'] ?? -1) === $r && (int) ($col['col'] ?? -1) === $c);
+                                    $cellClass = $isStart ? 'start' : ($isEnd ? 'end' : ($collectibleHere ? 'collectible' : ($cell === 1 ? 'wall' : 'path')));
+                                @endphp
+                                <button type="button"
+                                    wire:click="handleCellClick({{ $r }}, {{ $c }})"
+                                    wire:loading.attr="disabled"
+                                    class="maze-cell {{ $cellClass }}"
+                                    title="Row {{ $r }}, Col {{ $c }}"
+                                    aria-label="Cell {{ $r }}, {{ $c }}">
+                                    @if($isStart)
+                                        🟢
+                                    @elseif($isEnd)
+                                        🔴
+                                    @elseif($collectibleHere)
+                                        {{ $collectibleHere['emoji'] ?? '💎' }}
+                                    @endif
+                                </button>
+                            @endfor
+                        @endfor
+                    </div>
+                @else
+                    <div style="padding:24px;text-align:center;color:var(--cms-text-muted);font-size:12px;border:1px dashed var(--cms-border);border-radius:8px">
+                        Grid not initialized —
+                        <button type="button" wire:click="resizeGrid" style="background:none;border:none;color:#F2CB5A;cursor:pointer;font-weight:700;text-decoration:underline">click to build</button>
+                    </div>
+                @endif
             </div>
 
             <div style="margin-top:12px;font-size:11px;color:var(--cms-text-muted)">
-                Grid: <span x-text="rows + '×' + cols"></span> •
-                Start: (<span x-text="startPos.row"></span>, <span x-text="startPos.col"></span>) •
-                End: (<span x-text="endPos.row"></span>, <span x-text="endPos.col"></span>) •
-                Walls: <span x-text="countWalls()"></span>
+                Grid: {{ $grid_rows }}×{{ $grid_cols }} •
+                Start: ({{ $start_position['row'] ?? '—' }}, {{ $start_position['col'] ?? '—' }}) •
+                End: ({{ $end_position['row'] ?? '—' }}, {{ $end_position['col'] ?? '—' }}) •
+                Walls: {{ $this->wallCount() }}
             </div>
         </div>
-
-        <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('mazeBuilder', (initialGrid, initialRows, initialCols, initialStart, initialEnd, initialCollectibles) => ({
-                grid: [],
-                rows: initialRows,
-                cols: initialCols,
-                startPos: initialStart || { row: 0, col: 1 },
-                endPos: initialEnd || { row: initialRows - 1, col: initialCols - 2 },
-                collectibles: initialCollectibles || [],
-                mode: 'toggle',
-                cellSize: 30,
-                hoverCell: null,
-
-                init() {
-                    // Use existing grid or build default
-                    if (initialGrid && initialGrid.length > 0) {
-                        this.grid = initialGrid;
-                    } else {
-                        this.buildDefaultGrid();
-                    }
-                    this.$nextTick(() => this.draw());
-                },
-
-                buildDefaultGrid() {
-                    this.grid = [];
-                    for (let r = 0; r < this.rows; r++) {
-                        this.grid[r] = [];
-                        for (let c = 0; c < this.cols; c++) {
-                            // Border = wall, interior = path
-                            this.grid[r][c] = (r === 0 || r === this.rows-1 || c === 0 || c === this.cols-1) ? 1 : 0;
-                        }
-                    }
-                    this.startPos = { row: 0, col: 1 };
-                    this.endPos   = { row: this.rows - 1, col: this.cols - 2 };
-                },
-
-                reinit(newRows, newCols) {
-                    this.rows = parseInt(newRows) || this.rows;
-                    this.cols = parseInt(newCols) || this.cols;
-                    this.buildDefaultGrid();
-                    this.draw();
-                },
-
-                fillWalls() {
-                    for (let r = 0; r < this.rows; r++)
-                        for (let c = 0; c < this.cols; c++)
-                            this.grid[r][c] = 1;
-                    this.draw();
-                },
-
-                clearWalls() {
-                    for (let r = 0; r < this.rows; r++)
-                        for (let c = 0; c < this.cols; c++)
-                            this.grid[r][c] = 0;
-                    this.draw();
-                },
-
-                countWalls() {
-                    return this.grid.flat().filter(v => v === 1).length;
-                },
-
-                getCellFromEvent(e) {
-                    const canvas = this.$refs.canvas;
-                    const rect = canvas.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const col = Math.floor(x / this.cellSize);
-                    const row = Math.floor(y / this.cellSize);
-                    if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
-                        return { row, col };
-                    }
-                    return null;
-                },
-
-                handleClick(e) {
-                    const cell = this.getCellFromEvent(e);
-                    if (!cell) return;
-                    const { row, col } = cell;
-
-                    if (this.mode === 'start') {
-                        this.startPos = { row, col };
-                        // Make sure start cell is a path
-                        this.grid[row][col] = 0;
-                    } else if (this.mode === 'end') {
-                        this.endPos = { row, col };
-                        this.grid[row][col] = 0;
-                    } else {
-                        // Don't toggle start/end
-                        if ((row === this.startPos.row && col === this.startPos.col) ||
-                            (row === this.endPos.row && col === this.endPos.col)) return;
-                        this.grid[row][col] = this.grid[row][col] ? 0 : 1;
-                    }
-
-                    this.syncToLivewire();
-                    this.draw();
-                },
-
-                handleHover(e) {
-                    const cell = this.getCellFromEvent(e);
-                    this.hoverCell = cell;
-                    this.draw();
-                },
-
-                syncToLivewire() {
-                    // Sync grid state to Livewire before form submit
-                    @this.set('grid', this.grid);
-                    @this.set('start_position', this.startPos);
-                    @this.set('end_position', this.endPos);
-                },
-
-                draw() {
-                    const canvas = this.$refs.canvas;
-                    if (!canvas) return;
-                    const cs = this.cellSize;
-                    canvas.width  = this.cols * cs;
-                    canvas.height = this.rows * cs;
-                    const ctx = canvas.getContext('2d');
-
-                    for (let r = 0; r < this.rows; r++) {
-                        for (let c = 0; c < this.cols; c++) {
-                            const x = c * cs;
-                            const y = r * cs;
-                            const isStart = r === this.startPos.row && c === this.startPos.col;
-                            const isEnd   = r === this.endPos.row   && c === this.endPos.col;
-                            const isHover = this.hoverCell && this.hoverCell.row === r && this.hoverCell.col === c;
-                            const isWall  = this.grid[r]?.[c] === 1;
-                            const collectible = this.collectibles.find(col => col.row === r && col.col === c);
-
-                            // Background
-                            if (isStart)       ctx.fillStyle = 'rgba(74,124,89,0.8)';
-                            else if (isEnd)    ctx.fillStyle = 'rgba(196,75,43,0.8)';
-                            else if (collectible) ctx.fillStyle = 'rgba(212,160,23,0.5)';
-                            else if (isWall)   ctx.fillStyle = '#1a2744';
-                            else               ctx.fillStyle = isHover ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.07)';
-
-                            ctx.fillRect(x + 1, y + 1, cs - 2, cs - 2);
-
-                            // Border
-                            ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-                            ctx.lineWidth = 0.5;
-                            ctx.strokeRect(x + 1, y + 1, cs - 2, cs - 2);
-
-                            // Emoji labels
-                            if (isStart || isEnd || collectible) {
-                                ctx.font = `${cs * 0.55}px serif`;
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                ctx.fillText(
-                                    isStart ? '🟢' : (isEnd ? '🔴' : (collectible?.emoji || '💎')),
-                                    x + cs / 2, y + cs / 2
-                                );
-                            }
-                        }
-                    }
-                }
-            }));
-        });
-        </script>
 
         {{-- ── SECTION 4: Collectibles (for collect_items type) ── --}}
         @if($maze_type === 'collect_items')
