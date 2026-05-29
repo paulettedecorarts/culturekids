@@ -77,6 +77,9 @@ class MazeEditor extends Component
 
     public $visibility_radius = 3;
 
+    /** @var array<string, mixed> */
+    public array $metadata = [];
+
     // File uploads
     public $cover_image_file = null;
 
@@ -116,6 +119,7 @@ class MazeEditor extends Component
         $this->collectibles = $m->collectibles ?? [];
         $this->time_limit_seconds = $m->time_limit_seconds;
         $this->visibility_radius = $m->visibility_radius ?? 3;
+        $this->metadata = is_array($m->metadata) ? $m->metadata : [];
 
         if (empty($this->grid)) {
             $this->initGrid();
@@ -297,8 +301,9 @@ class MazeEditor extends Component
             'end_position' => $this->end_position,
             'collectibles' => $this->collectibles ?: null,
             'time_limit_seconds' => $this->time_limit_seconds ?: null,
-            'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
-        ]);
+                'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
+                'metadata' => $this->metadata ?: null,
+            ]);
 
         if (! $maze->exists) {
             $maze->saveQuietly();

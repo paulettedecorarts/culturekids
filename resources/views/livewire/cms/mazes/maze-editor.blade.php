@@ -127,23 +127,31 @@
         </div>
 
         {{-- ── SECTION 2: Type-specific Settings ── --}}
-        @if($maze_type === 'timed')
         <div class="me-card">
-            <div class="me-section-title">⏱️ Timed Settings</div>
+            <div class="me-section-title">⏱️ Time limit</div>
+            <p style="font-size:12px;color:var(--cms-text-muted);margin:0 0 14px;line-height:1.5">
+                Set a time limit here, then choose maze type <strong>Timed Maze</strong> so the child app shows a countdown.
+            </p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:500px">
                 <div class="me-field">
-                    <label class="me-label">Time Limit (seconds) <span style="color:#ff8c8c">*</span></label>
-                    <input wire:model="time_limit_seconds" type="number" class="me-input" min="10" placeholder="e.g. 60">
-                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Child must complete the maze within this time</div>
+                    <label class="me-label">Time limit (seconds)</label>
+                    <input wire:model="time_limit_seconds" type="number" class="me-input" min="10" max="600" placeholder="e.g. 60">
+                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Leave empty for no timer</div>
                 </div>
+                @if($maze_type === 'timed')
                 <div class="me-field">
-                    <label class="me-label">Bonus Threshold (seconds)</label>
+                    <label class="me-label">Bonus threshold (seconds)</label>
                     <input wire:model="metadata.timed.bonus_threshold" type="number" class="me-input" min="5" placeholder="e.g. 30">
-                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Complete under this time to earn bonus stars</div>
+                    <div style="font-size:10px;color:var(--cms-text-muted);margin-top:4px">Optional: finish under this time for bonus stars (app support coming)</div>
                 </div>
+                @endif
             </div>
+            @if($maze_type !== 'timed' && $time_limit_seconds)
+            <div style="margin-top:10px;font-size:11px;color:#F2CB5A;font-weight:600">
+                You entered a time limit but the type is not “Timed Maze” — switch type to Timed so the app uses the countdown.
+            </div>
+            @endif
         </div>
-        @endif
 
         @if($maze_type === 'visibility')
         <div class="me-card">
