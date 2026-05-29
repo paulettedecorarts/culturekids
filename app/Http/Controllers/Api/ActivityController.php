@@ -9,11 +9,13 @@ use App\Models\LanguageActivity;
 use App\Models\Maze;
 use App\Models\SpotDifference;
 use App\Models\Tribe;
+use App\Models\WordSearch;
 use App\Services\OrganisationModuleResolver;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
 use App\Support\OrganisationActivityScope;
 use App\Support\SpotDifferenceApiSerializer;
+use App\Support\WordSearchApiSerializer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -276,6 +278,23 @@ class ActivityController extends Controller
             if ($spotDifference && $spotDifference->image_a_path && $spotDifference->image_b_path) {
                 $response['spot_difference_data'] = [
                     'spot_difference' => SpotDifferenceApiSerializer::toArray($spotDifference),
+                ];
+            }
+        }
+
+        if ($activity->type === 'word_search') {
+            $legacyId = (int) DB::table('activities')
+                ->where('id', $id)
+                ->where('type', 'word_search')
+                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_word_search_id')) AS UNSIGNED)"));
+
+            $wordSearch = $legacyId > 0
+                ? WordSearch::query()->find($legacyId)
+                : null;
+
+            if ($wordSearch && is_array($wordSearch->grid) && $wordSearch->grid !== []) {
+                $response['word_search_data'] = [
+                    'word_search' => WordSearchApiSerializer::toArray($wordSearch),
                 ];
             }
         }
