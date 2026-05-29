@@ -265,7 +265,9 @@ class MazeEditor extends Component
                 'visibility_radius' => in_array($this->maze_type, ['visibility']) ? $this->visibility_radius : null,
             ]);
 
-            $maze->save();
+            if (! $maze->exists) {
+                $maze->saveQuietly();
+            }
 
             foreach ([
                 'cover_image_file' => ['games/maze-covers', 'cover_image_path'],

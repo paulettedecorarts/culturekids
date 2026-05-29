@@ -15,6 +15,7 @@ use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
@@ -30,7 +31,19 @@ class ActivityController extends Controller
         $search = $request->query('search');
         $user = $request->user();
         
+        $listColumns = [
+            'id',
+            'tribe_id',
+            'title',
+            'type',
+            'age_range',
+            'star_points',
+            'description',
+            'is_published',
+        ];
+
         $query = Activity::query()
+            ->select($user?->organisation_id ? [...$listColumns, 'metadata'] : $listColumns)
             ->with('tribe:id,name,hero_emoji,hero_icon,color')
             ->where('is_published', true)
             ->orderBy('title');
@@ -148,13 +161,37 @@ class ActivityController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        
-        $activity = Activity::with([
-            'tribe:id,name,color,hero_emoji,hero_icon',
-            'flashcardSlides' => function ($q) {
-                $q->orderBy('order_index');
-            }
-        ])->findOrFail($id);
+
+        $type = Activity::query()->whereKey($id)->value('type');
+        if ($type === null) {
+            abort(404);
+        }
+
+        $baseColumns = [
+            'id',
+            'tribe_id',
+            'title',
+            'type',
+            'age_range',
+            'star_points',
+            'description',
+        ];
+        $select = in_array($type, ['puzzle', 'vocab_pack'], true)
+            ? [...$baseColumns, 'metadata']
+            : $baseColumns;
+
+        $activity = Activity::query()
+            ->select($select)
+            ->with('tribe:id,name,color,hero_emoji,hero_icon')
+            ->findOrFail($id);
+
+        if ($activity->type === 'flashcard') {
+            $activity->load([
+                'flashcardSlides' => function ($q) {
+                    $q->orderBy('order_index');
+                },
+            ]);
+        }
 
         app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $activity->type);
 
@@ -196,14 +233,15 @@ class ActivityController extends Controller
         }
 
         if ($activity->type === 'maze') {
-            $legacyId = data_get($activity->metadata, 'legacy_maze_id');
-            $maze = $legacyId ? Maze::query()->find($legacyId) : null;
-            $playable = $maze
-                ? MazeApiSerializer::toArray($maze)
-                : data_get($activity->metadata, 'maze');
+            $legacyId = (int) DB::table('activities')
+                ->where('id', $id)
+                ->where('type', 'maze')
+                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_maze_id')) AS UNSIGNED)"));
 
-            if (is_array($playable) && ! empty($playable['grid'])) {
-                $response['maze_data'] = ['maze' => $playable];
+            $maze = $legacyId > 0 ? Maze::query()->find($legacyId) : null;
+
+            if ($maze && is_array($maze->grid) && $maze->grid !== []) {
+                $response['maze_data'] = ['maze' => MazeApiSerializer::toArray($maze)];
             }
         }
 

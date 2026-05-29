@@ -57,10 +57,24 @@ class Maze extends Model
     protected static function booted(): void
     {
         static::saved(function (Maze $maze): void {
-            if (self::$syncingLegacyActivity) return;
-            self::$syncingLegacyActivity = true;
-            try { $maze->syncLegacyActivity(); }
-            finally { self::$syncingLegacyActivity = false; }
+            if (self::$syncingLegacyActivity) {
+                return;
+            }
+
+            $mazeId = (int) $maze->id;
+            dispatch(function () use ($mazeId): void {
+                $fresh = self::query()->find($mazeId);
+                if (! $fresh) {
+                    return;
+                }
+
+                self::$syncingLegacyActivity = true;
+                try {
+                    $fresh->syncLegacyActivity();
+                } finally {
+                    self::$syncingLegacyActivity = false;
+                }
+            })->afterResponse();
         });
 
         static::deleted(function (Maze $maze): void {
@@ -126,14 +140,16 @@ class Maze extends Model
 
     protected function syncLegacyActivity(): void
     {
+        // Keep activity metadata small (grid lives on mazes table). A full maze blob here
+        // slowed list endpoints and CMS saves enough to trigger gateway timeouts.
         $metadata = array_merge($this->metadata ?? [], [
             'source'          => 'maze_mirror',
             'legacy_maze_id'  => $this->id,
             'maze_type'       => $this->maze_type,
             'grid_rows'       => $this->grid_rows,
             'grid_cols'       => $this->grid_cols,
-            'maze'            => $this->toPlayableArray(),
         ]);
+        unset($metadata['maze']);
 
         $query = DB::table('activities')
             ->where('type', 'maze')
