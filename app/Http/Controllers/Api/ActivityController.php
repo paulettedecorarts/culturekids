@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Drawing;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
 use App\Models\SpotDifference;
 use App\Models\Tribe;
 use App\Models\WordSearch;
 use App\Services\OrganisationModuleResolver;
+use App\Support\DrawingApiSerializer;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
 use App\Support\OrganisationActivityScope;
@@ -295,6 +297,23 @@ class ActivityController extends Controller
             if ($wordSearch && is_array($wordSearch->grid) && $wordSearch->grid !== []) {
                 $response['word_search_data'] = [
                     'word_search' => WordSearchApiSerializer::toArray($wordSearch),
+                ];
+            }
+        }
+
+        if ($activity->type === 'drawing_kit') {
+            $legacyId = (int) DB::table('activities')
+                ->where('id', $id)
+                ->where('type', 'drawing_kit')
+                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_drawing_id')) AS UNSIGNED)"));
+
+            $drawing = $legacyId > 0
+                ? Drawing::query()->find($legacyId)
+                : null;
+
+            if ($drawing) {
+                $response['drawing_data'] = [
+                    'drawing' => DrawingApiSerializer::toArray($drawing),
                 ];
             }
         }
