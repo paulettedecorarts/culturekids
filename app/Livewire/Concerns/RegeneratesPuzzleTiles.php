@@ -75,7 +75,7 @@ trait RegeneratesPuzzleTiles
         return ['rows' => $rows, 'cols' => $cols];
     }
 
-    public function regenerateTiles(): void
+    public function regenerateTiles()
     {
         if (! property_exists($this, 'activity') || ! $this->activity instanceof Activity) {
             return;
