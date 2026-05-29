@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Models\Activity;
 use App\Models\OrganisationContentDecision;
 use App\Models\User;
+use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
