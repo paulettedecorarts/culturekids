@@ -8,6 +8,7 @@ use App\Models\ChildProfile;
 use App\Models\ReadingProgress;
 use App\Models\Comic;
 use App\Services\ChildContentProgressService;
+use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -47,10 +48,10 @@ class ReadingProgressController extends Controller
         $totalPages = $comic->panels()->count();
 
         if ($request->filled('child_profile_id')) {
-            $child = ChildProfile::query()
-                ->where('id', $request->input('child_profile_id'))
-                ->where('user_id', $user->id)
-                ->firstOrFail();
+            $child = ChildProfileAccess::findForUserOrFail(
+                $user,
+                (int) $request->input('child_profile_id'),
+            );
 
             $unified = $this->progressService->upsertSession(
                 $user,

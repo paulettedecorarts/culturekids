@@ -8,6 +8,7 @@ use App\Models\ChildProfile;
 use App\Models\ProgressEvent;
 use App\Models\ReadingProgress;
 use App\Services\ChildContentProgressService;
+use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,8 +41,8 @@ class ProgressController extends Controller
         $skipped = [];
 
         foreach ($request->events as $event) {
-            $child = ChildProfile::where('id', $event['child_profile_id'])
-                ->where('user_id', $user->id)
+            $child = ChildProfileAccess::queryFor($user)
+                ->where('id', $event['child_profile_id'])
                 ->first();
 
             if (! $child) {
@@ -92,9 +93,7 @@ class ProgressController extends Controller
      */
     public function getChildProgress(Request $request, $childId)
     {
-        $child = ChildProfile::where('id', $childId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $child = ChildProfileAccess::findForUserOrFail($request->user(), (int) $childId);
 
         // Get completed activity IDs
         $completedActivityIds = ProgressEvent::where('child_profile_id', $childId)

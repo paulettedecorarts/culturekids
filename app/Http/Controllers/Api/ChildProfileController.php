@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChildProfile;
-use Illuminate\Http\Request;
+use App\Support\ChildProfileAccess;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
@@ -17,7 +17,7 @@ class ChildProfileController extends Controller
     {
         $user = $request->user();
         
-        $profiles = ChildProfile::where('user_id', $user->id)
+        $profiles = ChildProfileAccess::queryFor($user)
             ->orderBy('created_at', 'desc')
             ->get();
 

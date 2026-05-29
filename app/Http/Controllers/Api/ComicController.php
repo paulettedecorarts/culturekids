@@ -8,6 +8,7 @@ use App\Models\ChildProfile;
 use App\Models\Comic;
 use App\Models\ReadingProgress;
 use App\Services\ChildContentProgressService;
+use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use App\Support\PanelVocabTagSerializer;
 use Illuminate\Http\Request;
@@ -223,10 +224,10 @@ class ComicController extends Controller
         }
 
         if ($request->filled('child_profile_id')) {
-            $child = ChildProfile::query()
-                ->where('id', $request->input('child_profile_id'))
-                ->where('user_id', $user->id)
-                ->firstOrFail();
+            $child = ChildProfileAccess::findForUserOrFail(
+                $user,
+                (int) $request->input('child_profile_id'),
+            );
 
             $idempotencyKey = $request->input(
                 'idempotency_key',

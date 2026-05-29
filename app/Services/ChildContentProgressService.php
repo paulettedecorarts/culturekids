@@ -10,6 +10,7 @@ use App\Models\ProgressEvent;
 use App\Models\ReadingProgress;
 use App\Models\Song;
 use App\Models\User;
+use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -162,7 +163,7 @@ class ChildContentProgressService
 
     public function authorizeChild(User $user, ChildProfile $child): void
     {
-        if ((int) $child->user_id !== (int) $user->id) {
+        if (! ChildProfileAccess::canAccess($user, $child)) {
             throw new AuthorizationException('Child profile does not belong to this account.');
         }
     }

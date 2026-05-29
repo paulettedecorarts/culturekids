@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ChildProfile;
 use App\Services\ChildContentProgressService;
+use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,9 +107,6 @@ class ContentProgressController extends Controller
 
     private function resolveChild(Request $request, int $childId): ChildProfile
     {
-        return ChildProfile::query()
-            ->where('id', $childId)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        return ChildProfileAccess::findForUserOrFail($request->user(), $childId);
     }
 }
