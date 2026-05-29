@@ -117,6 +117,16 @@
             {{ session('message') }}
         </div>
     @endif
+    @if(data_get($m, 'puzzle.generating'))
+        <div style="background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.35);color:#F2CB5A;padding:10px 14px;border-radius:10px;margin-bottom:var(--sp-4);font-size:12px;font-weight:700">
+            Tiles are generating… refresh in a few seconds.
+        </div>
+    @endif
+    @if(data_get($m, 'puzzle.generation_error'))
+        <div style="background:rgba(196,75,43,.12);border:1px solid rgba(196,75,43,.35);color:#E06444;padding:10px 14px;border-radius:10px;margin-bottom:var(--sp-4);font-size:12px;font-weight:700">
+            {{ data_get($m, 'puzzle.generation_error') }}
+        </div>
+    @endif
 
     <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:var(--sp-5);align-items:start">
         <div class="sa-table-wrap" style="padding:20px">

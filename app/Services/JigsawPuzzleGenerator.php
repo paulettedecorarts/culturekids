@@ -23,7 +23,10 @@ class JigsawPuzzleGenerator
         self::ORIENTATION_SQUARE,
     ];
 
-    protected const MAX_SOURCE_EDGE = 1400;
+    protected const MAX_SOURCE_EDGE = 1200;
+
+    /** Lower = faster writes (3 is a good balance for puzzle tiles). */
+    protected const PNG_COMPRESSION = 3;
 
     public static function normalizeOrientation(?string $orientation): ?string
     {
@@ -82,6 +85,9 @@ class JigsawPuzzleGenerator
         [$rows, $cols] = self::validateGrid($rows, $cols);
         $pieceCount = $rows * $cols;
 
+        @set_time_limit(max(120, min(600, $pieceCount * 3)));
+        @ini_set('memory_limit', '512M');
+
         $disk = Storage::disk('public');
         if (! $disk->exists($relativeUploadPath)) {
             throw new RuntimeException('Uploaded image not found: '.$relativeUploadPath);
@@ -100,18 +106,22 @@ class JigsawPuzzleGenerator
         $orientation = self::inferOrientationFromGrid($rows, $cols);
 
         $baseDir = 'jigsaw-puzzles/'.$activityId;
-        $disk->makeDirectory($baseDir);
-        $disk->deleteDirectory($baseDir.'/pieces');
-
         $canonicalSource = $baseDir.'/source.png';
-        imagealphablending($image, false);
-        imagesavealpha($image, true);
-        imagepng($image, $disk->path($canonicalSource), 6);
+        $piecesDir = $baseDir.'/pieces';
+
+        $disk->makeDirectory($baseDir);
+        $this->clearPiecesDirectory($disk, $piecesDir);
+
+        $rewriteSource = $relativeUploadPath !== $canonicalSource;
+        if ($rewriteSource) {
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            imagepng($image, $disk->path($canonicalSource), self::PNG_COMPRESSION);
+        }
 
         $pieceW = (int) floor($srcW / $cols);
         $pieceH = (int) floor($srcH / $rows);
 
-        $piecesDir = $baseDir.'/pieces';
         $disk->makeDirectory($piecesDir);
 
         $piecePaths = [];
@@ -136,7 +146,7 @@ class JigsawPuzzleGenerator
                 imagecopy($tile, $image, 0, 0, $x, $y, $w, $h);
 
                 $name = $piecesDir.'/'.sprintf('%03d.png', $index);
-                imagepng($tile, $disk->path($name), 6);
+                imagepng($tile, $disk->path($name), self::PNG_COMPRESSION);
                 imagedestroy($tile);
                 $piecePaths[] = $name;
             }
@@ -144,7 +154,7 @@ class JigsawPuzzleGenerator
 
         imagedestroy($image);
 
-        if ($relativeUploadPath !== $canonicalSource && $disk->exists($relativeUploadPath)) {
+        if ($rewriteSource && $relativeUploadPath !== $canonicalSource && $disk->exists($relativeUploadPath)) {
             $disk->delete($relativeUploadPath);
         }
 
@@ -300,6 +310,17 @@ class JigsawPuzzleGenerator
     /**
      * @return resource|GdImage|false
      */
+    protected function clearPiecesDirectory($disk, string $piecesDir): void
+    {
+        if (! $disk->exists($piecesDir)) {
+            return;
+        }
+
+        foreach ($disk->files($piecesDir) as $file) {
+            $disk->delete($file);
+        }
+    }
+
     protected function loadImage(string $absolutePath)
     {
         $binary = file_get_contents($absolutePath);

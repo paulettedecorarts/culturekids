@@ -10,7 +10,9 @@ use App\Livewire\Concerns\ValidatesOnlyChangedOnEdit;
 use App\Models\Activity;
 use App\Models\AgeProfile;
 use App\Models\Tribe;
+use App\Jobs\GenerateJigsawPuzzleTiles;
 use App\Services\JigsawPuzzleGenerator;
+use App\Services\PuzzleGenerationService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -225,8 +227,9 @@ class PuzzleEditor extends Component
         }
 
         $activity = $this->activity ?? new Activity;
+        $uploadRelative = null;
 
-        DB::transaction(function () use ($validated, $activity): void {
+        DB::transaction(function () use ($validated, $activity, &$uploadRelative): void {
             $activity->fill([
                 'tribe_id' => $validated['tribe_id'],
                 'type' => 'puzzle',
@@ -241,13 +244,12 @@ class PuzzleEditor extends Component
             }
             $activity->save();
 
-            $id = $activity->id;
             $disk = Storage::disk('public');
 
             if ($this->puzzle_image) {
                 $ext = $this->puzzle_image->extension() ?: 'png';
                 $uploadRelative = $this->puzzle_image->storeAs(
-                    'jigsaw-puzzles/'.$id,
+                    'jigsaw-puzzles/'.$activity->id,
                     'upload.'.$ext,
                     'public'
                 );
@@ -259,15 +261,25 @@ class PuzzleEditor extends Component
                     ]);
                 }
             }
+        });
 
-            $generator = app(JigsawPuzzleGenerator::class);
-            $gen = $generator->generateFromStoredFile(
-                $uploadRelative,
-                $id,
-                $gridRows,
-                $gridCols
-            );
+        $puzzleGeneration = app(PuzzleGenerationService::class);
+        $activity->refresh();
 
+        if ($puzzleGeneration->shouldQueue($gridRows, $gridCols)) {
+            $puzzleGeneration->markGenerating($activity, $gridRows, $gridCols);
+            GenerateJigsawPuzzleTiles::dispatch($activity->id, $uploadRelative, $gridRows, $gridCols);
+
+            $puzzleMeta = [
+                'difficulty' => $validated['puzzle_difficulty'],
+                'pieces' => $gridRows * $gridCols,
+                'source_image' => $uploadRelative,
+                'grid' => ['rows' => $gridRows, 'cols' => $gridCols],
+                'generating' => true,
+            ];
+        } else {
+            $gen = $puzzleGeneration->generateAndPersist($activity, $uploadRelative, $gridRows, $gridCols);
+            $activity->refresh();
             $puzzleMeta = [
                 'difficulty' => $validated['puzzle_difficulty'],
                 'pieces' => $gen['pieces'],
@@ -278,26 +290,33 @@ class PuzzleEditor extends Component
                 'height' => $gen['height'],
                 'piece_paths' => $gen['piece_paths'],
                 'generated_at' => now()->toIso8601String(),
+                'generating' => false,
             ];
+        }
 
-            $metadata = array_merge($this->orphanMetadata(), ['puzzle' => $puzzleMeta]);
+        $metadata = array_merge($this->orphanMetadata(), ['puzzle' => $puzzleMeta]);
 
-            if (filled($validated['content_tag'] ?? null)) {
-                $metadata['tag'] = $validated['content_tag'];
-            } else {
-                unset($metadata['tag']);
-            }
+        if (filled($validated['content_tag'] ?? null)) {
+            $metadata['tag'] = $validated['content_tag'];
+        } else {
+            unset($metadata['tag']);
+        }
 
-            if (filled($validated['learning_difficulty'] ?? null)) {
-                $metadata['difficulty'] = $validated['learning_difficulty'];
-            } else {
-                unset($metadata['difficulty']);
-            }
+        if (filled($validated['learning_difficulty'] ?? null)) {
+            $metadata['difficulty'] = $validated['learning_difficulty'];
+        } else {
+            unset($metadata['difficulty']);
+        }
 
-            $activity->update(['metadata' => $metadata]);
-        });
+        $activity->update(['metadata' => $metadata]);
 
-        session()->flash('message', $this->activity ? 'Puzzle updated and pieces generated.' : 'Puzzle created and pieces generated.');
+        $queued = app(PuzzleGenerationService::class)->shouldQueue($gridRows, $gridCols);
+        session()->flash(
+            'message',
+            $queued
+                ? 'Puzzle saved. Tiles are generating in the background — refresh the puzzle page in a few seconds.'
+                : ($this->activity ? 'Puzzle updated and pieces generated.' : 'Puzzle created and pieces generated.')
+        );
 
         return $this->redirectRoute($this->portalRouteName('puzzles.show'), ['id' => $activity->id], navigate: true);
     }

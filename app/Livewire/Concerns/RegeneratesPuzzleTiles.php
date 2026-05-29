@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Concerns;
 
+use App\Jobs\GenerateJigsawPuzzleTiles;
 use App\Livewire\CMS\Puzzles\PuzzleShow;
 use App\Models\Activity;
 use App\Services\JigsawPuzzleGenerator;
+use App\Services\PuzzleGenerationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -94,48 +96,21 @@ trait RegeneratesPuzzleTiles
             ]);
         }
 
-        $generator = app(JigsawPuzzleGenerator::class);
-        $gen = $generator->generateFromStoredFile(
-            $sourcePath,
-            $this->activity->id,
-            $this->regen_rows,
-            $this->regen_cols
-        );
+        $rows = $this->regen_rows;
+        $cols = $this->regen_cols;
+        $puzzleGeneration = app(PuzzleGenerationService::class);
 
-        $existingPuzzle = data_get($this->activity->metadata, 'puzzle', []);
-        if (! is_array($existingPuzzle)) {
-            $existingPuzzle = [];
-        }
-
-        $puzzleMeta = array_merge($existingPuzzle, [
-            'pieces' => $gen['pieces'],
-            'orientation' => $gen['orientation'],
-            'source_image' => $gen['source_path'],
-            'grid' => ['rows' => $gen['rows'], 'cols' => $gen['cols']],
-            'width' => $gen['width'],
-            'height' => $gen['height'],
-            'piece_paths' => $gen['piece_paths'],
-            'generated_at' => now()->toIso8601String(),
-        ]);
-
-        $metadata = is_array($this->activity->metadata) ? $this->activity->metadata : [];
-        $metadata['puzzle'] = $puzzleMeta;
-        $this->activity->update(['metadata' => $metadata]);
-        $this->activity->refresh();
+        // Always queue regenerate so the HTTP request returns before Cloudflare/proxy timeouts.
+        $puzzleGeneration->markGenerating($this->activity, $rows, $cols);
+        GenerateJigsawPuzzleTiles::dispatch($this->activity->id, $sourcePath, $rows, $cols);
+        session()->flash('message', 'Generating '.$rows.'×'.$cols.' tiles in the background. Refresh this page in a few seconds.');
 
         if (property_exists($this, 'puzzle_grid_rows')) {
-            $this->puzzle_grid_rows = $gen['rows'];
+            $this->puzzle_grid_rows = $rows;
         }
         if (property_exists($this, 'puzzle_grid_cols')) {
-            $this->puzzle_grid_cols = $gen['cols'];
+            $this->puzzle_grid_cols = $cols;
         }
-
-        session()->flash('message', sprintf(
-            'Tiles regenerated: %d×%d grid (%d tiles).',
-            $gen['rows'],
-            $gen['cols'],
-            $gen['pieces']
-        ));
 
         if ($this instanceof PuzzleShow) {
             return $this->redirectRoute(
