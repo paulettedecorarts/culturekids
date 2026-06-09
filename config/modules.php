@@ -153,6 +153,7 @@ return [
         'flashcard' => 'flashcards',
         'puzzle' => 'puzzles',
         'drawing_kit' => 'drawings',
+        'colouring' => 'colouring',
         'vocab_pack' => 'language_activities',
         'game' => 'games',
         'maze' => 'mazes',

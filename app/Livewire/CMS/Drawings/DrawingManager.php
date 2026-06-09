@@ -18,12 +18,34 @@ class DrawingManager extends Component
     public string $tribeFilter = '';
     public string $statusFilter = '';
 
+    public string $listScope = 'all';
+
     protected $queryString = [
         'search' => ['except' => ''],
         'typeFilter' => ['except' => ''],
         'tribeFilter' => ['except' => ''],
         'statusFilter' => ['except' => ''],
     ];
+
+    public function mount(): void
+    {
+        if (request()->routeIs('admin.colouring', 'cms.editor.colouring')) {
+            $this->listScope = 'colouring';
+            if ($this->typeFilter === '') {
+                $this->typeFilter = 'coloring';
+            }
+        }
+    }
+
+    public function isColouringList(): bool
+    {
+        return $this->listScope === 'colouring';
+    }
+
+    public function contentRoutePrefix(): string
+    {
+        return $this->isColouringList() ? 'colouring' : 'drawings';
+    }
 
     public function updatedSearch(): void
     {
@@ -61,6 +83,9 @@ class DrawingManager extends Component
                     ->orWhere('description', 'like', '%'.$this->search.'%')
                     ->orWhere('drawing_type', 'like', '%'.$this->search.'%');
             }))
+            ->when($this->isColouringList(), function ($q) {
+                $q->whereIn('drawing_type', \App\Support\ActivityDrawingTypeFilter::COLOURING_TYPES);
+            })
             ->when($this->typeFilter !== '', fn ($q) => $q->where('drawing_type', $this->typeFilter))
             ->when($this->tribeFilter !== '', fn ($q) => $q->where('tribe_id', (int) $this->tribeFilter))
             ->when($this->statusFilter !== '', fn ($q) => $q->where('status', $this->statusFilter))

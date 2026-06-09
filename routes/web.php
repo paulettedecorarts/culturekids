@@ -119,6 +119,12 @@ Route::middleware(['auth', 'verified', 'role:super_admin', 'log.admin'])->prefix
     Route::get('drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
     Route::get('drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
 
+    Route::get('colouring', \App\Livewire\CMS\Drawings\DrawingManager::class)->name('colouring');
+    Route::get('colouring/create', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('colouring.create');
+    Route::get('colouring/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('colouring.edit');
+    Route::get('colouring/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('colouring.show');
+    Route::get('colouring/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('colouring.play');
+
     Route::get('language-activities', \App\Livewire\CMS\Languages\LanguageActivityManager::class)->name('language-activities');
     Route::get('language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
     Route::get('language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
@@ -222,6 +228,12 @@ Route::middleware(['auth', 'verified', 'role:cms_editor', 'portal.role:cms_edito
     Route::get('/drawings/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('drawings.show');
     Route::get('/drawings/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('drawings.play');
 
+    Route::get('/colouring', \App\Livewire\CMS\Drawings\DrawingManager::class)->name('colouring');
+    Route::get('/colouring/create', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('colouring.create');
+    Route::get('/colouring/{id}/edit', \App\Livewire\CMS\Drawings\DrawingEditor::class)->name('colouring.edit');
+    Route::get('/colouring/{id}', \App\Livewire\CMS\Drawings\DrawingShow::class)->name('colouring.show');
+    Route::get('/colouring/{id}/play', \App\Livewire\Student\DrawingPlayer::class)->name('colouring.play');
+
     Route::get('/language-activities', \App\Livewire\CMS\Languages\LanguageActivityManager::class)->name('language-activities');
     Route::get('/language-activities/create', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.create');
     Route::get('/language-activities/{id}/edit', \App\Livewire\CMS\Languages\LanguageActivityEditor::class)->name('language-activities.edit');
@@ -290,6 +302,7 @@ Route::middleware(['auth', 'verified', 'role:org_admin', 'portal.role:org_admin'
     Route::get('/approved-content/flashcards/{id}', ActivityDetailPage::class)->name('approved-content.flashcards.show');
     Route::get('/approved-content/puzzles/{id}', PuzzleShow::class)->name('approved-content.puzzles.show');
     Route::get('/approved-content/drawings/{id}', DrawingShow::class)->name('approved-content.drawings.show');
+    Route::get('/approved-content/colouring/{id}', DrawingShow::class)->name('approved-content.colouring.show');
     Route::get('/approved-content/language-activities/{id}', LanguageActivityShow::class)->name('approved-content.language-activities.show');
     Route::get('/approved-content/games/{id}', GameShow::class)->name('approved-content.games.show');
     Route::get('/approved-content/mazes/{id}', MazeShow::class)->name('approved-content.mazes.show');

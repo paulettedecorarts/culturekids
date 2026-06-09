@@ -67,6 +67,14 @@ HTML;
 
             <div class="cms-nav-section"><span class="cms-nav-section-text">Activities</span></div>
             {!! $cmsNavLink(route('cms.editor.activities'), '🧩', 'All activities', request()->routeIs('cms.editor.activities*')) !!}
+            @foreach(\App\Support\CmsProductionActivityNav::items() as $item)
+                {!! $cmsNavLink(
+                    route('cms.editor.'.$item['route']),
+                    $item['icon'],
+                    $item['label'],
+                    request()->routeIs('cms.editor.'.$item['route'].'*')
+                ) !!}
+            @endforeach
         @endif
 
         @if($isAdmin || $isSuper)

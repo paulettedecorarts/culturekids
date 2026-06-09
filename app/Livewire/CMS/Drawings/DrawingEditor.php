@@ -263,13 +263,30 @@ class DrawingEditor extends Component
 
         session()->flash('message', $this->isEdit ? 'Drawing activity updated successfully!' : 'Drawing activity created successfully!');
 
-        $this->redirectRoute($this->portalRouteName('drawings.show'), ['id' => $this->drawing->id], navigate: true);
+        $prefix = \App\Support\ActivityDrawingTypeFilter::isColouringType($this->drawing->drawing_type)
+            || request()->routeIs('admin.colouring.*', 'cms.editor.colouring.*')
+            ? 'colouring'
+            : 'drawings';
+
+        $this->redirectRoute($this->portalRouteName($prefix.'.show'), ['id' => $this->drawing->id], navigate: true);
+    }
+
+    public function contentRoutePrefix(): string
+    {
+        if (request()->routeIs('admin.colouring.*', 'cms.editor.colouring.*')) {
+            return 'colouring';
+        }
+
+        return \App\Support\ActivityDrawingTypeFilter::isColouringType($this->drawing_type)
+            ? 'colouring'
+            : 'drawings';
     }
 
     public function render()
     {
         return view('livewire.cms.drawings.drawing-editor', [
             'routePrefix' => $this->portalRoutePrefix(),
+            'contentRoutePrefix' => $this->contentRoutePrefix(),
         ])->layout($this->portalLayout());
     }
 }

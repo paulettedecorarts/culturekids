@@ -28,7 +28,7 @@ final class ActivityApiListSerializer
         return [
             'id' => $activity->id,
             'title' => $activity->title,
-            'type' => $activity->type,
+            'type' => ActivityDrawingTypeFilter::listTypeForActivity($activity),
             'age_range' => $activity->age_range,
             'stars' => $activity->star_points ?? 10,
             'description' => $activity->description,

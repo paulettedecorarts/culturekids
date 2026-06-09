@@ -9,6 +9,7 @@ use App\Models\Comic;
 use App\Models\Song;
 use App\Services\OrganisationModuleResolver;
 use App\Support\ActivityApiListSerializer;
+use App\Support\ActivityDrawingTypeFilter;
 use App\Support\OrganisationActivityScope;
 use Illuminate\Http\Request;
 
@@ -162,7 +163,7 @@ class ContentController extends Controller
 
         if ($type) {
             $resolver->assertActivityTypeAllowedForUser($user, $type);
-            $query->where('type', $type);
+            ActivityDrawingTypeFilter::applyListTypeFilter($query, $type);
         }
 
         $activities = ActivityApiListSerializer::mapCollection(

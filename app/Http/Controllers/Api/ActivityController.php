@@ -15,6 +15,7 @@ use App\Models\Tribe;
 use App\Models\WordSearch;
 use App\Services\OrganisationModuleResolver;
 use App\Support\ActivityApiListSerializer;
+use App\Support\ActivityDrawingTypeFilter;
 use App\Support\CultureApiSerializer;
 use App\Support\DrawingApiSerializer;
 use App\Support\GameApiSerializer;
@@ -74,7 +75,7 @@ class ActivityController extends Controller
 
         if ($type) {
             $resolver->assertActivityTypeAllowedForUser($request->user(), $type);
-            $query->where('type', $type);
+            ActivityDrawingTypeFilter::applyListTypeFilter($query, $type);
         }
 
         $activities = ActivityApiListSerializer::mapCollection(
@@ -169,7 +170,7 @@ class ActivityController extends Controller
             'star_points',
             'description',
         ];
-        $select = in_array($type, ['puzzle', 'vocab_pack', 'culture', 'game'], true)
+        $select = in_array($type, ['puzzle', 'vocab_pack', 'culture', 'game', 'drawing_kit'], true)
             ? [...$baseColumns, 'metadata']
             : $baseColumns;
 
@@ -186,7 +187,13 @@ class ActivityController extends Controller
             ]);
         }
 
-        app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $activity->type);
+        $moduleActivityType = $activity->type;
+        if ($activity->type === 'drawing_kit') {
+            $moduleActivityType = ActivityDrawingTypeFilter::moduleActivityTypeForDrawing(
+                data_get($activity->metadata, 'drawing_type')
+            );
+        }
+        app(OrganisationModuleResolver::class)->assertActivityTypeAllowedForUser($user, $moduleActivityType);
 
         $response = [
             'id' => $activity->id,
@@ -284,19 +291,17 @@ class ActivityController extends Controller
         }
 
         if ($activity->type === 'drawing_kit') {
-            $legacyId = (int) DB::table('activities')
-                ->where('id', $id)
-                ->where('type', 'drawing_kit')
-                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_drawing_id')) AS UNSIGNED)"));
-
+            $legacyId = (int) data_get($activity->metadata, 'legacy_drawing_id');
             $drawing = $legacyId > 0
                 ? Drawing::query()->find($legacyId)
                 : null;
 
-            if ($drawing) {
+            if ($drawing && $drawing->status === 'published') {
+                $drawingPayload = DrawingApiSerializer::toArray($drawing);
                 $response['drawing_data'] = [
-                    'drawing' => DrawingApiSerializer::toArray($drawing),
+                    'drawing' => $drawingPayload,
                 ];
+                $response['cover_image'] = $drawingPayload['cover_image_url'] ?? null;
             }
         }
 
@@ -339,4 +344,5 @@ class ActivityController extends Controller
 
         return response()->json($response);
     }
+
 }

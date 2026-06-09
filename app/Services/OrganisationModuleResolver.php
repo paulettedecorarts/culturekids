@@ -336,7 +336,18 @@ class OrganisationModuleResolver
     public function filterActivitiesForUser(Collection $activities, ?User $user): Collection
     {
         return $activities
-            ->filter(fn (Activity $activity) => $this->isActivityTypeAllowed($user, $activity->type))
+            ->filter(function (Activity $activity) use ($user) {
+                $type = $activity->type;
+
+                if ($type === 'drawing_kit') {
+                    $drawingType = \App\Support\ActivityBundleMetadataExtract::toMetadataArray($activity)['drawing_type'] ?? null;
+                    $type = \App\Support\ActivityDrawingTypeFilter::moduleActivityTypeForDrawing(
+                        is_string($drawingType) ? $drawingType : null
+                    );
+                }
+
+                return $this->isActivityTypeAllowed($user, $type);
+            })
             ->values();
     }
 

@@ -53,7 +53,7 @@ class ActivityTypeSelector extends Component
         }
 
         if ($type === 'colouring') {
-            return $this->redirectRoute($this->portalRouteName('drawings.create'), navigate: true);
+            return $this->redirectRoute($this->portalRouteName('colouring.create'), navigate: true);
         }
         
         if ($type === 'flashcard') {

@@ -3,7 +3,7 @@
     <div class="editor-header">
         <div class="header-content">
             <div class="breadcrumb-section">
-                <a href="{{ route($routePrefix . '.drawings') }}" class="back-link">← Drawings</a>
+                <a href="{{ route($routePrefix . '.' . $contentRoutePrefix) }}" class="back-link">← {{ $contentRoutePrefix === 'colouring' ? 'Colouring' : 'Drawings' }}</a>
                 <h1 class="page-title">{{ $isEdit ? 'Edit Drawing Activity' : 'New Drawing Activity' }}</h1>
                 <p class="page-subtitle">{{ $isEdit ? 'Update drawing activity details and configuration' : 'Create a new interactive drawing activity' }}</p>
             </div>
@@ -336,7 +336,7 @@
 
         <!-- Form Actions -->
         <div class="form-actions">
-            <a href="{{ route($routePrefix . '.drawings') }}" class="cancel-button">Cancel</a>
+            <a href="{{ route($routePrefix . '.' . $contentRoutePrefix) }}" class="cancel-button">Cancel</a>
             <button type="submit" class="create-button">
                 {{ $isEdit ? 'Update Drawing' : 'Create Drawing' }}
             </button>
