@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\CultureActivity;
 use App\Support\CultureApiSerializer;
+use App\Support\GameApiSerializer;
 use App\Models\Drawing;
 use App\Models\Game;
 use App\Models\LanguageActivity;
@@ -291,16 +292,19 @@ class OfflineBundleBuilder
         $writer = $this->createWriter(OrganisationContentDecision::TYPE_GAME, $gameId, null);
         $assetMap = $writer->addStorageAssets($paths);
 
-        $questions = $game->questions->map(fn ($q) => $this->withBundleRefs($q->toArray(), $assetMap))->values()->all();
+        $gamePayload = array_merge(
+            array_filter([
+                'cover_image_path' => $game->cover_image_path,
+                'background_music_path' => $game->background_music_path,
+            ]),
+            GameApiSerializer::toArray($game),
+        );
 
         return $this->finalize($writer, $this->baseManifest(
             OrganisationContentDecision::TYPE_GAME,
             $game,
             $assetMap,
-            [
-                'game' => $this->withBundleRefs($game->toArray(), $assetMap),
-                'questions' => $questions,
-            ]
+            ['game' => $this->withBundleRefs($gamePayload, $assetMap)]
         ), null);
     }
 

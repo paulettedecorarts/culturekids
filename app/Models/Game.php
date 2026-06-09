@@ -119,9 +119,10 @@ class Game extends Model
     protected function syncLegacyActivity(): void
     {
         $metadata = array_merge($this->metadata ?? [], [
-            'source'         => 'game_mirror',
-            'legacy_game_id' => $this->id,
-            'game_type'      => $this->game_type,
+            'source'            => 'game_mirror',
+            'legacy_game_id'    => $this->id,
+            'game_type'         => $this->game_type,
+            'cover_image_path'  => $this->cover_image_path,
         ]);
 
         $query = DB::table('activities')

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\CultureActivity;
 use App\Models\Drawing;
+use App\Models\Game;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
 use App\Models\SpotDifference;
@@ -16,6 +17,7 @@ use App\Services\OrganisationModuleResolver;
 use App\Support\ActivityApiListSerializer;
 use App\Support\CultureApiSerializer;
 use App\Support\DrawingApiSerializer;
+use App\Support\GameApiSerializer;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
 use App\Support\OrganisationActivityScope;
@@ -167,7 +169,7 @@ class ActivityController extends Controller
             'star_points',
             'description',
         ];
-        $select = in_array($type, ['puzzle', 'vocab_pack', 'culture'], true)
+        $select = in_array($type, ['puzzle', 'vocab_pack', 'culture', 'game'], true)
             ? [...$baseColumns, 'metadata']
             : $baseColumns;
 
@@ -319,6 +321,19 @@ class ActivityController extends Controller
                 $culturePayload = CultureApiSerializer::toArray($cultureActivity);
                 $response['culture_activity'] = $culturePayload;
                 $response['cover_image'] = $culturePayload['cover_image_url'] ?? null;
+            }
+        }
+
+        if ($activity->type === 'game') {
+            $legacyId = (int) data_get($activity->metadata, 'legacy_game_id');
+            $game = $legacyId > 0
+                ? Game::query()->with('questions')->find($legacyId)
+                : null;
+
+            if ($game && $game->status === 'published') {
+                $gamePayload = GameApiSerializer::toArray($game);
+                $response['game'] = $gamePayload;
+                $response['cover_image'] = $gamePayload['cover_image_url'] ?? null;
             }
         }
 
