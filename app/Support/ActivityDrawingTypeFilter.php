@@ -22,12 +22,10 @@ final class ActivityDrawingTypeFilter
      */
     public static function applyColouringScope(Builder $query): void
     {
+        $placeholders = implode(', ', array_fill(0, count(self::COLOURING_TYPES), '?'));
+
         $query->where('type', 'drawing_kit')
-            ->where(function (Builder $inner): void {
-                foreach (self::COLOURING_TYPES as $drawingType) {
-                    $inner->orWhere('_drawing_type', $drawingType);
-                }
-            });
+            ->whereRaw(self::drawingTypeSql().' IN ('.$placeholders.')', self::COLOURING_TYPES);
     }
 
     /**
@@ -35,13 +33,21 @@ final class ActivityDrawingTypeFilter
      */
     public static function applyDrawingScope(Builder $query): void
     {
+        $placeholders = implode(', ', array_fill(0, count(self::COLOURING_TYPES), '?'));
+
         $query->where('type', 'drawing_kit')
-            ->where(function (Builder $inner): void {
-                $inner->whereNull('_drawing_type')
-                    ->orWhere('_drawing_type', '')
-                    ->orWhere('_drawing_type', 'null')
-                    ->orWhereNotIn('_drawing_type', self::COLOURING_TYPES);
+            ->where(function (Builder $inner) use ($placeholders): void {
+                $expr = self::drawingTypeSql();
+                $inner->whereRaw(
+                    "({$expr} IS NULL OR {$expr} IN ('', 'null') OR {$expr} NOT IN ({$placeholders}))",
+                    self::COLOURING_TYPES
+                );
             });
+    }
+
+    private static function drawingTypeSql(): string
+    {
+        return "JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.drawing_type'))";
     }
 
     public static function listTypeForActivity(\App\Models\Activity $activity): string
