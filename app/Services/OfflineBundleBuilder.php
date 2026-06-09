@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\CultureActivity;
+use App\Support\CultureApiSerializer;
 use App\Models\Drawing;
 use App\Models\Game;
 use App\Models\LanguageActivity;
@@ -378,11 +379,19 @@ class OfflineBundleBuilder
         $writer = $this->createWriter(OrganisationContentDecision::TYPE_CULTURE, $id, null);
         $assetMap = $writer->addStorageAssets($paths);
 
+        $culturePayload = array_merge(
+            array_filter([
+                'cover_image_path' => $item->cover_image_path,
+                'map_image_path' => $item->map_image_path,
+            ]),
+            CultureApiSerializer::toArray($item),
+        );
+
         return $this->finalize($writer, $this->baseManifest(
             OrganisationContentDecision::TYPE_CULTURE,
             $item,
             $assetMap,
-            ['culture_activity' => $this->withBundleRefs($item->toArray(), $assetMap)]
+            ['culture_activity' => $this->withBundleRefs($culturePayload, $assetMap)]
         ), null);
     }
 

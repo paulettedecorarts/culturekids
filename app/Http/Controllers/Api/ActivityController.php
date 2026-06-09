@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\CultureActivity;
 use App\Models\Drawing;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
@@ -12,6 +13,7 @@ use App\Models\SpotDifference;
 use App\Models\Tribe;
 use App\Models\WordSearch;
 use App\Services\OrganisationModuleResolver;
+use App\Support\CultureApiSerializer;
 use App\Support\DrawingApiSerializer;
 use App\Support\LanguageActivityApiSerializer;
 use App\Support\MazeApiSerializer;
@@ -187,7 +189,7 @@ class ActivityController extends Controller
             'star_points',
             'description',
         ];
-        $select = in_array($type, ['puzzle', 'vocab_pack'], true)
+        $select = in_array($type, ['puzzle', 'vocab_pack', 'culture'], true)
             ? [...$baseColumns, 'metadata']
             : $baseColumns;
 
@@ -326,6 +328,17 @@ class ActivityController extends Controller
 
             if ($languageActivity) {
                 $response['language_activity'] = LanguageActivityApiSerializer::toArray($languageActivity);
+            }
+        }
+
+        if ($activity->type === 'culture') {
+            $legacyId = (int) data_get($activity->metadata, 'legacy_culture_activity_id');
+            $cultureActivity = $legacyId > 0
+                ? CultureActivity::query()->find($legacyId)
+                : null;
+
+            if ($cultureActivity && $cultureActivity->status === 'published') {
+                $response['culture_activity'] = CultureApiSerializer::toArray($cultureActivity);
             }
         }
 
