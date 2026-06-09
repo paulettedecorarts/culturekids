@@ -8,6 +8,7 @@ use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\Song;
 use App\Services\OrganisationModuleResolver;
+use App\Support\ActivityApiListSerializer;
 use App\Support\OrganisationActivityScope;
 use Illuminate\Http\Request;
 
@@ -164,27 +165,12 @@ class ContentController extends Controller
             $query->where('type', $type);
         }
 
-        $activities = OrganisationActivityScope::filterApproved(
-            $resolver->filterActivitiesForUser($query->get(), $user),
-            $user,
-        )
-            ->map(function (Activity $activity) {
-                return [
-                    'id' => $activity->id,
-                    'title' => $activity->title,
-                    'type' => $activity->type,
-                    'age_range' => $activity->age_range,
-                    'stars' => $activity->star_points ?? 10,
-                    'description' => $activity->description,
-                    'tribe' => $activity->tribe ? [
-                        'id' => $activity->tribe->id,
-                        'name' => $activity->tribe->name,
-                        'icon' => $activity->tribe->hero_emoji ?? $activity->tribe->hero_icon,
-                        'color' => $activity->tribe->color,
-                    ] : null,
-                ];
-            })
-            ->values();
+        $activities = ActivityApiListSerializer::mapCollection(
+            OrganisationActivityScope::filterApproved(
+                $resolver->filterActivitiesForUser($query->get(), $user),
+                $user,
+            )
+        )->values();
 
         return response()->json($activities);
     }

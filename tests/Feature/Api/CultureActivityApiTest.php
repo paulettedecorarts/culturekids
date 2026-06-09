@@ -34,6 +34,7 @@ class CultureActivityApiTest extends TestCase
             'tribe_id' => $tribe->id,
             'title' => 'The Gora Clan Story',
             'description' => 'Learn about the Gora clan totem.',
+            'cover_image_path' => 'culture/covers/test-cover.jpg',
             'culture_type' => 'clan_story',
             'difficulty_level' => 'easy',
             'age_min' => 5,
@@ -77,6 +78,38 @@ class CultureActivityApiTest extends TestCase
             ->assertJsonPath('culture_activity.content_sections.0.title', 'Origins')
             ->assertJsonPath('culture_activity.quiz_questions.0.question', 'What is the clan totem?')
             ->assertJsonPath('culture_activity.quiz_questions.0.answer', 'Nile Crocodile')
-            ->assertJsonPath('culture_activity.proverb_translation', 'Water is life');
+            ->assertJsonPath('culture_activity.proverb_translation', 'Water is life')
+            ->assertJsonPath('cover_image', asset('storage/culture/covers/test-cover.jpg'));
+    }
+
+    public function test_culture_activity_list_includes_cover_image(): void
+    {
+        $tribe = Tribe::create([
+            'name' => 'Baganda',
+            'hero_name' => 'Kintu',
+            'region' => 'Central',
+        ]);
+
+        CultureActivity::create([
+            'tribe_id' => $tribe->id,
+            'title' => 'Clan Map Tour',
+            'description' => 'Explore clan lands.',
+            'cover_image_path' => 'culture/covers/map-cover.jpg',
+            'culture_type' => 'clan_map',
+            'difficulty_level' => 'easy',
+            'age_min' => 5,
+            'age_max' => 10,
+            'star_points' => 10,
+            'status' => 'published',
+        ]);
+
+        $user = User::factory()->create(['organisation_id' => null]);
+        Role::firstOrCreate(['name' => 'parent', 'guard_name' => 'web']);
+        $user->assignRole('parent');
+        Sanctum::actingAs($user);
+
+        $this->getJson('/api/v1/content?type=culture')
+            ->assertOk()
+            ->assertJsonPath('0.cover_image', asset('storage/culture/covers/map-cover.jpg'));
     }
 }

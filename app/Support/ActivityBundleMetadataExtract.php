@@ -36,6 +36,7 @@ final class ActivityBundleMetadataExtract
             DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_spot_difference_id')) AS UNSIGNED) as _legacy_spot_difference_id"),
             DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_word_search_id')) AS UNSIGNED) as _legacy_word_search_id"),
             DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_culture_activity_id')) AS UNSIGNED) as _legacy_culture_activity_id"),
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.puzzle.source_image')) as _puzzle_source_image"),
         ];
     }
 

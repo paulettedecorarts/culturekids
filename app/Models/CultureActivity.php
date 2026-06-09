@@ -102,6 +102,7 @@ class CultureActivity extends Model
             'legacy_culture_activity_id' => $this->id,
             'culture_type'              => $this->culture_type,
             'clan_name'                 => $this->clan_name,
+            'cover_image_path'          => $this->cover_image_path,
         ]);
 
         $query = DB::table('activities')
