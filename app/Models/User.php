@@ -82,6 +82,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(PushDeviceToken::class);
     }
 
+    public function userNotifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
     /**
      * Classes where this user is the assigned teacher.
      */

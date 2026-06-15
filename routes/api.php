@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\OrganisationModuleAdminController;
 use App\Http\Controllers\Api\OrganisationModuleController;
 use App\Http\Controllers\Api\OrganisationThemeController;
 use App\Http\Controllers\Api\ProgressController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PushDeviceController;
 use App\Http\Controllers\Api\ReadingProgressController;
 use App\Http\Controllers\Api\SongController;
@@ -92,6 +93,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/push/devices', [PushDeviceController::class, 'index']);
     Route::post('/push/devices/register', [PushDeviceController::class, 'register']);
     Route::post('/push/devices/unregister', [PushDeviceController::class, 'unregister']);
+
+    // In-app notification inbox
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead']);
 });
 
 Route::middleware(['auth:sanctum', 'role:super_admin'])->prefix('admin')->group(function () {

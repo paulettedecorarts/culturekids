@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('livewire:clean-temp-uploads')->daily();
+Schedule::job(new \App\Jobs\SendEngagementNotificationsJob)->dailyAt('10:00');

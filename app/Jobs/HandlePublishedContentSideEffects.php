@@ -6,6 +6,9 @@ use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\PushDeviceToken;
 use App\Models\Song;
+use App\Models\User;
+use App\Models\UserNotification;
+use App\Services\Push\UserNotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,10 +29,8 @@ class HandlePublishedContentSideEffects implements ShouldQueue
         $this->onQueue('media-processing');
     }
 
-    public function handle(): void
+    public function handle(UserNotificationService $notifications): void
     {
-        // API cache invalidation strategy: bump org content version
-        // so clients can detect stale data and refresh.
         $versionKey = $this->orgId
             ? "api:org:{$this->orgId}:content_version"
             : 'api:global:content_version';
@@ -39,53 +40,63 @@ class HandlePublishedContentSideEffects implements ShouldQueue
             Cache::increment($versionKey);
         }
 
-        // Notification hook point (e.g., Firebase push). We log metadata now
-        // so downstream notifier wiring can consume a clear event trail.
         $payload = ['org_id' => $this->orgId];
+        $title = 'New content available';
+        $body = 'Fresh approved content is now available offline.';
+
         if ($this->comicId) {
             $comic = Comic::find($this->comicId);
             $payload['comic_id'] = $this->comicId;
             $payload['comic_title'] = $comic?->title;
+            if ($comic?->title) {
+                $title = 'New story published';
+                $body = $comic->title.' is now available.';
+            }
+            if ($comic?->tribe_id) {
+                $payload['tribe_id'] = (string) $comic->tribe_id;
+            }
         }
+
         if ($this->songId) {
             $song = Song::find($this->songId);
             $payload['song_id'] = $this->songId;
             $payload['song_title'] = $song?->title;
+            if ($song?->title) {
+                $title = 'New song published';
+                $body = $song->title.' is now available.';
+            }
+            if ($song?->tribe_id) {
+                $payload['tribe_id'] = (string) $song->tribe_id;
+            }
         }
 
-        $tokens = PushDeviceToken::query()
+        $userIds = PushDeviceToken::query()
             ->where('is_active', true)
             ->when($this->orgId, fn ($query) => $query->where('organisation_id', $this->orgId))
-            ->pluck('token')
-            ->values()
-            ->all();
+            ->distinct()
+            ->pluck('user_id');
 
-        if ($tokens !== []) {
-            $title = 'New content available';
-            $body = 'Fresh approved content is now available offline.';
+        $users = User::query()
+            ->role('parent')
+            ->whereIn('id', $userIds)
+            ->get();
 
-            if (! empty($payload['comic_title'])) {
-                $title = 'New story published';
-                $body = $payload['comic_title'].' is now available.';
-            } elseif (! empty($payload['song_title'])) {
-                $title = 'New song published';
-                $body = $payload['song_title'].' is now available.';
-            }
+        $notifyData = array_filter([
+            'org_id' => $this->orgId !== null ? (string) $this->orgId : null,
+            'comic_id' => isset($payload['comic_id']) ? (string) $payload['comic_id'] : null,
+            'song_id' => isset($payload['song_id']) ? (string) $payload['song_id'] : null,
+            'tribe_id' => $payload['tribe_id'] ?? null,
+        ], fn ($value) => $value !== null);
 
-            DispatchPushNotification::dispatch(
-                tokens: $tokens,
-                title: $title,
-                body: $body,
-                data: [
-                    'org_id' => $this->orgId !== null ? (string) $this->orgId : null,
-                    'comic_id' => isset($payload['comic_id']) ? (string) $payload['comic_id'] : null,
-                    'song_id' => isset($payload['song_id']) ? (string) $payload['song_id'] : null,
-                    'type' => 'content_published',
-                ]
-            );
-        }
+        $sent = $notifications->notifyUsers(
+            $users,
+            UserNotification::TYPE_CONTENT_PUBLISHED,
+            $title,
+            $body,
+            $notifyData
+        );
 
-        AuditLog::record('PUBLISH_SIDE_EFFECTS', 'publish/side-effects', $payload);
-        Log::info('Published content side-effects applied', $payload);
+        AuditLog::record('PUBLISH_SIDE_EFFECTS', 'publish/side-effects', $payload + ['notifications_sent' => $sent]);
+        Log::info('Published content side-effects applied', $payload + ['notifications_sent' => $sent]);
     }
 }

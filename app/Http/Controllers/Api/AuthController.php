@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Jobs\SendUserNotificationJob;
 use App\Models\User;
+use App\Models\UserNotification;
 
 class AuthController extends Controller
 {
@@ -103,6 +105,18 @@ class AuthController extends Controller
 
         // Generate new token
         $token = $user->createToken('mobile-app-token')->plainTextToken;
+
+        if ($user->hasRole('parent')) {
+            SendUserNotificationJob::dispatch(
+                userId: $user->id,
+                type: UserNotification::TYPE_LOGIN_ALERT,
+                title: 'Welcome back',
+                body: "You're signed in to {$user->name}'s CultureKids account.",
+                data: [
+                    'device' => $request->input('device_name'),
+                ]
+            );
+        }
 
         return response()->json([
             'message' => 'Login successful',
