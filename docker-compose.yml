@@ -80,6 +80,12 @@ services:
 
       VITE_APP_NAME: "Paulette Culture Kids"
 
+      # Push notifications (mobile app registers Expo tokens via /api/v1/push/devices/register)
+      # log = no-op (default safe) | expo = Expo Push API | fcm = legacy FCM | composite = both
+      PUSH_PROVIDER: expo
+      PUSH_FCM_URL: "https://fcm.googleapis.com/fcm/send"
+      PUSH_FCM_SERVER_KEY: ""
+
     ports:
       - "7000:80"
     depends_on:

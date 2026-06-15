@@ -7,6 +7,8 @@ use App\Models\LanguageActivityWord;
 use App\Models\ContentTranslation;
 use App\Models\PanelVocabTag;
 use App\Observers\TranslationCoverageObserver;
+use App\Services\Push\CompositePushGateway;
+use App\Services\Push\ExpoPushGateway;
 use App\Services\Push\FcmPushGateway;
 use App\Services\Push\LogPushGateway;
 use App\Services\Push\PushGateway;
@@ -34,9 +36,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FileUploadController::class, AppFileUploadController::class);
 
         $this->app->singleton(PushGateway::class, function () {
-            return config('push.provider') === 'fcm'
-                ? new FcmPushGateway
-                : new LogPushGateway;
+            return match (config('push.provider')) {
+                'fcm' => new FcmPushGateway,
+                'expo' => new ExpoPushGateway,
+                'composite' => new CompositePushGateway(new ExpoPushGateway, new FcmPushGateway),
+                default => new LogPushGateway,
+            };
         });
     }
 
