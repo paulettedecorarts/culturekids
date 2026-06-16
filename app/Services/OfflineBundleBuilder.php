@@ -214,12 +214,17 @@ class OfflineBundleBuilder
             ];
         })->values()->all();
 
+        $activityPayload = $this->withBundleRefs($activity->toArray(), $assetMap);
+        if ($type === 'puzzle') {
+            $activityPayload = $this->enrichPuzzleForBundle($activityPayload, $assetMap);
+        }
+
         return $this->finalize($writer, $this->baseManifest(
             $contentType,
             $activity,
             $assetMap,
             [
-                'activity' => $this->withBundleRefs($activity->toArray(), $assetMap),
+                'activity' => $activityPayload,
                 'slides' => $slides,
             ]
         ), null);
@@ -519,5 +524,42 @@ class OfflineBundleBuilder
         }
 
         return $row;
+    }
+
+    /**
+     * @param  array<string, mixed>  $activityRow
+     * @param  array<string, string>  $assetMap
+     * @return array<string, mixed>
+     */
+    private function enrichPuzzleForBundle(array $activityRow, array $assetMap): array
+    {
+        $puzzle = data_get($activityRow, 'metadata.puzzle');
+        if (! is_array($puzzle)) {
+            return $activityRow;
+        }
+
+        $source = $puzzle['source_image'] ?? null;
+        if (is_string($source) && isset($assetMap[$source])) {
+            $puzzle['bundle_source_image'] = $assetMap[$source];
+        }
+
+        $piecePaths = $puzzle['piece_paths'] ?? [];
+        if (is_array($piecePaths) && $piecePaths !== []) {
+            $bundlePiecePaths = [];
+            foreach ($piecePaths as $piecePath) {
+                if (is_string($piecePath) && isset($assetMap[$piecePath])) {
+                    $bundlePiecePaths[] = $assetMap[$piecePath];
+                } else {
+                    $bundlePiecePaths[] = null;
+                }
+            }
+            if (count(array_filter($bundlePiecePaths)) > 0) {
+                $puzzle['bundle_piece_paths'] = $bundlePiecePaths;
+            }
+        }
+
+        data_set($activityRow, 'metadata.puzzle', $puzzle);
+
+        return $activityRow;
     }
 }

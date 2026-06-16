@@ -31,6 +31,15 @@ class OfflineBundleAssetCollector
         }
 
         foreach ($value as $key => $child) {
+            if ($key === 'piece_paths' && is_array($child)) {
+                foreach ($child as $piecePath) {
+                    if (is_string($piecePath)) {
+                        $this->addPath($piecePath);
+                    }
+                }
+                continue;
+            }
+
             if (is_string($key) && $this->keySuggestsAsset($key) && is_string($child)) {
                 $this->addPath($child);
             } elseif (is_array($child)) {
@@ -43,7 +52,7 @@ class OfflineBundleAssetCollector
     {
         return str_ends_with($key, '_path')
             || str_ends_with($key, '_url')
-            || in_array($key, ['image', 'audio', 'video', 'cover', 'template', 'file'], true);
+            || in_array($key, ['image', 'audio', 'video', 'cover', 'template', 'file', 'source_image'], true);
     }
 
     private function addPath(string $path): void
