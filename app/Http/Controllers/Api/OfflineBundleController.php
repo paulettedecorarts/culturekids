@@ -243,15 +243,18 @@ class OfflineBundleController extends Controller
                         return [
                             'id' => $slide->id,
                             'order_index' => $slide->order_index,
-                            'title' => $slide->title,
-                            'description' => $slide->description,
+                            'emoji' => $slide->emoji,
+                            'front_label' => $slide->front_label,
+                            'back_label' => $slide->back_label,
+                            'phonetic' => $slide->phonetic,
+                            'metadata' => $slide->metadata,
                             'image_path' => $slide->image_path,
-                            'image_url' => $slide->image_path 
-                                ? Storage::disk('public')->url($slide->image_path) 
+                            'image_url' => $slide->image_path
+                                ? Storage::disk('public')->url($slide->image_path)
                                 : null,
                             'audio_path' => $slide->audio_path,
-                            'audio_url' => $slide->audio_path 
-                                ? Storage::disk('public')->url($slide->audio_path) 
+                            'audio_url' => $slide->audio_path
+                                ? Storage::disk('public')->url($slide->audio_path)
                                 : null,
                         ];
                     }),

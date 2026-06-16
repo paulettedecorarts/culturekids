@@ -198,11 +198,20 @@ class OfflineBundleBuilder
             : OrganisationContentDecision::TYPE_PUZZLE;
 
         $slides = $activity->flashcardSlides->map(function ($slide) use ($assetMap) {
-            $row = $slide->toArray();
-            $row['bundle_image'] = $slide->image_path ? ($assetMap[$slide->image_path] ?? null) : null;
-            $row['bundle_audio'] = $slide->audio_path ? ($assetMap[$slide->audio_path] ?? null) : null;
-
-            return $row;
+            return [
+                'id' => $slide->id,
+                'activity_id' => $slide->activity_id,
+                'order_index' => $slide->order_index,
+                'emoji' => $slide->emoji,
+                'front_label' => $slide->front_label,
+                'back_label' => $slide->back_label,
+                'phonetic' => $slide->phonetic,
+                'metadata' => $slide->metadata,
+                'image_path' => $slide->image_path,
+                'audio_path' => $slide->audio_path,
+                'bundle_image' => $slide->image_path ? ($assetMap[$slide->image_path] ?? null) : null,
+                'bundle_audio' => $slide->audio_path ? ($assetMap[$slide->audio_path] ?? null) : null,
+            ];
         })->values()->all();
 
         return $this->finalize($writer, $this->baseManifest(
