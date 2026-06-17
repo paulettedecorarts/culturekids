@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\CultureActivity;
 use App\Models\Tribe;
 
 /**
@@ -9,6 +10,30 @@ use App\Models\Tribe;
  */
 final class CultureQuizGenerator
 {
+    /**
+     * Rebuild a heritage seed item shape from a stored culture activity (no JSON file needed).
+     *
+     * @return array<string, mixed>
+     */
+    public static function heritageItemFromActivity(CultureActivity $activity): array
+    {
+        $meta = is_array($activity->metadata) ? $activity->metadata : [];
+        $tribe = $activity->relationLoaded('tribe') ? $activity->tribe : null;
+
+        return [
+            'tribe' => $tribe?->name,
+            'hero' => $meta['hero'] ?? $tribe?->hero_name,
+            'heroTitle' => $meta['hero_title'] ?? null,
+            'greeting' => $meta['greeting'] ?? $tribe?->greeting,
+            'greetingMeaning' => $meta['greeting_meaning'] ?? null,
+            'language' => $meta['language'] ?? null,
+            'region' => $meta['region'] ?? $tribe?->region,
+            'sacredAnimal' => $meta['sacred_animal'] ?? null,
+            'activityType' => $meta['seed_activity_type'] ?? null,
+            'tag' => $meta['tag'] ?? null,
+        ];
+    }
+
     /**
      * @param  array<string, mixed>  $item  Heritage seed activity row
      * @return list<array{question: string, answer: string, options: list<string>}>

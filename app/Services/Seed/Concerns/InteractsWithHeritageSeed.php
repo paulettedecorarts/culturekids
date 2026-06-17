@@ -67,6 +67,10 @@ trait InteractsWithHeritageSeed
             'source' => $item['source'] ?? null,
             'hero' => $item['hero'] ?? null,
             'hero_title' => $item['heroTitle'] ?? null,
+            'greeting' => $item['greeting'] ?? null,
+            'greeting_meaning' => $item['greetingMeaning'] ?? null,
+            'region' => $item['region'] ?? null,
+            'sacred_animal' => $item['sacredAnimal'] ?? null,
             'language' => $item['language'] ?? null,
         ];
 
