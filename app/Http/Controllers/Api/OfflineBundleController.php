@@ -11,6 +11,8 @@ use App\Models\OrganisationContentDecision;
 use App\Models\ParentDownloadedPack;
 use App\Models\Song;
 use App\Models\Tribe;
+use App\Jobs\RebuildTribePackBundles;
+use App\Services\OfflineBundleFreshness;
 use App\Services\OrganisationModuleResolver;
 use App\Support\ActivityBundleMetadataExtract;
 use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
@@ -88,6 +90,10 @@ class OfflineBundleController extends Controller
         $tribe = Tribe::findOrFail($tribeId);
         $resolver = app(OrganisationModuleResolver::class);
         $user = $request->user();
+
+        $freshness = app(OfflineBundleFreshness::class);
+        $freshness->refreshStalePuzzleBundlesForTribe($tribeId);
+        RebuildTribePackBundles::dispatch($tribeId, $user->id);
 
         // Get all published comics for this tribe
         $comics = $resolver->filterComicsForUser($this->scopeComicsForUser(
@@ -299,6 +305,23 @@ class OfflineBundleController extends Controller
             $path = $comic->bundle_path;
         }
 
+        $freshness = app(OfflineBundleFreshness::class);
+        if ($freshness->bundleNeedsRebuild($contentType, $contentId, $bundle)) {
+            try {
+                $freshness->rebuildIfStale($contentType, $contentId, force: true);
+            } catch (\Throwable) {
+                // Fall through — serve the last good build if it still exists.
+            }
+
+            $bundle = $this->bundleRecord($contentType, $contentId);
+            $path = $bundle?->bundle_path;
+
+            if ($contentType === OrganisationContentDecision::TYPE_STORY && ! $path) {
+                $comic = Comic::where('status', 'published')->find($contentId);
+                $path = $comic?->bundle_path;
+            }
+        }
+
         if (! $path || ! Storage::disk('public')->exists($path)) {
             return response()->json([
                 'message' => 'Bundle not available. Ask your school to rebuild offline packs.',
@@ -441,6 +464,8 @@ class OfflineBundleController extends Controller
                 'downloaded_at' => $request->input('downloaded_at', now()),
             ]
         );
+
+        RebuildTribePackBundles::dispatch($tribeId, $user->id);
 
         return response()->json([
             'message' => 'Pack marked as downloaded',

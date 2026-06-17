@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Activity;
+use App\Models\OrganisationContentDecision;
+use App\Services\OfflineBundlePublisher;
 use App\Services\PuzzleGenerationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -51,6 +53,13 @@ class GenerateJigsawPuzzleTiles implements ShouldQueue
             $this->rows,
             $this->cols
         );
+
+        if ($activity->is_published) {
+            OfflineBundlePublisher::queue(
+                OrganisationContentDecision::TYPE_PUZZLE,
+                (int) $activity->id,
+            );
+        }
     }
 
     public function failed(Throwable $exception): void
