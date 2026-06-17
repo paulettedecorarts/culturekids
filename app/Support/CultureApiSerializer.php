@@ -39,6 +39,8 @@ final class CultureApiSerializer
             'quiz_questions' => self::normalizeQuizQuestions($activity->quiz_questions ?? []),
             'map_data' => $activity->map_data ?? [],
             'design_elements' => $activity->design_elements ?? [],
+            'interaction_mode' => CultureInteractionMode::for($activity),
+            'seed_tag' => $activity->metadata['tag'] ?? null,
             'cover_image_url' => self::publicUrl($activity->cover_image_path),
             'map_image_url' => self::publicUrl($activity->map_image_path),
             'tribe' => $activity->tribe ? [
@@ -92,10 +94,23 @@ final class CultureApiSerializer
                     return null;
                 }
 
-                return [
+                $payload = [
                     'question' => $text,
                     'answer' => $answer,
                 ];
+
+                $options = collect($question['options'] ?? [])
+                    ->map(fn ($opt) => trim((string) $opt))
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->all();
+
+                if (count($options) >= 2) {
+                    $payload['options'] = $options;
+                }
+
+                return $payload;
             })
             ->filter()
             ->values()

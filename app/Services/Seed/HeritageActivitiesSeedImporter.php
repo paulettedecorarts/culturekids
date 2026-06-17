@@ -5,6 +5,8 @@ namespace App\Services\Seed;
 use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\CultureActivity;
+use App\Models\Tribe;
+use App\Support\CultureQuizGenerator;
 use App\Models\Drawing;
 use App\Models\Game;
 use App\Models\LanguageActivity;
@@ -225,11 +227,17 @@ class HeritageActivitiesSeedImporter
             ->where('metadata->seed_activity_id', $seedId)
             ->first();
 
+        $tribe = Tribe::query()->find($tribeId);
+        $cultureType = $this->mapCultureType((string) ($item['activityType'] ?? ''), (string) ($item['tag'] ?? ''));
+        $quizQuestions = $this->isHeritageQuizCulture($item)
+            ? CultureQuizGenerator::fromHeritageItem($item, $tribe)
+            : null;
+
         $payload = [
             'tribe_id' => $tribeId,
             'title' => (string) $item['title'],
             'description' => (string) ($item['instructions'] ?? $item['content'] ?? ''),
-            'culture_type' => $this->mapCultureType((string) ($item['activityType'] ?? ''), (string) ($item['tag'] ?? '')),
+            'culture_type' => $cultureType,
             'difficulty_level' => $this->parseDifficulty($item['difficulty'] ?? null),
             'age_min' => $ageMin,
             'age_max' => $ageMax,
@@ -237,6 +245,7 @@ class HeritageActivitiesSeedImporter
             'status' => 'published',
             'content' => (string) ($item['content'] ?? ''),
             'cultural_note' => $item['culturalNote'] ?? null,
+            'quiz_questions' => $quizQuestions ?: null,
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
@@ -488,11 +497,25 @@ class HeritageActivitiesSeedImporter
 
         return match (true) {
             str_contains($haystack, 'map') => 'clan_map',
-            str_contains($haystack, 'design') => 'clan_design',
-            str_contains($haystack, 'profile') => 'clan_profile',
-            str_contains($haystack, 'history') => 'clan_history',
+            str_contains($haystack, 'design') || str_contains($haystack, 'crest') => 'clan_design',
+            str_contains($haystack, 'profile') || str_contains($haystack, 'meet the') => 'clan_profile',
+            str_contains($haystack, 'history') || str_contains($haystack, 'long ago') => 'clan_history',
+            str_contains($haystack, 'clan quiz') => 'clan_profile',
             default => 'clan_story',
         };
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     */
+    protected function isHeritageQuizCulture(array $item): bool
+    {
+        $type = strtolower((string) ($item['activityType'] ?? ''));
+        $tag = strtolower((string) ($item['tag'] ?? ''));
+
+        return $type === 'quiz'
+            || str_contains($tag, 'quiz')
+            || str_contains($tag, 'graduation');
     }
 
     protected function mapDrawingType(string $category, string $activityType): string
