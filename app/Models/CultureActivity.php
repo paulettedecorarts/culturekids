@@ -103,6 +103,7 @@ class CultureActivity extends Model
             'culture_type'              => $this->culture_type,
             'clan_name'                 => $this->clan_name,
             'cover_image_path'          => $this->cover_image_path,
+            'quiz_question_count'       => count($this->quiz_questions ?? []),
         ]);
 
         $query = DB::table('activities')

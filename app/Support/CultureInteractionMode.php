@@ -34,8 +34,24 @@ final class CultureInteractionMode
             'clan_design' => self::DESIGN,
             'clan_profile' => $quizFocused ? self::QUIZ : self::PROFILE,
             'clan_history' => $quizFocused ? self::QUIZ : self::HISTORY,
-            'clan_story' => $quizFocused ? self::QUIZ : self::STORY,
+            'clan_story' => self::storyInteractionMode($activity, $quizFocused),
             default => $hasQuiz ? self::QUIZ : self::STORY,
         };
+    }
+
+    private static function storyInteractionMode(CultureActivity $activity, bool $quizFocused): string
+    {
+        if ($quizFocused) {
+            return self::QUIZ;
+        }
+
+        if (! empty($activity->quiz_questions)) {
+            $title = strtolower((string) $activity->title);
+            if (str_contains($title, 'quiz') || str_contains($title, 'graduation')) {
+                return self::QUIZ;
+            }
+        }
+
+        return self::STORY;
     }
 }
