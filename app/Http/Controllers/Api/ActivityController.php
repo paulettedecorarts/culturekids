@@ -233,21 +233,34 @@ class ActivityController extends Controller
         }
 
         if ($activity->type === 'maze') {
-            $legacyId = (int) DB::table('activities')
-                ->where('id', $id)
-                ->where('type', 'maze')
-                ->value(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.legacy_maze_id')) AS UNSIGNED)"));
+            $legacyId = (int) data_get($activity->metadata, 'legacy_maze_id');
 
-            $maze = $legacyId > 0
-                ? Maze::query()->select([
+            $maze = null;
+            if ($legacyId > 0) {
+                $maze = Maze::query()->select([
                     'id', 'title', 'maze_type', 'difficulty_level',
                     'grid', 'grid_rows', 'grid_cols',
                     'start_position', 'end_position', 'collectibles',
                     'time_limit_seconds', 'visibility_radius',
                     'hero_character', 'cultural_note',
                     'background_image_path', 'cover_image_path',
-                ])->find($legacyId)
-                : null;
+                ])->find($legacyId);
+            }
+
+            if (! $maze && $activity->tribe_id && $activity->title) {
+                $maze = Maze::query()->select([
+                    'id', 'title', 'maze_type', 'difficulty_level',
+                    'grid', 'grid_rows', 'grid_cols',
+                    'start_position', 'end_position', 'collectibles',
+                    'time_limit_seconds', 'visibility_radius',
+                    'hero_character', 'cultural_note',
+                    'background_image_path', 'cover_image_path',
+                ])
+                    ->where('tribe_id', $activity->tribe_id)
+                    ->where('title', $activity->title)
+                    ->where('status', 'published')
+                    ->first();
+            }
 
             if ($maze && is_array($maze->grid) && $maze->grid !== []) {
                 $response['maze_data'] = ['maze' => MazeApiSerializer::toArray($maze)];
