@@ -305,9 +305,19 @@ class ActivityController extends Controller
 
         if ($activity->type === 'drawing_kit') {
             $legacyId = (int) data_get($activity->metadata, 'legacy_drawing_id');
-            $drawing = $legacyId > 0
-                ? Drawing::query()->find($legacyId)
-                : null;
+
+            $drawing = null;
+            if ($legacyId > 0) {
+                $drawing = Drawing::query()->find($legacyId);
+            }
+
+            if (! $drawing && $activity->tribe_id && $activity->title) {
+                $drawing = Drawing::query()
+                    ->where('tribe_id', $activity->tribe_id)
+                    ->where('title', $activity->title)
+                    ->where('status', 'published')
+                    ->first();
+            }
 
             if ($drawing && $drawing->status === 'published') {
                 $drawingPayload = DrawingApiSerializer::toArray($drawing);
