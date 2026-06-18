@@ -7,6 +7,7 @@ use App\Models\Comic;
 use App\Models\OfflineContentBundle;
 use App\Models\OrganisationContentDecision;
 use App\Models\Song;
+use App\Support\OfflineBundle\ActivityOfflineBundleIdentity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -207,6 +208,23 @@ class OfflineBundleFreshness
                     'content_type' => OrganisationContentDecision::TYPE_FLASHCARD,
                     'content_id' => (int) $activity->id,
                 ];
+            }
+        }
+
+        $drawingActivities = Activity::query()
+            ->where('tribe_id', $tribeId)
+            ->where('is_published', true)
+            ->where('type', 'drawing_kit')
+            ->get(['id', 'type', 'is_published', 'metadata']);
+
+        foreach ($drawingActivities as $activity) {
+            $identity = ActivityOfflineBundleIdentity::resolve($activity);
+            if ($identity === null) {
+                continue;
+            }
+
+            if ($this->bundleNeedsRebuild($identity['content_type'], $identity['content_id'])) {
+                $targets[] = $identity;
             }
         }
 

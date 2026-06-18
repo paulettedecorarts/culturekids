@@ -5,6 +5,7 @@ namespace App\Support\OfflineBundle;
 use App\Models\Activity;
 use App\Models\OrganisationContentDecision;
 use App\Support\ActivityBundleMetadataExtract;
+use App\Support\ActivityDrawingTypeFilter;
 
 /**
  * Maps legacy {@see Activity} rows to offline bundle keys (content_type + content_id).
@@ -55,7 +56,9 @@ class ActivityOfflineBundleIdentity
             return null;
         }
 
-        $contentType = ($metadata['drawing_type'] ?? null) === 'coloring'
+        $contentType = ActivityDrawingTypeFilter::isColouringType(
+            is_string($metadata['drawing_type'] ?? null) ? $metadata['drawing_type'] : null,
+        )
             ? OrganisationContentDecision::TYPE_COLOURING
             : OrganisationContentDecision::TYPE_DRAWING;
 

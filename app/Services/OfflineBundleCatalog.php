@@ -11,6 +11,7 @@ use App\Models\LanguageActivity;
 use App\Models\Maze;
 use App\Models\OfflineContentBundle;
 use App\Models\OrganisationContentDecision;
+use App\Support\ActivityDrawingTypeFilter;
 use App\Services\OfflineBundleBuildStatus;
 use App\Models\Song;
 use App\Models\SpotDifference;
@@ -70,7 +71,7 @@ class OfflineBundleCatalog
             OrganisationContentDecision::TYPE_FLASHCARD => fn () => $this->mapActivities('flashcard', OrganisationContentDecision::TYPE_FLASHCARD),
             OrganisationContentDecision::TYPE_PUZZLE => fn () => $this->mapActivities('puzzle', OrganisationContentDecision::TYPE_PUZZLE),
             OrganisationContentDecision::TYPE_DRAWING => fn () => $this->mapDrawings('drawing', OrganisationContentDecision::TYPE_DRAWING),
-            OrganisationContentDecision::TYPE_COLOURING => fn () => $this->mapDrawings('coloring', OrganisationContentDecision::TYPE_COLOURING),
+            OrganisationContentDecision::TYPE_COLOURING => fn () => $this->mapColouringDrawings(),
             OrganisationContentDecision::TYPE_LANGUAGE => fn () => $this->mapLanguages(),
             OrganisationContentDecision::TYPE_GAME => fn () => $this->mapSimple(Game::class, OrganisationContentDecision::TYPE_GAME),
             OrganisationContentDecision::TYPE_MAZE => fn () => $this->mapSimple(Maze::class, OrganisationContentDecision::TYPE_MAZE),
@@ -140,6 +141,23 @@ class OfflineBundleCatalog
             ->orderBy('title')
             ->get(['id', 'title', 'tribe_id'])
             ->map(fn (Drawing $d) => $this->rowFromBundle($contentType, (int) $d->id, $d->title, $d->tribe?->name))
+            ->all();
+    }
+
+    private function mapColouringDrawings(): array
+    {
+        return Drawing::query()
+            ->with('tribe:id,name')
+            ->whereIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES)
+            ->where('status', 'published')
+            ->orderBy('title')
+            ->get(['id', 'title', 'tribe_id'])
+            ->map(fn (Drawing $d) => $this->rowFromBundle(
+                OrganisationContentDecision::TYPE_COLOURING,
+                (int) $d->id,
+                $d->title,
+                $d->tribe?->name,
+            ))
             ->all();
     }
 

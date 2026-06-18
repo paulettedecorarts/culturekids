@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\OrganisationContentDecision;
+use App\Services\OfflineBundlePublisher;
+use App\Support\ActivityDrawingTypeFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,6 +52,12 @@ class Drawing extends Model
             self::$syncingLegacyActivity = true;
             try {
                 $drawing->syncLegacyActivity();
+                if ($drawing->status === 'published') {
+                    $contentType = ActivityDrawingTypeFilter::isColouringType($drawing->drawing_type)
+                        ? OrganisationContentDecision::TYPE_COLOURING
+                        : OrganisationContentDecision::TYPE_DRAWING;
+                    OfflineBundlePublisher::queue($contentType, (int) $drawing->id);
+                }
             } finally {
                 self::$syncingLegacyActivity = false;
             }

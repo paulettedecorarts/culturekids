@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\HandlePublishedContentSideEffects;
+use App\Support\ActivityDrawingTypeFilter;
 use App\Services\OfflineBundlePublisher;
 use App\Models\Activity;
 use App\Models\AuditLog;
@@ -282,10 +282,10 @@ class OrganisationContentReviewService
             ->where('status', 'published')
             ->when(
                 $colouring,
-                fn ($q) => $q->where('drawing_type', 'coloring'),
+                fn ($q) => $q->whereIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES),
                 fn ($q) => $q->where(function ($inner) {
                     $inner->whereNull('drawing_type')
-                        ->orWhere('drawing_type', '!=', 'coloring');
+                        ->orWhereNotIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES);
                 })
             )
             ->when($exclude !== [], fn ($q) => $q->whereNotIn('id', $exclude))
@@ -488,13 +488,14 @@ class OrganisationContentReviewService
                 ->whereKey($contentId)
                 ->where('status', 'published')
                 ->where(function ($q) {
-                    $q->whereNull('drawing_type')->orWhere('drawing_type', '!=', 'coloring');
+                    $q->whereNull('drawing_type')
+                        ->orWhereNotIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES);
                 })
                 ->first(['id', 'title']),
             OrganisationContentDecision::TYPE_COLOURING => Drawing::query()
                 ->whereKey($contentId)
                 ->where('status', 'published')
-                ->where('drawing_type', 'coloring')
+                ->whereIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES)
                 ->first(['id', 'title']),
             OrganisationContentDecision::TYPE_LANGUAGE => LanguageActivity::query()
                 ->whereKey($contentId)

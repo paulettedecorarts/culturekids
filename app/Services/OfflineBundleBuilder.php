@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\CultureActivity;
 use App\Support\CultureApiSerializer;
+use App\Support\ActivityDrawingTypeFilter;
 use App\Support\GameApiSerializer;
 use App\Models\Drawing;
 use App\Models\Game;
@@ -420,11 +421,11 @@ class OfflineBundleBuilder
             ->where('status', 'published');
 
         if ($colouring) {
-            $query->where('drawing_type', 'coloring');
+            $query->whereIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES);
         } else {
             $query->where(function ($inner) {
                 $inner->whereNull('drawing_type')
-                    ->orWhere('drawing_type', '!=', 'coloring');
+                    ->orWhereNotIn('drawing_type', ActivityDrawingTypeFilter::COLOURING_TYPES);
             });
         }
 
