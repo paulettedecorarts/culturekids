@@ -86,7 +86,7 @@ class SongController extends Controller
 
         $song = $query->with('lyricSegments')->firstOrFail();
 
-        return response()->json(SongApiSerializer::toArray($song, includeLyrics: true));
+        return response()->json(SongApiSerializer::toArray($song, includeLyrics: true, includeSegments: true));
     }
 
     /**

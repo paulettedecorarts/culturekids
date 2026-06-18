@@ -9,9 +9,16 @@ final class SongApiSerializer
     /**
      * @return array<string, mixed>
      */
-    public static function toArray(Song $song, bool $includeLyrics = false): array
-    {
-        $song->loadMissing(['tribe:id,name,hero_emoji,hero_icon,color', 'lyricSegments']);
+    public static function toArray(
+        Song $song,
+        bool $includeLyrics = false,
+        bool $includeSegments = false,
+    ): array {
+        $relations = ['tribe:id,name,hero_emoji,hero_icon,color'];
+        if ($includeSegments) {
+            $relations[] = 'lyricSegments';
+        }
+        $song->loadMissing($relations);
 
         $payload = [
             'id' => $song->id,
@@ -38,7 +45,10 @@ final class SongApiSerializer
                 'icon' => $song->tribe->hero_emoji ?? $song->tribe->hero_icon,
                 'color' => $song->tribe->color,
             ] : null,
-            'lyric_segments' => $song->lyricSegments
+        ];
+
+        if ($includeSegments) {
+            $payload['lyric_segments'] = $song->lyricSegments
                 ->sortBy('order_index')
                 ->values()
                 ->map(fn ($segment) => [
@@ -51,8 +61,8 @@ final class SongApiSerializer
                     'is_fill_blank' => (bool) $segment->is_fill_blank,
                     'blank_answer' => $segment->is_fill_blank ? $segment->blank_answer : null,
                 ])
-                ->all(),
-        ];
+                ->all();
+        }
 
         if ($includeLyrics) {
             $payload['lyrics'] = $song->lyrics;

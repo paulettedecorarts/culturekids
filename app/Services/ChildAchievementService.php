@@ -22,12 +22,16 @@ class ChildAchievementService
         $completed = ChildContentProgress::query()
             ->where('child_profile_id', $child->id)
             ->where('status', 'completed')
-            ->get();
+            ->get(['id', 'content_type', 'content_id', 'stars_earned', 'metadata']);
 
         $totalStories = $completed->where('content_type', ContentProgressType::STORY)->count();
         $totalSongs = $completed->where('content_type', ContentProgressType::SONG)->count();
         $totalActivities = $completed
-            ->where(fn (ChildContentProgress $row) => $row->content_type !== ContentProgressType::STORY)
+            ->filter(fn (ChildContentProgress $row) => ! in_array(
+                $row->content_type,
+                [ContentProgressType::STORY, ContentProgressType::SONG],
+                true,
+            ))
             ->count();
 
         $gradeCounts = ['gold' => 0, 'silver' => 0, 'bronze' => 0];
@@ -60,7 +64,13 @@ class ChildAchievementService
             ->all();
 
         return [
-            'child' => $child,
+            'child' => [
+                'id' => $child->id,
+                'name' => $child->name,
+                'avatar' => $child->avatar,
+                'age_band' => $child->age_band,
+                'total_stars' => (int) $child->total_stars,
+            ],
             'completed_activity_ids' => $completedActivityIds,
             'total_stars' => (int) $child->total_stars,
             'total_activities_completed' => $totalActivities,
@@ -80,9 +90,14 @@ class ChildAchievementService
     private function buildTribeBadges(Collection $completed): Collection
     {
         $byTribe = [];
+        $tribeLookup = $this->buildTribeIdLookup($completed);
 
         foreach ($completed as $row) {
-            $tribeId = $this->resolveTribeId($row->content_type, (int) $row->content_id);
+            $tribeId = $this->resolveTribeIdFromLookup(
+                $tribeLookup,
+                $row->content_type,
+                (int) $row->content_id,
+            );
             if ($tribeId === null) {
                 continue;
             }
@@ -141,12 +156,55 @@ class ChildAchievementService
         });
     }
 
-    private function resolveTribeId(string $contentType, int $contentId): ?int
+    /**
+     * Batch-resolve tribe IDs (3 queries instead of one per completion row).
+     *
+     * @param  Collection<int, ChildContentProgress>  $completed
+     * @return array<string, array<int, int|null>>
+     */
+    private function buildTribeIdLookup(Collection $completed): array
+    {
+        $storyIds = $completed
+            ->where('content_type', ContentProgressType::STORY)
+            ->pluck('content_id')
+            ->unique()
+            ->values()
+            ->all();
+        $songIds = $completed
+            ->where('content_type', ContentProgressType::SONG)
+            ->pluck('content_id')
+            ->unique()
+            ->values()
+            ->all();
+        $activityIds = $completed
+            ->filter(fn (ChildContentProgress $row) => ContentProgressType::usesActivityTable($row->content_type))
+            ->pluck('content_id')
+            ->unique()
+            ->values()
+            ->all();
+
+        return [
+            ContentProgressType::STORY => $storyIds === []
+                ? []
+                : Comic::query()->whereIn('id', $storyIds)->pluck('tribe_id', 'id')->all(),
+            ContentProgressType::SONG => $songIds === []
+                ? []
+                : DB::table('songs')->whereIn('id', $songIds)->pluck('tribe_id', 'id')->all(),
+            'activity' => $activityIds === []
+                ? []
+                : Activity::query()->whereIn('id', $activityIds)->pluck('tribe_id', 'id')->all(),
+        ];
+    }
+
+    /**
+     * @param  array<string, array<int, int|null>>  $tribeLookup
+     */
+    private function resolveTribeIdFromLookup(array $tribeLookup, string $contentType, int $contentId): ?int
     {
         return match ($contentType) {
-            ContentProgressType::STORY => Comic::query()->whereKey($contentId)->value('tribe_id'),
-            ContentProgressType::SONG => DB::table('songs')->where('id', $contentId)->value('tribe_id'),
-            default => Activity::query()->whereKey($contentId)->value('tribe_id'),
+            ContentProgressType::STORY => $tribeLookup[ContentProgressType::STORY][$contentId] ?? null,
+            ContentProgressType::SONG => $tribeLookup[ContentProgressType::SONG][$contentId] ?? null,
+            default => $tribeLookup['activity'][$contentId] ?? null,
         };
     }
 
