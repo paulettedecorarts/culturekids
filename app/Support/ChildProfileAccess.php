@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Models\ChildProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * Resolves child profiles for both:
@@ -30,5 +31,28 @@ final class ChildProfileAccess
     {
         return (int) $child->user_id === (int) $user->id
             || (int) $child->child_user_id === (int) $user->id;
+    }
+
+    /**
+     * Return the user's child profile, creating one for child-role logins when missing.
+     */
+    public static function ensureForUser(User $user): ?ChildProfile
+    {
+        $existing = self::queryFor($user)->orderByDesc('updated_at')->first();
+        if ($existing) {
+            return $existing;
+        }
+
+        if (! $user->hasRole('child')) {
+            return null;
+        }
+
+        return ChildProfile::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'dob' => Carbon::now()->subYears(8)->toDateString(),
+            'age_band' => 'simple',
+            'total_stars' => 0,
+        ]);
     }
 }

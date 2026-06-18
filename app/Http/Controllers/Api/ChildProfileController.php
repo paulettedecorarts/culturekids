@@ -24,13 +24,10 @@ class ChildProfileController extends Controller
 
         // Org / school child logins must always have a progress profile.
         if ($profiles->isEmpty() && $user->hasRole('child')) {
-            $profiles = collect([
-                ChildProfile::create([
-                    'user_id' => $user->id,
-                    'name' => $user->name,
-                    'total_stars' => 0,
-                ]),
-            ]);
+            $created = ChildProfileAccess::ensureForUser($user);
+            if ($created) {
+                $profiles = collect([$created]);
+            }
         }
 
         return response()->json($profiles);

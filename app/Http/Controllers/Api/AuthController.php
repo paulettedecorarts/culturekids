@@ -14,7 +14,6 @@ use Illuminate\Validation\ValidationException;
 use App\Jobs\SendUserNotificationJob;
 use App\Models\User;
 use App\Models\UserNotification;
-use App\Models\ChildProfile;
 
 class AuthController extends Controller
 {
@@ -245,15 +244,8 @@ class AuthController extends Controller
     {
         $childProfile = ChildProfileAccess::queryFor($user)
             ->orderByDesc('updated_at')
-            ->first();
-
-        if (! $childProfile && $user->hasRole('child')) {
-            $childProfile = ChildProfile::create([
-                'user_id' => $user->id,
-                'name' => $user->name,
-                'total_stars' => 0,
-            ]);
-        }
+            ->first()
+            ?? ChildProfileAccess::ensureForUser($user);
 
         return [
             'id' => $user->id,
