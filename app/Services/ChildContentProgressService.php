@@ -6,10 +6,12 @@ use App\Models\Activity;
 use App\Models\ChildContentProgress;
 use App\Models\ChildProfile;
 use App\Models\Comic;
+use App\Models\DrawingSubmission;
 use App\Models\ProgressEvent;
 use App\Models\ReadingProgress;
 use App\Models\Song;
 use App\Models\User;
+use App\Support\AppleGradeScoring;
 use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -72,6 +74,7 @@ class ChildContentProgressService
         string $contentType,
         int $contentId,
         string $idempotencyKey,
+        ?array $performance = null,
     ): array {
         ContentProgressType::assertValid($contentType);
         $this->authorizeChild($user, $child);
@@ -86,7 +89,12 @@ class ChildContentProgressService
             return $this->format($existingByKey, alreadyRecorded: true);
         }
 
-        $stars = $this->resolveStars($contentType, $contentId);
+        $maxStars = $this->resolveStars($contentType, $contentId);
+        $gradeInput = (is_array($performance) && is_array($performance['apple_input'] ?? null))
+            ? $performance['apple_input']
+            : ($performance ?? []);
+        $graded = AppleGradeScoring::compute($gradeInput, $maxStars);
+        $stars = (int) $graded['stars_earned'];
 
         $progress = ChildContentProgress::query()->firstOrNew([
             'child_profile_id' => $child->id,
@@ -106,6 +114,10 @@ class ChildContentProgressService
 
         $progress->status = 'completed';
         $progress->stars_earned = $stars;
+        $progress->metadata = array_merge(
+            is_array($progress->metadata) ? $progress->metadata : [],
+            $graded['metadata'],
+        );
         $progress->completed_at = now();
         $progress->last_activity_at = now();
         $progress->completion_idempotency_key = $idempotencyKey;
@@ -116,6 +128,7 @@ class ChildContentProgressService
         }
 
         $this->syncLegacyCompletion($user, $child, $contentType, $contentId, $stars, $idempotencyKey);
+        $this->persistTypeAttempt($user, $contentType, $contentId, $graded['metadata'], $stars);
 
         return $this->format($progress->fresh(), alreadyRecorded: $wasCompleted);
     }
@@ -266,6 +279,46 @@ class ChildContentProgressService
                 'synced_at' => now(),
             ]);
         }
+    }
+
+    /**
+     * @param  array<string, mixed>  $metadata
+     */
+    private function persistTypeAttempt(
+        User $user,
+        string $contentType,
+        int $contentId,
+        array $metadata,
+        int $starsEarned,
+    ): void {
+        if (! in_array($contentType, [ContentProgressType::DRAWING_KIT, ContentProgressType::COLOURING], true)) {
+            return;
+        }
+
+        $activity = Activity::query()->find($contentId);
+        $drawingId = $activity?->metadata['legacy_drawing_id'] ?? null;
+        if (! $drawingId) {
+            return;
+        }
+
+        $input = is_array($metadata['apple_input'] ?? null) ? $metadata['apple_input'] : [];
+        $durationMs = $input['durationMs'] ?? $input['duration_ms'] ?? null;
+        $toolsUsed = $input['tools_used'] ?? $input['toolsUsed'] ?? [];
+
+        DrawingSubmission::query()->updateOrCreate(
+            [
+                'drawing_id' => (int) $drawingId,
+                'user_id' => $user->id,
+            ],
+            [
+                'completed' => true,
+                'stars_earned' => $starsEarned,
+                'time_spent_seconds' => is_numeric($durationMs) ? max(0, (int) round(((float) $durationMs) / 1000)) : null,
+                'tools_used' => is_array($toolsUsed) ? $toolsUsed : [],
+                'drawing_data' => $input,
+                'completed_at' => now(),
+            ],
+        );
     }
 
     /**

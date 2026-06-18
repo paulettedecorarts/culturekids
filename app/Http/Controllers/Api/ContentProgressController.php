@@ -86,6 +86,7 @@ class ContentProgressController extends Controller
             'content_type' => 'required|string|in:'.implode(',', ContentProgressType::ALL),
             'content_id' => 'required|integer|min:1',
             'idempotency_key' => 'required|string|max:191',
+            'performance' => 'nullable|array',
         ]);
 
         if ($validator->fails()) {
@@ -100,9 +101,14 @@ class ContentProgressController extends Controller
             $request->input('content_type'),
             (int) $request->input('content_id'),
             $request->input('idempotency_key'),
+            $request->input('performance'),
         );
 
-        return response()->json($result);
+        return response()->json([
+            ...$result,
+            'starsEarned' => $result['stars_earned'] ?? 0,
+            'progress' => $result,
+        ]);
     }
 
     private function resolveChild(Request $request, int $childId): ChildProfile

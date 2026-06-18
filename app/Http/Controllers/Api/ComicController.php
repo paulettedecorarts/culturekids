@@ -224,6 +224,16 @@ class ComicController extends Controller
         }
 
         if ($request->filled('child_profile_id')) {
+            $validator = Validator::make($request->all(), [
+                'child_profile_id' => 'required|integer',
+                'idempotency_key' => 'nullable|string|max:191',
+                'performance' => 'nullable|array',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
             $child = ChildProfileAccess::findForUserOrFail(
                 $user,
                 (int) $request->input('child_profile_id'),
@@ -240,6 +250,7 @@ class ComicController extends Controller
                 ContentProgressType::STORY,
                 (int) $id,
                 $idempotencyKey,
+                $request->input('performance'),
             );
 
             return response()->json([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Concerns\ChecksOrganisationModules;
 use App\Http\Controllers\Controller;
 use App\Models\Song;
+use App\Support\SongApiSerializer;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
@@ -52,29 +53,7 @@ class SongController extends Controller
             $query->whereNull('org_id');
         }
 
-        $songs = $query->get()->map(function ($song) {
-            return [
-                'id' => $song->id,
-                'title' => $song->title,
-                'description' => $song->description,
-                'language' => $song->language,
-                'song_type' => $song->song_type,
-                'age_range' => $song->age_range,
-                'duration' => $song->duration_label,
-                'duration_seconds' => $song->duration_seconds,
-                'status' => $song->status,
-                'cover_image' => $song->cover_image_path ? asset('storage/' . $song->cover_image_path) : null,
-                'audio_path' => $song->audio_path ? asset('storage/' . $song->audio_path) : null,
-                'video_path' => $song->video_path ? asset('storage/' . $song->video_path) : null,
-                'star_points' => $song->star_points ?? 10,
-                'tribe' => $song->tribe ? [
-                    'id' => $song->tribe->id,
-                    'name' => $song->tribe->name,
-                    'icon' => $song->tribe->hero_emoji ?? $song->tribe->hero_icon,
-                    'color' => $song->tribe->color,
-                ] : null,
-            ];
-        });
+        $songs = $query->get()->map(fn (Song $song) => SongApiSerializer::toArray($song));
 
         return response()->json($songs);
     }
@@ -105,30 +84,9 @@ class SongController extends Controller
             $query->whereNull('org_id');
         }
 
-        $song = $query->firstOrFail();
+        $song = $query->with('lyricSegments')->firstOrFail();
 
-        return response()->json([
-            'id' => $song->id,
-            'title' => $song->title,
-            'description' => $song->description,
-            'language' => $song->language,
-            'song_type' => $song->song_type,
-            'lyrics' => $song->lyrics,
-            'age_range' => $song->age_range,
-            'duration' => $song->duration_label,
-            'duration_seconds' => $song->duration_seconds,
-            'status' => $song->status,
-            'cover_image' => $song->cover_image_path ? asset('storage/' . $song->cover_image_path) : null,
-            'audio_path' => $song->audio_path ? asset('storage/' . $song->audio_path) : null,
-            'video_path' => $song->video_path ? asset('storage/' . $song->video_path) : null,
-            'star_points' => $song->star_points ?? 10,
-            'tribe' => $song->tribe ? [
-                'id' => $song->tribe->id,
-                'name' => $song->tribe->name,
-                'icon' => $song->tribe->hero_emoji ?? $song->tribe->hero_icon,
-                'color' => $song->tribe->color,
-            ] : null,
-        ]);
+        return response()->json(SongApiSerializer::toArray($song, includeLyrics: true));
     }
 
     /**
@@ -166,20 +124,7 @@ class SongController extends Controller
             $query->whereNull('org_id');
         }
 
-        $songs = $query->get()->map(function ($song) {
-            return [
-                'id' => $song->id,
-                'title' => $song->title,
-                'description' => $song->description,
-                'language' => $song->language,
-                'song_type' => $song->song_type,
-                'age_range' => $song->age_range,
-                'duration' => $song->duration_label,
-                'cover_image' => $song->cover_image_path ? asset('storage/' . $song->cover_image_path) : null,
-                'audio_path' => $song->audio_path ? asset('storage/' . $song->audio_path) : null,
-                'star_points' => $song->star_points ?? 10,
-            ];
-        });
+        $songs = $query->get()->map(fn (Song $song) => SongApiSerializer::toArray($song));
 
         return response()->json($songs);
     }
