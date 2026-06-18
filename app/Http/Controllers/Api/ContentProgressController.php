@@ -106,7 +106,7 @@ class ContentProgressController extends Controller
 
         return response()->json([
             ...$result,
-            'starsEarned' => $result['stars_earned'] ?? 0,
+            'starsEarned' => (int) ($result['stars_earned_this_attempt'] ?? 0),
             'progress' => $result,
         ]);
     }

@@ -241,7 +241,7 @@ class ComicController extends Controller
 
             $idempotencyKey = $request->input(
                 'idempotency_key',
-                "{$child->id}-story-{$id}-".now()->timestamp,
+                "{$child->id}-story-{$id}-complete",
             );
 
             $result = $this->progressService->complete(
@@ -254,8 +254,9 @@ class ComicController extends Controller
             );
 
             return response()->json([
-                'message' => 'Story completed!',
-                'stars_earned' => $result['stars_earned'],
+                'message' => ($result['already_recorded'] ?? false) ? 'Story already completed!' : 'Story completed!',
+                'stars_earned' => (int) ($result['stars_earned_this_attempt'] ?? 0),
+                'already_recorded' => (bool) ($result['already_recorded'] ?? false),
                 'progress' => $result,
                 'new_badges' => [],
             ]);

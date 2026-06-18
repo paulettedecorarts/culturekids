@@ -86,7 +86,7 @@ class ChildContentProgressService
             ->first();
 
         if ($existingByKey) {
-            return $this->format($existingByKey, alreadyRecorded: true);
+            return $this->format($existingByKey, alreadyRecorded: true, newStarsEarned: 0);
         }
 
         $maxStars = $this->resolveStars($contentType, $contentId);
@@ -103,6 +103,28 @@ class ChildContentProgressService
         ]);
 
         $wasCompleted = $progress->status === 'completed';
+
+        if ($wasCompleted) {
+            if (! $progress->exists) {
+                $progress->started_at = now();
+            }
+
+            if ($progress->total_positions > 0) {
+                $progress->current_position = $progress->total_positions;
+            }
+
+            $progress->metadata = $this->mergeAttemptMetadata(
+                is_array($progress->metadata) ? $progress->metadata : [],
+                $graded['metadata'],
+            );
+            $progress->last_activity_at = now();
+            if (! $progress->completion_idempotency_key) {
+                $progress->completion_idempotency_key = $idempotencyKey;
+            }
+            $progress->save();
+
+            return $this->format($progress->fresh(), alreadyRecorded: true, newStarsEarned: 0);
+        }
 
         if (! $progress->exists) {
             $progress->started_at = now();
@@ -123,14 +145,12 @@ class ChildContentProgressService
         $progress->completion_idempotency_key = $idempotencyKey;
         $progress->save();
 
-        if (! $wasCompleted) {
-            $child->increment('total_stars', $stars);
-        }
+        $child->increment('total_stars', $stars);
 
         $this->syncLegacyCompletion($user, $child, $contentType, $contentId, $stars, $idempotencyKey);
         $this->persistTypeAttempt($user, $contentType, $contentId, $graded['metadata'], $stars);
 
-        return $this->format($progress->fresh(), alreadyRecorded: $wasCompleted);
+        return $this->format($progress->fresh(), alreadyRecorded: false, newStarsEarned: $stars);
     }
 
     /**
@@ -322,11 +342,50 @@ class ChildContentProgressService
     }
 
     /**
+     * @param  array<string, mixed>|null  $existing
+     * @param  array<string, mixed>  $attempt
      * @return array<string, mixed>
      */
-    private function format(ChildContentProgress $progress, bool $alreadyRecorded = false): array
+    private function mergeAttemptMetadata(?array $existing, array $attempt): array
     {
-        return [
+        $merged = array_merge($existing ?? [], $attempt);
+
+        $existingBest = $existing['apple_best_grade'] ?? ($existing['apple_grade'] ?? null);
+        $attemptGrade = $attempt['apple_grade'] ?? null;
+
+        if ($this->gradeRank(is_string($attemptGrade) ? $attemptGrade : null)
+            > $this->gradeRank(is_string($existingBest) ? $existingBest : null)) {
+            $merged['apple_best_grade'] = $attemptGrade;
+        } elseif (is_string($existingBest)) {
+            $merged['apple_best_grade'] = $existingBest;
+        }
+
+        if (is_string($attemptGrade)) {
+            $merged['apple_last_grade'] = $attemptGrade;
+        }
+
+        return $merged;
+    }
+
+    private function gradeRank(?string $grade): int
+    {
+        return match ($grade) {
+            'gold' => 3,
+            'silver' => 2,
+            'bronze' => 1,
+            default => 0,
+        };
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function format(
+        ChildContentProgress $progress,
+        bool $alreadyRecorded = false,
+        ?int $newStarsEarned = null,
+    ): array {
+        $result = [
             'child_profile_id' => $progress->child_profile_id,
             'content_type' => $progress->content_type,
             'content_id' => $progress->content_id,
@@ -334,13 +393,19 @@ class ChildContentProgressService
             'current_position' => $progress->current_position,
             'total_positions' => $progress->total_positions,
             'percentage' => $progress->percentage,
-            'stars_earned' => $progress->stars_earned,
+            'stars_earned' => (int) $progress->stars_earned,
             'metadata' => $progress->metadata,
             'started_at' => $progress->started_at,
             'completed_at' => $progress->completed_at,
             'last_activity_at' => $progress->last_activity_at,
             'already_recorded' => $alreadyRecorded,
         ];
+
+        if ($newStarsEarned !== null || $alreadyRecorded) {
+            $result['stars_earned_this_attempt'] = $newStarsEarned ?? 0;
+        }
+
+        return $result;
     }
 
     /**
@@ -362,6 +427,7 @@ class ChildContentProgressService
             'completed_at' => null,
             'last_activity_at' => null,
             'already_recorded' => false,
+            'stars_earned_this_attempt' => 0,
         ];
     }
 }

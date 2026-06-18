@@ -36,7 +36,8 @@ class ChildAchievementService
 
         $gradeCounts = ['gold' => 0, 'silver' => 0, 'bronze' => 0];
         foreach ($completed as $row) {
-            $grade = is_array($row->metadata) ? ($row->metadata['apple_grade'] ?? null) : null;
+            $metadata = is_array($row->metadata) ? $row->metadata : [];
+            $grade = $metadata['apple_best_grade'] ?? ($metadata['apple_grade'] ?? null);
             if (is_string($grade) && isset($gradeCounts[$grade])) {
                 $gradeCounts[$grade]++;
             }
