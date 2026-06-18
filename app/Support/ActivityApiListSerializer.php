@@ -25,10 +25,12 @@ final class ActivityApiListSerializer
      */
     public static function mapOne(Activity $activity, ?string $coverImage = null): array
     {
-        return [
+        $listType = ActivityDrawingTypeFilter::listTypeForActivity($activity);
+
+        $payload = [
             'id' => $activity->id,
             'title' => $activity->title,
-            'type' => ActivityDrawingTypeFilter::listTypeForActivity($activity),
+            'type' => $listType,
             'age_range' => $activity->age_range,
             'stars' => $activity->star_points ?? 10,
             'description' => $activity->description,
@@ -40,5 +42,14 @@ final class ActivityApiListSerializer
                 'color' => $activity->tribe->color,
             ] : null,
         ];
+
+        if (in_array($listType, ['colouring', 'drawing_kit'], true)) {
+            $slim = ActivityBundleMetadataExtract::toMetadataArray($activity);
+            if ($slim !== []) {
+                $payload['metadata'] = $slim;
+            }
+        }
+
+        return $payload;
     }
 }

@@ -325,6 +325,9 @@ class ActivityController extends Controller
                     'drawing' => $drawingPayload,
                 ];
                 $response['cover_image'] = $drawingPayload['cover_image_url'] ?? null;
+                if (ActivityDrawingTypeFilter::isColouringType($drawing->drawing_type)) {
+                    $response['type'] = 'colouring';
+                }
             }
         }
 
