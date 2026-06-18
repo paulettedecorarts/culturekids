@@ -22,6 +22,17 @@ class ChildProfileController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Org / school child logins must always have a progress profile.
+        if ($profiles->isEmpty() && $user->hasRole('child')) {
+            $profiles = collect([
+                ChildProfile::create([
+                    'user_id' => $user->id,
+                    'name' => $user->name,
+                    'total_stars' => 0,
+                ]),
+            ]);
+        }
+
         return response()->json($profiles);
     }
 

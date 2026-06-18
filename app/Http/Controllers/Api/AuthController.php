@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\VerificationCodeMail;
 use App\Models\VerificationCode;
+use App\Support\ChildProfileAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use App\Jobs\SendUserNotificationJob;
 use App\Models\User;
 use App\Models\UserNotification;
+use App\Models\ChildProfile;
 
 class AuthController extends Controller
 {
@@ -120,13 +122,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login successful',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-                'organization_id' => $user->organisation_id,
-            ],
+            'user' => $this->userPayload($user),
             'token' => $token,
         ], 200);
     }
@@ -139,13 +135,7 @@ class AuthController extends Controller
         $user = $request->user();
         
         return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-                'organization_id' => $user->organisation_id,
-            ],
+            'user' => $this->userPayload($user),
         ], 200);
     }
 
@@ -213,14 +203,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Email verified successfully',
             'verified' => true,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-                'organization_id' => $user->organisation_id,
-                'email_verified' => true,
-            ],
+            'user' => $this->userPayload($user),
         ], 200);
     }
 
@@ -255,5 +238,31 @@ class AuthController extends Controller
                 'message' => 'Failed to send verification code. Please try again.',
             ], 500);
         }
+    }
+
+    /** @return array<string, mixed> */
+    private function userPayload(User $user): array
+    {
+        $childProfile = ChildProfileAccess::queryFor($user)
+            ->orderByDesc('updated_at')
+            ->first();
+
+        if (! $childProfile && $user->hasRole('child')) {
+            $childProfile = ChildProfile::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'total_stars' => 0,
+            ]);
+        }
+
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->getRoleNames(),
+            'organization_id' => $user->organisation_id,
+            'email_verified' => (bool) $user->email_verified_at,
+            'child_profile_id' => $childProfile?->id,
+        ];
     }
 }
