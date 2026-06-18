@@ -46,6 +46,8 @@ FROM node:22-bookworm-slim AS frontend
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+# Coolify/build hosts often set NODE_ENV=production; postcss/tailwind live in devDependencies.
+ENV NPM_CONFIG_PRODUCTION=false
 RUN npm ci
 
 COPY vite.config.js postcss.config.js tailwind.config.js ./
