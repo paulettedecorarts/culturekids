@@ -45,7 +45,7 @@ class ChildAchievementService
 
         $badges = $this->buildTribeBadges($completed);
         $completedTribes = $badges->filter(
-            fn (array $badge) => ($badge['completed_activities'] ?? 0) >= ($badge['total_activities'] ?? 1)
+            fn (array $badge) => ($badge['completed_total'] ?? 0) >= ($badge['total_activities'] ?? 1)
         )->count();
 
         $milestones = $this->buildMilestones(
@@ -56,6 +56,8 @@ class ChildAchievementService
             $completedTribes,
             $gradeCounts,
         );
+
+        $progressSnapshot = $this->buildProgressSnapshot($child->id);
 
         $completedActivityIds = $completed
             ->filter(fn (ChildContentProgress $row) => ContentProgressType::usesActivityTable($row->content_type))
@@ -81,6 +83,68 @@ class ChildAchievementService
             'tribes_completed' => $completedTribes,
             'badges' => $badges->values()->all(),
             'milestones' => $milestones,
+            'completion_by_type' => $progressSnapshot['completion_by_type'],
+            'in_progress_items' => $progressSnapshot['in_progress_items'],
+        ];
+    }
+
+    /**
+     * @return array{
+     *   completion_by_type: array<string, array{completed: int, in_progress: int}>,
+     *   in_progress_items: list<array<string, mixed>>
+     * }
+     */
+    private function buildProgressSnapshot(int $childProfileId): array
+    {
+        $byType = [];
+        foreach (ContentProgressType::ALL as $type) {
+            $byType[$type] = ['completed' => 0, 'in_progress' => 0];
+        }
+
+        $rows = ChildContentProgress::query()
+            ->where('child_profile_id', $childProfileId)
+            ->orderByDesc('last_activity_at')
+            ->get([
+                'content_type',
+                'content_id',
+                'status',
+                'current_position',
+                'total_positions',
+                'percentage',
+                'last_activity_at',
+            ]);
+
+        $inProgressItems = [];
+
+        foreach ($rows as $row) {
+            $type = $row->content_type;
+            if (! isset($byType[$type])) {
+                continue;
+            }
+
+            if ($row->status === 'completed') {
+                $byType[$type]['completed']++;
+                continue;
+            }
+
+            if ($row->status === 'in_progress') {
+                $byType[$type]['in_progress']++;
+                if (count($inProgressItems) < 20) {
+                    $inProgressItems[] = [
+                        'content_type' => $type,
+                        'content_id' => (int) $row->content_id,
+                        'current_position' => (int) $row->current_position,
+                        'total_positions' => (int) $row->total_positions,
+                        'percentage' => (int) $row->percentage,
+                        'last_activity_at' => $row->last_activity_at,
+                    ];
+                }
+            }
+        }
+
+        return [
+            'completion_by_type' => $byType,
+            'in_progress_items' => $inProgressItems,
         ];
     }
 
@@ -105,12 +169,21 @@ class ChildAchievementService
 
             if (! isset($byTribe[$tribeId])) {
                 $byTribe[$tribeId] = [
+                    'completed_stories' => 0,
+                    'completed_songs' => 0,
                     'completed_activities' => 0,
                     'stars_earned' => 0,
                 ];
             }
 
-            $byTribe[$tribeId]['completed_activities']++;
+            if ($row->content_type === ContentProgressType::STORY) {
+                $byTribe[$tribeId]['completed_stories']++;
+            } elseif ($row->content_type === ContentProgressType::SONG) {
+                $byTribe[$tribeId]['completed_songs']++;
+            } else {
+                $byTribe[$tribeId]['completed_activities']++;
+            }
+
             $byTribe[$tribeId]['stars_earned'] += (int) $row->stars_earned;
         }
 
@@ -138,9 +211,21 @@ class ChildAchievementService
             ->groupBy('tribe_id')
             ->pluck('total', 'tribe_id');
 
-        return collect($byTribe)->map(function (array $stats, int $tribeId) use ($tribes, $activityTotals, $storyTotals) {
+        $songTotals = DB::table('songs')
+            ->select('tribe_id')
+            ->selectRaw('COUNT(*) as total')
+            ->whereIn('tribe_id', array_keys($byTribe))
+            ->groupBy('tribe_id')
+            ->pluck('total', 'tribe_id');
+
+        return collect($byTribe)->map(function (array $stats, int $tribeId) use ($tribes, $activityTotals, $storyTotals, $songTotals) {
             $tribe = $tribes->get($tribeId);
-            $total = (int) (($activityTotals[$tribeId] ?? 0) + ($storyTotals[$tribeId] ?? 0));
+            $totalStories = (int) ($storyTotals[$tribeId] ?? 0);
+            $totalSongs = (int) ($songTotals[$tribeId] ?? 0);
+            $totalActivitiesOnly = (int) ($activityTotals[$tribeId] ?? 0);
+            $totalAll = $totalStories + $totalSongs + $totalActivitiesOnly;
+            $completedTotal =
+                $stats['completed_stories'] + $stats['completed_songs'] + $stats['completed_activities'];
 
             return [
                 'tribe_id' => $tribeId,
@@ -148,11 +233,14 @@ class ChildAchievementService
                 'tribe_icon' => $tribe->hero_emoji ?? '🏛️',
                 'tribe_color' => $tribe->color ?? '#E8872A',
                 'completed_activities' => $stats['completed_activities'],
-                'completed_stories' => $stats['completed_activities'],
-                'total_activities' => max($total, 1),
-                'total_stories' => max($total, 1),
+                'completed_stories' => $stats['completed_stories'],
+                'completed_songs' => $stats['completed_songs'],
+                'completed_total' => $completedTotal,
+                'total_activities' => max($totalAll, 1),
+                'total_stories' => max($totalStories, 1),
+                'total_songs' => max($totalSongs, 1),
                 'stars_earned' => $stats['stars_earned'],
-                'unlocked' => $stats['completed_activities'] > 0,
+                'unlocked' => $completedTotal > 0,
             ];
         });
     }

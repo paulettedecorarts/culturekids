@@ -118,7 +118,12 @@ class ProgressController extends Controller
     {
         $user = $request->user();
 
-        // Get completed stories count
+        $child = ChildProfileAccess::queryFor($user)->orderByDesc('updated_at')->first();
+        if ($child) {
+            return response()->json($this->achievementService->build($child));
+        }
+
+        // Legacy account-level reading progress (pre-child-profile sessions only).
         $totalCompleted = ReadingProgress::where('user_id', $user->id)
             ->where('status', 'completed')
             ->count();

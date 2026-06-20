@@ -54,7 +54,8 @@ class ChildContentProgress extends Model
         if ($this->current_position <= 0) {
             $this->status = 'not_started';
         } elseif ($this->total_positions > 0 && $this->current_position >= $this->total_positions) {
-            $this->status = 'completed';
+            // Session ticks may reach the final position before graded completion runs.
+            $this->status = 'in_progress';
         } else {
             $this->status = 'in_progress';
         }
