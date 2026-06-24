@@ -11,6 +11,7 @@ class ReadingProgress extends Model
 
     protected $fillable = [
         'user_id',
+        'child_profile_id',
         'comic_id',
         'current_page',
         'total_pages',

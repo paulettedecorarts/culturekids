@@ -3,9 +3,11 @@
 namespace App\Livewire\Teacher;
 
 use App\Models\Classroom;
+use App\Models\ChildContentProgress;
 use App\Models\ChildProfile;
 use App\Models\ReadingProgress;
 use App\Models\ProgressEvent;
+use App\Support\ContentProgressType;
 use App\Support\TeacherActiveClassroom;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -70,11 +72,12 @@ class Reports extends Component
         
         // Calculate engagement (students with any activity)
         $activeStudents = $students->filter(function ($student) {
-            $hasStories = ReadingProgress::where('user_id', $student->id)->exists();
-            $hasActivities = ChildProfile::where('user_id', $student->id)
-                ->whereHas('progressEvents')
+            $profileIds = ChildProfile::where('user_id', $student->id)->pluck('id');
+
+            return ChildContentProgress::query()
+                ->whereIn('child_profile_id', $profileIds)
+                ->where('status', 'completed')
                 ->exists();
-            return $hasStories || $hasActivities;
         })->count();
         $engagementRate = round(($activeStudents / $totalStudents) * 100);
         
@@ -90,26 +93,21 @@ class Reports extends Component
         $students = $this->classroom->children()->orderBy('name')->get();
         
         $this->studentPerformance = $students->map(function ($student) {
-            // Get child profiles
             $profiles = ChildProfile::where('user_id', $student->id)->get();
-            
-            // Calculate total stars from activities
-            $activityStars = $profiles->sum('total_stars');
-            
-            // Calculate stars from stories
-            $storyStars = ReadingProgress::where('user_id', $student->id)
-                ->where('reading_progress.status', 'completed')
-                ->join('comics', 'reading_progress.comic_id', '=', 'comics.id')
-                ->sum('comics.star_points');
-            
-            $totalStars = $activityStars + $storyStars;
-            
-            // Count completed items
-            $completedStories = ReadingProgress::where('user_id', $student->id)
-                ->where('reading_progress.status', 'completed')
+            $profileIds = $profiles->pluck('id');
+
+            $completedRows = ChildContentProgress::query()
+                ->whereIn('child_profile_id', $profileIds)
+                ->where('status', 'completed')
+                ->get(['content_type', 'stars_earned']);
+
+            $totalStars = (int) $profiles->sum('total_stars');
+            $completedStories = $completedRows->where('content_type', ContentProgressType::STORY)->count();
+            $completedSongs = $completedRows->where('content_type', ContentProgressType::SONG)->count();
+            $completedActivities = $completedRows
+                ->filter(fn ($row) => ! in_array($row->content_type, [ContentProgressType::STORY, ContentProgressType::SONG], true))
                 ->count();
-            $completedActivities = ProgressEvent::whereIn('child_profile_id', $profiles->pluck('id'))->count();
-            $totalCompleted = $completedStories + $completedActivities;
+            $totalCompleted = $completedStories + $completedSongs + $completedActivities;
             
             // Calculate badges (simple milestone system)
             $badges = 0;

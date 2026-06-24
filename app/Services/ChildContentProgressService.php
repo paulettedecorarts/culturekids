@@ -60,7 +60,7 @@ class ChildContentProgressService
             $progress->save();
         }
 
-        // Legacy reading_progress dual-write removed from session ticks — unified table is source of truth.
+        $this->syncLegacySession($user, $child, $contentType, $contentId, $progress);
 
         return $this->format($progress);
     }
@@ -253,10 +253,11 @@ class ChildContentProgressService
         if ($contentType === ContentProgressType::STORY) {
             $reading = ReadingProgress::query()->updateOrCreate(
                 [
-                    'user_id' => $user->id,
+                    'child_profile_id' => $child->id,
                     'comic_id' => $contentId,
                 ],
                 [
+                    'user_id' => $user->id,
                     'current_page' => $progress->current_position,
                     'total_pages' => max($progress->total_positions, 1),
                     'last_read_at' => now(),
@@ -281,10 +282,11 @@ class ChildContentProgressService
 
             ReadingProgress::query()->updateOrCreate(
                 [
-                    'user_id' => $user->id,
+                    'child_profile_id' => $child->id,
                     'comic_id' => $contentId,
                 ],
                 [
+                    'user_id' => $user->id,
                     'current_page' => $totalPages,
                     'total_pages' => $totalPages,
                     'status' => 'completed',

@@ -39,12 +39,13 @@ final class AppleGradeScoring
      */
     public static function compute(?array $input, int $maxStars): array
     {
-        $input = $input ?? [];
+        $input = self::sanitiseInput($input ?? []);
         $cappedMax = max(1, $maxStars);
+        $hasSignal = self::hasPerformanceSignal($input);
 
-        $accuracy = self::resolveAccuracy($input);
-        $speed = self::resolveSpeed($input);
-        $precision = self::resolvePrecision($input);
+        $accuracy = self::resolveAccuracy($input, $hasSignal);
+        $speed = self::resolveSpeed($input, $hasSignal);
+        $precision = self::resolvePrecision($input, $hasSignal);
 
         $performance = ($accuracy * self::WEIGHT_ACCURACY)
             + ($speed * self::WEIGHT_SPEED)
@@ -79,7 +80,7 @@ final class AppleGradeScoring
     /**
      * @param  array<string, mixed>  $input
      */
-    private static function resolveAccuracy(array $input): float
+    private static function resolveAccuracy(array $input, bool $hasSignal = true): float
     {
         if (isset($input['accuracy']) && is_numeric($input['accuracy'])) {
             return self::clamp01((float) $input['accuracy']);
@@ -103,13 +104,13 @@ final class AppleGradeScoring
             return self::clamp01((float) $score / (float) $maxScore);
         }
 
-        return 1.0;
+        return $hasSignal ? 1.0 : 0.55;
     }
 
     /**
      * @param  array<string, mixed>  $input
      */
-    private static function resolvePrecision(array $input): float
+    private static function resolvePrecision(array $input, bool $hasSignal = true): float
     {
         if (isset($input['precision']) && is_numeric($input['precision'])) {
             return self::clamp01((float) $input['precision']);
@@ -121,13 +122,13 @@ final class AppleGradeScoring
             return self::clamp01(1 - ((float) $mistakes / (float) $attempts));
         }
 
-        return 1.0;
+        return $hasSignal ? 1.0 : 0.55;
     }
 
     /**
      * @param  array<string, mixed>  $input
      */
-    private static function resolveSpeed(array $input): float
+    private static function resolveSpeed(array $input, bool $hasSignal = true): float
     {
         if (isset($input['speed']) && is_numeric($input['speed'])) {
             return self::clamp01((float) $input['speed']);
@@ -144,7 +145,7 @@ final class AppleGradeScoring
             return self::clamp01(min((float) $par / max((float) $duration, 1), 1));
         }
 
-        return 0.85;
+        return $hasSignal ? 0.85 : 0.55;
     }
 
     private static function gradeFromPerformance(float $performance): string
@@ -162,5 +163,66 @@ final class AppleGradeScoring
     private static function clamp01(float $value): float
     {
         return max(0.0, min(1.0, $value));
+    }
+
+    /**
+     * @param  array<string, mixed>  $input
+     * @return array<string, mixed>
+     */
+    private static function sanitiseInput(array $input): array
+    {
+        foreach (['accuracy', 'speed', 'precision', 'timeRemainingRatio', 'time_remaining_ratio'] as $key) {
+            if (isset($input[$key]) && is_numeric($input[$key])) {
+                $input[$key] = self::clamp01((float) $input[$key]);
+            }
+        }
+
+        $correct = $input['correctCount'] ?? $input['correct_count'] ?? null;
+        $attempts = $input['attemptCount'] ?? $input['attempt_count'] ?? null;
+        if (is_numeric($correct) && is_numeric($attempts)) {
+            $attempts = max(1, (int) $attempts);
+            $correct = max(0, min((int) $correct, $attempts));
+            $input['correctCount'] = $correct;
+            $input['correct_count'] = $correct;
+            $input['attemptCount'] = $attempts;
+            $input['attempt_count'] = $attempts;
+        }
+
+        $score = $input['score'] ?? null;
+        $maxScore = $input['maxScore'] ?? $input['max_score'] ?? null;
+        if (is_numeric($score) && is_numeric($maxScore)) {
+            $maxScore = max(1, (float) $maxScore);
+            $score = max(0, min((float) $score, $maxScore));
+            $input['score'] = $score;
+            $input['maxScore'] = $maxScore;
+            $input['max_score'] = $maxScore;
+        }
+
+        return $input;
+    }
+
+    /**
+     * @param  array<string, mixed>  $input
+     */
+    private static function hasPerformanceSignal(array $input): bool
+    {
+        $signalKeys = [
+            'accuracy', 'speed', 'precision',
+            'correctCount', 'correct_count',
+            'attemptCount', 'attempt_count',
+            'mistakeCount', 'mistake_count',
+            'score', 'maxScore', 'max_score',
+            'timeRemainingRatio', 'time_remaining_ratio',
+            'durationMs', 'duration_ms',
+            'avgMatchScore', 'avg_match_score',
+        ];
+
+        foreach ($signalKeys as $key) {
+            if (array_key_exists($key, $input) && $input[$key] !== null && $input[$key] !== '') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

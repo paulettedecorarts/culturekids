@@ -7,8 +7,10 @@ use App\Models\Activity;
 use App\Models\ChildProfile;
 use App\Models\ProgressEvent;
 use App\Models\ReadingProgress;
+use App\Models\User;
 use App\Services\ChildAchievementService;
 use App\Services\ChildContentProgressService;
+use App\Services\FamilyLeaderboardService;
 use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ class ProgressController extends Controller
     public function __construct(
         private readonly ChildContentProgressService $progressService,
         private readonly ChildAchievementService $achievementService,
+        private readonly FamilyLeaderboardService $leaderboardService,
     ) {}
     /**
      * Record progress events (mark activities as done)
@@ -114,6 +117,16 @@ class ProgressController extends Controller
     }
 
     /**
+     * Family-scoped star leaderboard (sibling child profiles on the same account).
+     */
+    public function getFamilyLeaderboard(Request $request, int $childId)
+    {
+        $payload = $this->leaderboardService->build($request->user(), $childId);
+
+        return response()->json($payload);
+    }
+
+    /**
      * Bulk sync progress events (for offline sync)
      */
     public function sync(Request $request)
@@ -130,10 +143,27 @@ class ProgressController extends Controller
 
         $child = ChildProfileAccess::queryFor($user)->orderByDesc('updated_at')->first();
         if ($child) {
-            return response()->json($this->achievementService->build($child));
+            return response()->json(
+                array_merge(
+                    $this->achievementService->build($child),
+                    ['legacy_route' => false],
+                ),
+            );
         }
 
-        // Legacy account-level reading progress (pre-child-profile sessions only).
+        return response()->json(
+            array_merge(
+                $this->buildLegacyUserProgress($user),
+                ['legacy_route' => true, 'deprecated' => true],
+            ),
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildLegacyUserProgress(User $user): array
+    {
         $totalCompleted = ReadingProgress::where('user_id', $user->id)
             ->where('status', 'completed')
             ->count();

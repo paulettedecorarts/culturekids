@@ -46,7 +46,7 @@ class ChildAchievementService
 
         $badges = $this->buildTribeBadges($completed);
         $completedTribes = $badges->filter(
-            fn (array $badge) => ($badge['completed_total'] ?? 0) >= ($badge['total_activities'] ?? 1)
+            fn (array $badge) => ($badge['is_complete'] ?? false) === true
         )->count();
 
         $milestones = $this->buildMilestones(
@@ -201,19 +201,46 @@ class ChildAchievementService
             $byTribe[$tribeId]['stars_earned'] += (int) $row->stars_earned;
         }
 
-        if ($byTribe === []) {
+        $tribeIdsWithContent = DB::table('tribes')
+            ->select('tribes.id')
+            ->leftJoin('activities', function ($join) {
+                $join->on('activities.tribe_id', '=', 'tribes.id')
+                    ->where('activities.is_published', true);
+            })
+            ->leftJoin('comics', function ($join) {
+                $join->on('comics.tribe_id', '=', 'tribes.id')
+                    ->where('comics.status', 'published');
+            })
+            ->leftJoin('songs', function ($join) {
+                $join->on('songs.tribe_id', '=', 'tribes.id')
+                    ->where('songs.status', 'published');
+            })
+            ->where(function ($query) {
+                $query->whereNotNull('activities.id')
+                    ->orWhereNotNull('comics.id')
+                    ->orWhereNotNull('songs.id');
+            })
+            ->pluck('tribes.id')
+            ->unique()
+            ->merge(array_keys($byTribe))
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($tribeIdsWithContent === []) {
             return collect();
         }
 
         $tribes = DB::table('tribes')
-            ->whereIn('id', array_keys($byTribe))
+            ->whereIn('id', $tribeIdsWithContent)
             ->get(['id', 'name', 'hero_emoji', 'color'])
             ->keyBy('id');
 
         $activityTotals = DB::table('activities')
             ->select('tribe_id')
             ->selectRaw('COUNT(*) as total')
-            ->whereIn('tribe_id', array_keys($byTribe))
+            ->where('is_published', true)
+            ->whereIn('tribe_id', $tribeIdsWithContent)
             ->groupBy('tribe_id')
             ->pluck('total', 'tribe_id');
 
@@ -221,23 +248,31 @@ class ChildAchievementService
             ->select('tribe_id')
             ->selectRaw('COUNT(*) as total')
             ->where('status', 'published')
-            ->whereIn('tribe_id', array_keys($byTribe))
+            ->whereIn('tribe_id', $tribeIdsWithContent)
             ->groupBy('tribe_id')
             ->pluck('total', 'tribe_id');
 
         $songTotals = DB::table('songs')
             ->select('tribe_id')
             ->selectRaw('COUNT(*) as total')
-            ->whereIn('tribe_id', array_keys($byTribe))
+            ->where('status', 'published')
+            ->whereIn('tribe_id', $tribeIdsWithContent)
             ->groupBy('tribe_id')
             ->pluck('total', 'tribe_id');
 
-        return collect($byTribe)->map(function (array $stats, int $tribeId) use ($tribes, $activityTotals, $storyTotals, $songTotals) {
+        return collect($tribeIdsWithContent)->map(function (int $tribeId) use ($tribes, $byTribe, $activityTotals, $storyTotals, $songTotals) {
             $tribe = $tribes->get($tribeId);
+            $stats = $byTribe[$tribeId] ?? [
+                'completed_stories' => 0,
+                'completed_songs' => 0,
+                'completed_activities' => 0,
+                'stars_earned' => 0,
+            ];
+
             $totalStories = (int) ($storyTotals[$tribeId] ?? 0);
             $totalSongs = (int) ($songTotals[$tribeId] ?? 0);
             $totalActivitiesOnly = (int) ($activityTotals[$tribeId] ?? 0);
-            $totalAll = $totalStories + $totalSongs + $totalActivitiesOnly;
+            $totalContent = $totalStories + $totalSongs + $totalActivitiesOnly;
             $completedTotal =
                 $stats['completed_stories'] + $stats['completed_songs'] + $stats['completed_activities'];
 
@@ -250,11 +285,14 @@ class ChildAchievementService
                 'completed_stories' => $stats['completed_stories'],
                 'completed_songs' => $stats['completed_songs'],
                 'completed_total' => $completedTotal,
-                'total_activities' => max($totalAll, 1),
-                'total_stories' => max($totalStories, 1),
-                'total_songs' => max($totalSongs, 1),
+                'total_content_count' => $totalContent,
+                'total_activities' => $totalContent,
+                'total_stories' => $totalStories,
+                'total_songs' => $totalSongs,
+                'total_activities_only' => $totalActivitiesOnly,
                 'stars_earned' => $stats['stars_earned'],
                 'unlocked' => $completedTotal > 0,
+                'is_complete' => $totalContent > 0 && $completedTotal >= $totalContent,
             ];
         });
     }
