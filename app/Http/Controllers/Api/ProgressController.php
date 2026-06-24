@@ -12,6 +12,7 @@ use App\Services\ChildContentProgressService;
 use App\Support\ChildProfileAccess;
 use App\Support\ContentProgressType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -100,7 +101,16 @@ class ProgressController extends Controller
     {
         $child = ChildProfileAccess::findForUserOrFail($request->user(), (int) $childId);
 
-        return response()->json($this->achievementService->build($child));
+        $cacheKey = sprintf(
+            'child_achievements:%d:%d:%d',
+            $child->id,
+            (int) $child->total_stars,
+            $child->updated_at?->timestamp ?? 0,
+        );
+
+        $payload = Cache::remember($cacheKey, 60, fn () => $this->achievementService->build($child));
+
+        return response()->json($payload);
     }
 
     /**

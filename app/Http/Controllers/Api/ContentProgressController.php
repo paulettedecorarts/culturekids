@@ -25,6 +25,8 @@ class ContentProgressController extends Controller
             'child_profile_id' => 'required|integer',
             'content_type' => 'nullable|string|in:'.implode(',', ContentProgressType::ALL),
             'content_id' => 'nullable|integer|min:1',
+            'status' => 'nullable|string|in:completed,in_progress,not_started',
+            'limit' => 'nullable|integer|min:1|max:1000',
         ]);
 
         if ($validator->fails()) {
@@ -38,6 +40,8 @@ class ContentProgressController extends Controller
             $child,
             $request->query('content_type'),
             $request->query('content_id') ? (int) $request->query('content_id') : null,
+            $request->query('status'),
+            $request->query('limit') ? (int) $request->query('limit') : null,
         );
 
         return response()->json($data);

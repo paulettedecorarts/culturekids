@@ -33,7 +33,8 @@ class ComicController extends Controller
         $search = $request->query('search');
         
         $query = Comic::query()
-            ->with(['tribe:id,name,hero_emoji,hero_icon,color', 'panels'])
+            ->with(['tribe:id,name,hero_emoji,hero_icon,color'])
+            ->withCount('panels')
             ->published()
             ->orderBy('created_at', 'desc');
 
@@ -63,11 +64,16 @@ class ComicController extends Controller
             $query->whereNull('org_id');
         }
 
-        $comics = $query->get()->map(function ($comic) use ($user) {
-            // Get reading progress for this comic
-            $progress = ReadingProgress::where('user_id', $user->id)
-                ->where('comic_id', $comic->id)
-                ->first();
+        $comics = $query->get();
+
+        $progressByComicId = ReadingProgress::query()
+            ->where('user_id', $user->id)
+            ->whereIn('comic_id', $comics->pluck('id'))
+            ->get()
+            ->keyBy('comic_id');
+
+        $payload = $comics->map(function ($comic) use ($progressByComicId) {
+            $progress = $progressByComicId->get($comic->id);
 
             return [
                 'id' => $comic->id,
@@ -75,9 +81,9 @@ class ComicController extends Controller
                 'description' => $comic->description,
                 'age_range' => $comic->age_range,
                 'status' => $comic->status,
-                'cover_image' => $comic->cover_image_path ? asset('storage/' . $comic->cover_image_path) : null,
+                'cover_image' => $comic->cover_image_path ? asset('storage/'.$comic->cover_image_path) : null,
                 'star_points' => $comic->star_points ?? 10,
-                'panels_count' => $comic->panels->count(),
+                'panels_count' => (int) $comic->panels_count,
                 'tribe' => $comic->tribe ? [
                     'id' => $comic->tribe->id,
                     'name' => $comic->tribe->name,
@@ -93,7 +99,7 @@ class ComicController extends Controller
             ];
         });
 
-        return response()->json($comics);
+        return response()->json($payload);
     }
 
     /**

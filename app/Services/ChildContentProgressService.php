@@ -60,7 +60,7 @@ class ChildContentProgressService
             $progress->save();
         }
 
-        $this->syncLegacySession($user, $child, $contentType, $contentId, $progress);
+        // Legacy reading_progress dual-write removed from session ticks — unified table is source of truth.
 
         return $this->format($progress);
     }
@@ -161,6 +161,8 @@ class ChildContentProgressService
         ChildProfile $child,
         ?string $contentType = null,
         ?int $contentId = null,
+        ?string $status = null,
+        ?int $limit = null,
     ): array {
         $this->authorizeChild($user, $child);
 
@@ -176,6 +178,13 @@ class ChildContentProgressService
             $query->where('content_id', $contentId);
         }
 
+        if ($status !== null) {
+            $query->where('status', $status);
+        } elseif ($contentType === null && $contentId === null) {
+            // Catalog badges only need rows the child has touched.
+            $query->whereIn('status', ['completed', 'in_progress']);
+        }
+
         if ($contentType !== null && $contentId !== null) {
             $progress = $query->first();
 
@@ -188,6 +197,7 @@ class ChildContentProgressService
 
         return $query
             ->orderByDesc('last_activity_at')
+            ->limit(min($limit ?? 500, 1000))
             ->get()
             ->map(fn (ChildContentProgress $row) => $this->format($row))
             ->values()

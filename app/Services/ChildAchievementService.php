@@ -19,10 +19,11 @@ class ChildAchievementService
      */
     public function build(ChildProfile $child): array
     {
-        $completed = ChildContentProgress::query()
+        $allRows = ChildContentProgress::query()
             ->where('child_profile_id', $child->id)
-            ->where('status', 'completed')
-            ->get(['id', 'content_type', 'content_id', 'stars_earned', 'metadata']);
+            ->get(['id', 'content_type', 'content_id', 'status', 'stars_earned', 'metadata', 'current_position', 'total_positions', 'last_activity_at']);
+
+        $completed = $allRows->where('status', 'completed')->values();
 
         $totalStories = $completed->where('content_type', ContentProgressType::STORY)->count();
         $totalSongs = $completed->where('content_type', ContentProgressType::SONG)->count();
@@ -57,7 +58,7 @@ class ChildAchievementService
             $gradeCounts,
         );
 
-        $progressSnapshot = $this->buildProgressSnapshot($child->id);
+        $progressSnapshot = $this->buildProgressSnapshotFromRows($allRows);
 
         $completedActivityIds = $completed
             ->filter(fn (ChildContentProgress $row) => ContentProgressType::usesActivityTable($row->content_type))
@@ -89,34 +90,22 @@ class ChildAchievementService
     }
 
     /**
+     * @param  Collection<int, ChildContentProgress>  $rows
      * @return array{
      *   completion_by_type: array<string, array{completed: int, in_progress: int}>,
      *   in_progress_items: list<array<string, mixed>>
      * }
      */
-    private function buildProgressSnapshot(int $childProfileId): array
+    private function buildProgressSnapshotFromRows(Collection $rows): array
     {
         $byType = [];
         foreach (ContentProgressType::ALL as $type) {
             $byType[$type] = ['completed' => 0, 'in_progress' => 0];
         }
 
-        $rows = ChildContentProgress::query()
-            ->where('child_profile_id', $childProfileId)
-            ->orderByDesc('last_activity_at')
-            ->get([
-                'content_type',
-                'content_id',
-                'status',
-                'current_position',
-                'total_positions',
-                'percentage',
-                'last_activity_at',
-            ]);
-
         $inProgressItems = [];
 
-        foreach ($rows as $row) {
+        foreach ($rows->sortByDesc('last_activity_at') as $row) {
             $type = $row->content_type;
             if (! isset($byType[$type])) {
                 continue;
@@ -146,6 +135,31 @@ class ChildAchievementService
             'completion_by_type' => $byType,
             'in_progress_items' => $inProgressItems,
         ];
+    }
+
+    /**
+     * @deprecated Use buildProgressSnapshotFromRows — kept for tests.
+     * @return array{
+     *   completion_by_type: array<string, array{completed: int, in_progress: int}>,
+     *   in_progress_items: list<array<string, mixed>>
+     * }
+     */
+    private function buildProgressSnapshot(int $childProfileId): array
+    {
+        $rows = ChildContentProgress::query()
+            ->where('child_profile_id', $childProfileId)
+            ->orderByDesc('last_activity_at')
+            ->get([
+                'content_type',
+                'content_id',
+                'status',
+                'current_position',
+                'total_positions',
+                'percentage',
+                'last_activity_at',
+            ]);
+
+        return $this->buildProgressSnapshotFromRows($rows);
     }
 
     /**
