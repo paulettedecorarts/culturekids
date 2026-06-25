@@ -92,6 +92,127 @@ class ChildContentProgressApiTest extends TestCase
         $this->assertSame($starsAfterFirst, (int) $child->total_stars);
     }
 
+    public function test_gold_completion_awards_full_stars_and_stores_them_everywhere(): void
+    {
+        // Perfect performance → gold (×1.0) → the full star_points value.
+        [$user, $child, $activity] = $this->createParentChildAndPuzzle(starPoints: 12);
+        Sanctum::actingAs($user);
+
+        $key = "{$child->id}-puzzle-{$activity->id}-complete";
+
+        $response = $this->postJson('/api/v1/progress/content/complete', [
+            'child_profile_id' => $child->id,
+            'content_type' => ContentProgressType::PUZZLE,
+            'content_id' => $activity->id,
+            'idempotency_key' => $key,
+            'performance' => ['apple_input' => ['accuracy' => 1, 'speed' => 1, 'precision' => 1]],
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('already_recorded', false)
+            ->assertJsonPath('starsEarned', 12)
+            ->assertJsonPath('stars_earned_this_attempt', 12)
+            ->assertJsonPath('progress.stars_earned', 12)
+            ->assertJsonPath('progress.metadata.apple_grade', 'gold');
+
+        // (1) Stored on the per-activity progress row.
+        $this->assertDatabaseHas('child_content_progress', [
+            'child_profile_id' => $child->id,
+            'content_type' => ContentProgressType::PUZZLE,
+            'content_id' => $activity->id,
+            'status' => 'completed',
+            'stars_earned' => 12,
+        ]);
+
+        // (2) Mirrored to the legacy progress_events ledger.
+        $this->assertDatabaseHas('progress_events', [
+            'child_profile_id' => $child->id,
+            'activity_id' => $activity->id,
+            'stars_earned' => 12,
+            'idempotency_key' => $key,
+        ]);
+
+        // (3) Added to the child's cumulative counter (the leaderboard metric).
+        $child->refresh();
+        $this->assertSame(12, (int) $child->total_stars);
+    }
+
+    public function test_lower_grade_awards_partial_stars(): void
+    {
+        // accuracy/speed/precision all 0.5 → performance 0.5 → bronze (×0.5).
+        [$user, $child, $activity] = $this->createParentChildAndPuzzle(starPoints: 10);
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/v1/progress/content/complete', [
+            'child_profile_id' => $child->id,
+            'content_type' => ContentProgressType::PUZZLE,
+            'content_id' => $activity->id,
+            'idempotency_key' => "{$child->id}-puzzle-{$activity->id}-complete",
+            'performance' => ['apple_input' => ['accuracy' => 0.5, 'speed' => 0.5, 'precision' => 0.5]],
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('starsEarned', 5)
+            ->assertJsonPath('progress.stars_earned', 5)
+            ->assertJsonPath('progress.metadata.apple_grade', 'bronze');
+
+        $this->assertDatabaseHas('child_content_progress', [
+            'child_profile_id' => $child->id,
+            'content_id' => $activity->id,
+            'stars_earned' => 5,
+        ]);
+
+        $child->refresh();
+        $this->assertSame(5, (int) $child->total_stars);
+    }
+
+    public function test_total_stars_accumulates_across_activities(): void
+    {
+        [$user, $child] = $this->createParentAndChild();
+        Sanctum::actingAs($user);
+
+        $tribe = Tribe::create([
+            'name' => 'Accumulator Tribe',
+            'hero_name' => 'Hero',
+            'region' => 'Test',
+        ]);
+
+        $puzzle = Activity::create([
+            'tribe_id' => $tribe->id,
+            'type' => 'puzzle',
+            'title' => 'Puzzle 7',
+            'is_published' => true,
+            'star_points' => 7,
+        ]);
+        $maze = Activity::create([
+            'tribe_id' => $tribe->id,
+            'type' => 'maze',
+            'title' => 'Maze 9',
+            'is_published' => true,
+            'star_points' => 9,
+        ]);
+
+        foreach ([[$puzzle, 'puzzle'], [$maze, 'maze']] as [$activity, $type]) {
+            $this->postJson('/api/v1/progress/content/complete', [
+                'child_profile_id' => $child->id,
+                'content_type' => $type,
+                'content_id' => $activity->id,
+                'idempotency_key' => "{$child->id}-{$type}-{$activity->id}-complete",
+                'performance' => ['apple_input' => ['accuracy' => 1, 'speed' => 1, 'precision' => 1]],
+            ])->assertOk();
+        }
+
+        // Per-activity rows keep their own awarded totals…
+        $this->assertSame(7, (int) ChildContentProgress::query()
+            ->where('content_type', 'puzzle')->where('content_id', $puzzle->id)->value('stars_earned'));
+        $this->assertSame(9, (int) ChildContentProgress::query()
+            ->where('content_type', 'maze')->where('content_id', $maze->id)->value('stars_earned'));
+
+        // …and the child's total is their sum.
+        $child->refresh();
+        $this->assertSame(16, (int) $child->total_stars);
+    }
+
     public function test_session_upsert_does_not_overwrite_completed_row(): void
     {
         [$user, $child, $activity] = $this->createParentChildAndPuzzle(starPoints: 8);
@@ -163,27 +284,8 @@ class ChildContentProgressApiTest extends TestCase
             'region' => 'Test',
         ]);
 
-        $story = Comic::create([
-            'tribe_id' => $tribe->id,
-            'title' => 'Story',
-            'status' => 'published',
-            'age_min' => 4,
-            'age_max' => 8,
-            'star_points' => 10,
-        ]);
-
         foreach (ContentProgressType::ALL as $type) {
-            $contentId = match ($type) {
-                ContentProgressType::STORY => $story->id,
-                ContentProgressType::SONG => $this->createSong($tribe->id)->id,
-                default => Activity::create([
-                    'tribe_id' => $tribe->id,
-                    'type' => $type,
-                    'title' => "Item {$type}",
-                    'is_published' => true,
-                    'star_points' => 10,
-                ])->id,
-            };
+            $contentId = $this->createContentForType($type, $tribe->id);
 
             $this->postJson('/api/v1/progress/content/complete', [
                 'child_profile_id' => $child->id,
@@ -194,6 +296,77 @@ class ChildContentProgressApiTest extends TestCase
             ])->assertOk()
                 ->assertJsonPath('progress.content_type', $type)
                 ->assertJsonPath('progress.status', 'completed');
+        }
+    }
+
+    public function test_session_tracking_lifecycle_works_for_all_twelve_content_types(): void
+    {
+        [$user, $child] = $this->createParentAndChild();
+        Sanctum::actingAs($user);
+
+        $tribe = Tribe::create([
+            'name' => 'Tracking Tribe',
+            'hero_name' => 'Hero',
+            'region' => 'Test',
+        ]);
+
+        foreach (ContentProgressType::ALL as $type) {
+            $contentId = $this->createContentForType($type, $tribe->id);
+
+            // (1) First session tick → in_progress with stored position + percentage.
+            $this->putJson('/api/v1/progress/content', [
+                'child_profile_id' => $child->id,
+                'content_type' => $type,
+                'content_id' => $contentId,
+                'current_position' => 2,
+                'total_positions' => 5,
+            ])->assertOk()
+                ->assertJsonPath('content_type', $type)
+                ->assertJsonPath('status', 'in_progress')
+                ->assertJsonPath('current_position', 2)
+                ->assertJsonPath('total_positions', 5)
+                ->assertJsonPath('percentage', 40);
+
+            // (2) Later tick advances the position and is persisted, still in_progress.
+            $this->putJson('/api/v1/progress/content', [
+                'child_profile_id' => $child->id,
+                'content_type' => $type,
+                'content_id' => $contentId,
+                'current_position' => 4,
+                'total_positions' => 5,
+            ])->assertOk()
+                ->assertJsonPath('status', 'in_progress')
+                ->assertJsonPath('current_position', 4)
+                ->assertJsonPath('percentage', 80);
+
+            $row = ChildContentProgress::query()
+                ->where('child_profile_id', $child->id)
+                ->where('content_type', $type)
+                ->where('content_id', $contentId)
+                ->first();
+
+            $this->assertNotNull($row, "Expected a progress row for {$type}");
+            $this->assertSame('in_progress', $row->status);
+            $this->assertSame(4, (int) $row->current_position);
+            $this->assertSame(0, (int) $row->stars_earned, "No stars should be banked mid-{$type}");
+            $this->assertNotNull($row->started_at);
+            $this->assertNull($row->completed_at);
+
+            // (3) Completion flips the same row to completed.
+            $this->postJson('/api/v1/progress/content/complete', [
+                'child_profile_id' => $child->id,
+                'content_type' => $type,
+                'content_id' => $contentId,
+                'idempotency_key' => "{$child->id}-{$type}-{$contentId}-complete",
+                'performance' => ['apple_input' => ['accuracy' => 1]],
+            ])->assertOk()
+                ->assertJsonPath('progress.status', 'completed');
+
+            $this->assertSame(1, ChildContentProgress::query()
+                ->where('child_profile_id', $child->id)
+                ->where('content_type', $type)
+                ->where('content_id', $contentId)
+                ->count(), "Tracking should reuse one row per {$type}, not duplicate it");
         }
     }
 
@@ -239,6 +412,28 @@ class ChildContentProgressApiTest extends TestCase
         ]);
 
         return [$user, $child];
+    }
+
+    private function createContentForType(string $type, int $tribeId): int
+    {
+        return match ($type) {
+            ContentProgressType::STORY => Comic::create([
+                'tribe_id' => $tribeId,
+                'title' => 'Story',
+                'status' => 'published',
+                'age_min' => 4,
+                'age_max' => 8,
+                'star_points' => 10,
+            ])->id,
+            ContentProgressType::SONG => $this->createSong($tribeId)->id,
+            default => Activity::create([
+                'tribe_id' => $tribeId,
+                'type' => $type,
+                'title' => "Item {$type}",
+                'is_published' => true,
+                'star_points' => 10,
+            ])->id,
+        };
     }
 
     private function createSong(int $tribeId): \App\Models\Song
