@@ -5,11 +5,15 @@ namespace App\Services;
 use App\Models\Comic;
 use App\Models\PlatformLandingSetting;
 use App\Models\Tribe;
+use App\Support\ChildFriendlyFontLibrary;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PlatformLandingService
 {
+    public function __construct(
+        protected ChildFriendlyFontLibrary $fonts,
+    ) {}
     public function defaults(): array
     {
         return [
@@ -24,8 +28,8 @@ class PlatformLandingService
             'accent_color' => '#F2CB5A',
             'hero_bg_start' => '#FFF8F0',
             'hero_bg_end' => '#E8F4FC',
-            'font_heading' => 'Baloo 2',
-            'font_body' => 'Inter',
+            'font_heading' => $this->fonts->defaultKey('heading'),
+            'font_body' => $this->fonts->defaultKey('body'),
             'peoples_section_title' => null,
             'peoples_count' => 65,
             'featured_tribe_ids' => [],
@@ -193,7 +197,7 @@ class PlatformLandingService
         $row = PlatformLandingSetting::instance();
         $draft = is_array($row->draft) ? $row->draft : [];
 
-        return array_merge($this->defaults(), $draft);
+        return $this->normalizeSettings(array_merge($this->defaults(), $draft));
     }
 
     public function published(): array
@@ -203,20 +207,21 @@ class PlatformLandingService
             ? $row->published
             : null;
 
-        return array_merge($this->defaults(), $published ?? $this->draft());
+        return $this->normalizeSettings(array_merge($this->defaults(), $published ?? $this->draft()));
     }
 
     public function saveDraft(array $data): void
     {
         $row = PlatformLandingSetting::instance();
-        $row->update(['draft' => array_merge($this->draft(), $data)]);
+        $row->update(['draft' => $this->normalizeSettings(array_merge($this->draft(), $data))]);
     }
 
     public function publish(int $userId): void
     {
         $row = PlatformLandingSetting::instance();
+        $draft = $this->draft();
         $row->update([
-            'published' => $this->draft(),
+            'published' => $draft,
             'published_at' => now(),
             'published_by' => $userId,
         ]);
@@ -227,7 +232,7 @@ class PlatformLandingService
         $row = PlatformLandingSetting::instance();
         $published = is_array($row->published) ? $row->published : [];
 
-        $row->update(['draft' => $published !== [] ? $published : $this->defaults()]);
+        $row->update(['draft' => $this->normalizeSettings($published !== [] ? $published : $this->defaults())]);
     }
 
     /**
@@ -241,8 +246,18 @@ class PlatformLandingService
         $featuredPeoples = $this->featuredPeoples($settings);
         $peoplesCount = (int) ($settings['peoples_count'] ?? 65);
 
+        $headingKey = $this->fonts->resolveKey($settings['font_heading'] ?? null, 'heading');
+        $bodyKey = $this->fonts->resolveKey($settings['font_body'] ?? null, 'body');
+
         return [
             'landing' => $settings,
+            'landingFonts' => [
+                'heading_key' => $headingKey,
+                'body_key' => $bodyKey,
+                'heading_stack' => $this->fonts->cssFamilyStack($headingKey),
+                'body_stack' => $this->fonts->cssFamilyStack($bodyKey),
+                'stylesheet_url' => $this->fonts->googleFontsStylesheetUrl([$headingKey, $bodyKey]),
+            ],
             'heroComic' => $heroComic,
             'heroImageUrl' => $heroImageUrl,
             'featuredPeoples' => $featuredPeoples,
@@ -323,5 +338,17 @@ class PlatformLandingService
         }
 
         return $query->limit(7)->get();
+    }
+
+    /**
+     * @param  array<string, mixed>  $settings
+     * @return array<string, mixed>
+     */
+    protected function normalizeSettings(array $settings): array
+    {
+        $settings['font_heading'] = $this->fonts->resolveKey($settings['font_heading'] ?? null, 'heading');
+        $settings['font_body'] = $this->fonts->resolveKey($settings['font_body'] ?? null, 'body');
+
+        return $settings;
     }
 }

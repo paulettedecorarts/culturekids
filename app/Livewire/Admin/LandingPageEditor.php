@@ -6,7 +6,9 @@ use App\Models\AuditLog;
 use App\Models\Comic;
 use App\Models\Tribe;
 use App\Services\PlatformLandingService;
+use App\Support\ChildFriendlyFontLibrary;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -29,8 +31,8 @@ class LandingPageEditor extends Component
     public string $accent_color = '#F2CB5A';
     public string $hero_bg_start = '#FFF8F0';
     public string $hero_bg_end = '#E8F4FC';
-    public string $font_heading = 'Baloo 2';
-    public string $font_body = 'Inter';
+    public string $font_heading = 'baloo_2';
+    public string $font_body = 'nunito';
 
     public ?string $peoples_section_title = null;
     public int $peoples_count = 65;
@@ -52,6 +54,11 @@ class LandingPageEditor extends Component
         $this->fillFrom($landing->draft());
     }
 
+    protected function fontKeys(): array
+    {
+        return app(ChildFriendlyFontLibrary::class)->keys();
+    }
+
     protected function rules(): array
     {
         return [
@@ -66,8 +73,8 @@ class LandingPageEditor extends Component
             'accent_color' => ['nullable', 'string', 'max:20'],
             'hero_bg_start' => ['nullable', 'string', 'max:20'],
             'hero_bg_end' => ['nullable', 'string', 'max:20'],
-            'font_heading' => ['nullable', 'string', 'max:80'],
-            'font_body' => ['nullable', 'string', 'max:80'],
+            'font_heading' => ['nullable', 'string', Rule::in($this->fontKeys())],
+            'font_body' => ['nullable', 'string', Rule::in($this->fontKeys())],
             'peoples_section_title' => ['nullable', 'string', 'max:180'],
             'peoples_count' => ['required', 'integer', 'min:1', 'max:200'],
             'featured_tribe_ids' => ['array'],
@@ -260,8 +267,8 @@ class LandingPageEditor extends Component
         $this->accent_color = (string) ($data['accent_color'] ?? '#F2CB5A');
         $this->hero_bg_start = (string) ($data['hero_bg_start'] ?? '#FFF8F0');
         $this->hero_bg_end = (string) ($data['hero_bg_end'] ?? '#E8F4FC');
-        $this->font_heading = (string) ($data['font_heading'] ?? 'Baloo 2');
-        $this->font_body = (string) ($data['font_body'] ?? 'Inter');
+        $this->font_heading = app(ChildFriendlyFontLibrary::class)->resolveKey($data['font_heading'] ?? null, 'heading');
+        $this->font_body = app(ChildFriendlyFontLibrary::class)->resolveKey($data['font_body'] ?? null, 'body');
         $this->peoples_section_title = $data['peoples_section_title'] ?? null;
         $this->peoples_count = (int) ($data['peoples_count'] ?? 65);
         $this->featured_tribe_ids = array_values(array_map('intval', $data['featured_tribe_ids'] ?? []));
@@ -301,13 +308,23 @@ class LandingPageEditor extends Component
             ->all();
     }
 
-    public function render(PlatformLandingService $landing)
+    public function render(PlatformLandingService $landing, ChildFriendlyFontLibrary $fonts)
     {
+        $headingKey = $fonts->resolveKey($this->font_heading, 'heading');
+        $bodyKey = $fonts->resolveKey($this->font_body, 'body');
+
         return view('livewire.admin.landing-page-editor', [
             'comics' => Comic::query()->published()->orderBy('title')->get(['id', 'title']),
             'peoples' => Tribe::query()->orderBy('name')->get(['id', 'name', 'hero_emoji']),
             'previewUrl' => url('/'),
             'previewPlans' => $landing->visiblePricingPlans(array_merge($landing->draft(), $this->payload($landing))),
+            'headingFonts' => $fonts->forRole('heading'),
+            'bodyFonts' => $fonts->forRole('body'),
+            'previewFonts' => [
+                'heading_stack' => $fonts->cssFamilyStack($headingKey),
+                'body_stack' => $fonts->cssFamilyStack($bodyKey),
+                'stylesheet_url' => $fonts->googleFontsStylesheetUrl([$headingKey, $bodyKey]),
+            ],
         ])->layout('layouts.admin');
     }
 }

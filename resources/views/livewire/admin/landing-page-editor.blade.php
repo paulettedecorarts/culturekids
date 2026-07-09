@@ -93,13 +93,23 @@
                             <label for="hero_bg_end">Hero background (end)</label>
                             <input id="hero_bg_end" type="color" wire:model.live="hero_bg_end">
                         </div>
-                        <div class="lp-field">
-                            <label for="font_heading">Heading font (Google Fonts)</label>
-                            <input id="font_heading" type="text" wire:model.live="font_heading" placeholder="Baloo 2">
-                        </div>
-                        <div class="lp-field">
-                            <label for="font_body">Body font</label>
-                            <input id="font_body" type="text" wire:model.live="font_body" placeholder="Inter">
+                        <div class="lp-form-row lp-form-row--2">
+                            <div class="lp-field">
+                                <label for="font_heading">Heading font</label>
+                                <select id="font_heading" wire:model.live="font_heading" class="lp-font-select">
+                                    @foreach ($headingFonts as $key => $font)
+                                        <option value="{{ $key }}">{{ $font['label'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="lp-field">
+                                <label for="font_body">Body font</label>
+                                <select id="font_body" wire:model.live="font_body" class="lp-font-select">
+                                    @foreach ($bodyFonts as $key => $font)
+                                        <option value="{{ $key }}">{{ $font['label'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     @elseif ($active_tab === 'peoples')
                         <div class="lp-field">
@@ -237,10 +247,11 @@
                 <span class="lp-status-dot" aria-hidden="true"></span>
                 <span>Live preview · {{ $previewUrl }}</span>
             </div>
-            <div class="lp-mock-browser" style="--mock-primary: {{ $primary_color }}; --mock-secondary: {{ $secondary_color }};">
+            <link rel="stylesheet" href="{{ $previewFonts['stylesheet_url'] }}" wire:key="preview-fonts-{{ $font_heading }}-{{ $font_body }}">
+            <div class="lp-mock-browser" style="--mock-primary: {{ $primary_color }}; --mock-secondary: {{ $secondary_color }}; font-family: {{ $previewFonts['body_stack'] }};">
                 <div class="lp-mock-hero" style="background: linear-gradient(135deg, {{ $hero_bg_start }}, {{ $hero_bg_end }});">
                     <div>
-                        <h1 style="font-family:{{ $font_heading }},sans-serif; color:{{ $secondary_color }};">
+                        <h1 style="font-family:{{ $previewFonts['heading_stack'] }}; color:{{ $secondary_color }};">
                             {{ $hero_headline }}
                             <span style="color:{{ $primary_color }}">{{ $hero_highlight }}</span>
                             {{ $hero_headline_suffix }}

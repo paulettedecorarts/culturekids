@@ -5,10 +5,10 @@
     $accent = $l['accent_color'] ?? '#F2CB5A';
     $heroStart = $l['hero_bg_start'] ?? '#FFF8F0';
     $heroEnd = $l['hero_bg_end'] ?? '#E8F4FC';
-    $fontHeading = $l['font_heading'] ?? 'Baloo 2';
-    $fontBody = $l['font_body'] ?? 'Inter';
+    $fontHeadingStack = $landingFonts['heading_stack'] ?? "'Baloo 2', cursive, system-ui, sans-serif";
+    $fontBodyStack = $landingFonts['body_stack'] ?? "'Nunito', sans-serif, system-ui, sans-serif";
+    $fontsStylesheetUrl = $landingFonts['stylesheet_url'] ?? 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap';
     $headline = trim(($l['hero_headline'] ?? 'Bring').' '.($l['hero_highlight'] ?? "Africa's Stories").' '.($l['hero_headline_suffix'] ?? 'to Life'));
-    $fontsQuery = urlencode($fontHeading.'|'.$fontBody);
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -24,14 +24,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family={{ $fontsQuery }}:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="{{ $fontsStylesheetUrl }}" rel="stylesheet">
 
     @include('layouts.partials.portal-theme-vars')
 
     <style>
         :root {
-            --font-landing: '{{ $fontBody }}', system-ui, sans-serif;
-            --font-landing-display: '{{ $fontHeading }}', system-ui, sans-serif;
+            --font-landing: {!! $fontBodyStack !!};
+            --font-landing-display: {!! $fontHeadingStack !!};
             --landing-primary: {{ $primary }};
             --landing-secondary: {{ $secondary }};
             --landing-accent: {{ $accent }};
