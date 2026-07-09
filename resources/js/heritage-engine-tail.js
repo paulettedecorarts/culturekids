@@ -7,6 +7,32 @@ const CATS={
   clan:{l:"Clan Activities",c:"#C8A951",e:"🌳"}
 };
 
+const ACTIVITY_TYPES=[
+  'story','song','flashcard','puzzle','drawing_kit','colouring',
+  'vocab_pack','game','maze','spot_difference','word_search','culture'
+];
+
+const TYPE_META={
+  story:{l:'Stories',c:'#4A1C60',e:'📖'},
+  song:{l:'Songs',c:'#8B1A1A',e:'🎵'},
+  flashcard:{l:'Flashcards',c:'#6B3FA0',e:'🃏'},
+  puzzle:{l:'Puzzles',c:'#2E7D32',e:'🧩'},
+  drawing_kit:{l:'Drawing',c:'#7B3F00',e:'✏️'},
+  colouring:{l:'Colouring',c:'#C44B2B',e:'🎨'},
+  vocab_pack:{l:'Language',c:'#1B6CA8',e:'🗣️'},
+  game:{l:'Games',c:'#1565C0',e:'🎮'},
+  maze:{l:'Mazes',c:'#00695C',e:'🌀'},
+  spot_difference:{l:'Spot Difference',c:'#5D4037',e:'🔍'},
+  word_search:{l:'Word Search',c:'#4527A0',e:'🔠'},
+  culture:{l:'Culture',c:'#C8A951',e:'🌍'}
+};
+
+function typeMeta(activity){
+  if(activity?.type && TYPE_META[activity.type]) return TYPE_META[activity.type];
+  if(activity?.cat && CATS[activity.cat]) return CATS[activity.cat];
+  return {l:'Activity',c:'#888',e:'📌'};
+}
+
 var TRIBES = window.TRIBES || [];
 var TRIBE_IMAGES = window.TRIBE_IMAGES || {};
 
@@ -44,6 +70,8 @@ function _applyView(view,tid,aid){
   window.scrollTo(0,0);
   document.getElementById('btnBack').classList.toggle('hidden',view==='home');
   document.getElementById('btnP').classList.toggle('hidden',view!=='home');
+  const heritageRoot=document.getElementById('heritage-root');
+  if(heritageRoot){heritageRoot.classList.toggle('hh-immersive-mode',view==='tribe'||view==='act');}
   if(view==='home'){curT=null;curA=null;curF='all';curD=0;renderHome();}
   else if(view==='tribe'){
     var newTribe=TRIBES.find(function(t){return t.id===tid;});
@@ -127,6 +155,27 @@ const TIPS={
   mission:"Missions unlock after completing earlier activities. Work through the modules to open these special challenges!",
   clan:"Clan activities connect your family to specific ancestral groups. Ask older family members: 'Which clan do WE belong to?'"
 };
+
+const TYPE_TIPS={
+  story:TIPS.mission,
+  song:TIPS.music,
+  flashcard:'Flip through each card slowly and say the word out loud together.',
+  puzzle:TIPS.puzzle,
+  drawing_kit:TIPS.arts,
+  colouring:TIPS.arts,
+  vocab_pack:TIPS.language,
+  game:'Take turns playing — games are a fun way to practise new words and ideas.',
+  maze:TIPS.puzzle,
+  spot_difference:TIPS.puzzle,
+  word_search:TIPS.puzzle,
+  culture:TIPS.clan
+};
+
+function typeTip(activity){
+  if(activity?.type && TYPE_TIPS[activity.type]) return TYPE_TIPS[activity.type];
+  if(activity?.cat && TIPS[activity.cat]) return TIPS[activity.cat];
+  return 'Complete this activity to earn '+(activity?.pts||10)+' stars!';
+}
 
 // ══════════════════════════════════════════════════════════════════════
 // HOME
@@ -289,30 +338,32 @@ function renderTribeView(){
 }
 
 function renderFilterBar(){
-  const t=curT;const cats=['all',...new Set(t.activities.map(a=>a.cat))];
+  const t=curT;
+  const cats=['all',...ACTIVITY_TYPES];
   document.getElementById('fbar').innerHTML=cats.map(c=>{
-    const info=c==='all'?{e:'🌟',l:`All ${t.activities.length}`}:(CATS[c]||{e:'📌',l:c});
-    const cnt=c==='all'?t.activities.length:t.activities.filter(a=>a.cat===c).length;
-    return `<button class="fb${curF===c?' act':''}" onclick="setF('${c}')">${info.e} ${info.l} <span style="opacity:.55;font-size:.65rem">(${cnt})</span></button>`;
+    const info=c==='all'?{e:'🌟',l:`All ${t.activities.length}`}:typeMeta({type:c});
+    const cnt=c==='all'?t.activities.length:t.activities.filter(a=>a.type===c).length;
+    const empty=c!=='all'&&cnt===0;
+    return `<button class="fb${curF===c?' act':''}${empty?' is-empty':''}" type="button" onclick="setF('${c}')">${info.e} ${info.l} <span style="opacity:.55;font-size:.65rem">(${cnt})</span></button>`;
   }).join('');
-  document.getElementById('dbar').innerHTML=['All Levels','⭐ Easiest','⭐⭐ Easy','⭐⭐⭐ Medium','⭐⭐⭐⭐ Hard','⭐⭐⭐⭐⭐ Master'].map((l,i)=>`<button class="db${curD===i?' act':''}" onclick="setD(${i})">${l}</button>`).join('');
+  document.getElementById('dbar').innerHTML=['All Levels','⭐ Easiest','⭐⭐ Easy','⭐⭐⭐ Medium','⭐⭐⭐⭐ Hard','⭐⭐⭐⭐⭐ Master'].map((l,i)=>`<button class="db${curD===i?' act':''}" type="button" onclick="setD(${i})">${l}</button>`).join('');
 }
 function setF(f){curF=f;renderFilterBar();renderActGrid()}
 function setD(d){curD=d;renderFilterBar();renderActGrid()}
 
 function renderActGrid(){
   const t=curT;
-  let acts=curF==='all'?t.activities:t.activities.filter(a=>a.cat===curF);
+  let acts=curF==='all'?t.activities:t.activities.filter(a=>a.type===curF);
   if(curD>0)acts=acts.filter(a=>a.diff===curD);
   document.getElementById('actGrid').innerHTML=acts.length===0?
     `<div style="grid-column:1/-1;text-align:center;padding:56px;color:var(--muted);font-size:1rem">No activities match — try another filter!</div>`:
     acts.map((a,i)=>{
       const key=dk(t.id,a.id),done=!!S.done[key];
-      const ac=(CATS[a.cat]||{}).c||t.color;
+      const meta=typeMeta(a),ac=meta.c||t.color;
       return `<div class="ac${done?' done':''}" style="--ac:${ac};animation:fu .3s ease ${i*.03}s both" onclick="nav('act','${t.id}',${a.id})">
         <div class="done-b">✓</div>
         <div class="a-hdr"><div class="a-ico" style="background:${ac}22;border-color:${ac}44">${a.icon}</div>
-        <div><div class="a-tag" style="background:${ac}22;border-color:${ac}44;color:${ac}">${a.tag}</div><div class="a-title">${a.title}</div></div></div>
+        <div><div class="a-tag" style="background:${ac}22;border-color:${ac}44;color:${ac}">${meta.l}</div><div class="a-title">${a.title}</div></div></div>
         <div class="a-desc">${(a.desc||'').length>115?a.desc.slice(0,115)+'…':a.desc||''}</div>
         <div class="a-foot">
           <span class="a-age">Ages ${a.age}</span>
@@ -378,24 +429,24 @@ function renderActView(){
   if(!curT||!curA)return;
   const t=curT,a=curA;
   const key=dk(t.id,a.id),done=!!S.done[key];
-  const ac=(CATS[a.cat]||{}).c||t.color;
+  const meta=typeMeta(a),ac=meta.c||t.color;
   document.getElementById('avCard').style.setProperty('--tc',t.color);
   document.getElementById('avCard').innerHTML=`
     <div class="av-top" style="background:linear-gradient(135deg,${t.color}2E,${t.color}0A);border-bottom:1px solid var(--border2);position:relative">
-      <div class="av-tag" style="background:cmix(${ac},0.14);border:1px solid cmix(${ac},0.32);color:${ac}">${(CATS[a.cat]||{}).e||'📌'} ${a.tag}</div>
+      <div class="av-tag" style="background:cmix(${ac},0.14);border:1px solid cmix(${ac},0.32);color:${ac}">${meta.e} ${a.tag}</div>
       <div class="av-title">${a.title}</div>
       <div class="av-meta">
         <span class="av-pill">Ages ${a.age}</span>
         <span class="av-pill">${['','Easy','Medium','Hard','Expert','Master'][a.diff]} ${'⭐'.repeat(a.diff)}</span>
         <span class="av-pill">⭐ ${a.pts} pts</span>
         <span class="av-pill">${t.name}</span>
-        ${a.cat==='clan'?'<span class="av-pill" style="color:var(--gold)">🌳 Clan Activity</span>':''}
+        ${a.type==='culture'||a.cat==='clan'?'<span class="av-pill" style="color:var(--gold)">🌳 Clan Activity</span>':''}
         ${done?'<span style="background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);color:var(--gold);border-radius:50px;padding:3px 11px;font-size:.7rem;font-weight:900">✓ COMPLETED</span>':''}
       </div>
     </div>
     <div class="av-body">
       <div class="av-box" id="actBox"></div>
-      <div class="av-tip"><div class="av-tip-t">💡 Parent & Educator Tip</div><div class="av-tip-b">${TIPS[a.cat]||'Complete this activity to earn '+a.pts+' stars!'}</div></div>
+      <div class="av-tip"><div class="av-tip-t">💡 Parent & Educator Tip</div><div class="av-tip-b">${typeTip(a)}</div></div>
       <div class="av-actions">
         <button class="av-done" id="doneBtn" style="background:${done?'rgba(245,197,24,.18)':ac};color:${done?'var(--gold)':'#fff'}" ${done?'disabled':''} onclick="doComplete()">
           ${done?'✓ Completed! +'+a.pts+' stars':'✓ Mark as Done — Earn '+a.pts+' Stars!'}
@@ -406,7 +457,7 @@ function renderActView(){
   // Build the interactive activity
   setTimeout(()=>buildActivity(t,a,done),30);
   // Nearby
-  const nearby=t.activities.filter(x=>x.cat===a.cat&&x.id!==a.id).slice(0,4);
+  const nearby=t.activities.filter(x=>(x.type||x.cat)===(a.type||a.cat)&&x.id!==a.id).slice(0,4);
   document.getElementById('nearGrid').innerHTML=nearby.map(na=>{
     const ndone=!!S.done[dk(t.id,na.id)];
     return `<div class="ac${ndone?' done':''}" style="--ac:${ac}" onclick="nav('act','${t.id}',${na.id})">
@@ -712,7 +763,7 @@ function buildSpotDiff(box,t,a,done){
 // WORD SEARCH
 // ══════════════════════════════════════════════════════════════════════
 function buildWordSearch(box,t,a,done){
-  const isClan=a.cat==='clan'||a.tag.toLowerCase().includes('clan');
+  const isClan=a.type==='culture'||a.cat==='clan'||a.tag.toLowerCase().includes('clan');
   let wordPool=isClan?t.clans:
     (t.words||['HERO','TRIBE','UGANDA','RIVER','FOREST','DANCE','DRUM']).map(w=>w.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,''));
   const maxW=a.diff<=2?3:a.diff<=3?5:Math.min(8,wordPool.length);
@@ -915,7 +966,7 @@ function buildSpeakBack(box,t,a,done){
 // PROVERB JUMBLE / SENTENCE BUILDER
 // ══════════════════════════════════════════════════════════════════════
 function buildProverbJumble(box,t,a,done){
-  const isProverb=a.cat==='language'||a.cat==='clan';
+  const isProverb=a.type==='vocab_pack'||a.cat==='language'||a.type==='culture'||a.cat==='clan';
   const provPool=t.proverbs||['"Together we stand stronger."','"Wisdom guides the brave heart."'];
   const rawProv=provPool[Math.floor(Math.random()*provPool.length)].replace(/['"]/g,'');
   const words=rawProv.split(' ').filter(w=>w.length>0);

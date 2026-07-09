@@ -37,7 +37,7 @@ class HeritageClientCatalogService
                     'stats' => [
                         'tribes' => 0,
                         'activities' => 0,
-                        'categories' => 6,
+                        'categories' => 12,
                     ],
                     'requiresTribeApproval' => true,
                 ];
@@ -102,7 +102,7 @@ class HeritageClientCatalogService
             'stats' => [
                 'tribes' => count($clientTribes),
                 'activities' => $totalActivities,
-                'categories' => 6,
+                'categories' => 12,
             ],
             'requiresTribeApproval' => false,
         ];
@@ -142,6 +142,7 @@ class HeritageClientCatalogService
             return [
                 'id' => $heritageId,
                 'activityId' => $activity->id,
+                'type' => $activity->type,
                 'cat' => $category,
                 'tag' => (string) ($meta['tag'] ?? $activity->title),
                 'age' => (string) ($activity->age_range ?? '2-10'),

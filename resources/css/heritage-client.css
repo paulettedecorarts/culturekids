@@ -222,7 +222,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 @keyframes tw{0%,100%{opacity:.07;transform:scale(1)}50%{opacity:.8;transform:scale(1.6)}}
 
 #app{position:relative;z-index:1}
-#heritage-root{padding-top:64px;max-width:1180px;margin:0 auto}
+#heritage-root{padding-top:64px;max-width:1180px;margin:0 auto;width:100%}
+#heritage-root.hh-immersive-mode{max-width:none;padding-left:0;padding-right:0}
 .hidden{display:none!important}
 
 /* ── App shell header ── */
@@ -455,10 +456,44 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .fb{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:50px;padding:6px 14px;white-space:nowrap;font-family:inherit;font-size:.76rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all .2s;flex-shrink:0}
 .fb:hover{border-color:var(--gold);color:var(--text)}
 .fb.act{background:var(--gold);border-color:var(--gold);color:#000}
+.fb.is-empty{opacity:.45}
 .dbar{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
 .db{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:4px 12px;font-family:inherit;font-size:.7rem;font-weight:800;color:var(--muted);cursor:pointer;transition:all .2s}
 .db:hover{border-color:var(--gold);color:var(--text)}
 .db.act{background:linear-gradient(135deg,#FFD700,#F5A623);border-color:var(--gold);color:#000}
+
+.hh-immersive-mode .tb-banner,
+.hh-immersive-mode .tps,
+.hh-immersive-mode .fwrap,
+.hh-immersive-mode .agrid,
+.hh-immersive-mode #act-view{padding-left:clamp(16px,3vw,40px);padding-right:clamp(16px,3vw,40px)}
+.hh-immersive-mode .tps-inner{width:100%}
+.hh-immersive-mode .tps-bw{flex:1 1 360px;max-width:none}
+.hh-immersive-mode .fbar{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
+  gap:8px;
+  overflow:visible;
+}
+.hh-immersive-mode .fb{
+  justify-content:center;
+  min-width:0;
+  white-space:normal;
+  text-align:center;
+  padding:8px 10px;
+  line-height:1.25;
+}
+.hh-immersive-mode .dbar{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+  gap:6px;
+}
+.hh-immersive-mode .db{text-align:center}
+.hh-immersive-mode .agrid{
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:16px;
+  padding-bottom:64px;
+}
 
 /* ── Activity grid ── */
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px;padding:20px 26px 56px}
