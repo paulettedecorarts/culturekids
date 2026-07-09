@@ -15,7 +15,7 @@
 @endphp
 
 @if ($paginator->hasPages())
-    <nav class="portal-pagination" aria-label="{{ __('Pagination') }}">
+    <nav class="portal-pagination" aria-label="{{ __('Pagination Navigation') }}">
         <div class="portal-pagination__controls">
             @if ($paginator->onFirstPage())
                 <span class="portal-pagination__btn portal-pagination__btn--disabled" aria-disabled="true">« {{ __('Previous') }}</span>
