@@ -1,5 +1,82 @@
 /* Platform homepage editor — responsive, professional form layout */
 
+/* Keep editor + preview on a public-site light palette inside dark admin/CMS portals */
+.sa-content .cms-site-module .lp-editor-card,
+.sa-content .cms-site-module .lp-plan-card,
+.sa-content .cms-site-module .lp-mock-browser,
+.cms-content .cms-site-module .lp-editor-card,
+.cms-content .cms-site-module .lp-plan-card,
+.cms-content .cms-site-module .lp-mock-browser {
+    --ink: #1a1208;
+    --ink-light: #4a4540;
+    --stone: #6b6560;
+    --cream: #f5f0e1;
+    --cream-warm: #f5f0e8;
+    --cream-mid: #e8e0d4;
+    color: var(--ink);
+}
+
+.sa-content .cms-site-module .lp-editor-card input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='color']):not([type='range']),
+.sa-content .cms-site-module .lp-editor-card select,
+.sa-content .cms-site-module .lp-editor-card textarea,
+.sa-content .cms-site-module .lp-plan-card input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='color']):not([type='range']),
+.sa-content .cms-site-module .lp-plan-card select,
+.sa-content .cms-site-module .lp-plan-card textarea,
+.cms-content .cms-site-module .lp-editor-card input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='color']):not([type='range']),
+.cms-content .cms-site-module .lp-editor-card select,
+.cms-content .cms-site-module .lp-editor-card textarea,
+.cms-content .cms-site-module .lp-plan-card input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='color']):not([type='range']),
+.cms-content .cms-site-module .lp-plan-card select,
+.cms-content .cms-site-module .lp-plan-card textarea {
+    background: #fdfbfa !important;
+    color: #1a1208 !important;
+    border-color: #ebe4d8 !important;
+}
+
+.sa-content .cms-site-module .lp-editor-card select option,
+.sa-content .cms-site-module .lp-editor-card select optgroup,
+.sa-content .cms-site-module .lp-plan-card select option,
+.sa-content .cms-site-module .lp-plan-card select optgroup,
+.cms-content .cms-site-module .lp-editor-card select option,
+.cms-content .cms-site-module .lp-editor-card select optgroup,
+.cms-content .cms-site-module .lp-plan-card select option,
+.cms-content .cms-site-module .lp-plan-card select optgroup {
+    background: #ffffff !important;
+    color: #1a1208 !important;
+}
+
+.cms-site-module .lp-preview-header {
+    color: var(--sa-text-muted, var(--cms-text-muted, #6b6560));
+}
+
+.cms-site-module .lp-mock-hero__subtitle {
+    margin: 0 0 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-light);
+}
+
+.cms-site-module .lp-mock-section-lead {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-light);
+}
+
+.cms-site-module .lp-mock-price__name {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--stone);
+}
+
+.cms-site-module .lp-mock-price__amount {
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 4px;
+    color: var(--ink);
+}
+
 .cms-site-module .lp-editor-header {
     display: flex;
     flex-wrap: wrap;

@@ -3,10 +3,10 @@
     use Illuminate\Support\Str;
 @endphp
 <div class="cms-site-module">
-    <div class="cms-header lp-editor-header">
+    <div class="lp-editor-header">
         <div>
-            <h1 class="cms-page-title">Platform Homepage</h1>
-            <div class="cms-breadcrumb">Super Admin · Public site · {{ $previewUrl }}</div>
+            <h1 class="sa-page-title">Platform Homepage</h1>
+            <div class="sa-breadcrumb">Super Admin · Public site · {{ $previewUrl }}</div>
         </div>
         <div class="lp-editor-actions">
             <button class="btn btn-ghost btn-sm" type="button" wire:click="discardChanges">Discard</button>
@@ -245,7 +245,7 @@
                             <span style="color:{{ $primary_color }}">{{ $hero_highlight }}</span>
                             {{ $hero_headline_suffix }}
                         </h1>
-                        <p style="color:var(--ink-light); margin:0 0 16px; font-size:13px; line-height:1.5;">{{ Str::limit($hero_subtitle, 160) }}</p>
+                        <p class="lp-mock-hero__subtitle">{{ Str::limit($hero_subtitle, 160) }}</p>
                     </div>
                     <div class="lp-mock-hero-visual">
                         @if ($hero_image_upload)
@@ -270,7 +270,7 @@
                         {{ $pricing_section_title ?: 'Pricing' }}
                     </div>
                     @if ($pricing_section_lead)
-                        <p style="font-size:12px; color:var(--ink-light); margin:0 0 12px; line-height:1.5;">{{ Str::limit($pricing_section_lead, 100) }}</p>
+                        <p class="lp-mock-section-lead">{{ Str::limit($pricing_section_lead, 100) }}</p>
                     @endif
                     <div class="lp-mock-pricing">
                         @foreach ($previewPlans as $plan)
@@ -278,8 +278,8 @@
                                 @if (!empty($plan['badge']))
                                     <span class="lp-mock-price__badge">{{ $plan['badge'] }}</span>
                                 @endif
-                                <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--stone)">{{ $plan['name'] }}</div>
-                                <div style="font-size:16px;font-weight:800;margin-top:4px">{{ $plan['price_display'] }}</div>
+                                <div class="lp-mock-price__name">{{ $plan['name'] }}</div>
+                                <div class="lp-mock-price__amount">{{ $plan['price_display'] }}</div>
                             </div>
                         @endforeach
                     </div>
