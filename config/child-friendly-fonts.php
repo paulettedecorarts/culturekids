@@ -8,8 +8,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'defaults' => [
-        'heading' => 'baloo_2',
-        'body' => 'nunito',
+        'heading' => 'chewy',
+        'body' => 'fredoka',
     ],
 
     /*

@@ -31,8 +31,8 @@ class LandingPageEditor extends Component
     public string $accent_color = '#F2CB5A';
     public string $hero_bg_start = '#FFF8F0';
     public string $hero_bg_end = '#E8F4FC';
-    public string $font_heading = 'baloo_2';
-    public string $font_body = 'nunito';
+    public string $font_heading = 'chewy';
+    public string $font_body = 'fredoka';
 
     public ?string $peoples_section_title = null;
     public int $peoples_count = 65;

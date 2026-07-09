@@ -5,9 +5,9 @@
     $accent = $l['accent_color'] ?? '#F2CB5A';
     $heroStart = $l['hero_bg_start'] ?? '#FFF8F0';
     $heroEnd = $l['hero_bg_end'] ?? '#E8F4FC';
-    $fontHeadingStack = $landingFonts['heading_stack'] ?? "'Baloo 2', cursive, system-ui, sans-serif";
-    $fontBodyStack = $landingFonts['body_stack'] ?? "'Nunito', sans-serif, system-ui, sans-serif";
-    $fontsStylesheetUrl = $landingFonts['stylesheet_url'] ?? 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap';
+    $fontHeadingStack = $landingFonts['heading_stack'] ?? "'Chewy', cursive, system-ui, sans-serif";
+    $fontBodyStack = $landingFonts['body_stack'] ?? "'Fredoka', sans-serif, system-ui, sans-serif";
+    $fontsStylesheetUrl = $landingFonts['stylesheet_url'] ?? 'https://fonts.googleapis.com/css2?family=Chewy:wght@400&family=Fredoka:wght@400;500;600;700&display=swap';
     $headline = trim(($l['hero_headline'] ?? 'Bring').' '.($l['hero_highlight'] ?? "Africa's Stories").' '.($l['hero_headline_suffix'] ?? 'to Life'));
 @endphp
 <!DOCTYPE html>
