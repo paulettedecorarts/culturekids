@@ -65,6 +65,12 @@ class ChildProfile extends Model
                 ->first();
 
             if (! $resolved) {
+                $profile->age_band = match (true) {
+                    $age <= 5 => '3-5',
+                    $age <= 8 => '6-8',
+                    default => '9+',
+                };
+
                 return;
             }
 

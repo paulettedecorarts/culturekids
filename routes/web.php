@@ -66,6 +66,9 @@ use App\Livewire\Teacher\StoryLibrary;
 use App\Livewire\Teacher\TeacherStoryReader;
 use App\Livewire\Teacher\TribesExplorer;
 use App\Livewire\Teacher\Worksheets;
+use App\Livewire\Parent\ChildForm;
+use App\Livewire\Parent\ChildrenIndex;
+use App\Livewire\Parent\MainDashboard as ParentMainDashboard;
 use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -344,6 +347,13 @@ Route::middleware(['auth', 'verified', 'role:teacher', 'portal.role:teacher'])->
     Route::get('/tribes', TribesExplorer::class)->name('tribes');
     Route::get('/print-center', PrintCenter::class)->name('print-center');
     Route::get('/worksheets', Worksheets::class)->name('worksheets');
+});
+
+// Family Hub (parent accounts)
+Route::middleware(['auth', 'verified', 'role:parent', 'portal.role:parent'])->prefix('parent')->name('parent.')->group(function () {
+    Route::get('/dashboard', ParentMainDashboard::class)->name('dashboard');
+    Route::get('/children', ChildrenIndex::class)->name('children.index');
+    Route::get('/children/create', ChildForm::class)->name('children.create');
 });
 
 Route::get('/dashboard', DashboardController::class)

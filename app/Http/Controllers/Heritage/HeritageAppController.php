@@ -51,10 +51,16 @@ class HeritageAppController extends Controller
         ]);
     }
 
-    public function setup(Request $request): View
+    public function setup(Request $request): \Illuminate\Http\RedirectResponse|View
     {
+        $user = $request->user();
+
+        if ($user->hasRole('parent')) {
+            return redirect()->route('parent.children.create');
+        }
+
         return view('heritage.setup', [
-            'profiles' => ChildProfileAccess::queryFor($request->user())->get(),
+            'profiles' => ChildProfileAccess::queryFor($user)->get(),
         ]);
     }
 }

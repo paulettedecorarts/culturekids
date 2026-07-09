@@ -31,6 +31,12 @@ class EnsureHeritageChildSelected
         $profiles = ChildProfileAccess::queryFor($user)->orderBy('name')->get();
 
         if ($profiles->isEmpty()) {
+            if ($user->hasRole('parent')) {
+                return redirect()
+                    ->route('parent.children.create')
+                    ->with('message', __('Add a child profile before starting Heritage Heroes.'));
+            }
+
             return redirect()
                 ->route('heritage.setup')
                 ->with('message', 'Add a child profile before starting Heritage Heroes.');

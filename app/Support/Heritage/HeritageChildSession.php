@@ -22,6 +22,11 @@ final class HeritageChildSession
         $request->session()->put(self::SESSION_KEY, $childProfileId);
     }
 
+    public static function setActiveProfileId(int $childProfileId): void
+    {
+        session()->put(self::SESSION_KEY, $childProfileId);
+    }
+
     public static function clear(Request $request): void
     {
         $request->session()->forget(self::SESSION_KEY);
