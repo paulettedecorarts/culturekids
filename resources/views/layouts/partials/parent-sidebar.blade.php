@@ -50,6 +50,9 @@ HTML;
 
         <div class="th-nav-section"><span class="th-nav-section-text">{{ __('Learning') }}</span></div>
         {!! $thNavLink(route('heritage.app'), '🌍', __('Heritage Heroes'), request()->routeIs('heritage.*')) !!}
+
+        <div class="th-nav-section"><span class="th-nav-section-text">{{ __('Management') }}</span></div>
+        {!! $thNavLink(route('parent.tribe-access'), '🏛️', __('Tribe access'), request()->routeIs('parent.tribe-access')) !!}
     </nav>
 
     <div class="th-sidebar-foot">

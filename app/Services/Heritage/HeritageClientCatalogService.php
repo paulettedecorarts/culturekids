@@ -3,8 +3,10 @@
 namespace App\Services\Heritage;
 
 use App\Models\Activity;
+use App\Models\ChildProfile;
 use App\Models\Tribe;
 use App\Models\User;
+use App\Support\FamilyTribeAccess;
 use App\Support\OrganisationActivityScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -17,14 +19,34 @@ class HeritageClientCatalogService
     ) {}
 
     /**
-     * @return array{tribes: list<array<string, mixed>>, tribeImages: array<string, string>, stats: array<string, int>}
+     * @return array{tribes: list<array<string, mixed>>, tribeImages: array<string, string>, stats: array<string, int>, requiresTribeApproval: bool}
      */
-    public function bootstrap(User $user): array
+    public function bootstrap(User $user, ?ChildProfile $child = null): array
     {
-        $tribes = Tribe::query()
+        $tribesQuery = Tribe::query()
             ->with(['clans' => fn ($q) => $q->orderBy('sort_order')])
-            ->orderBy('name')
-            ->get();
+            ->orderBy('name');
+
+        if ($child) {
+            $approvedIds = FamilyTribeAccess::approvedTribeIdsFor($user);
+
+            if ($approvedIds === []) {
+                return [
+                    'tribes' => [],
+                    'tribeImages' => [],
+                    'stats' => [
+                        'tribes' => 0,
+                        'activities' => 0,
+                        'categories' => 6,
+                    ],
+                    'requiresTribeApproval' => true,
+                ];
+            }
+
+            $tribesQuery->whereIn('id', $approvedIds);
+        }
+
+        $tribes = $tribesQuery->get();
 
         $activitiesByTribe = $this->publishedActivitiesByTribe($user);
 
@@ -82,6 +104,7 @@ class HeritageClientCatalogService
                 'activities' => $totalActivities,
                 'categories' => 6,
             ],
+            'requiresTribeApproval' => false,
         ];
     }
 

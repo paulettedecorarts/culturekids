@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,6 +32,12 @@ class Tribe extends Model
     public function clans(): HasMany
     {
         return $this->hasMany(Clan::class)->orderBy('sort_order');
+    }
+
+    public function parentsWithAccess(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'parent_tribe_approvals')
+            ->withPivot('approved_at');
     }
 
     /**

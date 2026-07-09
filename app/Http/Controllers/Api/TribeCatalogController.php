@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tribe;
+use App\Support\FamilyTribeAccess;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,13 @@ class TribeCatalogController extends Controller
             if ($allowed !== null) {
                 $query->whereIn('id', $allowed);
             }
+        } elseif ($user->hasRole('parent') || $user->hasRole('child')) {
+            $approved = FamilyTribeAccess::approvedTribeIdsFor($user);
+            if ($approved === []) {
+                return response()->json([]);
+            }
+
+            $query->whereIn('id', $approved);
         }
 
         $tribes = $query->get([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChildProfileController;
 use App\Http\Controllers\Api\ComicController;
 use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\FamilyTribeAccessController;
 use App\Http\Controllers\Api\ContentProgressController;
 use App\Http\Controllers\Api\LanguageRegistryController;
 use App\Http\Controllers\Api\OrganisationModuleAdminController;
@@ -55,6 +56,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/songs', [SongController::class, 'index']);
     Route::get('/songs/{id}', [SongController::class, 'show']);
     Route::get('/tribes/{tribeId}/songs', [SongController::class, 'getByTribe']);
+    
+    // Family tribe access (parent account — applies to all children)
+    Route::get('/family/tribe-access', [FamilyTribeAccessController::class, 'show']);
+    Route::put('/family/tribe-access', [FamilyTribeAccessController::class, 'update']);
     
     // Child Profiles
     Route::get('/child-profiles', [ChildProfileController::class, 'index']);

@@ -51,13 +51,16 @@ class ParentPortalTest extends TestCase
 
         $this->actingAs($parent);
 
-        \Livewire\Livewire::test(\App\Livewire\Parent\ChildForm::class)
+        $component = \Livewire\Livewire::test(\App\Livewire\Parent\ChildForm::class)
             ->set('name', 'Amina')
             ->set('date_of_birth', '2018-05-10')
             ->set('pin', '1234')
             ->set('pin_confirmation', '1234')
-            ->call('save')
-            ->assertRedirect(route('parent.children.index', absolute: false));
+            ->call('save');
+
+        $child = \App\Models\ChildProfile::query()->where('user_id', $parent->id)->first();
+
+        $component->assertRedirect(route('parent.tribe-access', absolute: false));
 
         $this->assertDatabaseHas('child_profiles', [
             'user_id' => $parent->id,
@@ -87,5 +90,16 @@ class ParentPortalTest extends TestCase
         $this->actingAs($teacher)
             ->get(route('parent.dashboard'))
             ->assertForbidden();
+    }
+
+    public function test_parent_can_open_tribe_access_page(): void
+    {
+        $parent = User::factory()->create(['email_verified_at' => now()]);
+        $parent->assignRole('parent');
+
+        $this->actingAs($parent)
+            ->get(route('parent.tribe-access'))
+            ->assertOk()
+            ->assertSee('Tribe access');
     }
 }

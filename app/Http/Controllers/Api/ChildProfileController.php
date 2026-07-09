@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Family\SyncParentApprovedTribes;
 use App\Http\Controllers\Controller;
 use App\Models\ChildProfile;
 use App\Support\ChildProfileAccess;
@@ -84,6 +85,10 @@ class ChildProfileController extends Controller
         // Refresh to get computed age_band
         $profile->refresh();
 
+        if ($request->filled('tribe_preferences')) {
+            app(SyncParentApprovedTribes::class)->sync($parent, $request->input('tribe_preferences'));
+        }
+
         return response()->json([
             'profile' => $profile,
             'child_email' => $childEmail,
@@ -150,6 +155,11 @@ class ChildProfileController extends Controller
         if ($request->has('date_of_birth')) $data['dob'] = $request->date_of_birth;
         
         $profile->update($data);
+
+        if ($request->has('tribe_preferences')) {
+            abort_unless((int) $profile->user_id === (int) $request->user()->id, 403);
+            app(SyncParentApprovedTribes::class)->sync($request->user(), $request->input('tribe_preferences', []));
+        }
 
         return response()->json($profile);
     }

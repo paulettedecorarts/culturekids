@@ -284,6 +284,115 @@
     flex: 1;
 }
 
+.fh-child-card__notice {
+    margin: 0 0 4px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--th-text);
+}
+
+.fh-breadcrumb-link {
+    color: var(--th-text-muted);
+    text-decoration: none;
+}
+
+.fh-breadcrumb-link:hover {
+    color: var(--th-text);
+    text-decoration: underline;
+}
+
+.fh-alert--warning {
+    background: rgba(249, 115, 22, 0.1);
+    border-color: rgba(249, 115, 22, 0.25);
+    color: var(--th-text);
+}
+
+.fh-tribe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.fh-tribe-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--th-border);
+    background: var(--th-card);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fh-tribe-option:hover {
+    border-color: rgba(249, 115, 22, 0.35);
+}
+
+.fh-tribe-option:has(input:checked) {
+    border-color: rgba(249, 115, 22, 0.55);
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
+}
+
+.fh-tribe-option input {
+    accent-color: #f97316;
+}
+
+.fh-tribe-option__badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 1.2rem;
+    background: color-mix(in srgb, var(--tribe-color) 18%, transparent);
+    flex-shrink: 0;
+}
+
+.fh-tribe-option__body {
+    min-width: 0;
+}
+
+.fh-tribe-option__body strong {
+    display: block;
+    font-size: 14px;
+    color: var(--th-text);
+}
+
+.fh-tribe-option__body small {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--th-text-muted);
+}
+
+.fh-btn--secondary {
+    background: rgba(249, 115, 22, 0.14);
+    border: 1px solid rgba(249, 115, 22, 0.28);
+    color: var(--th-text);
+}
+
+.fh-btn--secondary:hover {
+    background: rgba(249, 115, 22, 0.22);
+}
+
+.fh-form-panel__intro {
+    margin-bottom: 18px;
+}
+
+.fh-form-panel__text {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--th-text-muted);
+}
+
 .fh-empty {
     text-align: center;
     padding: 48px 24px;

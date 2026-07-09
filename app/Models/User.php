@@ -74,6 +74,37 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ChildProfile::class);
     }
 
+    public function approvedTribes(): BelongsToMany
+    {
+        return $this->belongsToMany(Tribe::class, 'parent_tribe_approvals')
+            ->withPivot('approved_at');
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function approvedTribeIds(): array
+    {
+        if ($this->relationLoaded('approvedTribes')) {
+            return $this->approvedTribes->pluck('id')->map(fn ($id) => (int) $id)->values()->all();
+        }
+
+        return $this->approvedTribes()
+            ->pluck('tribes.id')
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+    }
+
+    public function hasApprovedTribes(): bool
+    {
+        if ($this->relationLoaded('approvedTribes')) {
+            return $this->approvedTribes->isNotEmpty();
+        }
+
+        return $this->approvedTribes()->exists();
+    }
+
     /**
      * Device tokens registered for push notifications.
      */

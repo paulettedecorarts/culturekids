@@ -354,6 +354,7 @@ Route::middleware(['auth', 'verified', 'role:parent', 'portal.role:parent'])->pr
     Route::get('/dashboard', ParentMainDashboard::class)->name('dashboard');
     Route::get('/children', ChildrenIndex::class)->name('children.index');
     Route::get('/children/create', ChildForm::class)->name('children.create');
+    Route::get('/tribe-access', \App\Livewire\Parent\TribeAccessIndex::class)->name('tribe-access');
 });
 
 Route::get('/dashboard', DashboardController::class)

@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Services\Heritage\HeritageClientCatalogService;
 use App\Services\Heritage\HeritageClientProgressService;
 use App\Support\ChildProfileAccess;
+use App\Support\FamilyTribeAccess;
 use App\Support\Heritage\HeritageChildSession;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,13 +19,19 @@ class HeritageAppController extends Controller
         private readonly HeritageClientProgressService $progress,
     ) {}
 
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
         $user = $request->user();
         $child = HeritageChildSession::resolveActiveProfile($request);
-        $catalog = $this->catalog->bootstrap($user);
+        $catalog = $this->catalog->bootstrap($user, $child);
         $progress = $this->progress->load($user, $child);
         $isParent = $user->hasRole('parent');
+
+        if ($catalog['requiresTribeApproval'] && $isParent) {
+            return redirect()
+                ->route('parent.tribe-access')
+                ->with('status', __('Approve tribes for your family before playing Heritage Heroes.'));
+        }
 
         return view('heritage.app', [
             'user' => $user,
@@ -52,6 +60,7 @@ class HeritageAppController extends Controller
                     'parentDashboard' => $isParent ? route('parent.dashboard') : null,
                 ],
                 'csrfToken' => csrf_token(),
+                'requiresTribeApproval' => $catalog['requiresTribeApproval'] ?? false,
             ],
         ]);
     }

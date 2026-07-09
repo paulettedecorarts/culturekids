@@ -3,6 +3,7 @@
 namespace Tests\Feature\Heritage;
 
 use App\Models\ChildProfile;
+use App\Models\Tribe;
 use App\Models\User;
 use App\Support\Heritage\HeritageChildSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,6 +28,9 @@ class HeritageAppAccessTest extends TestCase
             'age_band' => '5-6',
             'total_stars' => 0,
         ]);
+
+        $tribe = Tribe::query()->create(['name' => 'Baganda', 'hero_name' => 'Kintu']);
+        $parent->approvedTribes()->attach($tribe->id, ['approved_at' => now()]);
 
         $response = $this->actingAs($parent)->get(route('heritage.app'));
 

@@ -42,9 +42,11 @@ class ChildForm extends Component
 
         HeritageChildSession::setActiveProfileId($result['profile']->id);
 
-        session()->flash('status', __('Child profile created. Child login: :email', ['email' => $result['child_email']]));
+        session()->flash('status', __('Child profile created. Child login: :email — now choose tribes for your family.', [
+            'email' => $result['child_email'],
+        ]));
 
-        $this->redirect(route('parent.children.index', absolute: false), navigate: true);
+        $this->redirect(route('parent.tribe-access', absolute: false), navigate: true);
     }
 
     public function render()

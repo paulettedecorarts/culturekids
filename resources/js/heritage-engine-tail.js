@@ -124,7 +124,10 @@ function renderHome(){
   if (!grid) return;
 
   if (!TRIBES.length) {
-    grid.innerHTML = '<div class="hh-empty">No tribes are available yet. Check back after content is published.</div>';
+    const needsApproval = window.HERITAGE_BOOTSTRAP?.requiresTribeApproval;
+    grid.innerHTML = needsApproval
+      ? '<div class="hh-empty">A parent needs to approve tribes in Family Hub before learning can begin.</div>'
+      : '<div class="hh-empty">No tribes are available yet. Check back after content is published.</div>';
     const lb = document.getElementById('lbGrid');
     if (lb) lb.innerHTML = '';
     return;

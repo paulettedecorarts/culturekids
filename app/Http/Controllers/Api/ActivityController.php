@@ -15,6 +15,7 @@ use App\Models\Tribe;
 use App\Models\WordSearch;
 use App\Services\OrganisationModuleResolver;
 use App\Support\ActivityApiListSerializer;
+use App\Support\FamilyTribeAccess;
 use App\Support\ActivityDrawingTypeFilter;
 use App\Support\CultureApiSerializer;
 use App\Support\DrawingApiSerializer;
@@ -94,6 +95,7 @@ class ActivityController extends Controller
     public function getTribeActivities(Request $request, $tribeId)
     {
         $tribe = Tribe::findOrFail($tribeId);
+        FamilyTribeAccess::ensureTribeAllowed($request->user(), (int) $tribeId);
         $search = $request->query('search');
         $type = $request->query('type');
         
