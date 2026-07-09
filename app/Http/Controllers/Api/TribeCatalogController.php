@@ -20,8 +20,8 @@ class TribeCatalogController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('hero_name', 'like', "%{$search}%")
-                  ->orWhere('region', 'like', "%{$search}%");
+                    ->orWhere('hero_name', 'like', "%{$search}%")
+                    ->orWhere('region', 'like', "%{$search}%");
             });
         }
 
@@ -50,7 +50,7 @@ class TribeCatalogController extends Controller
                 'language' => 'Luganda', // Default for now
                 'region' => $tribe->region,
                 'color' => $tribe->color,
-                'icon' => $tribe->hero_emoji ?? $tribe->hero_icon,
+                'icon' => $tribe->resolvedIcon(),
                 'animal' => '', // Not in current schema
             ];
         });

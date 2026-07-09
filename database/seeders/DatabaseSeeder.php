@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
         $this->command?->info('  admin@culturekids.app / password');
 
         $this->command?->info('→ Heritage content (activities + word flashcards JSON)');
+        if (! file_exists(base_path('seed/activities.seed.json'))) {
+            $this->command?->warn('  seed/activities.seed.json missing — run: php scripts/prepare_heritage_seed.php');
+        }
         $summary = app(HeritageContentSeedImporter::class)->import($this->command);
 
         $hf = $summary['heritage_activities'];

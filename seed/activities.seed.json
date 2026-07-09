@@ -1,27 +1,4 @@
 {
-  "metadata": {
-    "project": "Heritage Heroes",
-    "brand": "Paulette Comics",
-    "purpose": "Cultural education activity database seed",
-    "ageRange": "2-10",
-    "totalActivities": 1210,
-    "totalTribes": 11,
-    "totalCategories": 11,
-    "categories": [
-      "Language",
-      "Puzzles",
-      "Story",
-      "Culture",
-      "Song",
-      "Maze",
-      "Spot the Difference",
-      "Word Search",
-      "Colouring",
-      "Game",
-      "Drawing"
-    ],
-    "generatedAt": "2026-04-30T19:22:57.585Z"
-  },
   "tribes": [
     {
       "id": "alur",
@@ -47,7 +24,10 @@
         "A kind heart is worth more than any treasure.",
         "The forest keeps the secrets of those who respect it."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/alur.jpg"
+      }
     },
     {
       "id": "acholi",
@@ -73,7 +53,10 @@
         "The path to the well is made by many feet.",
         "The reed that stands alone breaks; the reeds that bundle together build the granary."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/acholi.jpg"
+      }
     },
     {
       "id": "bunyoro",
@@ -99,7 +82,10 @@
         "The sun shines for everyone in the kingdom.",
         "Friendship is a shield against the dark."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/bunyoro.jpg"
+      }
     },
     {
       "id": "tooro",
@@ -125,7 +111,10 @@
         "Independence is the gift of courage.",
         "The mist hides the peak but not the path."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/tooro.jpg"
+      }
     },
     {
       "id": "bagisu",
@@ -151,7 +140,10 @@
         "A man who stands alone stands on nothing.",
         "Hard work turns a mountain into a garden."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/bagisu.jpg"
+      }
     },
     {
       "id": "baganda",
@@ -177,7 +169,10 @@
         "Peace starts in a happy home.",
         "Buganda nnamungi (Buganda is great)."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/baganda.jpg"
+      }
     },
     {
       "id": "basongora",
@@ -203,7 +198,10 @@
         "The sun rises over the salt lakes first.",
         "Kindness is a pot that never runs dry."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/basongora.jpg"
+      }
     },
     {
       "id": "jie",
@@ -229,7 +227,10 @@
         "Even a spotted cow finds its way home.",
         "Respect the elder as you respect the mountain."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/jie.jpg"
+      }
     },
     {
       "id": "banyankole",
@@ -255,7 +256,10 @@
         "Milk and peace go hand in hand.",
         "United hills stand against the wind."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/banyankole.jpg"
+      }
     },
     {
       "id": "bakiga",
@@ -281,7 +285,10 @@
         "Unity is the strength of the Bakiga.",
         "Truth is a path that never ends."
       ],
-      "activityCount": 110
+      "activityCount": 110,
+      "assets": {
+        "iconImage": "tribes/bakiga.jpg"
+      }
     },
     {
       "id": "iteso",
@@ -307,113 +314,10 @@
         "One grain of millet cannot fill a granary.",
         "Peace is the best harvest of all."
       ],
-      "activityCount": 110
-    }
-  ],
-  "categories": [
-    {
-      "name": "Language",
-      "activityCount": 330,
-      "activityTypes": [
-        "Tracing",
-        "Audio Matching",
-        "Speaking",
-        "Word Jumble",
-        "Sentence Building",
-        "Language Challenge"
-      ]
-    },
-    {
-      "name": "Puzzles",
       "activityCount": 110,
-      "activityTypes": [
-        "Jigsaw Puzzle"
-      ]
-    },
-    {
-      "name": "Story",
-      "activityCount": 110,
-      "activityTypes": [
-        "Mission",
-        "Word Jumble",
-        "Story Quest",
-        "Quiz"
-      ]
-    },
-    {
-      "name": "Culture",
-      "activityCount": 75,
-      "activityTypes": [
-        "Storytelling",
-        "Clan Matching",
-        "Tracing",
-        "Word Jumble",
-        "Quiz",
-        "Map Activity"
-      ]
-    },
-    {
-      "name": "Song",
-      "activityCount": 35,
-      "activityTypes": [
-        "Karaoke",
-        "Music Game",
-        "Music Composition",
-        "Clan Song"
-      ]
-    },
-    {
-      "name": "Maze",
-      "activityCount": 110,
-      "activityTypes": [
-        "Maze"
-      ]
-    },
-    {
-      "name": "Spot the Difference",
-      "activityCount": 55,
-      "activityTypes": [
-        "Spot the Difference"
-      ]
-    },
-    {
-      "name": "Word Search",
-      "activityCount": 66,
-      "activityTypes": [
-        "Word Search"
-      ]
-    },
-    {
-      "name": "Colouring",
-      "activityCount": 159,
-      "activityTypes": [
-        "Colouring",
-        "Colour by Number"
-      ]
-    },
-    {
-      "name": "Game",
-      "activityCount": 86,
-      "activityTypes": [
-        "Instrument Exploration",
-        "Speaking",
-        "Rhythm Game",
-        "Sound Matching",
-        "Pronunciation Game",
-        "Audio Recording",
-        "Tracing",
-        "Music Game"
-      ]
-    },
-    {
-      "name": "Drawing",
-      "activityCount": 74,
-      "activityTypes": [
-        "Design and Drawing",
-        "Colouring",
-        "Clan Activity",
-        "Clan Design"
-      ]
+      "assets": {
+        "iconImage": "tribes/iteso.jpg"
+      }
     }
   ],
   "activities": [

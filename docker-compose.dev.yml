@@ -1,0 +1,16 @@
+# Local development — Laravel runs on the host (php artisan serve); DB + Redis in Docker.
+#
+# Start infrastructure:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up mysql redis -d
+#
+# Stop:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+services:
+  mysql:
+    ports:
+      - "3307:3306"
+
+  redis:
+    ports:
+      - "6380:6379"

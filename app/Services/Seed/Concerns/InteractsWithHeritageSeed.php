@@ -2,10 +2,28 @@
 
 namespace App\Services\Seed\Concerns;
 
+use App\Services\Seed\HeritageSeedAssetPublisher;
 use Illuminate\Support\Str;
 
 trait InteractsWithHeritageSeed
 {
+    /**
+     * Standard activity asset keys in seed JSON → model column names.
+     *
+     * @var array<string, string>
+     */
+    protected array $heritageActivityAssetMap = [
+        'coverImage' => 'cover_image_path',
+        'audio' => 'audio_path',
+        'video' => 'video_path',
+        'template' => 'template_path',
+        'preview' => 'preview_path',
+        'backgroundImage' => 'background_image_path',
+        'imageA' => 'image_a_path',
+        'imageB' => 'image_b_path',
+        'mapImage' => 'map_image_path',
+    ];
+
     public const SEED_SOURCE_ACTIVITIES = 'heritage_activities_seed';
 
     public const SEED_SOURCE_WORD_FLASHCARDS = 'word_flashcards_seed';
@@ -79,6 +97,53 @@ trait InteractsWithHeritageSeed
         }
 
         return array_filter($meta, fn ($value) => $value !== null && $value !== []);
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     * @param  array<string, mixed>  $payload
+     * @param  array<string, string>|null  $fieldMap
+     * @return array<string, string> published asset key => storage path
+     */
+    protected function applyHeritageSeedAssets(array $item, array &$payload, ?array $fieldMap = null): array
+    {
+        $assets = $item['assets'] ?? null;
+
+        if (! is_array($assets) || $assets === []) {
+            return [];
+        }
+
+        $fieldMap ??= $this->heritageActivityAssetMap;
+        $publisher = app(HeritageSeedAssetPublisher::class);
+        $published = [];
+
+        foreach ($assets as $assetKey => $relativePath) {
+            if (! is_string($relativePath) || $relativePath === '') {
+                continue;
+            }
+
+            $storagePath = $publisher->publish($relativePath);
+
+            if ($storagePath === null) {
+                continue;
+            }
+
+            $published[$assetKey] = $storagePath;
+
+            $modelField = $fieldMap[$assetKey] ?? null;
+
+            if (is_string($modelField) && $modelField !== '') {
+                $payload[$modelField] = $storagePath;
+            }
+        }
+
+        if ($published !== []) {
+            $metadata = is_array($payload['metadata'] ?? null) ? $payload['metadata'] : [];
+            $metadata['seed_assets'] = array_merge($metadata['seed_assets'] ?? [], $published);
+            $payload['metadata'] = $metadata;
+        }
+
+        return $published;
     }
 
     protected function languageCodeFromItem(array $item): string

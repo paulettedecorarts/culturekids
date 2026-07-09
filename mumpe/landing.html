@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paulette Culture Kids</title>
+    <meta name="description" content="Interactive cultural comics, songs, and language learning for Ugandan children.">
+    <meta name="theme-color" content="#1E2D4A">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+        --clay-red: #C44B2B;
+        --clay-red-light: #CC6449;
+        --clay-red-dark: #9A3218;
+        --sunfire: #E8872A;
+        --savanna-gold: #D4A017;
+        --banana-green: #4A7C59;
+        --ink: #1A1208;
+        --ink-light: #6B5544;
+        --stone: #9C8875;
+        --cream: #FAF6F0;
+        --cream-warm: #F0ECE6;
+        --cream-mid: #E1DDD8;
+        --white: #FFFFFF;
+
+        --font-landing: 'Inter', system-ui, sans-serif;
+        --font-landing-display: 'Baloo 2', system-ui, sans-serif;
+        --landing-primary: #C44B2B;
+        --landing-secondary: #1E2D4A;
+        --landing-accent: #F2CB5A;
+        --landing-hero-start: #FFF8F0;
+        --landing-hero-end: #E8F4FC;
+        --landing-navy-deep: #1a2b48;
+        --landing-navy-mid: #2b4a8c;
+        --landing-beige: #FAF6F0;
+        --landing-highlight: #D4A017;
+        --landing-text: #333333;
+        --landing-text-muted: #666666;
+        --landing-nav-muted: #4a4a4a;
+        --landing-container: 1120px;
+        --landing-radius-pill: 9999px;
+        --landing-gutter: clamp(16px, 4vw, 24px);
+    }
+
+    html { scroll-behavior: smooth; margin: 0; padding: 0; }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-landing);
+        color: var(--landing-text);
+        line-height: 1.5;
+        overflow-x: hidden;
+        background: #fff;
+    }
+
+    .landing { width: 100%; overflow-x: hidden; }
+
+    .landing__container {
+        width: 100%;
+        max-width: var(--landing-container);
+        margin: 0 auto;
+        padding-left: var(--landing-gutter);
+        padding-right: var(--landing-gutter);
+    }
+
+    /* ── HEADER ── */
+    .landing-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: #ffffff;
+        border-bottom: 1px solid rgba(26,43,72,0.06);
+    }
+
+    .landing-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 72px;
+    }
+
+    .landing-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+
+    .brand-logo {
+        display: block;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    .brand-logo--full {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 48px;
+    }
+
+    .landing-nav {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+
+    .landing-nav__links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .landing-nav__link {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--landing-nav-muted);
+        text-decoration: none;
+        transition: color 0.15s ease;
+    }
+
+    .landing-nav__link:hover { color: var(--landing-navy-deep); }
+
+    .landing-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        white-space: nowrap;
+    }
+
+    .landing-btn:hover { transform: translateY(-1px); }
+
+    .landing-btn--primary {
+        background: var(--landing-primary);
+        color: #ffffff;
+        padding: 12px 24px;
+        border-radius: var(--landing-radius-pill);
+        box-shadow: 0 4px 14px rgba(196,75,43,0.35);
+    }
+
+    .landing-btn--primary:hover {
+        box-shadow: 0 6px 20px rgba(196,75,43,0.45);
+        color: #ffffff;
+    }
+
+    .landing-btn--hero-primary {
+        padding: 14px 28px;
+        font-size: 16px;
+    }
+
+    .landing-btn--hero-secondary {
+        background: var(--landing-secondary);
+        color: #ffffff;
+        padding: 14px 28px;
+        font-size: 16px;
+        border-radius: var(--landing-radius-pill);
+        border: 1.5px solid rgba(255,255,255,0.35);
+    }
+
+    .landing-btn--hero-secondary:hover {
+        background: #324f8f;
+        color: #ffffff;
+    }
+
+    .landing-btn--cta {
+        padding: 16px 40px;
+        font-size: 17px;
+        margin-top: 28px;
+    }
+
+    .landing-btn--outline-dark {
+        background: transparent;
+        color: var(--landing-navy-deep);
+        border: 2px solid rgba(26,43,72,0.15);
+        padding: 12px 24px;
+        border-radius: var(--landing-radius-pill);
+    }
+
+    .landing-btn--outline-dark:hover {
+        border-color: var(--landing-navy-deep);
+        background: rgba(26,43,72,0.04);
+        color: var(--landing-navy-deep);
+    }
+
+    .landing-btn__icon { font-size: 1.1em; line-height: 1; }
+
+    .landing-nav__toggle {
+        display: none;
+        width: 44px;
+        height: 44px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .landing-nav__toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--landing-navy-deep);
+        margin: 5px auto;
+        border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .landing-hero {
+        background: linear-gradient(135deg, var(--landing-hero-start) 0%, var(--landing-hero-end) 55%, #fff 100%);
+        padding: clamp(48px,10vw,80px) 0 clamp(56px,12vw,88px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .landing-hero::before {
+        content: '';
+        position: absolute;
+        top: -20%; right: -10%;
+        width: min(520px,60vw);
+        height: min(520px,60vw);
+        background: radial-gradient(circle, rgba(242,203,90,0.35) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .landing-hero--split .landing-hero__grid {
+        display: grid;
+        grid-template-columns: 1fr minmax(280px,46%);
+        gap: clamp(32px,5vw,64px);
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .landing-hero__copy { max-width: 560px; }
+
+    .landing-hero__visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .landing-hero__image {
+        width: 100%;
+        max-width: 420px;
+        height: auto;
+        border-radius: 28px;
+        box-shadow: 0 24px 48px rgba(30,45,74,0.12), 0 8px 24px rgba(196,75,43,0.08);
+        object-fit: contain;
+        background: #fff;
+    }
+
+    .landing-hero__title {
+        font-family: var(--font-landing-display);
+        font-size: clamp(36px,5.5vw,56px);
+        font-weight: 800;
+        color: var(--landing-secondary);
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        margin: 0 0 24px;
+    }
+
+    .landing-hero__highlight { color: var(--landing-primary); }
+
+    .landing-hero__subtitle {
+        font-size: clamp(16px,2vw,19px);
+        color: var(--landing-text-muted);
+        max-width: 640px;
+        margin: 0 0 40px;
+        line-height: 1.55;
+    }
+
+    .landing-hero__actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+    }
+
+    /* ── FEATURES ── */
+    .landing-features {
+        background: #ffffff;
+        padding: clamp(48px,10vw,80px) var(--landing-gutter) clamp(56px,10vw,88px);
+    }
+
+    .landing-features__grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 48px 40px;
+        max-width: var(--landing-container);
+        margin: 0 auto;
+    }
+
+    .landing-feature { text-align: center; padding: 0 12px; }
+
+    .landing-feature__icon {
+        width: 56px; height: 56px;
+        margin: 0 auto 20px;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    .landing-feature__icon svg { width: 48px; height: 48px; }
+
+    .landing-feature__title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--landing-text);
+        margin: 0 0 12px;
+        letter-spacing: -0.02em;
+    }
+
+    .landing-feature__desc {
+        font-size: 15px;
+        color: var(--landing-text-muted);
+        margin: 0 auto;
+        line-height: 1.55;
+        max-width: 300px;
+    }
+
+    /* ── TRIBES ── */
+    .landing-tribes {
+        background: var(--landing-beige);
+        padding: clamp(40px,8vw,64px) var(--landing-gutter) clamp(48px,8vw,72px);
+    }
+
+    .landing-tribes__inner {
+        max-width: var(--landing-container);
+        margin: 0 auto;
+    }
+
+    .landing-tribes__title {
+        font-size: clamp(22px,4.5vw,28px);
+        font-weight: 700;
+        color: var(--landing-navy-deep);
+        margin: 0 0 28px;
+        letter-spacing: -0.02em;
+    }
+
+    .landing-tribes__row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .landing-tribe-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #ffffff;
+        padding: 12px 20px;
+        border-radius: var(--landing-radius-pill);
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--landing-navy-deep);
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(26,43,72,0.08);
+        border: 1px solid rgba(26,43,72,0.06);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .landing-tribe-chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(26,43,72,0.12);
+    }
+
+    .landing-tribe-chip__dot {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+        background: #fff8e1;
+    }
+
+    /* ── SECTIONS ── */
+    .landing-section {
+        padding: clamp(56px,10vw,88px) var(--landing-gutter);
+    }
+
+    .landing-section--white { background: #ffffff; }
+    .landing-section--beige { background: var(--landing-beige); }
+
+    .landing-section--navy {
+        background: var(--landing-navy-deep);
+        color: #ffffff;
+    }
+
+    .landing-section__inner {
+        max-width: var(--landing-container);
+        margin: 0 auto;
+    }
+
+    .landing-section__label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--clay-red);
+        margin-bottom: 12px;
+    }
+
+    .landing-section--navy .landing-section__label { color: var(--landing-highlight); }
+
+    .landing-section__title {
+        font-size: clamp(26px,4vw,36px);
+        font-weight: 700;
+        color: var(--landing-navy-deep);
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    .landing-section--navy .landing-section__title { color: #ffffff; }
+
+    .landing-section__lead {
+        font-size: clamp(16px,2vw,18px);
+        color: var(--landing-text-muted);
+        margin: 0 0 40px;
+        max-width: 640px;
+        line-height: 1.55;
+    }
+
+    .landing-section--navy .landing-section__lead { color: rgba(255,255,255,0.8); }
+
+    /* ── STORIES ── */
+    .landing-stories__grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 24px;
+    }
+
+    .landing-story-card {
+        background: var(--landing-beige);
+        border-radius: 20px;
+        padding: 28px 24px;
+        border: 1px solid rgba(26,43,72,0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .landing-story-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(26,43,72,0.1);
+    }
+
+    .landing-story-card__emoji { font-size: 40px; line-height: 1; margin-bottom: 16px; display: block; }
+    .landing-story-card__title { font-size: 18px; font-weight: 700; color: var(--landing-navy-deep); margin: 0 0 8px; }
+    .landing-story-card__meta { font-size: 13px; font-weight: 600; color: var(--clay-red); margin: 0 0 10px; }
+    .landing-story-card__desc { font-size: 14px; color: var(--landing-text-muted); margin: 0; line-height: 1.5; }
+
+    /* ── SCHOOLS ── */
+    .landing-schools__grid {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 32px;
+        align-items: start;
+    }
+
+    .landing-schools__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+
+    .landing-schools__item { display: flex; gap: 16px; align-items: flex-start; }
+
+    .landing-schools__icon {
+        width: 48px; height: 48px;
+        border-radius: 14px;
+        background: #ffffff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(26,43,72,0.06);
+    }
+
+    .landing-schools__item-title { font-size: 16px; font-weight: 700; color: var(--landing-navy-deep); margin: 0 0 4px; }
+    .landing-schools__item-desc { font-size: 14px; color: var(--landing-text-muted); margin: 0; line-height: 1.5; }
+
+    .landing-schools__panel {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 32px;
+        box-shadow: 0 8px 32px rgba(26,43,72,0.08);
+        border: 1px solid rgba(26,43,72,0.06);
+    }
+
+    .landing-schools__panel-title { font-size: 20px; font-weight: 700; color: var(--landing-navy-deep); margin: 0 0 20px; }
+
+    .landing-schools__stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--landing-beige);
+        font-size: 14px;
+    }
+
+    .landing-schools__stat:last-of-type { border-bottom: none; }
+    .landing-schools__stat strong { color: var(--landing-navy-deep); }
+
+    /* ── PRICING ── */
+    .landing-pricing__grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 24px;
+        align-items: stretch;
+        max-width: var(--landing-container);
+        margin: 0 auto;
+    }
+
+    .landing-price-card {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 32px 28px;
+        border: 1px solid rgba(26,43,72,0.08);
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(26,43,72,0.05);
+        position: relative;
+    }
+
+    .landing-price-card--featured {
+        border: 2px solid var(--landing-primary);
+        box-shadow: 0 12px 40px rgba(196,75,43,0.15);
+    }
+
+    .landing-price-card__badge {
+        position: absolute;
+        top: -12px; left: 50%;
+        transform: translateX(-50%);
+        background: var(--landing-primary);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 14px;
+        border-radius: 99px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .landing-price-card__name {
+        font-size: 14px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 1px;
+        color: var(--landing-text-muted);
+        margin: 0 0 8px;
+    }
+
+    .landing-price-card__price {
+        font-size: 36px; font-weight: 700;
+        color: var(--landing-navy-deep);
+        margin: 0 0 4px;
+    }
+
+    .landing-price-card__price span { font-size: 16px; font-weight: 500; color: var(--landing-text-muted); }
+
+    .landing-price-card__note { font-size: 13px; color: var(--landing-text-muted); margin: 0 0 24px; }
+
+    .landing-price-card__features {
+        list-style: none; margin: 0 0 28px; padding: 0;
+        text-align: left; flex: 1;
+    }
+
+    .landing-price-card__features li {
+        font-size: 14px; color: var(--landing-text);
+        padding: 8px 0 8px 24px;
+        position: relative; line-height: 1.4;
+        border-bottom: none;
+    }
+
+    .landing-price-card__features li::before {
+        content: '✓';
+        position: absolute; left: 0;
+        color: var(--banana-green); font-weight: 700;
+    }
+
+    .landing-price-card .landing-btn { width: 100%; }
+
+    /* ── DOWNLOAD ── */
+    .landing-download { text-align: center; }
+
+    .landing-download__stores {
+        display: flex; flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px; margin-top: 32px;
+    }
+
+    .landing-download__store {
+        display: inline-flex; align-items: center; gap: 12px;
+        background: rgba(255,255,255,0.1);
+        border: 1.5px solid rgba(255,255,255,0.25);
+        color: #ffffff;
+        padding: 14px 28px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 600; font-size: 15px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .landing-download__store:hover {
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,255,255,0.4);
+        color: #ffffff;
+    }
+
+    .landing-download__store-icon {
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; width: 28px; height: 28px;
+    }
+
+    .landing-store-icon { display: block; width: 28px; height: 28px; flex-shrink: 0; }
+    .landing-store-icon--apple { color: #ffffff; }
+    .landing-store-icon--google-play { width: 24px; height: 26px; }
+
+    /* ── BOTTOM CTA ── */
+    .landing-cta {
+        background: var(--landing-navy-deep);
+        padding: clamp(48px,10vw,80px) var(--landing-gutter) clamp(56px,10vw,88px);
+        text-align: center;
+    }
+
+    .landing-cta__title {
+        font-size: clamp(28px,4vw,36px); font-weight: 700;
+        color: #ffffff; margin: 0 0 16px; letter-spacing: -0.02em;
+    }
+
+    .landing-cta__subtitle {
+        font-size: clamp(15px,2.5vw,17px); font-weight: 400;
+        color: rgba(255,255,255,0.75);
+        margin: 0 auto; max-width: 520px;
+        line-height: 1.5; padding: 0 8px;
+    }
+
+    .landing-cta .landing-btn--cta {
+        max-width: 100%;
+        width: min(100%, 360px);
+    }
+
+    .landing-section__cta-row {
+        margin-top: 32px;
+        display: flex; flex-wrap: wrap;
+        gap: 16px; align-items: center;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) and (min-width: 993px) {
+        .landing-nav__links { gap: 18px; }
+        .landing-nav__link { font-size: 14px; }
+        .landing-nav { gap: 20px; }
+        .landing-btn--primary { padding: 10px 18px; font-size: 14px; }
+    }
+
+    @media (max-width: 992px) {
+        .landing-hero--split .landing-hero__grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        .landing-hero__copy { max-width: none; margin: 0 auto; }
+        .landing-hero__actions { justify-content: center; }
+        .landing-stories__grid,
+        .landing-pricing__grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .landing-schools__grid { grid-template-columns: 1fr; }
+        .landing-header__inner { flex-wrap: wrap; position: relative; }
+        .landing-nav { margin-left: auto; }
+        .landing-nav__links,
+        .landing-nav > .landing-btn--primary { display: none; }
+        .landing-nav__toggle { display: block; }
+        .landing-header--open .landing-nav {
+            flex-direction: column; align-items: stretch;
+            width: 100%; order: 3; gap: 0;
+        }
+        .landing-header--open .landing-nav__links {
+            display: flex; flex-direction: column;
+            align-items: stretch;
+            padding: 16px 0 12px; gap: 4px;
+        }
+        .landing-header--open .landing-nav__link { padding: 12px 0; font-size: 16px; }
+        .landing-header--open .landing-nav > .landing-btn--primary {
+            display: inline-flex; width: 100%;
+            justify-content: center; margin-top: 8px;
+        }
+        .landing-features__grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    @media (max-width: 992px) and (min-width: 601px) {
+        .landing-features__grid { grid-template-columns: repeat(2,1fr); gap: 40px 32px; }
+        .landing-features__grid .landing-feature:last-child { grid-column: 1/-1; max-width: 360px; margin-left: auto; margin-right: auto; }
+        .landing-stories__grid { grid-template-columns: repeat(2,1fr); max-width: none; }
+        .landing-stories__grid .landing-story-card:last-child { grid-column: 1/-1; max-width: 360px; margin-left: auto; margin-right: auto; }
+        .landing-pricing__grid { grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); max-width: none; }
+    }
+
+    @media (max-width: 600px) {
+        .landing-header__inner { min-height: 64px; gap: 12px; }
+        .landing-hero__actions { flex-direction: column; width: 100%; max-width: 360px; margin-left: auto; margin-right: auto; }
+        .landing-hero__actions .landing-btn { width: 100%; }
+        .landing-tribe-chip { font-size: 14px; padding: 10px 16px; }
+        .landing-btn--cta { width: 100%; }
+    }
+
+    @media (max-width: 380px) {
+        .landing-logo { max-width: calc(100% - 52px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .landing-btn:hover, .landing-tribe-chip:hover { transform: none; }
+    }
+    </style>
+</head>
+<body>
+<div class="landing">
+
+    <!-- HEADER -->
+    <header class="landing-header" id="landing-header">
+        <div class="landing__container landing-header__inner">
+            <a href="/" class="landing-logo" aria-label="Paulette Comics home">
+                <img
+                    src="https://heritage.paulettecomics.com/images/brand/paulette-comics-logo.png"
+                    alt="Paulette Comics"
+                    class="brand-logo brand-logo--full"
+                    decoding="async"
+                    onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';"
+                />
+                <span style="display:none;align-items:center;gap:8px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:18px;color:#C44B2B;">🌍 Paulette Culture Kids</span>
+            </a>
+            <nav class="landing-nav" aria-label="Main">
+                <button type="button" class="landing-nav__toggle" aria-expanded="false"
+                    aria-controls="landing-nav-menu" id="landing-nav-toggle" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="landing-nav__links" id="landing-nav-menu">
+                    <li><a href="#peoples" class="landing-nav__link">Peoples</a></li>
+                    <li><a href="#stories" class="landing-nav__link">Stories</a></li>
+                    <li><a href="#schools" class="landing-nav__link">For Schools</a></li>
+                    <li><a href="#pricing" class="landing-nav__link">Pricing</a></li>
+                    <li><a href="heritage.html" class="landing-nav__link">Login</a></li>
+                </ul>
+                <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary">Start Free Trial</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="landing-hero landing-hero--split" aria-labelledby="hero-title">
+        <div class="landing__container landing-hero__grid">
+            <div class="landing-hero__copy">
+                <h1 id="hero-title" class="landing-hero__title">
+                    Bring Oral
+                    <span class="landing-hero__highlight">Ugandan Stories...</span>
+                    to Life
+                </h1>
+                <p class="landing-hero__subtitle">
+                    Interactive cultural comics, songs, and language learning for children starting from 2 years, while celebrating Uganda's people and heritage.
+                </p>
+                <div class="landing-hero__actions">
+                    <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary landing-btn--hero-primary">
+                        <span class="landing-btn__icon" aria-hidden="true">🚀</span>
+                        Start Free Trial
+                    </a>
+                    <a href="#download" class="landing-btn landing-btn--hero-secondary">
+                        <span class="landing-btn__icon" aria-hidden="true">📱</span>
+                        Download App
+                    </a>
+                </div>
+            </div>
+            <div class="landing-hero__visual">
+                <img
+                    src="https://heritage.paulettecomics.com/m/storage/landing/bReQd2DINgamNxnS2RhfdzHhSNJAlercN0MzfO9g.png"
+                    alt="Paulette Culture Kids hero illustration"
+                    class="landing-hero__image"
+                    width="520" height="520"
+                    loading="eager" decoding="async"
+                    onerror="this.style.display='none'"
+                />
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="landing-features" id="features" aria-label="Platform highlights">
+        <div class="landing-features__grid">
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 6h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z" fill="#B8D4F0"/>
+                        <path d="M12 14h24v3H12v-3zm0 8h20v2H12v-2zm0 6h16v2H12v-2z" fill="#5B9BD5"/>
+                        <path d="M28 32l8 6V14l-8 6v12z" fill="#2E6DB4"/>
+                    </svg>
+                </div>
+                <h2 class="landing-feature__title">Cultural Comics</h2>
+                <p class="landing-feature__desc">Age-adaptive stories from 65+ Ugandan peoples with audio read-aloud</p>
+            </article>
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="28" r="14" fill="#D4B8F0"/>
+                        <path d="M24 8v32M16 16c4-6 16-6 16 0M14 24c-2 4 20 4 20 0" stroke="#7B4BB8" stroke-width="3" stroke-linecap="round"/>
+                        <ellipse cx="24" cy="30" rx="6" ry="4" fill="#9B6FD4"/>
+                    </svg>
+                </div>
+                <h2 class="landing-feature__title">Songs &amp; Language</h2>
+                <p class="landing-feature__desc">Traditional songs and vocabulary in local languages</p>
+            </article>
+            <article class="landing-feature">
+                <div class="landing-feature__icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 32L38 10l4 8-32 22-4-8z" fill="#7EB8E8"/>
+                        <path d="M38 10l4 8-8 4-4-8 8-4z" fill="#4A90D9"/>
+                        <path d="M10 36l-4-4 6-2 2 6z" fill="#2E6DB4"/>
+                    </svg>
+                </div>
+                <h2 class="landing-feature__title">Works Offline</h2>
+                <p class="landing-feature__desc">Download content bundles for full offline use in low-connectivity areas</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- TRIBES -->
+    <section class="landing-tribes" id="peoples" aria-labelledby="peoples-heading">
+        <div class="landing-tribes__inner">
+            <h2 id="peoples-heading" class="landing-tribes__title">Explore 65+ Nations of Ugandan People</h2>
+            <div class="landing-tribes__row">
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Acholi
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Alur
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Baganda
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Bagisu
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Bakiga
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Banyankole
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">🌍</span>Basongora
+                </a>
+                <a href="heritage.html" class="landing-tribe-chip">
+                    <span class="landing-tribe-chip__dot" aria-hidden="true">⭐</span>+ 58 more →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORIES -->
+    <section class="landing-section landing-section--white" id="stories" aria-labelledby="stories-heading">
+        <div class="landing-section__inner">
+            <span class="landing-section__label">Stories</span>
+            <h2 id="stories-heading" class="landing-section__title">Comic story packs children love</h2>
+            <p class="landing-section__lead">
+                Age-banded adventures (2–3, 3–4, 4–5, 5–6) with panel-by-panel audio, heritage vocabulary, and people-specific heritage heroes — ready for classroom or home.
+            </p>
+            <div class="landing-stories__grid">
+                <article class="landing-story-card">
+                    <span class="landing-story-card__emoji" aria-hidden="true">🐇</span>
+                    <h3 class="landing-story-card__title">The Clever Hare</h3>
+                    <p class="landing-story-card__meta">Buganda · Ages 3–4</p>
+                    <p class="landing-story-card__desc">A trickster tale with Luganda phrases, read-aloud on every panel, and gentle comprehension prompts.</p>
+                </article>
+                <article class="landing-story-card">
+                    <span class="landing-story-card__emoji" aria-hidden="true">🥁</span>
+                    <h3 class="landing-story-card__title">Drums of Acholi</h3>
+                    <p class="landing-story-card__meta">Acholi · Ages 4–5</p>
+                    <p class="landing-story-card__desc">Rhythm, community, and northern heritage — interactive panels plus song tie-ins from the heritage library.</p>
+                </article>
+                <article class="landing-story-card">
+                    <span class="landing-story-card__emoji" aria-hidden="true">🦁</span>
+                    <h3 class="landing-story-card__title">Savanna Friends</h3>
+                    <p class="landing-story-card__meta">Mixed peoples · Ages 2–3</p>
+                    <p class="landing-story-card__desc">Short, audio-first episodes for early learners with large touch targets and simple cultural greetings.</p>
+                </article>
+            </div>
+            <div class="landing-section__cta-row">
+                <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary">Browse story library</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCHOOLS -->
+    <section class="landing-section landing-section--beige" id="schools" aria-labelledby="schools-heading">
+        <div class="landing-section__inner">
+            <span class="landing-section__label">For Schools</span>
+            <h2 id="schools-heading" class="landing-section__title">Built for classrooms and organisations</h2>
+            <p class="landing-section__lead">
+                Give every school its own branded space — org admins manage teachers, approve content, toggle learning modules, and track engagement from one hub.
+            </p>
+            <div class="landing-schools__grid">
+                <ul class="landing-schools__list">
+                    <li class="landing-schools__item">
+                        <span class="landing-schools__icon" aria-hidden="true">🏫</span>
+                        <div>
+                            <h3 class="landing-schools__item-title">Organisation dashboards</h3>
+                            <p class="landing-schools__item-desc">Org admins review content, manage classrooms, and invite teachers — scoped to your school only.</p>
+                        </div>
+                    </li>
+                    <li class="landing-schools__item">
+                        <span class="landing-schools__icon" aria-hidden="true">🎨</span>
+                        <div>
+                            <h3 class="landing-schools__item-title">Custom branding</h3>
+                            <p class="landing-schools__item-desc">Set your default theme, logo, and colours so the CMS and mobile app reflect your identity.</p>
+                        </div>
+                    </li>
+                    <li class="landing-schools__item">
+                        <span class="landing-schools__icon" aria-hidden="true">📦</span>
+                        <div>
+                            <h3 class="landing-schools__item-title">Offline bundles</h3>
+                            <p class="landing-schools__item-desc">Download .ckb packs for rural sites — stories, songs, and activities that sync when you reconnect.</p>
+                        </div>
+                    </li>
+                    <li class="landing-schools__item">
+                        <span class="landing-schools__icon" aria-hidden="true">🧩</span>
+                        <div>
+                            <h3 class="landing-schools__item-title">Modular curriculum</h3>
+                            <p class="landing-schools__item-desc">Enable comics, songs, puzzles, games, and more per organisation — pay only for what you use.</p>
+                        </div>
+                    </li>
+                </ul>
+                <aside class="landing-schools__panel" aria-label="School plan highlights">
+                    <h3 class="landing-schools__panel-title">School plan includes</h3>
+                    <div class="landing-schools__stat"><span>Teachers &amp; classrooms</span><strong>Unlimited</strong></div>
+                    <div class="landing-schools__stat"><span>Content review queue</span><strong>✓</strong></div>
+                    <div class="landing-schools__stat"><span>Per-org module toggles</span><strong>✓</strong></div>
+                    <div class="landing-schools__stat"><span>Analytics &amp; reports</span><strong>✓</strong></div>
+                    <div class="landing-schools__stat"><span>Theme engine</span><strong>✓</strong></div>
+                    <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary" style="width:100%;margin-top:24px;justify-content:center;display:inline-flex;">Request school access</a>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="landing-section landing-section--white" id="pricing" aria-labelledby="pricing-heading">
+        <div class="landing-section__inner">
+            <span class="landing-section__label">Pricing</span>
+            <h2 id="pricing-heading" class="landing-section__title">Plans that scale with you</h2>
+            <p class="landing-section__lead">From families exploring at home to districts rolling out culturally grounded learning — start free and upgrade when you are ready.</p>
+            <div class="landing-pricing__grid">
+                <article class="landing-price-card">
+                    <h3 class="landing-price-card__name">Free</h3>
+                    <p class="landing-price-card__price">$0</p>
+                    <p class="landing-price-card__note">For parents &amp; trial classrooms</p>
+                    <ul class="landing-price-card__features">
+                        <li>Sample story packs &amp; songs</li>
+                        <li>One child profile</li>
+                        <li>Platform default branding</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--outline-dark">Get started</a>
+                </article>
+                <article class="landing-price-card landing-price-card--featured">
+                    <span class="landing-price-card__badge">Most popular</span>
+                    <h3 class="landing-price-card__name">School</h3>
+                    <p class="landing-price-card__price">Custom<span> / year</span></p>
+                    <p class="landing-price-card__note">Per organisation · modular add-ons</p>
+                    <ul class="landing-price-card__features">
+                        <li>Full people &amp; story catalogue</li>
+                        <li>Org admin &amp; teacher portals</li>
+                        <li>Review queue &amp; approvals</li>
+                        <li>Offline bundles &amp; kiosk mode</li>
+                        <li>Custom themes &amp; modules</li>
+                    </ul>
+                    <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary">Start free trial</a>
+                </article>
+                <article class="landing-price-card">
+                    <h3 class="landing-price-card__name">Enterprise</h3>
+                    <p class="landing-price-card__price">Let's talk</p>
+                    <p class="landing-price-card__note">Districts, NGOs &amp; multi-site rollouts</p>
+                    <ul class="landing-price-card__features">
+                        <li>Everything in School</li>
+                        <li>Multi-organisation management</li>
+                        <li>Priority onboarding &amp; training</li>
+                        <li>SLA &amp; dedicated support</li>
+                        <li>API &amp; integration options</li>
+                    </ul>
+                    <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--outline-dark">Contact sales</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="landing-section landing-section--navy landing-download" id="download" aria-labelledby="download-heading">
+        <div class="landing-section__inner">
+            <span class="landing-section__label">Mobile app</span>
+            <h2 id="download-heading" class="landing-section__title">Download the Culture Kids app</h2>
+            <p class="landing-section__lead" style="margin-left:auto;margin-right:auto;">
+                Stories, songs, and activities on phones and tablets — works offline after you download your heritage bundles.
+            </p>
+            <div class="landing-download__stores">
+                <a href="https://heritage.paulettecomics.com/register" class="landing-download__store" aria-label="Download on the App Store">
+                    <span class="landing-download__store-icon">
+                        <svg class="landing-store-icon landing-store-icon--apple" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                    </span>
+                    <span class="landing-download__store-text">App Store</span>
+                </a>
+                <a href="https://heritage.paulettecomics.com/register" class="landing-download__store" aria-label="Get it on Google Play">
+                    <span class="landing-download__store-icon">
+                        <svg class="landing-store-icon landing-store-icon--google-play" viewBox="0 0 28.99 31.99" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path fill="#ea4335" d="M13.54 15.28.12 29.34a3.66 3.66 0 0 0 5.33 2.16l15.1-8.6Z"/>
+                            <path fill="#fbbc04" d="m27.11 12.89-6.53-3.74-7.35 6.45 7.38 7.28 6.48-3.7a3.54 3.54 0 0 0 1.5-4.79 3.62 3.62 0 0 0-1.5-1.5z"/>
+                            <path fill="#4285f4" d="M.12 2.66a3.57 3.57 0 0 0-.12.92v24.84a3.57 3.57 0 0 0 .12.92L14 15.64Z"/>
+                            <path fill="#34a853" d="m13.64 16 6.94-6.85L5.5.51A3.73 3.73 0 0 0 3.63 0 3.64 3.64 0 0 0 .12 2.65Z"/>
+                        </svg>
+                    </span>
+                    <span class="landing-download__store-text">Google Play</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA -->
+    <section class="landing-cta" id="cta" aria-labelledby="cta-title">
+        <div class="landing__container">
+            <h2 id="cta-title" class="landing-cta__title">Ready to start your child's cultural journey?</h2>
+            <p class="landing-cta__subtitle">
+                Join thousands of children learning about their heritage through stories and songs.
+            </p>
+            <a href="https://heritage.paulettecomics.com/register" class="landing-btn landing-btn--primary landing-btn--cta">Create Free Account</a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+(function () {
+    var header = document.getElementById('landing-header');
+    var toggle = document.getElementById('landing-nav-toggle');
+    if (!header || !toggle) return;
+    toggle.addEventListener('click', function () {
+        var open = header.classList.toggle('landing-header--open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.querySelectorAll('.landing-nav__link[href^="#"]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            header.classList.remove('landing-header--open');
+            toggle.setAttribute('aria-expanded', 'false');
+        });
+    });
+})();
+</script>
+</body>
+</html>

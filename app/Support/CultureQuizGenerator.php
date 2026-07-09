@@ -77,7 +77,7 @@ final class CultureQuizGenerator
                 array_values(array_filter([$meaning, 'Goodbye', 'Sleep well', 'Thank you'])),
                 0,
             ),
-            self::mcq("How many clans does {$tribeName} have?", [string(max(count($clans), 5)), '2', '10', '20'], 0),
+            self::mcq('How many clans does '.$tribeName.' have?', [(string) max(count($clans), 5), '2', '10', '20'], 0),
             self::mcq("Who is the {$tribeName} hero's title?", [$heroTitle, $clanA, 'Elder', 'Chief'], 0),
         ];
 

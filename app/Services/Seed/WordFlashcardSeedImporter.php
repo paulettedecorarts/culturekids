@@ -215,7 +215,7 @@ class WordFlashcardSeedImporter
                 'phonetic' => filled($card['pronunciationGuide'] ?? null)
                     ? (string) $card['pronunciationGuide']
                     : null,
-                'image_path' => null,
+                'image_path' => $this->resolveImagePath($card),
                 'audio_path' => $this->resolveAudioPath($card),
                 'metadata' => $this->slideMetadata($card),
             ];
@@ -282,12 +282,34 @@ class WordFlashcardSeedImporter
     {
         $audio = $card['audio'] ?? null;
 
-        if (! is_array($audio)) {
+        if (is_array($audio)) {
+            $url = $audio['currentAudioUrl'] ?? $audio['audio'] ?? null;
+
+            if (is_string($url) && $url !== '') {
+                return app(HeritageSeedAssetPublisher::class)->publish($url);
+            }
+        }
+
+        $assets = $card['assets'] ?? null;
+
+        if (is_array($assets) && ! empty($assets['audio'])) {
+            return app(HeritageSeedAssetPublisher::class)->publish((string) $assets['audio']);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $card
+     */
+    protected function resolveImagePath(array $card): ?string
+    {
+        $assets = $card['assets'] ?? null;
+
+        if (! is_array($assets) || empty($assets['image'])) {
             return null;
         }
 
-        $url = $audio['currentAudioUrl'] ?? null;
-
-        return is_string($url) && $url !== '' ? $url : null;
+        return app(HeritageSeedAssetPublisher::class)->publish((string) $assets['image']);
     }
 }

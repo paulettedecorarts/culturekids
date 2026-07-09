@@ -5,16 +5,16 @@ namespace App\Services\Seed;
 use App\Models\Activity;
 use App\Models\Comic;
 use App\Models\CultureActivity;
-use App\Models\Tribe;
-use App\Support\CultureQuizGenerator;
 use App\Models\Drawing;
 use App\Models\Game;
 use App\Models\LanguageActivity;
 use App\Models\Maze;
 use App\Models\Song;
 use App\Models\SpotDifference;
+use App\Models\Tribe;
 use App\Models\WordSearch;
 use App\Services\Seed\Concerns\InteractsWithHeritageSeed;
+use App\Support\CultureQuizGenerator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -137,6 +137,8 @@ class HeritageActivitiesSeedImporter
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Language');
+
         if ($existing) {
             $existing->update($payload);
 
@@ -168,6 +170,8 @@ class HeritageActivitiesSeedImporter
                 ],
             ]),
         ];
+
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Puzzles');
 
         $existing = Activity::query()
             ->where('type', 'puzzle')
@@ -205,6 +209,8 @@ class HeritageActivitiesSeedImporter
             'star_points' => (int) ($item['points'] ?? 10),
             'metadata' => $this->heritageActivityMetadata($item),
         ];
+
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Story');
 
         if ($existing) {
             $existing->update($payload);
@@ -249,6 +255,8 @@ class HeritageActivitiesSeedImporter
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Culture');
+
         if ($existing) {
             $existing->update($payload);
 
@@ -289,6 +297,8 @@ class HeritageActivitiesSeedImporter
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Song');
+
         if ($existing) {
             $existing->update($payload);
 
@@ -325,6 +335,8 @@ class HeritageActivitiesSeedImporter
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Maze');
+
         if ($existing) {
             $existing->update($payload);
 
@@ -360,6 +372,8 @@ class HeritageActivitiesSeedImporter
             'scene_name' => $item['tag'] ?? null,
             'metadata' => $this->heritageActivityMetadata($item),
         ];
+
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Spot the Difference');
 
         if ($existing) {
             $existing->update($payload);
@@ -398,6 +412,8 @@ class HeritageActivitiesSeedImporter
             'metadata' => $this->heritageActivityMetadata($item),
         ];
 
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Word Search');
+
         if ($existing) {
             $existing->update($payload);
 
@@ -432,6 +448,9 @@ class HeritageActivitiesSeedImporter
             'materials' => $item['materialsNeeded'] ?? null,
             'metadata' => $this->heritageActivityMetadata($item),
         ];
+
+        $category = (string) ($item['category'] ?? 'Drawing');
+        $this->finalizeHeritageActivityPayload($item, $payload, $category);
 
         if ($existing) {
             $existing->update($payload);
@@ -468,6 +487,8 @@ class HeritageActivitiesSeedImporter
             'language_code' => $this->languageCodeFromItem($item),
             'metadata' => $this->heritageActivityMetadata($item),
         ];
+
+        $this->finalizeHeritageActivityPayload($item, $payload, 'Game');
 
         if ($existing) {
             $existing->update($payload);
@@ -539,6 +560,50 @@ class HeritageActivitiesSeedImporter
             'Pronunciation Game', 'Quiz' => 'quiz',
             'Speaking' => 'quiz',
             default => 'quiz',
+        };
+    }
+
+    protected function finalizeHeritageActivityPayload(array $item, array &$payload, string $category): void
+    {
+        $this->applyHeritageSeedAssets($item, $payload, $this->seedAssetFieldMap($category));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function seedAssetFieldMap(string $category): array
+    {
+        return match ($category) {
+            'Language' => ['audio' => 'audio_path'],
+            'Song' => [
+                'audio' => 'audio_path',
+                'coverImage' => 'cover_image_path',
+                'video' => 'video_path',
+            ],
+            'Story' => ['coverImage' => 'cover_image_path'],
+            'Culture' => [
+                'coverImage' => 'cover_image_path',
+                'mapImage' => 'map_image_path',
+            ],
+            'Maze' => [
+                'coverImage' => 'cover_image_path',
+                'backgroundImage' => 'background_image_path',
+            ],
+            'Spot the Difference' => [
+                'imageA' => 'image_a_path',
+                'imageB' => 'image_b_path',
+            ],
+            'Colouring', 'Drawing' => [
+                'template' => 'template_path',
+                'preview' => 'preview_path',
+                'coverImage' => 'preview_path',
+            ],
+            'Game' => [
+                'coverImage' => 'cover_image_path',
+                'audio' => 'audio_path',
+            ],
+            'Puzzles', 'Word Search' => [],
+            default => [],
         };
     }
 }

@@ -5,7 +5,6 @@ namespace App\Services\Seed;
 use App\Models\Clan;
 use App\Models\Tribe;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class HeritageTribeUpserter
 {
@@ -28,15 +27,22 @@ class HeritageTribeUpserter
                 continue;
             }
 
+            $tribeAssets = is_array($tribeMeta['assets'] ?? null) ? $tribeMeta['assets'] : [];
+            $iconPath = null;
+
+            if (! empty($tribeAssets['iconImage'])) {
+                $iconPath = app(HeritageSeedAssetPublisher::class)->publish((string) $tribeAssets['iconImage']);
+            }
+
             $tribe = Tribe::query()->updateOrCreate(
                 ['name' => $name],
                 [
                     'hero_name' => (string) ($tribeMeta['hero'] ?? 'Heritage Hero'),
                     'hero_emoji' => $tribeMeta['emoji'] ?? null,
-                    'hero_icon' => null,
+                    'hero_icon' => $iconPath,
                     'greeting' => $tribeMeta['greeting'] ?? null,
                     'region' => $tribeMeta['region'] ?? null,
-                    'color' => null,
+                    'color' => $tribeMeta['color'] ?? null,
                 ]
             );
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Tribe extends Model
 {
@@ -30,6 +31,18 @@ class Tribe extends Model
     public function clans(): HasMany
     {
         return $this->hasMany(Clan::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Emoji, image URL, or storage-backed tribe icon for API responses.
+     */
+    public function resolvedIcon(): ?string
+    {
+        if (filled($this->hero_icon) && str_contains((string) $this->hero_icon, '/')) {
+            return Storage::disk('public')->url($this->hero_icon);
+        }
+
+        return $this->hero_emoji ?? $this->hero_icon;
     }
 
     public function songs(): HasMany
