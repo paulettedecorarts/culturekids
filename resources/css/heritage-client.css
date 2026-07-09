@@ -162,9 +162,9 @@ html,body{height:100%;font-family:'Nunito','Segoe UI',sans-serif}
   40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}
 }
 
-/* ── APP PAGE ── */
+/* ── APP PAGE (Laravel serves this directly — no login gate) ── */
 #appPage{
-  display:none;position:fixed;inset:0;
+  display:block;position:fixed;inset:0;
   background:#0e1420;overflow:auto;z-index:50;
 }
 .topbar{

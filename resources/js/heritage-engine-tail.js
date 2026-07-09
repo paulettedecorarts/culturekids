@@ -1390,7 +1390,15 @@ function confetti(n=50){
 }
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')goBack()});
-if ((window.TRIBES || []).length) {
-  document.getElementById('totS').textContent = S.stars || 0;
+
+window.__heritageBootApp = function () {
+  if (window.__heritageState) {
+    S = Object.assign({ stars: 0, done: {}, tStars: {} }, window.__heritageState);
+  }
+
+  const tot = document.getElementById('totS');
+  if (tot) {
+    tot.textContent = (S.stars || 0).toLocaleString();
+  }
   _applyView('home');
-}
+};

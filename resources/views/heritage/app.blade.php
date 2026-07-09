@@ -1,6 +1,9 @@
 @extends('layouts.heritage')
 
 @section('content')
+<script>
+    window.HERITAGE_BOOTSTRAP = @json($bootstrap);
+</script>
 <div id="appPage">
     <div class="topbar">
         <div class="tb-brand">
@@ -102,8 +105,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    window.HERITAGE_BOOTSTRAP = @json($bootstrap);
-</script>
 @endsection
