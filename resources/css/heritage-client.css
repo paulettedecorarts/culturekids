@@ -308,24 +308,38 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 @keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── Home dashboard ── */
-.hh-home-hero{
-  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.8fr);gap:20px;
-  padding:28px 22px 18px;align-items:start;
+.hh-home-intro{
+  padding:28px 22px 12px;
 }
 .hh-home-eyebrow{
   margin:0 0 8px;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,197,24,.85);
 }
-.hh-home-hero h1{
+.hh-home-intro h1{
   margin:0 0 10px;font-family:'Baloo 2',cursive;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.05;color:#fff;
 }
-.hh-home-hero p{margin:0;color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.55;max-width:38rem}
-.hh-home-stats{display:grid;gap:10px}
-.hh-home-stat{
-  padding:14px 16px;border-radius:16px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+.hh-home-intro p{margin:0;color:rgba(255,255,255,.62);font-size:.95rem;line-height:1.55;max-width:42rem}
+.hh-home-progress-band{
+  padding:8px 22px 20px;
 }
-.hh-home-stat strong{display:block;font-family:'Baloo 2',cursive;font-size:1.5rem;color:#F5C518;line-height:1}
-.hh-home-stat span{display:block;margin-top:4px;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.hh-home-progress-band__head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.hh-home-progress-band__head h2{
+  margin:0;font-family:'Baloo 2',cursive;font-size:1.05rem;color:#fff;
+}
+.hh-home-progress-band__head p{margin:0;color:rgba(255,255,255,.5);font-size:.78rem}
+.hh-progress-grid--horizontal{
+  display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;
+  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+}
+.hh-progress-grid--horizontal .hh-progress-chip{
+  flex:0 0 min(240px,78vw);scroll-snap-align:start;
+}
+.hh-progress-grid--horizontal::-webkit-scrollbar{height:6px}
+.hh-progress-grid--horizontal::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.15);border-radius:999px;
+}
 .hh-home-section{padding:8px 22px 28px}
 .hh-home-section__head{margin-bottom:14px}
 .hh-home-section__head h2{margin:0 0 4px;font-family:'Baloo 2',cursive;font-size:1.2rem;color:#fff}
@@ -381,6 +395,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   padding:28px 20px;border-radius:16px;text-align:center;
   border:1px dashed rgba(255,255,255,.14);color:rgba(255,255,255,.55);font-size:.9rem;
 }
+.hh-empty--compact{padding:16px 12px;font-size:.8rem}
 
 /* ── Section title ── */
 .s-title{font-family:'Baloo 2',cursive;font-size:1.45rem;font-weight:900;padding:0 26px;margin-bottom:18px}
@@ -600,11 +615,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* ── Responsive ── */
 @media(max-width:800px){
-  .hh-home-hero{grid-template-columns:minmax(0,1fr)}
   .hh-shell{align-items:flex-start;flex-wrap:wrap}
 }
 @media(max-width:640px){
-  .hh-home-hero,.hh-home-section,.agrid,.s-title,.tb-banner,.tps,.fwrap,.pv,.lb{padding-left:14px;padding-right:14px}
+  .hh-home-intro,.hh-home-progress-band,.hh-home-section,.agrid,.s-title,.tb-banner,.tps,.fwrap,.pv,.lb{padding-left:14px;padding-right:14px}
   .av-top,.av-body{padding:18px 16px}
   #act-view{padding:0 14px 40px}
 }

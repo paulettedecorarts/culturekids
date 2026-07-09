@@ -87,17 +87,18 @@
     <div id="heritage-root">
         <div id="app">
             <div class="view active" id="view-home">
-                <section class="hh-home-hero">
-                    <div class="hh-home-hero__copy">
-                        <p class="hh-home-eyebrow">Learning for ages 2–10</p>
-                        <h1>Explore Uganda’s heritage tribes</h1>
-                        <p>Choose a tribe to open language, music, puzzles, missions, and clan stories. Progress is saved for <strong id="hhChildName">{{ $child->name }}</strong>.</p>
+                <section class="hh-home-intro">
+                    <p class="hh-home-eyebrow">Learning for ages 2–10</p>
+                    <h1>Explore Uganda’s heritage tribes</h1>
+                    <p>Choose a tribe to open language, music, puzzles, missions, and clan stories. Progress is saved for <strong id="hhChildName">{{ $child->name }}</strong>.</p>
+                </section>
+
+                <section class="hh-home-progress-band">
+                    <div class="hh-home-progress-band__head">
+                        <h2>Progress overview</h2>
+                        <p>Stars and completion for each tribe.</p>
                     </div>
-                    <div class="hh-home-stats">
-                        <div class="hh-home-stat"><strong>{{ $bootstrap['stats']['tribes'] ?? 11 }}</strong><span>Tribes</span></div>
-                        <div class="hh-home-stat"><strong>{{ number_format($bootstrap['stats']['activities'] ?? 0) }}</strong><span>Activities</span></div>
-                        <div class="hh-home-stat"><strong>{{ $bootstrap['stats']['categories'] ?? 6 }}</strong><span>Categories</span></div>
-                    </div>
+                    <div class="hh-progress-grid hh-progress-grid--horizontal" id="lbGrid"></div>
                 </section>
 
                 <section class="hh-home-section">
@@ -106,14 +107,6 @@
                         <p>Pick where to start. You can switch tribes any time.</p>
                     </div>
                     <div class="hh-tribe-grid" id="tribeGrid"></div>
-                </section>
-
-                <section class="hh-home-section">
-                    <div class="hh-home-section__head">
-                        <h2>Progress overview</h2>
-                        <p>Stars and completion for each tribe.</p>
-                    </div>
-                    <div class="hh-progress-grid" id="lbGrid"></div>
                 </section>
             </div>
 

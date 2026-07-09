@@ -129,7 +129,7 @@ function renderHome(){
       ? '<div class="hh-empty">A parent needs to approve tribes in Family Hub before learning can begin.</div>'
       : '<div class="hh-empty">No tribes are available yet. Check back after content is published.</div>';
     const lb = document.getElementById('lbGrid');
-    if (lb) lb.innerHTML = '';
+    if (lb) lb.innerHTML = '<div class="hh-empty hh-empty--compact">Progress will appear once tribes are available.</div>';
     return;
   }
 
@@ -156,12 +156,15 @@ function renderHome(){
     </article>`;
   }).join('');
 
-  const maxS=Math.max(...TRIBES.map(t=>S.tStars[t.id]||0),1);
+  const maxS = Math.max(...TRIBES.map(t => S.tStars[t.id] || 0), 1);
   const lb = document.getElementById('lbGrid');
   if (!lb) return;
 
-  lb.innerHTML = TRIBES.map(t=>{
-    const stars=S.tStars[t.id]||0,pct=Math.round(stars/maxS*100),done=getD(t.id),tot=Math.max(t.activities.length,1);
+  lb.innerHTML = TRIBES.map(t => {
+    const stars = S.tStars[t.id] || 0;
+    const pct = Math.round(stars / maxS * 100);
+    const done = getD(t.id);
+    const tot = Math.max(t.activities.length, 1);
     return `<button type="button" class="hh-progress-chip" onclick="nav('tribe','${t.id}')">
       <span class="hh-progress-chip__ico">${TRIBE_IMAGES[t.id] ? '<img src="'+TRIBE_IMAGES[t.id]+'" alt="'+t.name+'">' : (t.symbol || '🌍')}</span>
       <span class="hh-progress-chip__body">
@@ -1496,8 +1499,14 @@ function confetti(n=50){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')goBack()});
 
 window.__heritageBootApp = function () {
+  const boot = window.HERITAGE_BOOTSTRAP || {};
+  TRIBES = boot.tribes || window.TRIBES || [];
+  TRIBE_IMAGES = boot.tribeImages || window.TRIBE_IMAGES || {};
+
   if (window.__heritageState) {
     S = Object.assign({ stars: 0, done: {}, tStars: {} }, window.__heritageState);
+  } else if (boot.progress) {
+    S = Object.assign({ stars: 0, done: {}, tStars: {} }, boot.progress);
   }
 
   const tot = document.getElementById('totS');
