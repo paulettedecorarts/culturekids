@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Heritage;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tribe;
 use App\Services\Heritage\HeritageClientCatalogService;
 use App\Services\Heritage\HeritageClientProgressService;
-use App\Support\ChildProfileAccess;
 use App\Support\FamilyTribeAccess;
 use App\Support\Heritage\HeritageChildSession;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +21,31 @@ class HeritageAppController extends Controller
 
     public function index(Request $request): View|RedirectResponse
     {
+        return $this->renderApp($request);
+    }
+
+    public function tribe(Request $request, Tribe $tribe): View|RedirectResponse
+    {
+        FamilyTribeAccess::ensureTribeAllowed($request->user(), $tribe->id);
+
+        $user = $request->user();
+        $child = HeritageChildSession::resolveActiveProfile($request);
+        $catalog = $this->catalog->bootstrap($user, $child);
+
+        $clientTribe = collect($catalog['tribes'])->firstWhere('dbId', $tribe->id);
+        abort_unless($clientTribe, 404);
+
+        return $this->renderApp($request, [
+            'view' => 'tribe',
+            'tribeId' => $clientTribe['id'],
+        ]);
+    }
+
+    /**
+     * @param  array{view: string, tribeId?: string}|null  $initialView
+     */
+    private function renderApp(Request $request, ?array $initialView = null): View|RedirectResponse
+    {
         $user = $request->user();
         $child = HeritageChildSession::resolveActiveProfile($request);
         $catalog = $this->catalog->bootstrap($user, $child);
@@ -33,11 +58,20 @@ class HeritageAppController extends Controller
                 ->with('status', __('Approve tribes for your family before playing Heritage Heroes.'));
         }
 
+        $tribes = collect($catalog['tribes'])
+            ->map(function (array $tribe) {
+                $tribe['url'] = route('heritage.tribes.show', ['tribe' => $tribe['dbId']]);
+
+                return $tribe;
+            })
+            ->values()
+            ->all();
+
         return view('heritage.app', [
             'user' => $user,
             'child' => $child,
             'bootstrap' => [
-                'tribes' => $catalog['tribes'],
+                'tribes' => $tribes,
                 'tribeImages' => $catalog['tribeImages'],
                 'stats' => $catalog['stats'],
                 'progress' => $progress,
@@ -53,19 +87,21 @@ class HeritageAppController extends Controller
                     'role' => $user->hasRole('child') ? 'child' : 'parent',
                 ],
                 'routes' => [
+                    'home' => route('heritage.app'),
                     'progress' => route('heritage.progress'),
                     'logout' => route('logout'),
                     'selectChild' => $isParent ? route('heritage.select-child') : null,
                     'exitToParent' => $isParent ? route('heritage.exit-to-parent') : null,
                     'parentDashboard' => $isParent ? route('parent.dashboard') : null,
                 ],
+                'initialView' => $initialView,
                 'csrfToken' => csrf_token(),
                 'requiresTribeApproval' => $catalog['requiresTribeApproval'] ?? false,
             ],
         ]);
     }
 
-    public function setup(Request $request): \Illuminate\Http\RedirectResponse|View
+    public function setup(Request $request): RedirectResponse|View
     {
         $user = $request->user();
 
@@ -74,7 +110,7 @@ class HeritageAppController extends Controller
         }
 
         return view('heritage.setup', [
-            'profiles' => ChildProfileAccess::queryFor($user)->get(),
+            'profiles' => \App\Support\ChildProfileAccess::queryFor($user)->get(),
         ]);
     }
 }

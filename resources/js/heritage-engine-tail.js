@@ -65,17 +65,38 @@ function syncHeritageContext(){
   window.navStack=navStack;
 }
 function goHome(){
+  const home = window.HERITAGE_BOOTSTRAP?.routes?.home;
+  if (home) {
+    window.location.href = home;
+    return;
+  }
   navStack=[];
   _applyView('home');
 }
 function nav(view,tid,aid){
+  if (view === 'tribe' && !aid) {
+    const tribe = TRIBES.find(function (t) { return t.id === tid; });
+    if (tribe?.url) {
+      window.location.href = tribe.url;
+      return;
+    }
+  }
   // Save where we are NOW before moving
   var curView=curA?'act':(curT?'tribe':'home');
   navStack.push({view:curView,tid:curT?curT.id:null,aid:curA?curA.id:null,f:curF,d:curD});
   _applyView(view,tid,aid);
 }
 function goBack(){
-  if(navStack.length===0){_applyView('home');return;}
+  if(navStack.length===0){
+    const home = window.HERITAGE_BOOTSTRAP?.routes?.home;
+    const initial = window.HERITAGE_BOOTSTRAP?.initialView;
+    if (home && (initial?.view === 'tribe' || curT)) {
+      window.location.href = home;
+      return;
+    }
+    _applyView('home');
+    return;
+  }
   var p=navStack.pop();
   if(!p||p.view==='home'){
     _applyView('home');
@@ -1515,6 +1536,14 @@ window.__heritageBootApp = function () {
   }
   renderChildProfileStats();
   syncHeritageContext();
+
+  const initial = boot.initialView;
+  if (initial?.view === 'tribe' && initial.tribeId) {
+    navStack = [];
+    _applyView('tribe', initial.tribeId);
+    return;
+  }
+
   _applyView('home');
 };
 

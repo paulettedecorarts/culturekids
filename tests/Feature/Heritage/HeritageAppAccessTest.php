@@ -79,4 +79,55 @@ class HeritageAppAccessTest extends TestCase
             ->get(route('heritage.app'))
             ->assertForbidden();
     }
+
+    public function test_parent_can_open_approved_tribe_on_dedicated_route(): void
+    {
+        Role::firstOrCreate(['name' => 'parent', 'guard_name' => 'web']);
+
+        $parent = User::factory()->create();
+        $parent->assignRole('parent');
+
+        ChildProfile::query()->create([
+            'user_id' => $parent->id,
+            'name' => 'Amina',
+            'dob' => now()->subYears(6)->toDateString(),
+            'age_band' => '5-6',
+            'total_stars' => 0,
+        ]);
+
+        $tribe = Tribe::query()->create(['name' => 'Baganda', 'hero_name' => 'Kintu']);
+        $parent->approvedTribes()->attach($tribe->id, ['approved_at' => now()]);
+
+        $response = $this->actingAs($parent)
+            ->get(route('heritage.tribes.show', ['tribe' => $tribe->id]));
+
+        $response->assertOk();
+        $response->assertSee('HERITAGE_BOOTSTRAP', false);
+        $response->assertSee('"view":"tribe"', false);
+        $response->assertSee('"tribeId":"baganda"', false);
+    }
+
+    public function test_parent_cannot_open_unapproved_tribe_route(): void
+    {
+        Role::firstOrCreate(['name' => 'parent', 'guard_name' => 'web']);
+
+        $parent = User::factory()->create();
+        $parent->assignRole('parent');
+
+        ChildProfile::query()->create([
+            'user_id' => $parent->id,
+            'name' => 'Amina',
+            'dob' => now()->subYears(6)->toDateString(),
+            'age_band' => '5-6',
+            'total_stars' => 0,
+        ]);
+
+        $approved = Tribe::query()->create(['name' => 'Baganda', 'hero_name' => 'Kintu']);
+        $blocked = Tribe::query()->create(['name' => 'Acholi', 'hero_name' => 'Gipir']);
+        $parent->approvedTribes()->attach($approved->id, ['approved_at' => now()]);
+
+        $this->actingAs($parent)
+            ->get(route('heritage.tribes.show', ['tribe' => $blocked->id]))
+            ->assertForbidden();
+    }
 }

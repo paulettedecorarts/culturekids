@@ -374,6 +374,7 @@ Route::middleware(['auth', 'verified', 'heritage.parent_or_child'])
 
         Route::middleware(['heritage.child'])->group(function () {
             Route::get('/', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'index'])->name('app');
+            Route::get('/tribes/{tribe}', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'tribe'])->name('tribes.show');
             Route::post('/progress', [\App\Http\Controllers\Heritage\HeritageProgressController::class, 'store'])->name('progress');
         });
     });
