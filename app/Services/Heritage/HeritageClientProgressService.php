@@ -47,4 +47,54 @@ class HeritageClientProgressService
     {
         return self::CACHE_PREFIX.$user->id.':'.$child->id;
     }
+
+    /**
+     * @param  list<array<string, mixed>>  $tribes
+     * @param  array{stars?: int, done?: array<string, bool>, tStars?: array<string, int>}  $progress
+     * @return array{
+     *     stars: int,
+     *     activitiesCompleted: int,
+     *     activitiesTotal: int,
+     *     tribesStarted: int,
+     *     tribesCompleted: int,
+     *     tribesTotal: int
+     * }
+     */
+    public function summarize(array $tribes, array $progress): array
+    {
+        $done = is_array($progress['done'] ?? null) ? $progress['done'] : [];
+        $completedKeys = array_keys(array_filter($done));
+        $activitiesTotal = 0;
+        $tribesStarted = 0;
+        $tribesCompleted = 0;
+
+        foreach ($tribes as $tribe) {
+            $tribeId = (string) ($tribe['id'] ?? '');
+            $tribeActivities = is_array($tribe['activities'] ?? null) ? $tribe['activities'] : [];
+            $tribeTotal = count($tribeActivities);
+            $activitiesTotal += $tribeTotal;
+
+            $tribeDone = count(array_filter(
+                $completedKeys,
+                static fn (string $key): bool => str_starts_with($key, $tribeId.'_'),
+            ));
+
+            if ($tribeDone > 0) {
+                $tribesStarted++;
+            }
+
+            if ($tribeTotal > 0 && $tribeDone >= $tribeTotal) {
+                $tribesCompleted++;
+            }
+        }
+
+        return [
+            'stars' => max(0, (int) ($progress['stars'] ?? 0)),
+            'activitiesCompleted' => count($completedKeys),
+            'activitiesTotal' => $activitiesTotal,
+            'tribesStarted' => $tribesStarted,
+            'tribesCompleted' => $tribesCompleted,
+            'tribesTotal' => count($tribes),
+        ];
+    }
 }

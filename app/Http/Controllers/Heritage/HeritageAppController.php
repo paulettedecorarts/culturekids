@@ -23,6 +23,7 @@ class HeritageAppController extends Controller
         $child = HeritageChildSession::resolveActiveProfile($request);
         $catalog = $this->catalog->bootstrap($user);
         $progress = $this->progress->load($user, $child);
+        $isParent = $user->hasRole('parent');
 
         return view('heritage.app', [
             'user' => $user,
@@ -32,10 +33,12 @@ class HeritageAppController extends Controller
                 'tribeImages' => $catalog['tribeImages'],
                 'stats' => $catalog['stats'],
                 'progress' => $progress,
+                'childStats' => $this->progress->summarize($catalog['tribes'], $progress),
                 'child' => [
                     'id' => $child->id,
                     'name' => $child->name,
                     'avatar' => $child->avatar,
+                    'ageBand' => $child->age_band,
                 ],
                 'user' => [
                     'name' => $user->name,
@@ -44,7 +47,9 @@ class HeritageAppController extends Controller
                 'routes' => [
                     'progress' => route('heritage.progress'),
                     'logout' => route('logout'),
-                    'selectChild' => $user->hasRole('parent') ? route('heritage.select-child') : null,
+                    'selectChild' => $isParent ? route('heritage.select-child') : null,
+                    'exitToParent' => $isParent ? route('heritage.exit-to-parent') : null,
+                    'parentDashboard' => $isParent ? route('parent.dashboard') : null,
                 ],
                 'csrfToken' => csrf_token(),
             ],

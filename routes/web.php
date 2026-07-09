@@ -367,6 +367,9 @@ Route::middleware(['auth', 'verified', 'heritage.parent_or_child'])
         Route::get('/setup', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'setup'])->name('setup');
         Route::get('/select-child', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'select'])->name('select-child');
         Route::post('/select-child', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'store'])->name('select-child.store');
+        Route::post('/exit-to-parent', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'exitToParent'])
+            ->middleware('role:parent')
+            ->name('exit-to-parent');
 
         Route::middleware(['heritage.child'])->group(function () {
             Route::get('/', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'index'])->name('app');

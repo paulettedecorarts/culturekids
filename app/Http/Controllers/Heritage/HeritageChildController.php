@@ -44,4 +44,13 @@ class HeritageChildController extends Controller
 
         return redirect()->route('heritage.app');
     }
+
+    public function exitToParent(Request $request): RedirectResponse
+    {
+        abort_unless($request->user()?->hasRole('parent'), 403);
+
+        HeritageChildSession::clear($request);
+
+        return redirect()->route('parent.dashboard');
+    }
 }

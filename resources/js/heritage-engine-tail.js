@@ -10,6 +10,19 @@ const CATS={
 var TRIBES = window.TRIBES || [];
 var TRIBE_IMAGES = window.TRIBE_IMAGES || {};
 
+function tribeSymbol(t, size='52px', borderRadius='14px') {
+  if(TRIBE_IMAGES[t.id]) {
+    return '<img src="' + TRIBE_IMAGES[t.id] + '" style="width:' + size + ';height:' + size + ';object-fit:contain;border-radius:' + borderRadius + ';background:#fff2;display:block" alt="' + t.name + '">';
+  }
+  return t.symbol || '🌍';
+}
+function tribeSymbolLarge(t) {
+  if(TRIBE_IMAGES[t.id]) {
+    return '<img src="' + TRIBE_IMAGES[t.id] + '" style="width:80px;height:80px;object-fit:contain;border-radius:16px;background:#fff1;display:block" alt="' + t.name + '">';
+  }
+  return t.symbol || '🌍';
+}
+
 // ══════════════════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════════════════
@@ -44,6 +57,16 @@ function _applyView(view,tid,aid){
     renderActView();
   }
   else if(view==='passport'){renderPassport();}
+  syncHeritageContext();
+}
+function syncHeritageContext(){
+  window.curT=curT;
+  window.curA=curA;
+  window.navStack=navStack;
+}
+function goHome(){
+  navStack=[];
+  _applyView('home');
 }
 function nav(view,tid,aid){
   // Save where we are NOW before moving
@@ -88,34 +111,111 @@ const TIPS={
 // HOME
 // ══════════════════════════════════════════════════════════════════════
 function renderHome(){
-  document.getElementById('totS').textContent=S.stars.toLocaleString();
-  // Tribe grid
-  document.getElementById('tribeGrid').innerHTML=TRIBES.map((t,i)=>{
-    const done=getD(t.id),tot=t.activities.length,pct=Math.round(done/tot*100),stars=S.tStars[t.id]||0;
-    return `<div class="tc" style="--tc:${t.color};animation-delay:${i*.05}s" onclick="nav('tribe','${t.id}')">
-      <div class="tc-top"><div class="tc-badge" style="background:${TRIBE_IMAGES[t.id]?'transparent':t.color}">${tribeSymbol(t,'44px','12px')}</div><div><div class="tc-name">${t.name}</div><div class="tc-hero">${t.hero}</div></div></div>
-      <div class="tc-greet"><div class="tc-phrase">${t.greeting}</div><div class="tc-ph">${t.phonetic}</div><div class="tc-mn">"${t.meaning}"</div></div>
-      <div class="tc-pills"><span class="pill">${t.region.split(',')[0]}</span><span class="pill">${t.language}</span><span class="pill">${t.clans.length} clans</span></div>
-      <div class="tc-prog">
-        <div class="tc-pl"><span>${done}/${tot} Activities</span><span>⭐ ${stars}</span></div>
-        <div class="tc-pb"><div class="tc-pf" style="width:${pct}%"></div></div>
+  const totEl = document.getElementById('totS');
+  if (totEl) totEl.textContent = S.stars.toLocaleString();
+  renderChildProfileStats();
+
+  const childLabel = document.getElementById('hhChildName');
+  if (childLabel && window.HERITAGE_BOOTSTRAP?.child?.name) {
+    childLabel.textContent = window.HERITAGE_BOOTSTRAP.child.name;
+  }
+
+  const grid = document.getElementById('tribeGrid');
+  if (!grid) return;
+
+  if (!TRIBES.length) {
+    grid.innerHTML = '<div class="hh-empty">No tribes are available yet. Check back after content is published.</div>';
+    const lb = document.getElementById('lbGrid');
+    if (lb) lb.innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = TRIBES.map((t,i)=>{
+    const done=getD(t.id), tot=Math.max(t.activities.length,1), pct=tot ? Math.round(done/tot*100) : 0, stars=S.tStars[t.id]||0;
+    const region = (t.region || 'Uganda').split(',')[0];
+    const btnLabel = done===0 ? 'Start' : (done===tot ? 'Review' : 'Continue');
+    return `<article class="hh-tribe-card" style="--tc:${t.color};animation-delay:${i*.04}s" onclick="nav('tribe','${t.id}')">
+      <div class="hh-tribe-card__top">
+        <div class="hh-tribe-card__badge">${tribeSymbol(t,'40px','12px')}</div>
+        <div class="hh-tribe-card__meta">
+          <h3 class="hh-tribe-card__name">${t.name}</h3>
+          <p class="hh-tribe-card__hero">${t.hero || 'Heritage Hero'}</p>
+        </div>
+        <div class="hh-tribe-card__stars">⭐ ${stars}</div>
       </div>
-      <button class="tc-btn" onclick="event.stopPropagation();nav('tribe','${t.id}')">${done===0?'Start Adventure 🚀':done===tot?'✓ Complete! Review':'Continue → ('+pct+'%)'}</button>
-    </div>`;
+      <div class="hh-tribe-card__pills">
+        <span>${region}</span>
+        <span>${t.language || 'Language'}</span>
+        <span>${done}/${tot} done</span>
+      </div>
+      <div class="hh-tribe-card__bar"><span style="width:${pct}%"></span></div>
+      <button type="button" class="hh-tribe-card__btn" onclick="event.stopPropagation();nav('tribe','${t.id}')">${btnLabel}</button>
+    </article>`;
   }).join('');
-  // Leaderboard
+
   const maxS=Math.max(...TRIBES.map(t=>S.tStars[t.id]||0),1);
-  document.getElementById('lbGrid').innerHTML=TRIBES.map(t=>{
-    const stars=S.tStars[t.id]||0,pct=Math.round(stars/maxS*100),done=getD(t.id);
-    return `<div class="lb-c" onclick="nav('tribe','${t.id}')">
-      <div class="lb-ico">${TRIBE_IMAGES[t.id] ? '<img src="'+TRIBE_IMAGES[t.id]+'" style="width:26px;height:26px;object-fit:contain;border-radius:6px" alt="'+t.name+'">' : t.symbol}</div>
-      <div class="lb-name">${t.name}</div>
-      <div class="lb-stars">⭐ ${stars}</div>
-      <div class="lb-pct">${done}/${t.activities.length} done</div>
-      <div class="lb-bar" style="background:linear-gradient(90deg,${t.color} ${pct}%,rgba(255,255,255,.07) ${pct}%)"></div>
-    </div>`;
+  const lb = document.getElementById('lbGrid');
+  if (!lb) return;
+
+  lb.innerHTML = TRIBES.map(t=>{
+    const stars=S.tStars[t.id]||0,pct=Math.round(stars/maxS*100),done=getD(t.id),tot=Math.max(t.activities.length,1);
+    return `<button type="button" class="hh-progress-chip" onclick="nav('tribe','${t.id}')">
+      <span class="hh-progress-chip__ico">${TRIBE_IMAGES[t.id] ? '<img src="'+TRIBE_IMAGES[t.id]+'" alt="'+t.name+'">' : (t.symbol || '🌍')}</span>
+      <span class="hh-progress-chip__body">
+        <strong>${t.name}</strong>
+        <small>${done}/${tot} activities · ⭐ ${stars}</small>
+      </span>
+      <span class="hh-progress-chip__bar" style="--pct:${pct}%;--tc:${t.color}"></span>
+    </button>`;
   }).join('');
 }
+
+function renderChildProfileStats(){
+  const totalActivities = TRIBES.reduce((sum,t)=>sum+(t.activities?.length||0),0);
+  const completed = Object.keys(S.done||{}).filter(k=>S.done[k]).length;
+  let tribesStarted = 0, tribesCompleted = 0;
+  TRIBES.forEach(t=>{
+    const tot=t.activities?.length||0;
+    const done=getD(t.id);
+    if(done>0) tribesStarted++;
+    if(tot>0 && done>=tot) tribesCompleted++;
+  });
+
+  const starsEl = document.getElementById('hhStatStars');
+  const actEl = document.getElementById('hhStatActivities');
+  const tribesEl = document.getElementById('hhStatTribes');
+  const completeEl = document.getElementById('hhStatComplete');
+  if(starsEl) starsEl.textContent = (S.stars||0).toLocaleString();
+  if(actEl) actEl.textContent = completed+' / '+totalActivities;
+  if(tribesEl) tribesEl.textContent = tribesStarted+' / '+TRIBES.length;
+  if(completeEl) completeEl.textContent = String(tribesCompleted);
+}
+
+function toggleChildProfile(){
+  const panel = document.getElementById('hhProfilePanel');
+  const btn = document.getElementById('hhProfileBtn');
+  if(!panel || !btn) return;
+  const open = panel.hasAttribute('hidden');
+  if(open){
+    panel.removeAttribute('hidden');
+    btn.setAttribute('aria-expanded','true');
+    renderChildProfileStats();
+  }else{
+    panel.setAttribute('hidden','');
+    btn.setAttribute('aria-expanded','false');
+  }
+}
+
+document.addEventListener('click',e=>{
+  const root = document.getElementById('hhProfile');
+  if(!root || root.contains(e.target)) return;
+  const panel = document.getElementById('hhProfilePanel');
+  const btn = document.getElementById('hhProfileBtn');
+  if(panel && btn && !panel.hasAttribute('hidden')){
+    panel.setAttribute('hidden','');
+    btn.setAttribute('aria-expanded','false');
+  }
+});
 
 // ══════════════════════════════════════════════════════════════════════
 // TRIBE VIEW
@@ -1348,6 +1448,7 @@ function doComplete(){
   if(S.done[key])return;
   S.done[key]=true;S.stars+=a.pts;S.tStars[t.id]=(S.tStars[t.id]||0)+a.pts;save();
   document.getElementById('totS').textContent=S.stars.toLocaleString();
+  renderChildProfileStats();
   confetti(50);showToast(a.icon,`${a.title} — Done!`,`+${a.pts} stars · Total: ${S.stars.toLocaleString()} ⭐`);
   renderActView();
   if(getD(t.id)===t.activities.length)setTimeout(()=>{confetti(100);showToast(TRIBE_IMAGES[t.id]?'🎉':t.symbol,`${t.name} Pack Complete! 🎉`,`You earned the ${t.name} passport stamp!`);},2200);
@@ -1400,5 +1501,25 @@ window.__heritageBootApp = function () {
   if (tot) {
     tot.textContent = (S.stars || 0).toLocaleString();
   }
+  renderChildProfileStats();
+  syncHeritageContext();
   _applyView('home');
 };
+
+// Inline onclick handlers need globals when this file is bundled as an ES module.
+window.nav = nav;
+window.goBack = goBack;
+window.goHome = goHome;
+window._applyView = _applyView;
+window.toggleChildProfile = toggleChildProfile;
+window.setF = setF;
+window.setD = setD;
+window.doComplete = doComplete;
+window.speakWord = speakWord;
+window.actWin = actWin;
+window.buildMaze = buildMaze;
+window.buildWordTrace = buildWordTrace;
+window.buildProverbJumble = buildProverbJumble;
+window.buildColouring = buildColouring;
+window.navStack = navStack;
+syncHeritageContext();
