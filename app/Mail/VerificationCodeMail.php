@@ -4,16 +4,14 @@ namespace App\Mail;
 
 use App\Models\User;
 use App\Models\VerificationCode;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationCodeMail extends Mailable implements ShouldQueue
+class VerificationCodeMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -21,10 +19,7 @@ class VerificationCodeMail extends Mailable implements ShouldQueue
     public function __construct(
         public User $user,
         public VerificationCode $verificationCode
-    ) {
-        // Use default queue for emails (lower priority than media processing)
-        $this->onQueue('default');
-    }
+    ) {}
 
     /**
      * Get the message envelope.

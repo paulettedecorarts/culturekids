@@ -50,6 +50,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'log.livewire.upload' => LogLivewireUploadDiagnostics::class,
             'portal.role' => EnsurePortalRoleIsolation::class,
             'teacher.library' => EnsureTeacherLibraryAccess::class,
+            'heritage.parent_or_child' => \App\Http\Middleware\EnsureParentOrChild::class,
+            'heritage.child' => \App\Http\Middleware\EnsureHeritageChildSelected::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

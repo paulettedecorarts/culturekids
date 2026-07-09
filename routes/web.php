@@ -350,6 +350,20 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth'])
     ->name('dashboard');
 
+Route::middleware(['auth', 'verified', 'heritage.parent_or_child'])
+    ->prefix('heritage')
+    ->name('heritage.')
+    ->group(function () {
+        Route::get('/setup', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'setup'])->name('setup');
+        Route::get('/select-child', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'select'])->name('select-child');
+        Route::post('/select-child', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'store'])->name('select-child.store');
+
+        Route::middleware(['heritage.child'])->group(function () {
+            Route::get('/', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'index'])->name('app');
+            Route::post('/progress', [\App\Http\Controllers\Heritage\HeritageProgressController::class, 'store'])->name('progress');
+        });
+    });
+
 Route::get('/profile', ProfilePage::class)
     ->middleware(['auth'])
     ->name('profile');

@@ -14,13 +14,13 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <x-slot name="title">Verify your email</x-slot>
+    <x-slot name="title">{{ __('Verify your email') }}</x-slot>
 
     <p class="guest-lead">
         @if ($email)
-            We sent a verification link to <strong>{{ $email }}</strong>. Open that link to activate your school account, then sign in.
+            {!! __('We sent a verification link to <strong>:email</strong>. Open that link to activate your account, then sign in.', ['email' => e($email)]) !!}
         @else
-            Check your inbox for the verification link we sent you. Open it to activate your school account, then sign in.
+            {{ __('Check your inbox for the verification link we sent you. Open it to activate your account, then sign in.') }}
         @endif
     </p>
 
@@ -31,14 +31,34 @@ new #[Layout('layouts.guest')] class extends Component
     @endif
 
     @if ($email)
-        <form method="POST" action="{{ route('registration.resend-verification') }}" class="verify-resend-form">
+        <form
+            method="POST"
+            action="{{ route('registration.resend-verification') }}"
+            class="verify-resend-form"
+            x-data="{ submitting: false }"
+            x-on:submit="submitting = true"
+        >
             @csrf
             <input type="hidden" name="email" value="{{ $email }}">
-            <button type="submit" class="btn-primary btn-primary--outline">Resend verification email</button>
+            <button
+                type="submit"
+                class="btn-primary btn-primary--outline guest-submit-btn"
+                :disabled="submitting"
+                :class="{ 'guest-submit-btn--loading': submitting }"
+            >
+                <span x-show="!submitting">{{ __('Resend verification email') }}</span>
+                <span class="guest-submit-btn__loading" x-show="submitting" x-cloak>
+                    <svg class="guest-submit-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="8" opacity="0.25"/>
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                    {{ __('Sending…') }}
+                </span>
+            </button>
         </form>
     @endif
 
     <div class="auth-links" style="margin-top: 24px;">
-        <a class="auth-link" href="{{ route('login') }}" wire:navigate>Back to sign in</a>
+        <a class="auth-link" href="{{ route('login') }}" wire:navigate>{{ __('Back to sign in') }}</a>
     </div>
 </div>

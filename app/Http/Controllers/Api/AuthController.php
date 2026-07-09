@@ -62,7 +62,7 @@ class AuthController extends Controller
 
         // Send verification email asynchronously (queued)
         try {
-            Mail::to($user->email)->queue(new VerificationCodeMail($user, $verificationCode));
+            Mail::to($user->email)->send(new VerificationCodeMail($user, $verificationCode));
         } catch (\Exception $e) {
             // Log error but don't fail registration
             \Log::error('Failed to queue verification email: ' . $e->getMessage());
@@ -225,7 +225,7 @@ class AuthController extends Controller
 
         // Send verification email asynchronously (queued)
         try {
-            Mail::to($user->email)->queue(new VerificationCodeMail($user, $verificationCode));
+            Mail::to($user->email)->send(new VerificationCodeMail($user, $verificationCode));
             
             return response()->json([
                 'message' => 'Verification code sent successfully',

@@ -32,6 +32,10 @@ class PortalHome
             return 'teacher.dashboard';
         }
 
+        if ($user->hasRole('parent') || $user->hasRole('child')) {
+            return 'heritage.app';
+        }
+
         return 'dashboard';
     }
 
@@ -70,6 +74,7 @@ class PortalHome
             'cms.editor.dashboard',
             'cms.admin.dashboard',
             'teacher.dashboard',
+            'heritage.app',
         ];
     }
 

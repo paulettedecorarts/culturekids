@@ -29,8 +29,35 @@ class RegistrationTest extends TestCase
         $response
             ->assertOk()
             ->assertSeeVolt('pages.auth.register')
-            ->assertSee('Register your school')
-            ->assertSee('Organisation Name');
+            ->assertSee('Create your account')
+            ->assertSee('Family account')
+            ->assertSee('School / organisation');
+    }
+
+    public function test_new_parent_can_register_without_auto_login(): void
+    {
+        Mail::fake();
+
+        $component = Volt::test('pages.auth.register')
+            ->set('account_type', 'parent')
+            ->set('admin_name', 'Jane Parent')
+            ->set('email', 'parent@family.test')
+            ->set('password', 'password')
+            ->set('password_confirmation', 'password');
+
+        $component->call('register');
+
+        $component->assertRedirect(route('verification.enter-code', absolute: false));
+
+        $this->assertGuest();
+
+        $user = User::where('email', 'parent@family.test')->first();
+        $this->assertNotNull($user);
+        $this->assertNull($user->email_verified_at);
+        $this->assertTrue($user->hasRole('parent'));
+        $this->assertNull($user->organisation_id);
+
+        Mail::assertSent(VerificationCodeMail::class, fn ($mail) => $mail->hasTo('parent@family.test'));
     }
 
     public function test_new_school_organisation_can_register_without_auto_login(): void
@@ -38,6 +65,7 @@ class RegistrationTest extends TestCase
         Mail::fake();
 
         $component = Volt::test('pages.auth.register')
+            ->set('account_type', 'school')
             ->set('organisation_name', 'Sunrise Primary')
             ->set('admin_name', 'Jane Admin')
             ->set('email', 'admin@sunrise.test')

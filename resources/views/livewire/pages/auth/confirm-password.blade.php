@@ -51,6 +51,8 @@ new #[Layout('layouts.guest')] class extends Component
             required
         />
 
-        <button type="submit" class="btn-primary">{{ __('Confirm') }} →</button>
+        <x-guest.submit-button target="confirmPassword" :loading="__('Confirming…')">
+            {{ __('Confirm') }} →
+        </x-guest.submit-button>
     </form>
 </div>

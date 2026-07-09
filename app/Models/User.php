@@ -104,11 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Only school org admins who self-register must verify email before sign-in.
+     * Self-registered school admins and family (parent) accounts must verify email before sign-in.
      */
     public function requiresEmailVerification(): bool
     {
-        return $this->hasRole('org_admin');
+        return $this->hasRole('org_admin') || $this->hasRole('parent');
     }
 
     /**

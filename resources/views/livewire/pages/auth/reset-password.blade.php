@@ -123,9 +123,9 @@ new #[Layout('layouts.guest')] class extends Component
             required
         />
 
-        <button type="submit" class="btn-primary" style="margin-top: 8px;">
+        <x-guest.submit-button target="resetPassword" :loading="__('Saving…')" style="margin-top: 8px;">
             {{ __('Save password and continue') }}
-        </button>
+        </x-guest.submit-button>
 
         <div class="auth-links">
             <a class="auth-link" href="{{ route('login') }}" wire:navigate>{{ __('Back to sign in') }}</a>

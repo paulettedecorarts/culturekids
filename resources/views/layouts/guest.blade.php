@@ -207,6 +207,76 @@
             }
 
             .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--clay-red-dark); }
+
+            .btn-primary[disabled],
+            .guest-submit-btn--loading {
+                opacity: 0.75;
+                cursor: not-allowed;
+            }
+
+            .guest-submit-btn__loading {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .guest-submit-btn__icon {
+                width: 18px;
+                height: 18px;
+                animation: guest-spin 0.8s linear infinite;
+            }
+
+            @keyframes guest-spin {
+                to { transform: rotate(360deg); }
+            }
+
+            .register-type-toggle {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+                margin-bottom: 24px;
+                padding: 6px;
+                border-radius: var(--r-full);
+                background: var(--cream);
+                border: 2px solid var(--cream-mid);
+            }
+
+            .register-type-toggle__option {
+                border: none;
+                background: transparent;
+                color: var(--stone);
+                font-family: inherit;
+                font-size: 13px;
+                font-weight: 700;
+                padding: 10px 14px;
+                border-radius: var(--r-full);
+                cursor: pointer;
+                transition: all var(--dur-fast);
+            }
+
+            .register-type-toggle__option.is-active {
+                background: #FFFFFF;
+                color: var(--ink);
+                box-shadow: 0 2px 8px rgba(30, 45, 74, 0.08);
+            }
+
+            .register-type-toggle__option:hover:not(.is-active) {
+                color: var(--clay-red);
+            }
+
+            .auth-link-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                font: inherit;
+            }
+
+            .auth-link-button[disabled] {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
             
             .auth-links {
                 margin-top: 24px;

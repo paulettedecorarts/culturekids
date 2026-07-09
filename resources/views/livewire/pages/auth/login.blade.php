@@ -2,6 +2,7 @@
 
 use App\Livewire\Forms\LoginForm;
 use App\Models\User;
+use App\Support\PortalHome;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -99,17 +100,9 @@ new #[Layout('layouts.guest')] class extends Component
 
     protected function redirectAfterLogin(): void
     {
-        if (auth()->user()->hasRole('super_admin')) {
-            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
-        } elseif (auth()->user()->hasRole('cms_editor')) {
-            $this->redirectIntended(default: route('cms.editor.dashboard', absolute: false), navigate: true);
-        } elseif (auth()->user()->hasRole('org_admin')) {
-            $this->redirectIntended(default: route('cms.admin.dashboard', absolute: false), navigate: true);
-        } elseif (auth()->user()->hasRole('teacher')) {
-            $this->redirectIntended(default: route('teacher.dashboard', absolute: false), navigate: true);
-        } else {
-            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-        }
+        $routeName = PortalHome::dashboardRouteName(auth()->user());
+
+        $this->redirectIntended(default: route($routeName, absolute: false), navigate: true);
     }
 }; ?>
 
@@ -162,7 +155,9 @@ new #[Layout('layouts.guest')] class extends Component
                 <label for="remember" style="margin-left:8px; font-size:13px; color:var(--stone); font-weight:600; cursor:pointer;">Remember me</label>
             </div>
 
-            <button type="submit" class="btn-primary">Sign In →</button>
+            <x-guest.submit-button target="login" :loading="__('Signing in…')">
+                {{ __('Sign in') }} →
+            </x-guest.submit-button>
 
             <div class="auth-links">
                 <a class="auth-link" href="{{ route('register') }}" wire:navigate>Don't have an account? Sign up</a>
@@ -178,9 +173,14 @@ new #[Layout('layouts.guest')] class extends Component
                         We can send a new 6-digit code to your inbox.
                     </p>
                     <div class="guest-modal-actions">
-                        <button type="button" class="btn-primary" wire:click="resendVerificationAndContinue">
-                            Resend verification code
-                        </button>
+                        <x-guest.submit-button
+                            type="button"
+                            wire:click="resendVerificationAndContinue"
+                            target="resendVerificationAndContinue"
+                            :loading="__('Sending code…')"
+                        >
+                            {{ __('Resend verification code') }}
+                        </x-guest.submit-button>
                         <button type="button" class="btn-primary btn-primary--outline" wire:click="closeUnverifiedDialog">
                             Cancel
                         </button>

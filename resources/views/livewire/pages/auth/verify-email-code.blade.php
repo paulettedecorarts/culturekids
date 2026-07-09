@@ -143,12 +143,21 @@ new #[Layout('layouts.guest')] class extends Component
             @error('code') <div class="input-error">{{ $message }}</div> @enderror
         </div>
 
-        <button type="submit" class="btn-primary">Verify &amp; continue →</button>
+        <x-guest.submit-button target="verifyCode" :loading="__('Verifying…')">
+            {{ __('Verify & continue') }} →
+        </x-guest.submit-button>
     </form>
 
     <div class="auth-links" style="margin-top: 20px;">
-        <button type="button" wire:click="resendCode" class="auth-link" style="background:none;border:none;cursor:pointer;">
-            Didn't receive it? Resend code
+        <button
+            type="button"
+            wire:click="resendCode"
+            class="auth-link auth-link-button"
+            wire:loading.attr="disabled"
+            wire:target="resendCode"
+        >
+            <span wire:loading.remove wire:target="resendCode">{{ __("Didn't receive it? Resend code") }}</span>
+            <span wire:loading wire:target="resendCode">{{ __('Sending code…') }}</span>
         </button>
         <a class="auth-link" href="{{ route('login') }}" wire:navigate>Back to sign in</a>
     </div>
