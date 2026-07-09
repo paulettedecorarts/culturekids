@@ -34,24 +34,24 @@
     </div>
 
     <!-- Filters -->
-    <div class="cms-filter-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-5)">
-        <input wire:model.live="searchTerm" type="text" placeholder="🔍 Search stories..." style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none">
+    <div class="sa-filter-bar stories-filter-bar" style="margin-bottom:var(--sp-5)">
+        <input wire:model.live.debounce.300ms="searchTerm" type="text" placeholder="🔍 Search stories..." class="stories-filter-search" style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;width:100%">
 
-        <select wire:model.live="filterTribe" style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer">
+        <select wire:model.live="filterTribe" class="stories-filter-select" style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer;width:100%">
             <option value="" style="background:var(--cms-input-bg)">All Tribes</option>
             @foreach($tribes as $tribe)
                 <option value="{{ $tribe->id }}" style="background:var(--cms-input-bg)">{{ $tribe->name }}</option>
             @endforeach
         </select>
 
-        <select wire:model.live="filterStatus" style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer">
+        <select wire:model.live="filterStatus" class="stories-filter-select" style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer;width:100%">
             <option value="" style="background:var(--cms-input-bg)">All Status</option>
             <option value="published" style="background:var(--cms-input-bg)">Published</option>
             <option value="review" style="background:var(--cms-input-bg)">In Review</option>
             <option value="draft" style="background:var(--cms-input-bg)">Draft</option>
         </select>
 
-        <select wire:model.live="filterAgeRange" style="background:var(--cms-input-bg);border: 1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer">
+        <select wire:model.live="filterAgeRange" class="stories-filter-select" style="background:var(--cms-input-bg);border:1px solid var(--cms-border);border-radius:12px;padding:12px 16px;color:var(--cms-text);font-size:13px;outline:none;cursor:pointer;width:100%">
             <option value="" style="background:var(--cms-input-bg)">All Ages</option>
             <option value="2-3" style="background:var(--cms-input-bg)">2-3 years</option>
             <option value="3-4" style="background:var(--cms-input-bg)">3-4 years</option>
@@ -166,4 +166,10 @@
     <div style="margin-top:var(--sp-6)">
         {{ $stories->links(data: ['scrollTo' => false]) }}
     </div>
+
+    <style>
+        .stories-filter-bar { align-items: stretch; }
+        .stories-filter-bar .stories-filter-search { flex: 2 1 280px; min-width: 200px; }
+        .stories-filter-bar .stories-filter-select { flex: 1 1 140px; min-width: 140px; max-width: 220px; }
+    </style>
 </div>

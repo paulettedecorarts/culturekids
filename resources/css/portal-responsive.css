@@ -216,8 +216,8 @@
 }
 
 /* Impersonate / two-column panels */
-.sa-content div[style*="grid-template-columns:2fr 1fr"]:not(.sa-table-head):not(.sa-table-row),
-.sa-content div[style*="grid-template-columns: 2fr 1fr"]:not(.sa-table-head):not(.sa-table-row) {
+.sa-content div[style*="grid-template-columns:2fr 1fr"]:not(.sa-table-head):not(.sa-table-row):not(.cms-filter-grid):not(.sa-filter-bar),
+.sa-content div[style*="grid-template-columns: 2fr 1fr"]:not(.sa-table-head):not(.sa-table-row):not(.cms-filter-grid):not(.sa-filter-bar) {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: var(--sp-4) !important;
@@ -383,10 +383,10 @@
     }
 
     /* Inline grid tables (users, tribes, clans, etc.) */
-    .sa-content div[style*="display:grid"][style*="grid-template-columns:2fr"],
-    .sa-content div[style*="display: grid"][style*="grid-template-columns:2fr"],
-    .sa-content div[style*="display:grid"][style*="grid-template-columns: 2fr"],
-    .cms-content div[style*="display:grid"][style*="grid-template-columns:2fr"],
+    .sa-content div[style*="display:grid"][style*="grid-template-columns:2fr"]:not(.cms-filter-grid):not(.sa-filter-bar),
+    .sa-content div[style*="display: grid"][style*="grid-template-columns:2fr"]:not(.cms-filter-grid):not(.sa-filter-bar),
+    .sa-content div[style*="display:grid"][style*="grid-template-columns: 2fr"]:not(.cms-filter-grid):not(.sa-filter-bar),
+    .cms-content div[style*="display:grid"][style*="grid-template-columns:2fr"]:not(.cms-filter-grid):not(.sa-filter-bar),
     .cms-content .cms-table-header[style*="grid-template-columns:1fr auto"],
     .cms-content .cms-table-row[style*="grid-template-columns:1fr"] {
         display: flex !important;
