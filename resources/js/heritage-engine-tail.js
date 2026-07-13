@@ -58,6 +58,34 @@ const save=()=>{
   if(typeof window.__heritageSaveProgress==='function'){window.__heritageSaveProgress(S);}
 };
 
+function reconcileProgressState(){
+  if(!Array.isArray(TRIBES)||!TRIBES.length)return;
+
+  const doneKeys=Object.keys(S.done||{}).filter((key)=>S.done[key]);
+  if(doneKeys.length){
+    const tStars={...(S.tStars||{})};
+    const tribeStarTotal=Object.values(tStars).reduce((sum,value)=>sum+(Number(value)||0),0);
+    if(tribeStarTotal===0){
+      doneKeys.forEach((key)=>{
+        const splitAt=key.indexOf('_');
+        if(splitAt===-1)return;
+        const tribeId=key.slice(0,splitAt);
+        const actId=key.slice(splitAt+1);
+        const tribe=TRIBES.find((entry)=>entry.id===tribeId);
+        const act=tribe?.activities?.find((entry)=>String(entry.id)===actId);
+        if(!act)return;
+        tStars[tribeId]=(tStars[tribeId]||0)+(act.pts||0);
+      });
+      S.tStars=tStars;
+    }
+  }
+
+  const tribeStars=Object.values(S.tStars||{}).reduce((sum,value)=>sum+(Number(value)||0),0);
+  if(tribeStars>0&&(!S.stars||S.stars<tribeStars)){
+    S.stars=tribeStars;
+  }
+}
+
 let curT=null,curA=null,curF='all',curD=0,navStack=[];
 
 // =====================================================================
@@ -1580,6 +1608,8 @@ window.__heritageBootApp = function () {
   } else if (boot.progress) {
     S = Object.assign({ stars: 0, done: {}, tStars: {} }, boot.progress);
   }
+
+  reconcileProgressState();
 
   const tot = document.getElementById('totS');
   if (tot) {
