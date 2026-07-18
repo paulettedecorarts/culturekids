@@ -242,6 +242,17 @@
                 border: 2px solid var(--cream-mid);
             }
 
+            .register-type-toggle--three {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                border-radius: 18px;
+            }
+
+            @media (max-width: 560px) {
+                .register-type-toggle--three {
+                    grid-template-columns: 1fr;
+                }
+            }
+
             .register-type-toggle__option {
                 border: none;
                 background: transparent;

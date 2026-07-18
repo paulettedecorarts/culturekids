@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Auth\RegisterIndividual;
 use App\Actions\Auth\RegisterParent;
 use App\Actions\Auth\RegisterSchoolOrganisation;
 use App\Models\User;
@@ -10,7 +11,7 @@ use Livewire\Volt\Component;
 
 new #[Layout('layouts.guest')] class extends Component
 {
-    public string $account_type = 'parent';
+    public string $account_type = 'individual';
 
     public string $organisation_name = '';
 
@@ -24,16 +25,19 @@ new #[Layout('layouts.guest')] class extends Component
 
     public function updatedAccountType(): void
     {
-        if ($this->account_type === 'parent') {
+        if ($this->account_type !== 'school') {
             $this->reset('organisation_name');
             $this->resetErrorBag('organisation_name');
         }
     }
 
-    public function register(RegisterSchoolOrganisation $registerSchool, RegisterParent $registerParent): void
-    {
+    public function register(
+        RegisterSchoolOrganisation $registerSchool,
+        RegisterParent $registerParent,
+        RegisterIndividual $registerIndividual,
+    ): void {
         $rules = [
-            'account_type' => ['required', 'in:parent,school'],
+            'account_type' => ['required', 'in:individual,parent,school'],
             'admin_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
@@ -45,18 +49,24 @@ new #[Layout('layouts.guest')] class extends Component
 
         $validated = $this->validate($rules);
 
-        $user = $this->account_type === 'school'
-            ? $registerSchool->register(
+        $user = match ($this->account_type) {
+            'school' => $registerSchool->register(
                 $validated['organisation_name'],
                 $validated['admin_name'],
                 $validated['email'],
                 $validated['password'],
-            )
-            : $registerParent->register(
+            ),
+            'parent' => $registerParent->register(
                 $validated['admin_name'],
                 $validated['email'],
                 $validated['password'],
-            );
+            ),
+            default => $registerIndividual->register(
+                $validated['admin_name'],
+                $validated['email'],
+                $validated['password'],
+            ),
+        };
 
         event(new Registered($user));
 
@@ -75,12 +85,23 @@ new #[Layout('layouts.guest')] class extends Component
     <p class="guest-lead">
         @if ($account_type === 'school')
             {{ __('Register your school or organisation. You will be the administrator.') }}
-        @else
+        @elseif ($account_type === 'parent')
             {{ __('Sign up as a parent to explore heritage activities with your children.') }}
+        @else
+            {{ __('Sign up as an individual to explore heritage activities on your own.') }}
         @endif
     </p>
 
-    <div class="register-type-toggle" role="tablist" aria-label="{{ __('Account type') }}">
+    <div class="register-type-toggle register-type-toggle--three" role="tablist" aria-label="{{ __('Account type') }}">
+        <button
+            type="button"
+            role="tab"
+            class="register-type-toggle__option @if ($account_type === 'individual') is-active @endif"
+            wire:click="$set('account_type', 'individual')"
+            aria-selected="{{ $account_type === 'individual' ? 'true' : 'false' }}"
+        >
+            {{ __('Individual') }}
+        </button>
         <button
             type="button"
             role="tab"
@@ -88,7 +109,7 @@ new #[Layout('layouts.guest')] class extends Component
             wire:click="$set('account_type', 'parent')"
             aria-selected="{{ $account_type === 'parent' ? 'true' : 'false' }}"
         >
-            {{ __('Family account') }}
+            {{ __('Family / parent') }}
         </button>
         <button
             type="button"
@@ -131,7 +152,7 @@ new #[Layout('layouts.guest')] class extends Component
             @error('email') <div class="input-error">{{ $message }}</div> @enderror
         </div>
 
-        <div @class(['span-full' => $account_type === 'parent'])>
+        <div @class(['span-full' => $account_type !== 'school'])>
             <x-guest.password-input
                 id="password"
                 :label="__('Password')"
@@ -142,7 +163,7 @@ new #[Layout('layouts.guest')] class extends Component
             />
         </div>
 
-        <div @class(['span-full' => $account_type === 'parent'])>
+        <div @class(['span-full' => $account_type !== 'school'])>
             <x-guest.password-input
                 id="password_confirmation"
                 :label="__('Confirm password')"

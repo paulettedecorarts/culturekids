@@ -43,17 +43,32 @@ class FamilyTribeAccess
         return self::familyAccount($user)->hasApprovedTribes();
     }
 
-    public static function ensureTribeAllowed(User $user, int $tribeId): void
+    /**
+     * Family (parent/child) accounts require parent-approved tribes.
+     * Individual learners and organisation users do not.
+     */
+    public static function requiresApprovedTribes(User $user): bool
     {
+        if ($user->hasRole('individual')) {
+            return false;
+        }
+
         $familyUser = self::familyAccount($user);
 
         if ($familyUser->organisation_id) {
+            return false;
+        }
+
+        return $familyUser->hasRole('parent') || $user->hasRole('child');
+    }
+
+    public static function ensureTribeAllowed(User $user, int $tribeId): void
+    {
+        if (! self::requiresApprovedTribes($user)) {
             return;
         }
 
-        if (! $familyUser->hasRole('parent') && ! $user->hasRole('child')) {
-            return;
-        }
+        $familyUser = self::familyAccount($user);
 
         abort_unless(in_array($tribeId, $familyUser->approvedTribeIds(), true), 403, 'This tribe has not been approved for your family.');
     }

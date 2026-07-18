@@ -51,6 +51,7 @@ class HeritageAppController extends Controller
         $catalog = $this->catalog->bootstrap($user, $child);
         $progress = $this->progress->load($user, $child);
         $isParent = $user->hasRole('parent');
+        $isIndividual = $user->hasRole('individual');
 
         if ($catalog['requiresTribeApproval'] && $isParent) {
             return redirect()
@@ -66,6 +67,12 @@ class HeritageAppController extends Controller
             })
             ->values()
             ->all();
+
+        $roleLabel = match (true) {
+            $user->hasRole('child') => 'child',
+            $isIndividual => 'individual',
+            default => 'parent',
+        };
 
         return view('heritage.app', [
             'user' => $user,
@@ -84,7 +91,7 @@ class HeritageAppController extends Controller
                 ],
                 'user' => [
                     'name' => $user->name,
-                    'role' => $user->hasRole('child') ? 'child' : 'parent',
+                    'role' => $roleLabel,
                 ],
                 'routes' => [
                     'home' => route('heritage.app'),
@@ -92,7 +99,9 @@ class HeritageAppController extends Controller
                     'logout' => route('logout'),
                     'selectChild' => $isParent ? route('heritage.select-child') : null,
                     'exitToParent' => $isParent ? route('heritage.exit-to-parent') : null,
+                    'exitToIndividual' => $isIndividual ? route('heritage.exit-to-individual') : null,
                     'parentDashboard' => $isParent ? route('parent.dashboard') : null,
+                    'individualDashboard' => $isIndividual ? route('individual.dashboard') : null,
                 ],
                 'initialView' => $initialView,
                 'csrfToken' => csrf_token(),
@@ -107,6 +116,10 @@ class HeritageAppController extends Controller
 
         if ($user->hasRole('parent')) {
             return redirect()->route('parent.children.create');
+        }
+
+        if ($user->hasRole('individual')) {
+            return redirect()->route('heritage.app');
         }
 
         return view('heritage.setup', [

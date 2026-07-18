@@ -54,10 +54,16 @@
                         @if ($bootstrap['routes']['selectChild'])
                             <a href="{{ $bootstrap['routes']['selectChild'] }}" class="hh-profile__link">{{ __('Switch child') }}</a>
                         @endif
-                        @if ($bootstrap['routes']['exitToParent'])
+                        @if ($bootstrap['routes']['exitToParent'] ?? null)
                             <form method="POST" action="{{ $bootstrap['routes']['exitToParent'] }}" style="margin:0">
                                 @csrf
                                 <button type="submit" class="hh-profile__parent">{{ __('Back to Family Hub') }}</button>
+                            </form>
+                        @endif
+                        @if ($bootstrap['routes']['exitToIndividual'] ?? null)
+                            <form method="POST" action="{{ $bootstrap['routes']['exitToIndividual'] }}" style="margin:0">
+                                @csrf
+                                <button type="submit" class="hh-profile__parent">{{ __('Back to Learner Hub') }}</button>
                             </form>
                         @endif
                     </div>

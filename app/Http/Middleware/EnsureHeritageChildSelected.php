@@ -24,6 +24,15 @@ class EnsureHeritageChildSelected
             return $next($request);
         }
 
+        if ($user->hasRole('individual')) {
+            $profile = ChildProfileAccess::ensureForUser($user);
+            if ($profile) {
+                HeritageChildSession::setActiveProfile($request, (int) $profile->id);
+            }
+
+            return $next($request);
+        }
+
         if (HeritageChildSession::activeProfileId($request) !== null) {
             return $next($request);
         }

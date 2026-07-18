@@ -139,7 +139,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function requiresEmailVerification(): bool
     {
-        return $this->hasRole('org_admin') || $this->hasRole('parent');
+        return $this->hasRole('org_admin') || $this->hasRole('parent') || $this->hasRole('individual');
     }
 
     /**

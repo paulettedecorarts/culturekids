@@ -43,16 +43,26 @@ final class ChildProfileAccess
             return $existing;
         }
 
-        if (! $user->hasRole('child')) {
-            return null;
+        if ($user->hasRole('child')) {
+            return ChildProfile::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'dob' => Carbon::now()->subYears(8)->toDateString(),
+                'age_band' => 'simple',
+                'total_stars' => 0,
+            ]);
         }
 
-        return ChildProfile::create([
-            'user_id' => $user->id,
-            'name' => $user->name,
-            'dob' => Carbon::now()->subYears(8)->toDateString(),
-            'age_band' => 'simple',
-            'total_stars' => 0,
-        ]);
+        if ($user->hasRole('individual')) {
+            return ChildProfile::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'dob' => Carbon::now()->subYears(18)->toDateString(),
+                'age_band' => 'full',
+                'total_stars' => 0,
+            ]);
+        }
+
+        return null;
     }
 }

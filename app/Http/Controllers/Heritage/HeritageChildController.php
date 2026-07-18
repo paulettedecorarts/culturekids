@@ -53,4 +53,11 @@ class HeritageChildController extends Controller
 
         return redirect()->route('parent.dashboard');
     }
+
+    public function exitToIndividual(Request $request): RedirectResponse
+    {
+        abort_unless($request->user()?->hasRole('individual'), 403);
+
+        return redirect()->route('individual.dashboard');
+    }
 }

@@ -36,7 +36,7 @@ final class HeritageChildSession
     {
         $user = $request->user();
 
-        if ($user->hasRole('child')) {
+        if ($user->hasRole('child') || $user->hasRole('individual')) {
             return ChildProfileAccess::ensureForUser($user)
                 ?? ChildProfileAccess::queryFor($user)->firstOrFail();
         }

@@ -36,6 +36,10 @@ class PortalHome
             return 'parent.dashboard';
         }
 
+        if ($user->hasRole('individual')) {
+            return 'individual.dashboard';
+        }
+
         if ($user->hasRole('child')) {
             return 'heritage.app';
         }
@@ -68,6 +72,10 @@ class PortalHome
             return 'layouts.parent';
         }
 
+        if ($user->hasRole('individual')) {
+            return 'layouts.individual';
+        }
+
         return 'layouts.app';
     }
 
@@ -83,6 +91,7 @@ class PortalHome
             'cms.admin.dashboard',
             'teacher.dashboard',
             'parent.dashboard',
+            'individual.dashboard',
             'heritage.app',
         ];
     }

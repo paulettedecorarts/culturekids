@@ -66,6 +66,7 @@ use App\Livewire\Teacher\StoryLibrary;
 use App\Livewire\Teacher\TeacherStoryReader;
 use App\Livewire\Teacher\TribesExplorer;
 use App\Livewire\Teacher\Worksheets;
+use App\Livewire\Individual\MainDashboard as IndividualMainDashboard;
 use App\Livewire\Parent\ChildForm;
 use App\Livewire\Parent\ChildrenIndex;
 use App\Livewire\Parent\MainDashboard as ParentMainDashboard;
@@ -357,6 +358,11 @@ Route::middleware(['auth', 'verified', 'role:parent', 'portal.role:parent'])->pr
     Route::get('/tribe-access', \App\Livewire\Parent\TribeAccessIndex::class)->name('tribe-access');
 });
 
+// Learner Hub (individual accounts)
+Route::middleware(['auth', 'verified', 'role:individual', 'portal.role:individual'])->prefix('individual')->name('individual.')->group(function () {
+    Route::get('/dashboard', IndividualMainDashboard::class)->name('dashboard');
+});
+
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth'])
     ->name('dashboard');
@@ -371,6 +377,9 @@ Route::middleware(['auth', 'verified', 'heritage.parent_or_child'])
         Route::post('/exit-to-parent', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'exitToParent'])
             ->middleware('role:parent')
             ->name('exit-to-parent');
+        Route::post('/exit-to-individual', [\App\Http\Controllers\Heritage\HeritageChildController::class, 'exitToIndividual'])
+            ->middleware('role:individual')
+            ->name('exit-to-individual');
 
         Route::middleware(['heritage.child'])->group(function () {
             Route::get('/', [\App\Http\Controllers\Heritage\HeritageAppController::class, 'index'])->name('app');

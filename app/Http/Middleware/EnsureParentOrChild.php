@@ -12,8 +12,15 @@ class EnsureParentOrChild
     {
         $user = $request->user();
 
-        if (! $user || (! $user->hasRole('parent') && ! $user->hasRole('child'))) {
-            abort(403, 'The heritage experience is available to parent and child accounts only.');
+        if (
+            ! $user
+            || (
+                ! $user->hasRole('parent')
+                && ! $user->hasRole('child')
+                && ! $user->hasRole('individual')
+            )
+        ) {
+            abort(403, 'The heritage experience is available to individual, parent, and child accounts only.');
         }
 
         return $next($request);

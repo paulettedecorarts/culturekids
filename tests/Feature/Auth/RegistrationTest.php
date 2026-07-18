@@ -30,8 +30,40 @@ class RegistrationTest extends TestCase
             ->assertOk()
             ->assertSeeVolt('pages.auth.register')
             ->assertSee('Create your account')
-            ->assertSee('Family account')
+            ->assertSee('Individual')
+            ->assertSee('Family / parent')
             ->assertSee('School / organisation');
+    }
+
+    public function test_new_individual_can_register_without_auto_login(): void
+    {
+        Mail::fake();
+
+        $component = Volt::test('pages.auth.register')
+            ->set('account_type', 'individual')
+            ->set('admin_name', 'Solo Learner')
+            ->set('email', 'solo@learner.test')
+            ->set('password', 'password')
+            ->set('password_confirmation', 'password');
+
+        $component->call('register');
+
+        $component->assertRedirect(route('verification.enter-code', absolute: false));
+
+        $this->assertGuest();
+
+        $user = User::where('email', 'solo@learner.test')->first();
+        $this->assertNotNull($user);
+        $this->assertNull($user->email_verified_at);
+        $this->assertTrue($user->hasRole('individual'));
+        $this->assertFalse($user->hasRole('parent'));
+        $this->assertNull($user->organisation_id);
+        $this->assertDatabaseHas('child_profiles', [
+            'user_id' => $user->id,
+            'name' => 'Solo Learner',
+        ]);
+
+        Mail::assertSent(VerificationCodeMail::class, fn ($mail) => $mail->hasTo('solo@learner.test'));
     }
 
     public function test_new_parent_can_register_without_auto_login(): void

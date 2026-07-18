@@ -27,7 +27,7 @@ class HeritageClientCatalogService
             ->with(['clans' => fn ($q) => $q->orderBy('sort_order')])
             ->orderBy('name');
 
-        if ($child) {
+        if ($child && FamilyTribeAccess::requiresApprovedTribes($user)) {
             $approvedIds = FamilyTribeAccess::approvedTribeIdsFor($user);
 
             if ($approvedIds === []) {

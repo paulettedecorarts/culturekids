@@ -41,7 +41,7 @@ class RoleSeeder extends Seeder
             'assign rewards',
             'view org analytics',
 
-            // Household / Personal (Parent, Child)
+            // Household / Personal (Parent, Individual, Child)
             'manage child profiles',
             'view child progress',
             'set usage limits',
@@ -72,6 +72,9 @@ class RoleSeeder extends Seeder
             ],
             'parent' => [
                 'manage child profiles', 'view child progress', 'set usage limits', 'play activities',
+            ],
+            'individual' => [
+                'play activities', 'earn badges',
             ],
             'child' => [
                 'play activities', 'earn badges',
