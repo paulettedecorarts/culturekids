@@ -90,6 +90,29 @@ class IndividualAccessTest extends TestCase
             ->assertRedirect(route('individual.dashboard'));
     }
 
+    public function test_individual_heritage_keeps_learner_hub_shell(): void
+    {
+        $user = User::factory()->create(['email_verified_at' => now()]);
+        $user->assignRole('individual');
+
+        ChildProfile::query()->create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'dob' => now()->subYears(18)->toDateString(),
+            'age_band' => 'full',
+            'total_stars' => 0,
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('heritage.app'))
+            ->assertOk()
+            ->assertSee('Learner Hub')
+            ->assertSee('th-sidebar', false)
+            ->assertSee('th-topbar', false)
+            ->assertSee('hh-embedded', false)
+            ->assertDontSee('>Sign out</button>', false);
+    }
+
     public function test_individual_cannot_open_family_hub(): void
     {
         $user = User::factory()->create(['email_verified_at' => now()]);

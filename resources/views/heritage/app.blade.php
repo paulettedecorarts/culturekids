@@ -1,18 +1,29 @@
 @extends('layouts.heritage')
 
 @section('content')
+@php
+    $heritageInPortal = auth()->user()
+        && (auth()->user()->hasRole('parent') || auth()->user()->hasRole('individual'));
+@endphp
 <script>
     window.HERITAGE_BOOTSTRAP = @json($bootstrap);
 </script>
-<div id="appPage">
-    <header class="hh-shell">
-        <button type="button" class="hh-shell__brand" onclick="goHome()">
-            <img src="{{ asset(config('brand.logo', 'images/brand/paulette-comics-logo.png')) }}" alt="" onerror="this.style.display='none'">
-            <span>
-                <strong>Heritage Heroes</strong>
-                <small>Uganda learning</small>
-            </span>
-        </button>
+<div id="appPage" @class(['hh-embedded' => $heritageInPortal])>
+    <header class="hh-shell" @class(['hh-shell--embedded' => $heritageInPortal])>
+        @unless ($heritageInPortal)
+            <button type="button" class="hh-shell__brand" onclick="goHome()">
+                <img src="{{ asset(config('brand.logo', 'images/brand/paulette-comics-logo.png')) }}" alt="" onerror="this.style.display='none'">
+                <span>
+                    <strong>Heritage Heroes</strong>
+                    <small>Uganda learning</small>
+                </span>
+            </button>
+        @else
+            <div class="hh-shell__context">
+                <strong>{{ __('Heritage Heroes') }}</strong>
+                <small>{{ __('Uganda learning') }}</small>
+            </div>
+        @endunless
 
         <div class="hh-shell__actions">
             <div class="hh-profile" id="hhProfile">
@@ -51,7 +62,7 @@
                     </div>
 
                     <div class="hh-profile__actions">
-                        @if ($bootstrap['routes']['selectChild'])
+                        @if ($bootstrap['routes']['selectChild'] ?? null)
                             <a href="{{ $bootstrap['routes']['selectChild'] }}" class="hh-profile__link">{{ __('Switch child') }}</a>
                         @endif
                         @if ($bootstrap['routes']['exitToParent'] ?? null)
@@ -73,10 +84,12 @@
             <button type="button" class="hh-chip" id="btnP" onclick="nav('passport')">Passport</button>
             <button type="button" class="hh-chip hidden" id="btnBack" onclick="goBack()">Back</button>
             <div class="hh-chip hh-chip--stars">⭐ <span id="totS">0</span></div>
-            <form method="POST" action="{{ route('logout') }}" style="margin:0">
-                @csrf
-                <button type="submit" class="hh-chip hh-chip--ghost">Sign out</button>
-            </form>
+            @unless ($heritageInPortal)
+                <form method="POST" action="{{ route('logout') }}" style="margin:0">
+                    @csrf
+                    <button type="submit" class="hh-chip hh-chip--ghost">Sign out</button>
+                </form>
+            @endunless
         </div>
     </header>
 
