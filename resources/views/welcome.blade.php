@@ -1,10 +1,10 @@
 @php
     $l = $landing ?? [];
-    $primary = $l['primary_color'] ?? '#C44B2B';
-    $secondary = $l['secondary_color'] ?? '#1E2D4A';
-    $accent = $l['accent_color'] ?? '#F2CB5A';
-    $heroStart = $l['hero_bg_start'] ?? '#FFF8F0';
-    $heroEnd = $l['hero_bg_end'] ?? '#E8F4FC';
+    $primary = $l['primary_color'] ?? '#C1441F';
+    $secondary = $l['secondary_color'] ?? '#3B2211';
+    $accent = $l['accent_color'] ?? '#DDA023';
+    $heroStart = $l['hero_bg_start'] ?? '#FBF0DD';
+    $heroEnd = $l['hero_bg_end'] ?? '#F6DCB8';
     $fontHeadingStack = $landingFonts['heading_stack'] ?? "'Chewy', cursive, system-ui, sans-serif";
     $fontBodyStack = $landingFonts['body_stack'] ?? "'Fredoka', sans-serif, system-ui, sans-serif";
     $fontsStylesheetUrl = $landingFonts['stylesheet_url'] ?? 'https://fonts.googleapis.com/css2?family=Chewy:wght@400&family=Fredoka:wght@400;500;600;700&display=swap';
@@ -48,7 +48,8 @@
     <header class="landing-header" id="landing-header">
         <div class="landing__container landing-header__inner">
             <a href="/" class="landing-logo" aria-label="{{ config('brand.name') }} home">
-                <x-brand-logo variant="full" />
+                <x-brand-logo variant="compact" />
+                <span class="landing-logo__text">{{ config('brand.name') }}</span>
             </a>
 
             <nav class="landing-nav" aria-label="Main">
@@ -56,6 +57,7 @@
                     <span></span><span></span><span></span>
                 </button>
                 <ul class="landing-nav__links" id="landing-nav-menu">
+                    <li><a href="#heroes" class="landing-nav__link">Heroes</a></li>
                     <li><a href="#peoples" class="landing-nav__link">{{ heritage('people_plural') }}</a></li>
                     <li><a href="#stories" class="landing-nav__link">Stories</a></li>
                     <li><a href="#schools" class="landing-nav__link">For Schools</a></li>
@@ -94,17 +96,24 @@
                     <img
                         src="{{ $heroImageUrl }}"
                         alt="{{ $heroComic?->title ? 'Comic: '.$heroComic->title : 'Paulette Culture Kids hero illustration' }}"
-                        class="landing-hero__image"
+                        class="landing-hero__image landing-hero__image--float"
                         width="520"
                         height="520"
                         loading="eager"
                         decoding="async"
                     >
                 @else
-                    <div class="landing-hero__placeholder">
-                        <x-brand-logo variant="mark" class="landing-hero__placeholder-logo" />
-                        <p>Stories that celebrate {{ strtolower(heritage('ugandan_peoples')) }}</p>
-                    </div>
+                    <span class="landing-hero__sticker landing-hero__sticker--1" aria-hidden="true">⭐</span>
+                    <span class="landing-hero__sticker landing-hero__sticker--2" aria-hidden="true">✨</span>
+                    <img
+                        src="{{ asset('images/heroes/the-warrior.webp') }}"
+                        alt="Illustrated Ugandan warrior hero, one of the Heritage Heroes characters"
+                        class="landing-hero__image landing-hero__image--float"
+                        width="520"
+                        height="520"
+                        loading="eager"
+                        decoding="async"
+                    >
                 @endif
                 @if ($heroComic ?? null)
                     <p class="landing-hero__comic-caption">
@@ -124,9 +133,9 @@
             <article class="landing-feature">
                 <div class="landing-feature__icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 6h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z" fill="#B8D4F0"/>
-                        <path d="M12 14h24v3H12v-3zm0 8h20v2H12v-2zm0 6h16v2H12v-2z" fill="#5B9BD5"/>
-                        <path d="M28 32l8 6V14l-8 6v12z" fill="#2E6DB4"/>
+                        <path d="M8 6h28a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V10a4 4 0 0 1 4-4z" fill="#F0D19E"/>
+                        <path d="M12 14h24v3H12v-3zm0 8h20v2H12v-2zm0 6h16v2H12v-2z" fill="#DDA023"/>
+                        <path d="M28 32l8 6V14l-8 6v12z" fill="#C1441F"/>
                     </svg>
                 </div>
                 <h2 class="landing-feature__title">Cultural Comics</h2>
@@ -135,9 +144,9 @@
             <article class="landing-feature">
                 <div class="landing-feature__icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="24" cy="28" r="14" fill="#D4B8F0"/>
-                        <path d="M24 8v32M16 16c4-6 16-6 16 0M14 24c-2 4 20 4 20 0" stroke="#7B4BB8" stroke-width="3" stroke-linecap="round"/>
-                        <ellipse cx="24" cy="30" rx="6" ry="4" fill="#9B6FD4"/>
+                        <circle cx="24" cy="28" r="14" fill="#E8C589"/>
+                        <path d="M24 8v32M16 16c4-6 16-6 16 0M14 24c-2 4 20 4 20 0" stroke="#8A2E14" stroke-width="3" stroke-linecap="round"/>
+                        <ellipse cx="24" cy="30" rx="6" ry="4" fill="#C1441F"/>
                     </svg>
                 </div>
                 <h2 class="landing-feature__title">Songs &amp; Language</h2>
@@ -146,9 +155,9 @@
             <article class="landing-feature">
                 <div class="landing-feature__icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 32L38 10l4 8-32 22-4-8z" fill="#7EB8E8"/>
-                        <path d="M38 10l4 8-8 4-4-8 8-4z" fill="#4A90D9"/>
-                        <path d="M10 36l-4-4 6-2 2 6z" fill="#2E6DB4"/>
+                        <path d="M6 32L38 10l4 8-32 22-4-8z" fill="#A6B583"/>
+                        <path d="M38 10l4 8-8 4-4-8 8-4z" fill="#7A9152"/>
+                        <path d="M10 36l-4-4 6-2 2 6z" fill="#566B2F"/>
                     </svg>
                 </div>
                 <h2 class="landing-feature__title">Works Offline</h2>
@@ -157,24 +166,76 @@
         </div>
     </section>
 
+    <!-- HERITAGE HEROES -->
+    <section class="landing-heroes" id="heroes" aria-labelledby="heroes-heading">
+        <div class="landing-heroes__inner">
+            <span class="landing-section__label">Meet the cast</span>
+            <h2 id="heroes-heading" class="landing-section__title">The Heritage Heroes</h2>
+            <p class="landing-section__lead" style="margin-left:auto;margin-right:auto;">
+                Five brave, warm-hearted characters who guide kids through {{ strtolower(heritage('ugandan_peoples')) }} stories, songs, and traditions.
+            </p>
+            <div class="landing-heroes__grid">
+                <article class="landing-hero-card">
+                    <span class="landing-hero-card__badge" aria-hidden="true">🛡️</span>
+                    <img class="landing-hero-card__img" loading="lazy" decoding="async"
+                         src="{{ asset('images/heroes/the-warrior.webp') }}"
+                         alt="The Warrior, an illustrated hero holding a spear and shield">
+                    <h3 class="landing-hero-card__name">The Warrior</h3>
+                    <p class="landing-hero-card__role">Protector of the Plains</p>
+                </article>
+                <article class="landing-hero-card">
+                    <span class="landing-hero-card__badge" aria-hidden="true">👑</span>
+                    <img class="landing-hero-card__img" loading="lazy" decoding="async"
+                         src="{{ asset('images/heroes/the-chief.webp') }}"
+                         alt="The Chief, an illustrated wise elder holding a staff">
+                    <h3 class="landing-hero-card__name">The Chief</h3>
+                    <p class="landing-hero-card__role">Keeper of Wisdom</p>
+                </article>
+                <article class="landing-hero-card">
+                    <span class="landing-hero-card__badge" aria-hidden="true">💜</span>
+                    <img class="landing-hero-card__img" loading="lazy" decoding="async"
+                         src="{{ asset('images/heroes/the-king-and-queen.webp') }}"
+                         alt="The King and Queen, illustrated Iteso royal pair">
+                    <h3 class="landing-hero-card__name">The King &amp; Queen</h3>
+                    <p class="landing-hero-card__role">The Iteso Pair</p>
+                </article>
+                <article class="landing-hero-card">
+                    <span class="landing-hero-card__badge" aria-hidden="true">⚡</span>
+                    <img class="landing-hero-card__img" loading="lazy" decoding="async"
+                         src="{{ asset('images/heroes/the-guardian.webp') }}"
+                         alt="The Guardian, an illustrated hero with a feathered headdress and spear">
+                    <h3 class="landing-hero-card__name">The Guardian</h3>
+                    <p class="landing-hero-card__role">Swift &amp; Steadfast</p>
+                </article>
+                <article class="landing-hero-card">
+                    <span class="landing-hero-card__badge" aria-hidden="true">🌟</span>
+                    <img class="landing-hero-card__img" loading="lazy" decoding="async"
+                         src="{{ asset('images/heroes/the-elder.webp') }}"
+                         alt="The Elder, an illustrated storyteller hero holding a walking staff">
+                    <h3 class="landing-hero-card__name">The Elder</h3>
+                    <p class="landing-hero-card__role">The Storyteller</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <section class="landing-tribes" id="peoples" aria-labelledby="peoples-heading">
         <div class="landing-tribes__inner">
             <h2 id="peoples-heading" class="landing-tribes__title">{{ $peoplesSectionTitle ?? heritage('explore_peoples_count', ['count' => $peoplesCount ?? 65]) }}</h2>
             <div class="landing-tribes__row">
-                @forelse ($featuredPeoples ?? [] as $person)
-                    <a href="{{ route('login') }}" class="landing-tribe-chip">
-                        <span class="landing-tribe-chip__dot" aria-hidden="true">{{ $person->hero_emoji ?: '🌍' }}</span>
+                @forelse ($featuredPeoples ?? [] as $i => $person)
+                    <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--c{{ ($i % 8) + 1 }}">
                         {{ $person->name }}
                     </a>
                 @empty
-                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">👑</span> Buganda</a>
-                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">🏹</span> Acholi</a>
-                    <a href="{{ route('login') }}" class="landing-tribe-chip"><span class="landing-tribe-chip__dot" aria-hidden="true">🌊</span> Basoga</a>
+                    <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--c3">Buganda</a>
+                    <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--c1">Acholi</a>
+                    <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--c2">Basoga</a>
                 @endforelse
                 @php $shown = ($featuredPeoples ?? collect())->count(); $more = max(0, ($peoplesCount ?? 65) - $shown); @endphp
                 @if ($more > 0)
                     <a href="{{ route('login') }}" class="landing-tribe-chip landing-tribe-chip--more">
-                        <span class="landing-tribe-chip__dot" aria-hidden="true">⭐</span>
+                        <span aria-hidden="true">⭐</span>
                         + {{ $more }} more →
                     </a>
                 @endif

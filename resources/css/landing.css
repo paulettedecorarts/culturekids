@@ -1,16 +1,21 @@
 /* Paulette Culture Kids — marketing landing (mockup-aligned) */
 
 .landing {
-    --landing-navy-deep: #1a2b48;
-    --landing-navy-mid: #2b4a8c;
-    --landing-beige: var(--cream, #f5f0e1);
-    --landing-highlight: var(--savanna-gold, #f5a623);
-    --landing-text: #333333;
-    --landing-text-muted: #666666;
-    --landing-nav-muted: #4a4a4a;
+    --landing-navy-deep: #3B2211;
+    --landing-navy-mid: #6B3A1E;
+    --landing-beige: var(--cream, #FBF3E7);
+    --landing-highlight: var(--savanna-gold, #DDA023);
+    --landing-text: #3A2A1D;
+    --landing-text-muted: #7A6350;
+    --landing-nav-muted: #5C4632;
     --landing-container: 1120px;
     --landing-radius-pill: 9999px;
     --landing-gutter: clamp(16px, 4vw, 24px);
+    --pattern-stripe: repeating-linear-gradient(135deg,
+        var(--clay-red, #C1441F) 0 10px,
+        var(--savanna-gold, #DDA023) 10px 20px,
+        var(--banana-green, #566B2F) 20px 30px,
+        var(--ink, #2A1608) 30px 40px);
     font-family: var(--font-landing, 'Inter', system-ui, sans-serif);
     color: var(--landing-text);
     line-height: 1.5;
@@ -38,7 +43,14 @@
     top: 0;
     z-index: 100;
     background: #ffffff;
-    border-bottom: 1px solid rgba(26, 43, 72, 0.06);
+    border-bottom: 1px solid rgba(59, 34, 17, 0.08);
+}
+
+.landing-header::after {
+    content: '';
+    display: block;
+    height: 4px;
+    background: var(--pattern-stripe);
 }
 
 .landing-header__inner {
@@ -64,10 +76,13 @@
 }
 
 .landing-logo__text {
-    font-size: clamp(15px, 3.5vw, 18px);
-    font-weight: 700;
+    font-family: var(--font-landing-display, 'Baloo 2', sans-serif);
+    font-size: clamp(16px, 3.5vw, 19px);
+    font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.2;
+    color: var(--clay-red, #c8502e);
+    white-space: nowrap;
 }
 
 .landing-logo__orange {
@@ -188,7 +203,7 @@
 
 /* —— Hero —— */
 .landing-hero {
-    background: linear-gradient(135deg, var(--landing-hero-start, #fff8f0) 0%, var(--landing-hero-end, #e8f4fc) 55%, #fff 100%);
+    background: linear-gradient(135deg, var(--landing-hero-start, #fbf0dd) 0%, var(--landing-hero-end, #f6dcb8) 60%, #fdf6ea 100%);
     padding: clamp(48px, 10vw, 80px) 0 clamp(56px, 12vw, 88px);
     text-align: left;
     position: relative;
@@ -200,10 +215,27 @@
     position: absolute;
     top: -20%;
     right: -10%;
-    width: min(520px, 60vw);
-    height: min(520px, 60vw);
-    background: radial-gradient(circle, color-mix(in srgb, var(--landing-accent, #f2cb5a) 35%, transparent) 0%, transparent 70%);
+    width: min(560px, 64vw);
+    height: min(560px, 64vw);
+    background: radial-gradient(circle, color-mix(in srgb, var(--landing-accent, #dda023) 30%, transparent) 0%, transparent 70%);
     pointer-events: none;
+}
+
+.landing-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23C1441F' stroke-opacity='0.07' stroke-width='1.5'%3E%3Cpath d='M28 2L54 28L28 54L2 28Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 56px 56px;
+    pointer-events: none;
+}
+
+.landing-hero__image--float { animation: heroFloat 4.5s ease-in-out infinite; }
+
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-16px) rotate(1deg); }
 }
 
 .landing-hero--split .landing-hero__grid {
@@ -321,7 +353,10 @@
 .landing-feature {
     text-align: center;
     padding: 0 12px;
+    transition: transform 0.25s ease;
 }
+
+.landing-feature:hover { transform: translateY(-6px) rotate(-1.5deg); }
 
 .landing-feature__icon {
     width: 56px;
@@ -386,47 +421,35 @@
     align-items: center;
     gap: 10px;
     background: #ffffff;
-    padding: 12px 20px;
+    padding: 12px 22px;
     border-radius: var(--landing-radius-pill);
-    font-size: 15px;
-    font-weight: 600;
+    font-family: var(--font-landing-display, 'Baloo 2', sans-serif);
+    font-size: 16px;
+    font-weight: 800;
     color: var(--landing-navy-deep);
     text-decoration: none;
-    box-shadow: 0 2px 8px rgba(26, 43, 72, 0.08);
-    border: 1px solid rgba(26, 43, 72, 0.06);
+    box-shadow: 0 2px 8px rgba(59, 34, 17, 0.10);
+    border: 1px solid rgba(59, 34, 17, 0.06);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .landing-tribe-chip:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(26, 43, 72, 0.12);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 16px rgba(59, 34, 17, 0.16);
 }
 
-.landing-tribe-chip__dot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.landing-tribe-chip__dot--buganda { background: #fce4ec; }
-.landing-tribe-chip__dot--acholi { background: #ffebee; }
-.landing-tribe-chip__dot--basoga { background: #f3e5f5; }
-.landing-tribe-chip__dot--iteso { background: #e8f5e9; }
-.landing-tribe-chip__dot--banyankole { background: #fff3e0; }
-.landing-tribe-chip__dot--alur { background: #e3f2fd; }
+/* Per-tribe accent colors, cycled via .landing-tribe-chip--c1..c8 (see welcome.blade.php) */
+.landing-tribe-chip--c1 { color: #E2790F; } /* orange */
+.landing-tribe-chip--c2 { color: #7B4B9E; } /* purple */
+.landing-tribe-chip--c3 { color: #C1441F; } /* clay red */
+.landing-tribe-chip--c4 { color: #4C7A2E; } /* green */
+.landing-tribe-chip--c5 { color: #1F7A6C; } /* teal */
+.landing-tribe-chip--c6 { color: #2E6DB4; } /* blue */
+.landing-tribe-chip--c7 { color: #B8447E; } /* pink */
+.landing-tribe-chip--c8 { color: #B9790E; } /* gold */
 
 .landing-tribe-chip--more {
-    color: var(--landing-navy-deep);
-}
-
-.landing-tribe-chip--more .landing-tribe-chip__dot {
-    background: #fff8e1;
-    font-size: 16px;
+    color: #B9790E;
 }
 
 /* —— Bottom CTA —— */
@@ -434,6 +457,16 @@
     background: var(--landing-navy-deep);
     padding: clamp(48px, 10vw, 80px) var(--landing-gutter) clamp(56px, 10vw, 88px);
     text-align: center;
+    position: relative;
+}
+
+.landing-cta::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: var(--pattern-stripe);
+    position: absolute;
+    top: 0; left: 0; right: 0;
 }
 
 .landing-cta__title {
@@ -477,6 +510,14 @@
 .landing-section--navy {
     background: var(--landing-navy-deep);
     color: #ffffff;
+    position: relative;
+}
+
+.landing-section--navy::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: var(--pattern-stripe);
 }
 
 .landing-section__inner {
@@ -532,15 +573,16 @@
 
 .landing-story-card {
     background: var(--landing-beige);
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 28px 24px;
-    border: 1px solid rgba(26, 43, 72, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 2px dashed rgba(193, 68, 31, 0.18);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .landing-story-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(26, 43, 72, 0.1);
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 0 14px 32px rgba(59, 34, 17, 0.14);
+    border-color: var(--savanna-gold, #DDA023);
 }
 
 .landing-story-card__emoji {
@@ -1048,4 +1090,95 @@ html {
     .landing-tribe-chip:hover {
         transform: none;
     }
+}
+
+/* ── HERITAGE HEROES SHOWCASE ── */
+.landing-heroes {
+    background: var(--cream-warm, #F5E8D4);
+    padding: clamp(48px,10vw,80px) var(--landing-gutter) clamp(56px,10vw,88px);
+    position: relative;
+    overflow: hidden;
+}
+
+.landing-heroes__inner {
+    max-width: var(--landing-container);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.landing-heroes__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+    text-align: left;
+}
+
+.landing-hero-card {
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 18px 14px 20px;
+    text-align: center;
+    border: 3px dashed var(--savanna-gold, #DDA023);
+    box-shadow: 0 10px 22px rgba(59,34,17,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+}
+
+.landing-hero-card:nth-child(even) { transform: rotate(1.2deg); }
+.landing-hero-card:nth-child(odd) { transform: rotate(-1.2deg); }
+
+.landing-hero-card:hover {
+    transform: translateY(-8px) rotate(0deg) scale(1.03);
+    box-shadow: 0 18px 36px rgba(193,68,31,0.22);
+    border-color: var(--clay-red, #C1441F);
+    z-index: 2;
+}
+
+.landing-hero-card__badge {
+    position: absolute;
+    top: -12px;
+    right: -8px;
+    background: var(--clay-red, #C1441F);
+    color: #fff;
+    font-size: 18px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(59,34,17,0.25);
+    border: 2px solid #fff;
+}
+
+.landing-hero-card__img {
+    width: 100%;
+    height: 168px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+
+.landing-hero-card__name {
+    font-family: var(--font-landing-display, 'Baloo 2', sans-serif);
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--landing-navy-deep);
+    margin: 0 0 4px;
+    text-align: center;
+}
+
+.landing-hero-card__role {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--clay-red, #C1441F);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .landing-heroes__grid { grid-template-columns: repeat(3,1fr); }
+}
+
+@media (max-width: 600px) {
+    .landing-heroes__grid { grid-template-columns: repeat(2,1fr); }
 }
