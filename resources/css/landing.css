@@ -1182,3 +1182,22 @@ html {
 @media (max-width: 600px) {
     .landing-heroes__grid { grid-template-columns: repeat(2,1fr); }
 }
+
+.landing-hero__visual { position: relative; }
+
+.landing-hero__sticker {
+    position: absolute;
+    font-size: 34px;
+    z-index: 2;
+    pointer-events: none;
+    animation: heroSpin 6s linear infinite;
+}
+
+.landing-hero__sticker--1 { top: -6px; right: 8%; animation-duration: 5s; }
+.landing-hero__sticker--2 { bottom: 6%; left: -4px; font-size: 26px; animation-duration: 7s; }
+
+@keyframes heroSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.15); }
+    100% { transform: rotate(360deg) scale(1); }
+}
