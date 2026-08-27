@@ -52,26 +52,26 @@ HTML;
         {!! $saNavLink(route('admin.analytics'), '📈', 'Analytics', request()->routeIs('admin.analytics')) !!}
 
         <div class="sa-nav-section"><span class="sa-nav-section-text">Content</span></div>
-        {!! $saNavLink(route('admin.stories'), '📖', 'Stories', request()->routeIs('admin.stories*')) !!}
-        {!! $saNavLink(route('admin.story-packs'), '📚', 'Story Packs', request()->routeIs('admin.story-packs*')) !!}
-        {!! $saNavLink(route('admin.songs'), '🎵', 'Songs', request()->routeIs('admin.songs*')) !!}
-        {!! $saNavLink(route('admin.flashcards'), '🃏', 'Flashcards', request()->routeIs('admin.flashcards*')) !!}
-        {!! $saNavLink(route('admin.activities'), '🎯', 'Activities', request()->routeIs('admin.activities*')) !!}
-        {!! $saNavLink(route('admin.drawings'), '🖍', 'Drawings', request()->routeIs('admin.drawings*')) !!}
-        {!! $saNavLink(route('admin.colouring'), '🎨', 'Colouring', request()->routeIs('admin.colouring*')) !!}
-        {!! $saNavLink(route('admin.games'), '🎮', 'Games', request()->routeIs('admin.games*')) !!}
-        {!! $saNavLink(route('admin.puzzles'), '🧩', 'Puzzles', request()->routeIs('admin.puzzles*')) !!}
-        {!! $saNavLink(route('admin.mazes'), '🌀', 'Mazes', request()->routeIs('admin.mazes*')) !!}
-        {!! $saNavLink(route('admin.spot-differences'), '🔍', 'Spot the Difference', request()->routeIs('admin.spot-differences*')) !!}
-        {!! $saNavLink(route('admin.word-searches'), '🔤', 'Word Searches', request()->routeIs('admin.word-searches*')) !!}
-        {!! $saNavLink(route('admin.culture-activities'), '🏺', 'Culture Activities', request()->routeIs('admin.culture-activities*')) !!}
-        {!! $saNavLink(route('admin.language-activities'), '📝', 'Language Activities', request()->routeIs('admin.language-activities*')) !!}
-        {!! $saNavLink(route('admin.assets'), '🖼', 'Assets', request()->routeIs('admin.assets*')) !!}
-        {!! $saNavLink(route('admin.translations'), '🌐', 'Translations', request()->routeIs('admin.translations*')) !!}
-        {!! $saNavLink(route('admin.age-categories'), '🌱', 'Age Categories', request()->routeIs('admin.age-categories*')) !!}
-        {!! $saNavLink(route('admin.tribe-registry'), '🌍', heritage('people_directory'), request()->routeIs('admin.tribe-registry*')) !!}
-        {!! $saNavLink(route('admin.clans'), '🌳', 'Clan Registry', request()->routeIs('admin.clans*')) !!}
-        {!! $saNavLink(route('admin.languages'), '🗣', 'Languages', request()->routeIs('admin.languages*')) !!}
+        {!! $saNavLink(route('admin.stories'), '<img src="'.asset('images/admin-icons/content/01-stories.png').'" alt="">', 'Stories', request()->routeIs('admin.stories*')) !!}
+        {!! $saNavLink(route('admin.story-packs'), '<img src="'.asset('images/admin-icons/content/02-story-packs.png').'" alt="">', 'Story Packs', request()->routeIs('admin.story-packs*')) !!}
+        {!! $saNavLink(route('admin.songs'), '<img src="'.asset('images/admin-icons/content/03-songs.png').'" alt="">', 'Songs', request()->routeIs('admin.songs*')) !!}
+        {!! $saNavLink(route('admin.flashcards'), '<img src="'.asset('images/admin-icons/content/04-flashcards.png').'" alt="">', 'Flashcards', request()->routeIs('admin.flashcards*')) !!}
+        {!! $saNavLink(route('admin.activities'), '<img src="'.asset('images/admin-icons/content/05-activities.png').'" alt="">', 'Activities', request()->routeIs('admin.activities*')) !!}
+        {!! $saNavLink(route('admin.drawings'), '<img src="'.asset('images/admin-icons/content/06-drawings.png').'" alt="">', 'Drawings', request()->routeIs('admin.drawings*')) !!}
+        {!! $saNavLink(route('admin.colouring'), '<img src="'.asset('images/admin-icons/content/07-colouring.png').'" alt="">', 'Colouring', request()->routeIs('admin.colouring*')) !!}
+        {!! $saNavLink(route('admin.games'), '<img src="'.asset('images/admin-icons/content/08-games.png').'" alt="">', 'Games', request()->routeIs('admin.games*')) !!}
+        {!! $saNavLink(route('admin.puzzles'), '<img src="'.asset('images/admin-icons/content/09-puzzles.png').'" alt="">', 'Puzzles', request()->routeIs('admin.puzzles*')) !!}
+        {!! $saNavLink(route('admin.mazes'), '<img src="'.asset('images/admin-icons/content/10-mazes.png').'" alt="">', 'Mazes', request()->routeIs('admin.mazes*')) !!}
+        {!! $saNavLink(route('admin.spot-differences'), '<img src="'.asset('images/admin-icons/content/11-spot-the-difference.png').'" alt="">', 'Spot the Difference', request()->routeIs('admin.spot-differences*')) !!}
+        {!! $saNavLink(route('admin.word-searches'), '<img src="'.asset('images/admin-icons/content/12-word-searches.png').'" alt="">', 'Word Searches', request()->routeIs('admin.word-searches*')) !!}
+        {!! $saNavLink(route('admin.culture-activities'), '<img src="'.asset('images/admin-icons/content/13-culture-activities.png').'" alt="">', 'Culture Activities', request()->routeIs('admin.culture-activities*')) !!}
+        {!! $saNavLink(route('admin.language-activities'), '<img src="'.asset('images/admin-icons/content/14-language-activities.png').'" alt="">', 'Language Activities', request()->routeIs('admin.language-activities*')) !!}
+        {!! $saNavLink(route('admin.assets'), '<img src="'.asset('images/admin-icons/content/15-assets.png').'" alt="">', 'Assets', request()->routeIs('admin.assets*')) !!}
+        {!! $saNavLink(route('admin.translations'), '<img src="'.asset('images/admin-icons/content/16-translations.png').'" alt="">', 'Translations', request()->routeIs('admin.translations*')) !!}
+        {!! $saNavLink(route('admin.age-categories'), '<img src="'.asset('images/admin-icons/content/17-age-categories.png').'" alt="">', 'Age Categories', request()->routeIs('admin.age-categories*')) !!}
+        {!! $saNavLink(route('admin.tribe-registry'), '<img src="'.asset('images/admin-icons/content/18-tribe-registry.png').'" alt="">', heritage('people_directory'), request()->routeIs('admin.tribe-registry*')) !!}
+        {!! $saNavLink(route('admin.clans'), '<img src="'.asset('images/admin-icons/content/19-clan-registry.png').'" alt="">', 'Clan Registry', request()->routeIs('admin.clans*')) !!}
+        {!! $saNavLink(route('admin.languages'), '<img src="'.asset('images/admin-icons/content/20-languages.png').'" alt="">', 'Languages', request()->routeIs('admin.languages*')) !!}
 
         <div class="sa-nav-section"><span class="sa-nav-section-text">Logs</span></div>
         {!! $saNavLink(route('admin.audit-logs'), '📋', 'Audit Logs', request()->routeIs('admin.audit-logs')) !!}

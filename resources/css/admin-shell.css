@@ -189,3 +189,13 @@
         font-size: 14px;
     }
 }
+
+/* Custom illustrated icons for the Content sidebar section (replaces emoji) */
+.sa-nav-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+
+   .sa-nav-icon svg { width: 20px; height: 20px; color: var(--savanna-gold, #DDA023); }
